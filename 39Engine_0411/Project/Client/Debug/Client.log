@@ -1,0 +1,5 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: 중간 디렉터리(Debug\)에 다른 프로젝트(39Engine.vcxproj)에서 공유하는 파일이 포함되어 있습니다.  이로 인해 잘못된 정리 및 다시 빌드 동작이 수행될 수 있습니다.
+  pch.cpp
+  main.cpp
+  LINK : C:\Users\AR\source\repos\39Engine\OutputFile\bin_debug\Client.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  Client.vcxproj -> C:\Users\AR\source\repos\39Engine\OutputFile\bin_debug\Client.exe
