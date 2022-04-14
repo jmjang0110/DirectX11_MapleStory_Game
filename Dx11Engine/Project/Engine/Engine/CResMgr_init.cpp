@@ -46,14 +46,11 @@ void CResMgr::CreateEngineMesh()
 
 	vecIdx.push_back(0); vecIdx.push_back(2); vecIdx.push_back(3);
 	vecIdx.push_back(0); vecIdx.push_back(1); vecIdx.push_back(2);
-	
+
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddRes<CMesh>(L"RectMesh", pMesh);
 	vecIdx.clear();
-
-
-
 
 	vecIdx.push_back(0); vecIdx.push_back(1); vecIdx.push_back(2); vecIdx.push_back(3); vecIdx.push_back(0);
 
@@ -61,12 +58,6 @@ void CResMgr::CreateEngineMesh()
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddRes<CMesh>(L"RectMesh_LineStrip", pMesh);
 	vecVtx.clear(); vecIdx.clear();
-
-
-
-
-
-
 
 	// ==========
 	// CircleMesh
@@ -82,7 +73,7 @@ void CResMgr::CreateEngineMesh()
 
 	for (UINT i = 0; i < iSliceCount + 1; ++i)
 	{
-		v.vPos = Vec3( fRadius * cosf(fAngleStep * (float)i) , fRadius * sinf(fAngleStep * (float)i), 0.f);
+		v.vPos = Vec3(fRadius * cosf(fAngleStep * (float)i), fRadius * sinf(fAngleStep * (float)i), 0.f);
 		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 		v.vUV = Vec2(v.vPos.x + 0.5f, -v.vPos.y + 0.5f);
 		vecVtx.push_back(v);
@@ -99,11 +90,18 @@ void CResMgr::CreateEngineMesh()
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
 	AddRes<CMesh>(L"CircleMesh", pMesh);
+	vecIdx.clear();
+
+	// CicleMesh_LineStrip
+	for (UINT i = 1; i <= iSliceCount + 1; ++i)
+	{
+		vecIdx.push_back(i);
+	}
+
+	pMesh = new CMesh;
+	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
+	AddRes<CMesh>(L"CircleMesh_LineStrip", pMesh);
 	vecVtx.clear(); vecIdx.clear();
-
-
-
-
 
 
 	// Cube
@@ -124,25 +122,28 @@ void CResMgr::CreateEngineTexture()
 void CResMgr::CreateEngineShader()
 {
 	MakeInputLayoutInfo();
-		
+
 	CGraphicsShader* pShader = nullptr;
 
-	// TestShader
+	// STD2D Shader
 	pShader = new CGraphicsShader;
-	pShader->CreateVertexShader(L"shader\\test.fx", "VS_Test");
-	pShader->CreatePixelShader(L"shader\\test.fx", "PS_Test");
-	pShader->SetRSType(RS_TYPE::CULL_NONE);	
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D");
 
-	pShader->AddScalarParamInfo(L"IsColorRed", SCALAR_PARAM::INT_0);
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_MASKED);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
+
+	
+	//pShader->AddScalarParamInfo(L"IsColorRed", SCALAR_PARAM::INT_0);
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
-
-	AddRes<CGraphicsShader>(L"TestShader", pShader);
+	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
 
 	// Collider2D Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Collider2D");
 	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Collider2D");
-		
+
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
@@ -157,7 +158,7 @@ void CResMgr::CreateEngineMaterial()
 
 	// TestMtrl »ý¼º
 	pMtrl = new CMaterial;
-	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TestShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes<CMaterial>(L"TestMtrl", pMtrl);
 
 	// Collider2DMtrl 

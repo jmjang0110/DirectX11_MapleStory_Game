@@ -121,6 +121,9 @@
     <ClInclude Include="CCollisionMgr.h">
       <Filter>Engine\03. Manager\09. CollisionMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CRenderMgr.h">
+      <Filter>Engine\03. Manager\02. RenderMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="CCollisionMgr.cpp">
       <Filter>Engine\03. Manager\09. CollisionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CRenderMgr.cpp">
+      <Filter>Engine\03. Manager\02. RenderMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,10 +14,14 @@ vector<D3D11_INPUT_ELEMENT_DESC> CGraphicsShader::g_vecLayout;
 
 
 CGraphicsShader::CGraphicsShader()
-	: m_eRSType(RS_TYPE::CULL_BACK)
+	: m_eDomain(SHADER_DOMAIN::DOMAIN_MASKED)
+	, m_eRSType(RS_TYPE::CULL_BACK)
 	, m_eDSType(DS_TYPE::LESS)
+	, m_eBSType(BS_TYPE::DEFAULT)
 	, m_eTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
 {
+
+
 }
 
 CGraphicsShader::~CGraphicsShader()
@@ -97,6 +101,8 @@ void CGraphicsShader::UpdateData()
 		
 	CONTEXT->RSSetState(CDevice::GetInst()->GetRS(m_eRSType).Get());
 	CONTEXT->OMSetDepthStencilState(CDevice::GetInst()->GetDS(m_eDSType).Get(), 0);
+	CONTEXT->OMSetBlendState(CDevice::GetInst()->GetBS(m_eBSType).Get(), Vec4(), 0xffffffff); // BLEND_FACTOR 로 설정후 Vec4() 자리에 값을 전달하면 적용됨  
+
 }
 
 void CGraphicsShader::AddScalarParamInfo(const wstring& _strDesc, SCALAR_PARAM _eParamType)

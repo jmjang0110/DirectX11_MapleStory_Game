@@ -22,7 +22,11 @@
 #define CLONE_DISABLE(type) virtual type* Clone() { return nullptr; }
 
 
+/*
+	Maple Story 
 
+*/
+#define GRAVITY 9.80665f
 
 
 typedef Vector2 Vec2;
@@ -77,6 +81,26 @@ enum class DS_TYPE
 	END,
 };
 
+
+// BlendState Option
+enum class BS_TYPE
+{
+	DEFAULT,		// SrcRGB * (1) + DestRGB * (0)
+	ALPHA_BLEND,	// SrcRGB * (SrcAlpha) + DestRGB * (1 - SrcAlpha)
+	END,
+};
+
+
+// 쉐이더의 렌더링 시점에 따른 분류 
+
+enum class SHADER_DOMAIN
+{
+	DOMAIN_FORWARD, // 불투명 
+	DOMAIN_MASKED,  // 불투명, 투명 
+	DOMAIN_OPAQUE,  // 반투명 
+	
+
+};
 
 enum class COMPONENT_TYPE
 {

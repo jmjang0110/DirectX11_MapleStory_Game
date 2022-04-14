@@ -28,5 +28,25 @@ public:
 	void progress();
 	void render();
 
+
+public:
+	// ----- LOAD TEXTURES -----
+	void LoadTextures();
+
+	// ----- MAKE RENDER OBJECT -----
+	void AddMainPlayerObj();
+	void AddMonsterObj();
+
+
+	// ----- MAKE TOOL OBJECT ------
+	void AddCameraObj();
+
+
+	// ----- MAKE PREFAB -----
+	void AddMissilePrefab();
+
+
+
+
 };
 

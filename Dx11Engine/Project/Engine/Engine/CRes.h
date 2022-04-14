@@ -26,7 +26,8 @@ protected:
     CLONE_DISABLE(CRes)
 
 private:
-    void AddRef()   {   ++m_iRefCount;  }
+    void AddRef() { ++m_iRefCount; 
+    int i = 0; }
     void SubRef()   {   --m_iRefCount;  }
 
 public:

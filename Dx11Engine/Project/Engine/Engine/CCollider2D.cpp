@@ -53,7 +53,7 @@ void CCollider2D::SetCollider2DType(COLLIDER2D_TYPE _type)
 	}
 	else
 	{
-		m_pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh");
+		m_pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_LineStrip");
 	}
 }
 
@@ -111,4 +111,16 @@ void CCollider2D::OnCollisionExit(CCollider2D* _Other)
 
 	CScript* pScript = GetOwner()->GetScript();
 	pScript->OnCollisionExit(_Other->GetOwner());
+}
+
+
+void CCollider2D::SetOffsetScale(Vec2 _vOffsetScale)
+{
+	m_vOffsetScale = _vOffsetScale;
+
+	if (COLLIDER2D_TYPE::CIRCLE == m_eColliderType)
+	{
+		// 원의 반지름 설정 
+		m_vOffsetScale.y = m_vOffsetScale.x; // x  y 값이 다르게 들어오면 그냥 x 값에 맞춘다. 
+	}
 }

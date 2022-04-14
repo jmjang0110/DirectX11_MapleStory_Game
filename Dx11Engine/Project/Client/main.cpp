@@ -49,7 +49,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     // Engine Core 초기화
-    if (FAILED(CCore::GetInst()->init(g_hWnd, POINT{ 1600, 900 })))
+    if (FAILED(CCore::GetInst()->init(g_hWnd, POINT{ 1366, 768 })))
     {
         return 0;
     }

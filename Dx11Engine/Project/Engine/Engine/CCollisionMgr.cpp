@@ -32,18 +32,31 @@ void CCollisionMgr::update()
 				CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 				CollisionBetweenLayer(pCurScene->GetLayer(i)->GetObjects()
-									, pCurScene->GetLayer(j)->GetObjects());
+					, pCurScene->GetLayer(j)->GetObjects());
 			}
 		}
 	}
 }
 
+
 void CCollisionMgr::CollisionCheck(const wstring& _strLeftName, const wstring& _strRightName)
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	CLayer* pLeftLayer = pCurScene->GetLayer(_strLeftName);
+	CLayer* pRightLayer = pCurScene->GetLayer(_strRightName);
+
+	if (pLeftLayer && pRightLayer)
+		CollisionCheck(pLeftLayer->GetLayerIdx(), pRightLayer->GetLayerIdx());
 }
 
 void CCollisionMgr::CollisionOff(const wstring& _strLeftName, const wstring& _strRightName)
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	CLayer* pLeftLayer = pCurScene->GetLayer(_strLeftName);
+	CLayer* pRightLayer = pCurScene->GetLayer(_strRightName);
+
+	if (pLeftLayer && pRightLayer)
+		CollisionOff(pLeftLayer->GetLayerIdx(), pRightLayer->GetLayerIdx());
 }
 
 void CCollisionMgr::CollisionBetweenLayer(const vector<CGameObject*>& _left, const vector<CGameObject*>& _right)
@@ -61,7 +74,7 @@ void CCollisionMgr::CollisionBetweenLayer(const vector<CGameObject*>& _left, con
 		for (size_t j = 0; j < _right.size(); ++j)
 		{
 			pRightCol = _right[j]->Collider2D();
-				
+
 			if (nullptr == pRightCol)
 				continue;
 
@@ -136,10 +149,33 @@ void CCollisionMgr::CollisionBetweenLayer(const vector<CGameObject*>& _left, con
 
 
 bool CCollisionMgr::IsCollision(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
-{	
+{
+	if (_pLeftCol->GetCollision2DType() == COLLIDER2D_TYPE::BOX
+		&& _pRightCol->GetCollision2DType() == COLLIDER2D_TYPE::BOX)
+	{
+		return IsCollision_Box(_pLeftCol, _pRightCol);
+	}
+	else if (_pLeftCol->GetCollision2DType() == COLLIDER2D_TYPE::CIRCLE
+		&& _pRightCol->GetCollision2DType() == COLLIDER2D_TYPE::CIRCLE)
+	{
+		return IsCollision_Circle(_pLeftCol, _pRightCol);
+	}
+	else
+	{
+		return false;
+
+	}
+
+
+
+}
+
+bool CCollisionMgr::IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
+{
+
 	// 충돌체가 사용하는 기본 도형(사각형) 로컬 정점위치를 알아낸다.
 	// 0 -- 1
-	// | \  |
+	// |  \ |
 	// 3 -- 2	
 	static CMesh* pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh").Get();
 	static Vtx* pVtx = pRectMesh->GetVtxSysMem();
@@ -151,7 +187,7 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
 	// Local 스페이스의 네개의 정점을 각 충돌체 월드 위치로 보낸다.
 	Vec3 vAsix[4] = {};
 
-	// (Vector3, 0.f) X Matirx(4x4)
+	// (Vector3, 0.f) X Matirx(4x4) - 방향정보이므로 이동 파트에 0.f 를 넣어야한다. ( 이동벡터까지 계산하면 방향이 틀어지기 떄문 ) 
 	// XMVector3TransformNormal();
 
 	// (Vector3, 1.f) X Matirx(4x4)
@@ -160,15 +196,50 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
 	vAsix[1] = XMVector3TransformCoord(vLocalPos[3], matLeft) - XMVector3TransformCoord(vLocalPos[0], matLeft);
 	vAsix[2] = XMVector3TransformCoord(vLocalPos[1], matRight) - XMVector3TransformCoord(vLocalPos[0], matRight);
 	vAsix[3] = XMVector3TransformCoord(vLocalPos[3], matRight) - XMVector3TransformCoord(vLocalPos[0], matRight);
-	
+
 	// 월드에 배치된 두 충돌체의 중심을 이은 벡터
 	//Vec3 vCenter = XMVector3TransformCoord(Vec3::Zero, matRight) - XMVector3TransformCoord(Vec3::Zero, matLeft);	
 	Vec3 vCenter = _pRightCol->GetWorldPos() - _pLeftCol->GetWorldPos();
 
+	for (int i = 0; i < 4; ++i)
+	{
+		vAsix[i].z = 0.f;
+		Vec3 vProj = vAsix[i];
+		vProj.Normalize();
+
+		float fDist = 0.f;
+
+		for (int j = 0; j < 4; ++j)
+		{
+			// vProj 에 vAsix[j] 를 투영시킨 길이		
+			fDist += abs(vAsix[j].Dot(vProj));
+		}
+		fDist *= 0.5f; // 절반으로 
+		float fCenterDist = abs(vCenter.Dot(vProj));
+
+		if (fDist < fCenterDist)
+			return false;
+	}
+
+	return true;
+
+}
+
+bool CCollisionMgr::IsCollision_Circle(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
+{
+
+	Vec3 vCenter = _pLeftCol->GetWorldPos() - _pRightCol->GetWorldPos();
+	float fDist = vCenter.Length();
+	float fRadius = fabsf(_pLeftCol->GetWorldScale().x) * 0.5f + fabsf(_pRightCol->GetWorldScale().x) * 0.5f; // GetWorldScale : 반지름을 얻는다. 
+
+
+	if (fRadius < fDist)
+	{
+		return false;
+	}
 
 	return true;
 }
-
 
 void CCollisionMgr::CollisionCheck(int _iLayerLeftIdx, int _iLayerRightIdx)
 {

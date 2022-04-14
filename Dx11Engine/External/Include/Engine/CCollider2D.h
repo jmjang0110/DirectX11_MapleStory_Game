@@ -31,8 +31,9 @@ private:
 public:
     void SetCollider2DType(COLLIDER2D_TYPE _type);
     void SetOffsetPos(Vec2 _vOffsetPos){m_vOffsetPos = _vOffsetPos;}
-    void SetOffsetScale(Vec2 _vOffsetScale) { m_vOffsetScale = _vOffsetScale; }
+    void SetOffsetScale(Vec2 _vOffsetScale);
 
+    COLLIDER2D_TYPE GetCollision2DType() { return m_eColliderType; }
     Vec3 GetWorldPos() { return m_matColWorld.Translation(); }
     Vec3 GetWorldScale() { return Vec3(m_vOffsetScale); }
 

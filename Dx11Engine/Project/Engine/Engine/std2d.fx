@@ -19,6 +19,11 @@ struct VTX_OUT
 
 // ============
 // Std2D Shader
+// g_float_0            : Mask Limit / limit 기준 alpha 값 세팅할때 사용 
+// g_tex_0              : Output Texture
+// Rasterizer           : CULL_NONE
+// BlendState           : Default
+// DepthStencilState    : LESS 
 // ============
 VTX_OUT VS_Std2D(VTX_IN _in)
 {
@@ -34,8 +39,14 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
     
+    vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    
+    if (vOutColor.a <= g_float_0)
+    {
+        discard;
+    }
+    
     return vOutColor;
-
 }
 
 
@@ -58,7 +69,7 @@ float4 PS_Collider2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
        
-    if(g_int_0)
+    if (g_int_0)
     {
         vOutColor = float4(1.f, 0.f, 0.f, 1.f);
     }
@@ -66,6 +77,7 @@ float4 PS_Collider2D(VTX_OUT _in) : SV_Target
     {
         vOutColor = float4(0.f, 1.f, 0.f, 1.f);
     }
+    
     
     return vOutColor;
 }

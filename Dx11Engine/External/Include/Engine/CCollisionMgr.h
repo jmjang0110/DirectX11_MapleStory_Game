@@ -34,6 +34,8 @@ public:
 private:
 	void CollisionBetweenLayer(const vector<CGameObject*>& _left, const vector<CGameObject*>& _right);
 	bool IsCollision(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
+	bool IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
+	bool IsCollision_Circle(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
 
 
 };

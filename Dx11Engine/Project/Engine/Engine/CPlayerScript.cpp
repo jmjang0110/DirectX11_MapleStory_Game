@@ -3,10 +3,17 @@
 
 #include "CMissileScript.h"
 
+
+
 CPlayerScript::CPlayerScript()
 	: m_pMissilePrefab(nullptr)
 	, m_fSpeed(0.5f)
+	, m_bJump(false)
 {
+	m_sJumpTool.velocity = 7.f;
+	m_sJumpTool.mass = 2.f;
+	m_sJumpTool.Force = 0.f;
+
 
 }
 
@@ -30,11 +37,17 @@ void CPlayerScript::update()
 	if (KEY_PRESSED(KEY::RIGHT))
 		vPos.x += DT * 100.f;
 
-	if (KEY_PRESSED(KEY::UP))	
-		vPos.y += DT * 100.f;
+	// 점프 기능 
+	if (KEY_TAP(KEY::SPACE))
+	{
+		m_bJump = true;
 
-	if (KEY_PRESSED(KEY::DOWN))
-		vPos.y -= DT * 100.f;
+	}
+
+	if (m_bJump == true)
+		Jump(vPos);
+
+
 
 	Transform()->SetPos(vPos);
 
@@ -44,7 +57,7 @@ void CPlayerScript::update()
 		vRot.z += DT * XM_2PI;
 		Transform()->SetRotation(vRot);
 	}
-
+	/*
 	if (KEY_TAP(KEY::SPACE))
 	{
 		if (nullptr != m_pMissilePrefab)
@@ -56,7 +69,7 @@ void CPlayerScript::update()
 
 			CSceneMgr::GetInst()->SpawnObject(pMissileObject, vMissilePos, L"Missile", 0);
 		}		
-	}
+	}*/
 }
 
 void CPlayerScript::lateupdate()
@@ -83,3 +96,25 @@ void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 		int a = 0;
 	}
 }
+
+
+
+void CPlayerScript::Jump(Vec3& _vPos)
+{
+
+	if (m_sJumpTool.velocity > 0.f)
+	{
+		m_sJumpTool.Force = 0.5f * m_sJumpTool.mass * (m_sJumpTool.velocity * m_sJumpTool.velocity);
+	}
+	else if (m_sJumpTool.velocity <= 0.f)
+	{
+		m_sJumpTool.Force = -0.5f * m_sJumpTool.mass * (m_sJumpTool.velocity * m_sJumpTool.velocity);
+	}
+
+	m_sJumpTool.velocity -= DT * m_fSpeed;
+	_vPos.y -= m_sJumpTool.velocity;
+
+
+}
+
+

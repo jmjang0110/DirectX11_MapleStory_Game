@@ -29,6 +29,12 @@ void CMaterial::UpdateData()
 		{
 			m_arrTex[i]->UpdateData((int)PIPELINE_STAGE::ALL, i);
 		}
+		else
+		{
+			// PIpeLine Stage 에 이전에세팅해놨던(잔류) 레지스터 값을 clear 하겠다. 
+			m_arrTex[i]->Clear(i);
+
+		}
 	}
 
 
