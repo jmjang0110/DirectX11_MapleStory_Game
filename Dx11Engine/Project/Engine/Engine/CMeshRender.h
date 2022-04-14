@@ -22,6 +22,7 @@ public:
 
 
     Ptr<CMesh> GetMesh() { return m_pMesh; }
+    Ptr<CMaterial> GetMaterial() { return m_pMtrl; }
     Ptr<CMaterial> GetSharedMaterial();
     Ptr<CMaterial> GetDynamicMaterial();
 

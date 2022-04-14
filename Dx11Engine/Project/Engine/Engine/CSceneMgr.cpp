@@ -208,6 +208,10 @@ void CSceneMgr::AddCameraObj()
 	pCamObj->AddComponent(new CCamera);
 	pCamObj->AddComponent(new CCameraMoveScript);
 
+	pCamObj->Camera()->SetCameraAsMain();
+	pCamObj->Camera()->CheckLayerMaskAll();
+
+
 	m_pCurScene->AddObject(pCamObj, L"Default");
 
 }

@@ -24,8 +24,8 @@ public:
 
     Vec3 GetWorldPos() { return m_matWorld.Translation(); }
     Vec3 GetWorldScale();
-
     const Matrix& GetWorldMat() { return m_matWorld; }
+
 
     void SetIgnoreParentScale(bool _bSet){ m_bIgnoreParentScale = _bSet;}
 

@@ -150,6 +150,26 @@ void CResMgr::CreateEngineShader()
 	pShader->AddScalarParamInfo(L"IsCollision", SCALAR_PARAM::INT_0);
 
 	AddRes<CGraphicsShader>(L"Collider2DShader", pShader);
+
+
+
+
+	// STD2D Alpha Blend Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2DAlphaBlend");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2DAlphaBlend");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+
+
+	//pShader->AddScalarParamInfo(L"IsColorRed", SCALAR_PARAM::INT_0);
+	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
+	AddRes<CGraphicsShader>(L"Std2DAlphaBlendShader", pShader);
+
+
 }
 
 void CResMgr::CreateEngineMaterial()
@@ -160,6 +180,12 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes<CMaterial>(L"TestMtrl", pMtrl);
+
+	// st2d Alpha Blend »ý¼º
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
+	AddRes<CMaterial>(L"Std2DAlphaBlendMtrl", pMtrl);
+
 
 	// Collider2DMtrl 
 	pMtrl = new CMaterial;

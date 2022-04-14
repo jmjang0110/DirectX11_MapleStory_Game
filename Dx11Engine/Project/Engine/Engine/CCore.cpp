@@ -9,6 +9,7 @@
 #include "CSceneMgr.h"
 #include "CCollisionMgr.h"
 #include "CEventMgr.h"
+#include "CRenderMgr.h"
 
 CCore::CCore()
 	: m_hWnd(nullptr)
@@ -37,20 +38,33 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 		return E_FAIL;
 	}
 
-	CPathMgr::GetInst()->init();
+
 	CKeyMgr::GetInst()->init();
+	CPathMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
+	CRenderMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
 	
 
 	return S_OK;
 }
+void CCore::Frame_Init()
+{
+
+
+	CTimeMgr::GetInst()->update();
+	CKeyMgr::GetInst()->update();
+	CRenderMgr::GetInst()->ClearCamera();
+}
+
+
 
 void CCore::progress()
 {
-	CTimeMgr::GetInst()->update();
-	CKeyMgr::GetInst()->update();
+	// frame start  
+	Frame_Init();
+
 
 	// Scene Update
 	CSceneMgr::GetInst()->progress();
@@ -60,8 +74,11 @@ void CCore::progress()
 
 	// Scene Render
 	CSceneMgr::GetInst()->render();	
+	//CRenderMgr::GetInst()->render();
 
 
 	// EventMgr update
 	CEventMgr::GetInst()->update();
 }
+
+
