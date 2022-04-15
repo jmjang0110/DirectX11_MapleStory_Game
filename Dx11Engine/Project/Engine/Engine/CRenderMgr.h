@@ -22,7 +22,8 @@ public:
 public:
     void RegisterCamera(CCamera* _pCam);
     void ClearCamera() { m_vecCam.clear(); }
-    void SwapCameraIndex(CCamera* _pCam, int _iChangeIdx);
+    // _pCam -> ChangeIdx ·Î Swap 
+    void SwapCameraIndex(CCamera* _pCam, int _iChangeIdx); 
 
 
 };

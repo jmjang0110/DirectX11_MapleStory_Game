@@ -22,6 +22,8 @@ public:
 	void SpawnObject(CGameObject* _pSpawnObject, UINT _iLayerIdx);
 
 	void AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject);
+	void ClearLayer();
+
 
 public:
 	void init();

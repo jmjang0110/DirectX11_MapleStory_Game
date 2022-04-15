@@ -16,6 +16,7 @@ public:
 
 private:
 	void Frame_Init();
+	void Frame_Clear();
 
 };
 

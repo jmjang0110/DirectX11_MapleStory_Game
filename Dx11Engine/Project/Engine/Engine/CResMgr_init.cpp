@@ -183,7 +183,7 @@ void CResMgr::CreateEngineMaterial()
 
 	// st2d Alpha Blend »ý¼º
 	pMtrl = new CMaterial;
-	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
 	AddRes<CMaterial>(L"Std2DAlphaBlendMtrl", pMtrl);
 
 

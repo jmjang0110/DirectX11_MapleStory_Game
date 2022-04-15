@@ -51,11 +51,16 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 }
 void CCore::Frame_Init()
 {
-
-
 	CTimeMgr::GetInst()->update();
 	CKeyMgr::GetInst()->update();
 	CRenderMgr::GetInst()->ClearCamera();
+}
+
+void CCore::Frame_Clear()
+{
+
+	CSceneMgr::GetInst()->ClearLayer();
+
 }
 
 
@@ -73,12 +78,15 @@ void CCore::progress()
 	CCollisionMgr::GetInst()->update();
 
 	// Scene Render
-	CSceneMgr::GetInst()->render();	
-	//CRenderMgr::GetInst()->render();
+	//CSceneMgr::GetInst()->render();	
+	CRenderMgr::GetInst()->render();
 
 
 	// EventMgr update
 	CEventMgr::GetInst()->update();
+
+	Frame_Clear();
+
 }
 
 

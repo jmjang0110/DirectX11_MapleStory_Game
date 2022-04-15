@@ -34,39 +34,55 @@ void CRenderMgr::render()
 	if (m_vecCam.empty())
 		return;
 
+	// ==========
+	// 화면 Clear 
+	// ==========
 	CDevice::GetInst()->ClearTarget();
 
-	// Main Camera 시점으로 Render
+
+
+	// ==========
+	// 화면 Draw 
+	// ==========
+
+	// *******************************
+	// [ Main Camera 시점으로 Render ]
+	// *******************************
+	
 	// [ 0 ] Camera : Main Camera  
 	CCamera* pMainCam = m_vecCam[0];
 	
-	// Camera 가 찍는 Layer 의 오브젝트들을 Shader Domain 에 따라 분류홰둠 
+	// Camera 가 찍는 Layer 의 오브젝트들을 Shader Domain 에 따라 분류해둠 
 	pMainCam->SortGameObject();
 
+	// Render 시점에 g_transform 의 데이터를 GPU 로 보낸다. 
 	g_transform.matView = pMainCam->GetViewMat();
 	g_transform.matProj = pMainCam->GetProjMat();
 
 	// Forward 물체 렌더링 
 	pMainCam->render_forward();
-
 	// Masked 물체 렌더링 
 	pMainCam->render_masked();
 	// Alpha 물체 렌더링 
 	pMainCam->render_opaque();
 
 
-	// Sub Camera 시점으로 Render 
+	// ******************************
+	// [ Sub Camera 시점으로 Render ]
+	// ******************************
 	for (int i = 1; i < m_vecCam.size(); ++i)
 	{
 		if (nullptr == m_vecCam[i])
 			continue;
 
-		m_vecCam[i];
+		m_vecCam[i]->render();
 
 	}
 
 
-
+	// ============
+	// 화면 Present 
+	// ============
 	CDevice::GetInst()->Present();
 
 }
@@ -102,7 +118,7 @@ void CRenderMgr::SwapCameraIndex(CCamera* _pCam, int _iChangeIdx)
 		{
 			if (nullptr != m_vecCam[_iChangeIdx])
 			{
-				m_vecCam[_iChangeIdx]->m_iCamIdx = i;
+				m_vecCam[_iChangeIdx]->m_iCamIdx = (int)i;
 				_pCam->m_iCamIdx = _iChangeIdx;
 
 				return;

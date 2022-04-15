@@ -13,19 +13,17 @@ private:
     vector<CGameObject*> m_vecOpaque;   // 반투명 물체 
 
 
-
-    
     Matrix              m_matView;
     Matrix              m_matProj;
 
 
     UINT                m_iLayerMask;
-    int                 m_iCamIdx; // RenderMgr 상에서 
+    int                 m_iCamIdx;          // RenderMgr 상에서 
 public:
     void SetCameraAsMain();
     void CheckLayerMask(int _iLayerIdx);
     void CheckLayerMask(const wstring&& _strLayerName);
-    void CheckLayerMaskAll() { m_iLayerMask = 0xffffffff; }
+    void CheckLayerMaskAll() { m_iLayerMask = 0xffffffff; } //32개 렌더링 하겠다.  }
 
 
 private:

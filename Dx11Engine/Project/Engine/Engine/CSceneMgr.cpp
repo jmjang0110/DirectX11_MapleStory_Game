@@ -121,9 +121,6 @@ void CSceneMgr::AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject
 }
 
 
-
-
-
 void CSceneMgr::LoadTextures()
 {
 	/*
@@ -232,4 +229,17 @@ void CSceneMgr::AddMissilePrefab()
 
 
 }
+
+
+
+
+void CSceneMgr::ClearLayer()
+{
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		m_pCurScene->GetLayer(i)->Clear();
+	}
+}
+
+
 

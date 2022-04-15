@@ -17,8 +17,6 @@
 #include "CMeshRender.h"
 
 #include "CGameObject.h"
-
-
 #include "CGraphicsShader.h"
 
 CCamera::CCamera()
@@ -44,27 +42,27 @@ CCamera::~CCamera()
 
 void CCamera::SortGameObject()
 {
-
 	m_vecForward.clear();
 	m_vecMasked.clear();
 	m_vecOpaque.clear();
 
-
-	// 찍기로 한 Layer 만 확인
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{
-		// 카메라가 찍을 대상 레이어가 아니면 continue;
+		// 카메라가 찍을 대상 레이어가 아니면 continue
 		if (!(m_iLayerMask & (1 << i)))
 			continue;
 
 		CLayer* pLayer = pCurScene->GetLayer(i);
 		vector<CGameObject*>& vecObj = pLayer->GetObjects();
 
-		for (size_t j = 0;j < vecObj.size(); ++j)
+		for (size_t j = 0; j < vecObj.size(); ++j)
 		{
-			CMeshRender* pMeshRender = vecObj[i]->MeshRender();
+			// 1. MeshRender Component 를 갖고있는지 확인
+			CMeshRender* pMeshRender = vecObj[j]->MeshRender();
+			if (nullptr == pMeshRender)
+				continue;
 
 			if (nullptr == pMeshRender
 				|| nullptr == pMeshRender->GetMesh()
@@ -74,9 +72,9 @@ void CCamera::SortGameObject()
 				continue;
 			}
 
+			// 2. SHADER_DOMAIN 확인 
 			Ptr<CGraphicsShader> pShader = pMeshRender->GetMaterial()->GetShader();
-			
-			
+
 			switch (pShader->GetShaderDomain())
 			{
 			case SHADER_DOMAIN::DOMAIN_FORWARD:
@@ -88,13 +86,10 @@ void CCamera::SortGameObject()
 			case SHADER_DOMAIN::DOMAIN_OPAQUE:
 				m_vecOpaque.push_back(vecObj[j]);
 				break;
-
-
 			}
 		}
 	}
 }
-
 void CCamera::render_forward()
 {
 	for (size_t i = 0; i < m_vecForward.size(); ++i)
@@ -139,7 +134,6 @@ void CCamera::finalupdate()
 
 	CRenderMgr::GetInst()->RegisterCamera(this);
 
-
 }
 
 
@@ -149,7 +143,7 @@ void CCamera::SetCameraAsMain()
 
 	tEvent.eType = EVENT_TYPE::SET_CAMERA_INDEX;
 	tEvent.lParam = (DWORD_PTR)this;
-	tEvent.wParam = 0;
+	tEvent.wParam = 0; // 0 Index  - Main Camera  
 
 	CEventMgr::GetInst()->AddEvent(tEvent);
 

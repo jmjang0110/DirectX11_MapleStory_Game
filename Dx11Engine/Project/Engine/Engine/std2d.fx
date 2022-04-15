@@ -49,13 +49,14 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     return vOutColor;
 }
 
-
+// ======================
 // STD 2D AlphaBlend
 // BlendState           :   Alpha blend 
-// DepthStencil State   :   NO_Write // 깊이 텍스처를 남기지 않는다. 
+// DepthStencil State   :   NO_Write // 깊이 텍스처를 남기지 않는다. ( 반투명 ) 
 // DOMAIN               :   OPAQUE 
+// ======================
 
-VTX_OUT VS_Std2DAlpha(VTX_IN _in)
+VTX_OUT VS_Std2DAlphaBlend(VTX_IN _in)
 {
     VTX_OUT output = (VTX_OUT) 0.f;
     
@@ -65,7 +66,7 @@ VTX_OUT VS_Std2DAlpha(VTX_IN _in)
     return output;
 }
 
-float4 PS_Std2DAlpha(VTX_OUT _in) : SV_Target
+float4 PS_Std2DAlphaBlend(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
     
