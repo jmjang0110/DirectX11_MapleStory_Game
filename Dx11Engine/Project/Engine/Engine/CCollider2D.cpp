@@ -17,7 +17,7 @@ CCollider2D::CCollider2D()
 	, m_iCollisionCount(0)
 {
 	// Collider2D 모양에 맞는 메쉬 참조
-	SetCollider2DType(m_eColliderType);	
+	SetCollider2DType(m_eColliderType);
 
 	// Collider2D 전용 재질 참조	
 	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Collider2DMtrl");
@@ -49,7 +49,6 @@ void CCollider2D::SetCollider2DType(COLLIDER2D_TYPE _type)
 	if (COLLIDER2D_TYPE::BOX == m_eColliderType)
 	{
 		m_pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh_LineStrip");
-		//m_pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
 	}
 	else
 	{
@@ -57,12 +56,32 @@ void CCollider2D::SetCollider2DType(COLLIDER2D_TYPE _type)
 	}
 }
 
+void CCollider2D::SetOffsetScale(Vec2 _vOffsetScale)
+{
+	m_vOffsetScale = _vOffsetScale;
+
+	if (COLLIDER2D_TYPE::CIRCLE == m_eColliderType)
+	{
+		m_vOffsetScale.y = m_vOffsetScale.x;
+	}
+}
+
+void CCollider2D::SetOffsetScale(float _x, float _y)
+{
+	m_vOffsetScale = Vec2(_x, _y);
+
+	if (COLLIDER2D_TYPE::CIRCLE == m_eColliderType)
+	{
+		m_vOffsetScale.y = m_vOffsetScale.x;
+	}
+}
+
 void CCollider2D::finalupdate()
 {
 	Matrix matTrans = XMMatrixTranslation(m_vOffsetPos.x, m_vOffsetPos.y, 0.f);
-	Matrix matScale = XMMatrixScaling(m_vOffsetScale.x, m_vOffsetScale.y, 1.f);	
+	Matrix matScale = XMMatrixScaling(m_vOffsetScale.x, m_vOffsetScale.y, 1.f);
 	m_matColWorld = matScale * matTrans;
-		
+
 	Vec3 vObjScale = Transform()->GetWorldScale();
 	Matrix matObjScaleInv = XMMatrixInverse(nullptr, XMMatrixScaling(vObjScale.x, vObjScale.y, vObjScale.z));
 
@@ -96,13 +115,16 @@ void CCollider2D::OnCollisionEnter(CCollider2D* _Other)
 	++m_iCollisionCount;
 
 	CScript* pScript = GetOwner()->GetScript();
-	pScript->OnCollisionEnter(_Other->GetOwner());
+
+	if (nullptr != pScript)
+		pScript->OnCollisionEnter(_Other->GetOwner());
 }
 
 void CCollider2D::OnCollision(CCollider2D* _Other)
 {
 	CScript* pScript = GetOwner()->GetScript();
-	pScript->OnCollision(_Other->GetOwner());
+	if (nullptr != pScript)
+		pScript->OnCollision(_Other->GetOwner());
 }
 
 void CCollider2D::OnCollisionExit(CCollider2D* _Other)
@@ -110,17 +132,6 @@ void CCollider2D::OnCollisionExit(CCollider2D* _Other)
 	--m_iCollisionCount;
 
 	CScript* pScript = GetOwner()->GetScript();
-	pScript->OnCollisionExit(_Other->GetOwner());
-}
-
-
-void CCollider2D::SetOffsetScale(Vec2 _vOffsetScale)
-{
-	m_vOffsetScale = _vOffsetScale;
-
-	if (COLLIDER2D_TYPE::CIRCLE == m_eColliderType)
-	{
-		// 원의 반지름 설정 
-		m_vOffsetScale.y = m_vOffsetScale.x; // x  y 값이 다르게 들어오면 그냥 x 값에 맞춘다. 
-	}
+	if (nullptr != pScript)
+		pScript->OnCollisionExit(_Other->GetOwner());
 }

@@ -16,7 +16,6 @@ public:
     void lateupdate();
     void finalupdate();
 
-    void render();
 
 public:
     void SetLayerName(int _iLayerIdx, const wstring& _strName);

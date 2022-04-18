@@ -63,7 +63,7 @@ void CSceneMgr::init()
 	AddMonsterObj();
 
 
-	CCollisionMgr::GetInst()->CollisionCheck(1, 2);
+	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
 
 	m_pCurScene->start();
 }
@@ -79,7 +79,7 @@ void CSceneMgr::render()
 {
 	CDevice::GetInst()->ClearTarget();
 
-	m_pCurScene->render();
+	//m_pCurScene->render();
 
 	CDevice::GetInst()->Present();
 }
@@ -139,32 +139,69 @@ void CSceneMgr::AddMainPlayerObj()
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");
 
 
+	//// Player Object
+	//CGameObject* pObject = new CGameObject;
+	//pObject->SetName(L"Player");
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender);
+	//pObject->AddComponent(new CCollider2D);
+	//pObject->AddComponent(new CPlayerScript);
+
+	//pObject->Transform()->SetScale(Vec3(300.f, 300.f, 1.f));
+
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+
+	////int a = 0;
+	////pObject->MeshRender()->GetDynamicMaterial()->SetScalarParam(L"IsColorRed", &a);
+
+	//float fLimit = 0.3333f;
+	//pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	//pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+
+
+	//
+	////pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(L"OutputTex", pTex);
+
+	//pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	//pObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
+
+	//m_pCurScene->AddObject(pObject, L"Player");
+
+
 	// Player Object
 	CGameObject* pObject = new CGameObject;
 	pObject->SetName(L"Player");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CPlayerScript);
 
+	pObject->Transform()->SetPos(0.f, 0.f, 500.f);
 	pObject->Transform()->SetScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 
-	//int a = 0;
-	//pObject->MeshRender()->GetDynamicMaterial()->SetScalarParam(L"IsColorRed", &a);
-
 	float fLimit = 0.3333f;
 	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
 
-
-	
-	//pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(L"OutputTex", pTex);
-
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
 	pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
 	pObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
+
+	CGameObject* pChildObj = pObject->Clone();
+	pChildObj->SetName(L"ChildObject");
+	pChildObj->Transform()->SetIgnoreParentScale(true);
+	pChildObj->Transform()->SetPos(200.f, 0.f, 0.f);
+	pChildObj->Transform()->SetScale(50.f, 50.f, 50.f);
+
+	pChildObj->Collider2D()->SetOffsetPos(0.f, 0.f);
+	pChildObj->Collider2D()->SetOffsetScale(50.f, 50.f);
+
+
+	pObject->AddChild(pChildObj);
+	pObject->AddComponent(new CPlayerScript);
 
 	m_pCurScene->AddObject(pObject, L"Player");
 
@@ -183,12 +220,13 @@ void CSceneMgr::AddMonsterObj()
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CMissileScript);
 
-	pObject->Transform()->SetPos(Vec3(400.f, 0.f, 0.f));
+	pObject->Transform()->SetPos(Vec3(400.f, 0.f, 500.f));
 	pObject->Transform()->SetScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
 	pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
 	pObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
 
@@ -205,6 +243,7 @@ void CSceneMgr::AddCameraObj()
 	pCamObj->AddComponent(new CCamera);
 	pCamObj->AddComponent(new CCameraMoveScript);
 
+	//pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pCamObj->Camera()->SetCameraAsMain();
 	pCamObj->Camera()->CheckLayerMaskAll();
 

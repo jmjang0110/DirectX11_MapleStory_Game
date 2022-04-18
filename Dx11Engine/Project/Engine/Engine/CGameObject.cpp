@@ -139,7 +139,12 @@ void CGameObject::DisconnectBetweenParent()
 	{
 		if ((*iter) == this)
 		{
+			// erase 하고 다시 순회를 할려면 
+			// iter = ~~ erase 하고 iter 를 인자로 다시 받아야했다. 
 			m_pParent->m_vecChild.erase(iter);
+			m_pParent = nullptr;
+			return;
+
 		}		
 	}
 

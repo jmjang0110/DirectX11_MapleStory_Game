@@ -7,12 +7,16 @@
 CTransform::CTransform()
 	: CComponent(COMPONENT_TYPE::TRANSFORM)
 	, m_vRelativeScale(Vec3(1.f, 1.f, 1.f))
+	, m_arrRelativeDir{}
+	, m_arrWorldDir{}
 	, m_bIgnoreParentScale(false)
 {
+
 }
 
 CTransform::~CTransform()
 {
+
 }
 
 void CTransform::finalupdate()
@@ -28,6 +32,18 @@ void CTransform::finalupdate()
 
 	// World 행렬 만들기
 	m_matWorld = matScale * matRotation * matTranslation;
+
+	// RelativeDir 계산 
+	Vec3 vAxis[(UINT)DIR_TYPE::END] = { Vec3::Right, Vec3::Up, Vec3::Front };
+	
+	
+	for (int i = 0; i < (int)DIR_TYPE::END; ++i)
+	{
+		// vAxis[i] : 회전하지 않았을 때의 기저축 
+		m_arrWorldDir[i] = m_arrRelativeDir[i] = XMVector3TransformNormal(vAxis[i], matRotation);
+
+	}
+
 
 	if (GetOwner()->GetParent())
 	{		
@@ -45,6 +61,15 @@ void CTransform::finalupdate()
 		{
 			m_matWorld *= matParentWorld;
 		}
+
+		// World Dir 구하기 
+		for (int i = 0; i < (int)DIR_TYPE::END; ++i)
+		{
+			m_arrWorldDir[i] = XMVector3TransformNormal(m_arrRelativeDir[i], matParentWorld);
+			m_arrWorldDir[i].Normalize();
+
+
+		}
 	}
 }
 
@@ -58,7 +83,7 @@ Vec3 CTransform::GetWorldScale()
 
 	while (pParent)
 	{
-		vWorldScale *= pParent->Transform()->GetScale();
+		vWorldScale *= pParent->Transform()->GetRelativeScale();
 
 		bool bIgnoreParentScale = pParent->Transform()->m_bIgnoreParentScale;
 		pParent = pParent->GetParent();

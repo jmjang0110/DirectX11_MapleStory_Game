@@ -19,16 +19,36 @@
 #include "CGameObject.h"
 #include "CGraphicsShader.h"
 
+#include "CTimeMgr.h"
+#include "CKeyMgr.h"
+
+
+
+
 CCamera::CCamera()
 	: CComponent(COMPONENT_TYPE::CAMERA)
+	, m_eProjType(PROJ_TYPE::ORTHOGRAPHIC)
+	, m_fWidth(0.f)
+	, m_fAspectRatio(1.f)
+	, m_fFOV(XM_PI / 4.f)
+	, m_fFar(10000.f)
 	, m_iLayerMask(0)
 	, m_iCamIdx(-1) // Scene 에 속한적 없는 카메라 
 {
+	m_fWidth = CDevice::GetInst()->GetRenderResolution().x;
+	m_fAspectRatio = (CDevice::GetInst()->GetRenderResolution().x /
+		CDevice::GetInst()->GetRenderResolution().y); // ( 종횡비 = 가로 / 세로  )  
+	
 
 }
 
 CCamera::CCamera(const CCamera& _origin)
 	: CComponent(_origin)
+	, m_eProjType(_origin.m_eProjType)
+	, m_fWidth(_origin.m_fWidth)
+	, m_fAspectRatio(_origin.m_fAspectRatio)
+	, m_fFOV(_origin.m_fFOV)
+	, m_fFar(_origin.m_fFar)
 	, m_iLayerMask(_origin.m_iLayerMask)
 	, m_iCamIdx(-1)
 {
@@ -120,13 +140,61 @@ void CCamera::render_opaque()
 
 void CCamera::finalupdate()
 {
-	// View 행렬 계산
-	Vec3 vCamPos = Transform()->GetPos();
-	m_matView = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
+	//if (KEY_PRESSED(KEY::NUM1))
+	//{
+	//	m_fWidth += DT * 500.f;
+	//	 
+	//}
 
-	// 투영행렬 계산
-	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
-	m_matProj = XMMatrixOrthographicLH(vRenderResolution.x, vRenderResolution.y, 0.f, 5000.f);	
+	//if (KEY_PRESSED(KEY::NUM2))
+	//{
+	//	m_fWidth -= DT * 500.f;
+
+	//}
+	// View 행렬 계산
+	Vec3 vCamPos = Transform()->GetRelativePos();
+
+	// view 이동행렬
+	Matrix matViewTrans = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
+	
+	// view 회전행렬 
+	Matrix matViewRot;
+
+	// Right Up  Front 를 가져온다, 
+	Vec3 vRight = Transform()->GetWorldRightDir();
+	Vec3 vUp = Transform()->GetWorldUpDir();
+	Vec3 vFront = Transform()->GetWorldFrontDir();
+
+	matViewRot._11 = vRight.x; matViewRot._12 = vUp.x; matViewRot._13 = vFront.x;
+	matViewRot._21 = vRight.y; matViewRot._22 = vUp.y; matViewRot._23 = vFront.y;
+	matViewRot._31 = vRight.z; matViewRot._32 = vUp.z; matViewRot._33 = vFront.z;
+
+
+	m_matView = matViewTrans * matViewRot;
+
+
+	// [  투영행렬 계산  ]
+
+	
+	
+	// 1. 직교 투영 
+	if (PROJ_TYPE::ORTHOGRAPHIC == m_eProjType)
+	{
+		float fHeight = m_fWidth / m_fAspectRatio;
+		m_matProj = XMMatrixOrthographicLH(m_fWidth, fHeight, 0.f, 5000.f);
+
+	}
+	// 2. 원근 투영 
+	else if (PROJ_TYPE::PERSPECTIVE == m_eProjType)
+	{
+		m_matProj = XMMatrixPerspectiveLH(m_fFOV, m_fAspectRatio, 1.f, m_fFar);
+
+
+	}
+
+
+	//Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+	
 
 	g_transform.matView = m_matView;
 	g_transform.matProj = m_matProj;

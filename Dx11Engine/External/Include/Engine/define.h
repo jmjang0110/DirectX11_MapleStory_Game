@@ -130,6 +130,15 @@ enum class COMPONENT_TYPE
 };
 
 
+enum class DIR_TYPE
+{
+	RIGHT,
+	UP,
+	FRONT,
+	END,
+
+};
+
 enum class SCALAR_PARAM
 {
 	INT_0,

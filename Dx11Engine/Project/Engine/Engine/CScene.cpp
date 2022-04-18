@@ -64,22 +64,7 @@ void CScene::finalupdate()
 
 }
 
-void CScene::render()
-{
-	// 렌더링 
-	for (UINT i = 0; i < MAX_LAYER; ++i)
-	{
-		m_arrLayer[i]->render();
 
-	}
-
-	// 지운다. 
-	for (UINT i = 0; i < MAX_LAYER; ++i)
-	{
-		m_arrLayer[i]->Clear();
-
-	}
-}
 
 void CScene::SetLayerName(int _iLayerIdx, const wstring& _strName)
 {

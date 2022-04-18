@@ -21,8 +21,7 @@ public:
     void update();
     void lateupdate();
     void finalupdate();
-    void render();
-
+  
 public:
     void AddObject(CGameObject* _pObj);
     void RegisterObject(CGameObject* _pObj) { m_vecObj.push_back(_pObj); }

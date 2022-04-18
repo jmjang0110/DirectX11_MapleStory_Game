@@ -29,7 +29,8 @@ void CPlayerScript::start()
 
 void CPlayerScript::update()
 {
-	Vec3 vPos = Transform()->GetPos();
+	
+	Vec3 vPos = Transform()->GetRelativePos();
 
 	if (KEY_PRESSED(KEY::LEFT))
 		vPos.x -= DT * 100.f;
@@ -53,7 +54,7 @@ void CPlayerScript::update()
 
 	if (KEY_PRESSED(KEY::Z))
 	{
-		Vec3 vRot = Transform()->GetRotation();
+		Vec3 vRot = Transform()->GetRelativeRotation();
 		vRot.z += DT * XM_2PI;
 		Transform()->SetRotation(vRot);
 	}

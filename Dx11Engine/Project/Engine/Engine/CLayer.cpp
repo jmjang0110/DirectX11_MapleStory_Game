@@ -56,13 +56,7 @@ void CLayer::finalupdate()
 	}
 }
 
-void CLayer::render()
-{
-	for (size_t i = 0; i < m_vecObj.size(); ++i)
-	{
-		m_vecObj[i]->render();
-	}
-}
+
 
 void CLayer::AddObject(CGameObject* _pObj)
 {

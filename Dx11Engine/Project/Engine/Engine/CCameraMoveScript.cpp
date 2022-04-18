@@ -17,26 +17,39 @@ CCameraMoveScript::~CCameraMoveScript()
 
 void CCameraMoveScript::update()
 {
-	Vec3 vPos = Transform()->GetPos();
+	Vec3 vPos = Transform()->GetRelativePos();
 
 	if (KEY_PRESSED(KEY::W))
 	{
-		vPos.y += DT * m_fCamSpeed;
+
+		Vec3 vFront = Transform()->GetWorldFrontDir();
+		vPos += DT * vFront * m_fCamSpeed;
+
 	}
 
 	if (KEY_PRESSED(KEY::S))
 	{
-		vPos.y -= DT * m_fCamSpeed;
+		Vec3 vFront = Transform()->GetWorldFrontDir();
+		vPos -= DT * vFront * m_fCamSpeed;
 	}
 
 	if (KEY_PRESSED(KEY::A))
 	{
-		vPos.x -= DT * m_fCamSpeed;
+		Vec3 vRight = Transform()->GetWorldRightDir();
+		vPos -= DT * vRight * m_fCamSpeed;
 	}
 
 	if (KEY_PRESSED(KEY::D))
 	{
-		vPos.x += DT * m_fCamSpeed;
+		Vec3 vRight = Transform()->GetWorldRightDir();
+		vPos += DT *  vRight * m_fCamSpeed;
+	}
+
+	if (KEY_PRESSED(KEY::Y))
+	{
+
+		Vec3 vRot = Transform()->GetRelativeRotation();
+
 	}
 
 	Transform()->SetPos(vPos);

@@ -11,6 +11,8 @@ private:
 public:
     virtual void update();
 
+    void OnCollisionEnter(CGameObject* _pOtherObj) override;
+
 
     CLONE(CMissileScript);
 public:

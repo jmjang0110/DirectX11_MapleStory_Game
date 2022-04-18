@@ -17,7 +17,7 @@ CMissileScript::~CMissileScript()
 
 void CMissileScript::update()
 {
-	Vec3 vPos = Transform()->GetPos();
+	Vec3 vPos = Transform()->GetRelativePos();
 
 	vPos.y += DT * m_fSpeed;
 
@@ -29,6 +29,15 @@ void CMissileScript::update()
 	if (m_fAccTime >= 2.f)
 	{
 		//GetOwner()->Destroy();
+	}
+}
+
+void CMissileScript::OnCollisionEnter(CGameObject* _pOtherObj)
+{
+	if (_pOtherObj->GetName() == L"ChildObject")
+	{
+		_pOtherObj->Destroy();
+
 	}
 }
 
