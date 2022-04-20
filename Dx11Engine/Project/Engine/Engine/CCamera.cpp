@@ -140,17 +140,20 @@ void CCamera::render_opaque()
 
 void CCamera::finalupdate()
 {
-	//if (KEY_PRESSED(KEY::NUM1))
-	//{
-	//	m_fWidth += DT * 500.f;
-	//	 
-	//}
+	if (KEY_PRESSED(KEY::NUM1))
+	{
+		//m_fWidth += DT * 500.f;
+		m_fFOV += DT * XM_PI / 10.f; // 시야각 조절 
 
-	//if (KEY_PRESSED(KEY::NUM2))
-	//{
-	//	m_fWidth -= DT * 500.f;
+	}
 
-	//}
+	if (KEY_PRESSED(KEY::NUM2))
+	{
+		//m_fWidth -= DT * 500.f;
+		m_fFOV -= DT * XM_PI / 10.f; // 시야각 조절 
+
+	}
+	 
 	// View 행렬 계산
 	Vec3 vCamPos = Transform()->GetRelativePos();
 
@@ -158,18 +161,19 @@ void CCamera::finalupdate()
 	Matrix matViewTrans = XMMatrixTranslation(-vCamPos.x, -vCamPos.y, -vCamPos.z);
 	
 	// view 회전행렬 
-	Matrix matViewRot;
+	Matrix matViewRot = XMMatrixIdentity();
 
 	// Right Up  Front 를 가져온다, 
 	Vec3 vRight = Transform()->GetWorldRightDir();
-	Vec3 vUp = Transform()->GetWorldUpDir();
+	Vec3 vUp	= Transform()->GetWorldUpDir();
 	Vec3 vFront = Transform()->GetWorldFrontDir();
 
+	// 전치 행렬 
 	matViewRot._11 = vRight.x; matViewRot._12 = vUp.x; matViewRot._13 = vFront.x;
 	matViewRot._21 = vRight.y; matViewRot._22 = vUp.y; matViewRot._23 = vFront.y;
 	matViewRot._31 = vRight.z; matViewRot._32 = vUp.z; matViewRot._33 = vFront.z;
 
-
+	// m_matView - google : View Matrix 형태를 띈다 .
 	m_matView = matViewTrans * matViewRot;
 
 
@@ -187,8 +191,7 @@ void CCamera::finalupdate()
 	// 2. 원근 투영 
 	else if (PROJ_TYPE::PERSPECTIVE == m_eProjType)
 	{
-		m_matProj = XMMatrixPerspectiveLH(m_fFOV, m_fAspectRatio, 1.f, m_fFar);
-
+		m_matProj = XMMatrixPerspectiveFovLH(m_fFOV, m_fAspectRatio, 1.f, m_fFar);
 
 	}
 

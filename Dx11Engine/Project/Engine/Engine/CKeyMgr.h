@@ -96,6 +96,7 @@ private:
 	vector<tKeyInfo>	m_vecKey;
 	Vec2				m_vMousePos;
 	Vec2				m_vMousePrevPos;
+	Vec2				m_vMouseDir;
 
 
 public:
@@ -115,7 +116,8 @@ public:
 
 	Vec2 GetMouseDir()
 	{
-		return (m_vMousePos - m_vMousePrevPos);
+
+		return m_vMouseDir;
 	}
 };
 

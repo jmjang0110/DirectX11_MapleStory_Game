@@ -124,6 +124,12 @@
     <ClInclude Include="CRenderMgr.h">
       <Filter>Engine\03. Manager\02. RenderMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CAnimator2D.h">
+      <Filter>Engine\05. Component\05. Animator2D</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimation2D.h">
+      <Filter>Engine\05. Component\05. Animator2D\CAnimation2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -230,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="CRenderMgr.cpp">
       <Filter>Engine\03. Manager\02. RenderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimator2D.cpp">
+      <Filter>Engine\05. Component\05. Animator2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimation2D.cpp">
+      <Filter>Engine\05. Component\05. Animator2D\CAnimation2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +394,9 @@
     </Filter>
     <Filter Include="Engine\03. Manager\09. CollisionMgr">
       <UniqueIdentifier>{6dd8a486-5c5b-47c5-a5db-fac349597fd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\05. Animator2D\CAnimation2D">
+      <UniqueIdentifier>{345b105d-9333-4895-8d9c-b59ba591ffb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

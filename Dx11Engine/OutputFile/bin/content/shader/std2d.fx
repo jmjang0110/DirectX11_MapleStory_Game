@@ -28,6 +28,7 @@ struct VTX_OUT
 VTX_OUT VS_Std2D(VTX_IN _in)
 {
     VTX_OUT output = (VTX_OUT) 0.f;
+   
     
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vUV = _in.vUV;
@@ -39,12 +40,26 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
     
-    vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
-    
-    if (vOutColor.a <= g_float_0)
+     
+    // Animation 정보가 있는 경우 
+    if (g_useAnim2D)
     {
-        discard;
+       vOutColor = g_Atlas.Sample(g_sam_0, _in.vUV);
+        
+
     }
+    else
+    {
+        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    
+        if (vOutColor.a <= g_float_0)
+        {
+            discard;
+        }
+        
+    }
+    
+   
     
     return vOutColor;
 }

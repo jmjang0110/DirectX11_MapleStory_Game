@@ -21,7 +21,7 @@ void CMissileScript::update()
 
 	vPos.y += DT * m_fSpeed;
 
-	Transform()->SetPos(vPos);
+	Transform()->SetRelativePos(vPos);
 
 
 	m_fAccTime += DT;

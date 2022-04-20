@@ -40,17 +40,38 @@ cbuffer SCALAR_PARAM : register(b1)
     matrix g_mat_3;
 }
 
+cbuffer ANIM2D : register(b2)
+{
+    int     g_useAnim2D; // Animation 정보 사용 유무
+    float   g_Atlas_Width;
+    float   g_Atlas_Height;   // 해상도 정보 
+    
+    float g_vLT;
+    float g_vSlice;
+    float g_BaseSize;
+    
+    
+    
+    int     g_Anim2D_Padding;
+}
+
 
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
 Texture2D g_tex_2 : register(t2);
 Texture2D g_tex_3 : register(t3);
+Texture2D g_tex_4 : register(t4);
+Texture2D g_tex_5 : register(t5);
 
-TextureCube g_texcube_0 : register(t4);
-TextureCube g_texcube_1 : register(t5);
 
-Texture2DArray g_texarr_0 : register(t6);
-Texture2DArray g_texarr_1 : register(t7);
+TextureCube g_texcube_0 : register(t6);
+TextureCube g_texcube_1 : register(t7);
+
+Texture2DArray g_texarr_0 : register(t8);
+Texture2DArray g_texarr_1 : register(t9);
+
+
+Texture2D g_Atlas : register(t10);
 
 
 SamplerState g_sam_0 : register(s0); // Anisotropic Filter

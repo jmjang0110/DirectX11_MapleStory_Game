@@ -38,11 +38,13 @@ public:
     void SetCameraAsMain();
     void SetWidth(float _fWidth) { m_fWidth = _fWidth; }
     void SetAspectRatio(float _fAR) { m_fAspectRatio = _fAR; }
+    void SetFOV(float _FOV) { m_fFOV = _FOV; }
     void SetProjType(PROJ_TYPE _eType) { m_eProjType = _eType; }
     
 
     float GetWidth() { return m_fWidth; }
     float GetAspectRatio() { return m_fAspectRatio; }
+    float GetFOV() { return m_fFOV; }
     PROJ_TYPE GetProjType() { return m_eProjType; }
 
 

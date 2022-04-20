@@ -20,6 +20,31 @@ struct Vertex
 
 typedef Vertex Vtx;
 
+//==========
+// Animation2D
+// ============
+struct tAnim2DFrame
+{
+	Vec2	vLT;
+	Vec2	vSlice;		
+	float	fDuration;	// 노출 유지 시간
+
+};
+
+
+struct tAnim2D
+{
+	int     useAnim2D; // Animation 정보 사용 유무
+	float   Atlas_Width;
+	float   Atlas_Height;   // 해상도 정보 
+
+	Vec2	vLT;
+	Vec2	vSlice;
+	Vec2	vBaseSize;
+
+	Vec3    Anim2D_Padding;
+
+};
 
 // ===================
 // 상수버퍼 대응 구조체

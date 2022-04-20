@@ -19,13 +19,13 @@ private:
     bool    m_bIgnoreParentScale;
 
 public:
-    void SetPos(float _x, float _y, float _z) { m_vRelativePos = Vec3(_x, _y, _z); }
-    void SetScale(float _x, float _y, float _z) { m_vRelativeScale = Vec3(_x, _y, _z); }
-    void SetRotation(float _x, float _y, float _z) { m_vRelativeRot = Vec3(_x, _y, _z); }
+    void SetRelativePos(float _x, float _y, float _z) { m_vRelativePos = Vec3(_x, _y, _z); }
+    void SetRelativeScale(float _x, float _y, float _z) { m_vRelativeScale = Vec3(_x, _y, _z); }
+    void SetRelativeRotation(float _x, float _y, float _z) { m_vRelativeRot = Vec3(_x, _y, _z); }
 
-    void SetPos(const Vec3& _vPos) { m_vRelativePos = _vPos; }
-    void SetScale(const Vec3& _vScale) { m_vRelativeScale = _vScale; }
-    void SetRotation(const Vec3 _vRot) { m_vRelativeRot = _vRot; }
+    void SetRelativePos(const Vec3& _vPos) { m_vRelativePos = _vPos; }
+    void SetRelativeScale(const Vec3& _vScale) { m_vRelativeScale = _vScale; }
+    void SetRelativeRotation(const Vec3 _vRot) { m_vRelativeRot = _vRot; }
 
     const Vec3& GetRelativePos() { return m_vRelativePos; }
     const Vec3& GetRelativeScale() { return m_vRelativeScale; }

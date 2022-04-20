@@ -94,7 +94,7 @@ void CSceneMgr::SpawnObject(CGameObject* _pSpawnObject, Vec3 _vWorldPos, wstring
 	info.lParam = (DWORD_PTR)_pSpawnObject;
 	info.wParam = (DWORD_PTR)_iLayerIdx;
 
-	_pSpawnObject->Transform()->SetPos(_vWorldPos);
+	_pSpawnObject->Transform()->SetRelativePos(_vWorldPos);
 	_pSpawnObject->SetName(_strName);
 
 	CEventMgr::GetInst()->AddEvent(info);
@@ -176,8 +176,8 @@ void CSceneMgr::AddMainPlayerObj()
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
 
-	pObject->Transform()->SetPos(0.f, 0.f, 500.f);
-	pObject->Transform()->SetScale(Vec3(300.f, 300.f, 1.f));
+	pObject->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
@@ -193,8 +193,8 @@ void CSceneMgr::AddMainPlayerObj()
 	CGameObject* pChildObj = pObject->Clone();
 	pChildObj->SetName(L"ChildObject");
 	pChildObj->Transform()->SetIgnoreParentScale(true);
-	pChildObj->Transform()->SetPos(200.f, 0.f, 0.f);
-	pChildObj->Transform()->SetScale(50.f, 50.f, 50.f);
+	pChildObj->Transform()->SetRelativePos(200.f, 0.f, 0.f);
+	pChildObj->Transform()->SetRelativeScale(50.f, 50.f, 50.f);
 
 	pChildObj->Collider2D()->SetOffsetPos(0.f, 0.f);
 	pChildObj->Collider2D()->SetOffsetScale(50.f, 50.f);
@@ -220,8 +220,8 @@ void CSceneMgr::AddMonsterObj()
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CMissileScript);
 
-	pObject->Transform()->SetPos(Vec3(400.f, 0.f, 500.f));
-	pObject->Transform()->SetScale(Vec3(300.f, 300.f, 1.f));
+	pObject->Transform()->SetRelativePos(Vec3(400.f, 0.f, 500.f));
+	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
@@ -243,7 +243,7 @@ void CSceneMgr::AddCameraObj()
 	pCamObj->AddComponent(new CCamera);
 	pCamObj->AddComponent(new CCameraMoveScript);
 
-	//pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pCamObj->Camera()->SetCameraAsMain();
 	pCamObj->Camera()->CheckLayerMaskAll();
 
@@ -259,7 +259,7 @@ void CSceneMgr::AddMissilePrefab()
 	pMissileObj->AddComponent(new CMeshRender);
 	pMissileObj->AddComponent(new CMissileScript);
 
-	pMissileObj->Transform()->SetScale(Vec3(50.f, 50.f, 1.f));
+	pMissileObj->Transform()->SetRelativeScale(Vec3(50.f, 50.f, 1.f));
 	pMissileObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
 	pMissileObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 

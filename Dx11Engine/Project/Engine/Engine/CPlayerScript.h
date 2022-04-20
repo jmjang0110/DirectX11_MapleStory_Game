@@ -1,13 +1,27 @@
 #pragma once
 #include "CScript.h"
 
-struct JumpTool
-{
-    // F = 1/2 * m * v ^ 2
 
-    float Force;            // 위 아래 힘 
-    float mass;             // 질량 
-    float velocity;         // 속도  
+typedef struct Jumptool
+{
+    Vec3   _TransformPos;
+    bool  _IsJumping;
+    
+    float _StartPosY;       // 오브젝트의 초기 높이 
+    float _Gravity;         // 중력 가속도 
+    float _JumpPower;       // 점프력 
+    float _JumpTime;        // 점프 이후 경과 시간 
+
+    void start()
+    {
+        _TransformPos = Vec3(0.f, 0.f, 0.f);
+        _IsJumping = false;
+        _StartPosY = _TransformPos.y;
+        _Gravity = 9.14f;
+        _JumpPower = 15.0f;
+        _JumpTime = 0.f;
+    }
+
 
 
 };
@@ -22,8 +36,9 @@ private:
 
     float           m_HP;
     float           m_MP;
-    bool            m_bJump;    // 점프 중
-    JumpTool        m_sJumpTool;
+
+private:
+    Jumptool        m_JumpTool;
 
 
 public:
@@ -37,7 +52,7 @@ public:
     CLONE(CPlayerScript)
 
 public:
-    void Jump(Vec3& _vPos);
+    void Jump();
 
 
 public:

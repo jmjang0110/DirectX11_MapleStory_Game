@@ -9,6 +9,8 @@ class CMeshRender;
 class CCollider2D;
 class CScript;
 class CCamera;
+class CAnimator2D;
+
 
 
 class CGameObject :
@@ -57,6 +59,7 @@ public:
     GET_COMPONENT(MeshRender, MESHRENDER)
     GET_COMPONENT(Collider2D, COLLIDER2D)
     GET_COMPONENT(Camera, CAMERA)
+    GET_COMPONENT(Animator2D, ANIMATOR2D)
 
     CScript* GetScript() { return (CScript*)m_arrCom[(UINT)COMPONENT_TYPE::SCRIPT]; }
 

@@ -113,6 +113,8 @@ void CMaterial::SetTexParam(TEX_PARAM _eType, Ptr<CTexture> _pTex)
 	case TEX_PARAM::TEX_1:
 	case TEX_PARAM::TEX_2:
 	case TEX_PARAM::TEX_3:
+	case TEX_PARAM::TEX_4:
+	case TEX_PARAM::TEX_5:
 	case TEX_PARAM::TEX_CUBE_0:
 	case TEX_PARAM::TEX_CUBE_1:
 	case TEX_PARAM::TEX_ARR_0:

@@ -5,15 +5,12 @@
 
 
 
+
 CPlayerScript::CPlayerScript()
 	: m_pMissilePrefab(nullptr)
 	, m_fSpeed(0.5f)
-	, m_bJump(false)
 {
-	m_sJumpTool.velocity = 7.f;
-	m_sJumpTool.mass = 2.f;
-	m_sJumpTool.Force = 0.f;
-
+	m_JumpTool.start();
 
 }
 
@@ -38,25 +35,26 @@ void CPlayerScript::update()
 	if (KEY_PRESSED(KEY::RIGHT))
 		vPos.x += DT * 100.f;
 
-	// 점프 기능 
-	if (KEY_TAP(KEY::SPACE))
+	if (KEY_TAP(KEY::SPACE) && !m_JumpTool._IsJumping)
 	{
-		m_bJump = true;
-
+		m_JumpTool._IsJumping = true;
+		m_JumpTool._TransformPos = vPos;
+		m_JumpTool._StartPosY = vPos.y;
+	}
+	if (m_JumpTool._IsJumping)
+	{
+		Jump();
 	}
 
-	if (m_bJump == true)
-		Jump(vPos);
 
-
-
-	Transform()->SetPos(vPos);
+	if(m_JumpTool._IsJumping == false)
+		Transform()->SetRelativePos(vPos);
 
 	if (KEY_PRESSED(KEY::Z))
 	{
 		Vec3 vRot = Transform()->GetRelativeRotation();
 		vRot.z += DT * XM_2PI;
-		Transform()->SetRotation(vRot);
+		Transform()->SetRelativeRotation(vRot);
 	}
 	/*
 	if (KEY_TAP(KEY::SPACE))
@@ -75,7 +73,7 @@ void CPlayerScript::update()
 
 void CPlayerScript::lateupdate()
 {
-
+	
 }
 
 void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
@@ -100,22 +98,33 @@ void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 
 
-void CPlayerScript::Jump(Vec3& _vPos)
+void CPlayerScript::Jump()
 {
+	// y = a * x + b  에서 ( a  : 중력 가속도 , b : 초기 점프 속도 )
+	// 적분하여 y = ( -a / 2 ) * x *x  + ( b * x ) 공식을 얻는다. ( x : 점프시간, y : 오브젝트의 높이 )
+	// 변화된 높이 hegith 를 기존 높이 _StartPosY 에 더한다. 
 
-	if (m_sJumpTool.velocity > 0.f)
+	float Height = (m_JumpTool._JumpTime * m_JumpTool._JumpTime * (-m_JumpTool._Gravity / 2) 
+		+ (m_JumpTool._JumpTime * m_JumpTool._JumpPower));
+	
+	//Height *= 100.f;
+
+	Vec3 vPos = Transform()->GetRelativePos();
+	vPos = Vec3(vPos.x, vPos.y + Height, vPos.z);
+
+	m_JumpTool._JumpTime += DT ;
+
+
+	if (Height < 0.0f)
 	{
-		m_sJumpTool.Force = 0.5f * m_sJumpTool.mass * (m_sJumpTool.velocity * m_sJumpTool.velocity);
-	}
-	else if (m_sJumpTool.velocity <= 0.f)
-	{
-		m_sJumpTool.Force = -0.5f * m_sJumpTool.mass * (m_sJumpTool.velocity * m_sJumpTool.velocity);
+		m_JumpTool._IsJumping = false;
+		m_JumpTool._JumpTime = 0.f;
 	}
 
-	m_sJumpTool.velocity -= DT * m_fSpeed;
-	_vPos.y -= m_sJumpTool.velocity;
-
+	Transform()->SetRelativePos(vPos);
 
 }
+
+
 
 

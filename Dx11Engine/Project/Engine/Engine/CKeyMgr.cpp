@@ -139,6 +139,11 @@ void CKeyMgr::update()
 
 		m_vMousePrevPos = m_vMousePos;
 		m_vMousePos = Vec2((float)ptMouse.x, (float)ptMouse.y);
+
+		m_vMouseDir = m_vMousePos - m_vMousePrevPos;
+		m_vMouseDir.y *= -1.f; // 위로 갈때 + 아래로 갈 대 - ( 윈도우 좌표계 이기 때문에 
+
+
 	}
 		
 	// 윈도우가 포커싱 되어있지 않다.

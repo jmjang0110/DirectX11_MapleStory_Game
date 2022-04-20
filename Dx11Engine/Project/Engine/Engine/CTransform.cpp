@@ -28,18 +28,18 @@ void CTransform::finalupdate()
 	Matrix matRotX = XMMatrixRotationX(m_vRelativeRot.x);
 	Matrix matRotY = XMMatrixRotationY(m_vRelativeRot.y);
 	Matrix matRotZ = XMMatrixRotationZ(m_vRelativeRot.z);
-	Matrix matRotation = matRotX * matRotY * matRotZ;
+	Matrix matRotation = matRotX * matRotY * matRotZ;		// 물체의 최종 회전 상태 
 
 	// World 행렬 만들기
 	m_matWorld = matScale * matRotation * matTranslation;
 
 	// RelativeDir 계산 
-	Vec3 vAxis[(UINT)DIR_TYPE::END] = { Vec3::Right, Vec3::Up, Vec3::Front };
+	static Vec3 vAxis[(UINT)DIR_TYPE::END] = { Vec3::Right, Vec3::Up, Vec3::Front };
 	
 	
 	for (int i = 0; i < (int)DIR_TYPE::END; ++i)
 	{
-		// vAxis[i] : 회전하지 않았을 때의 기저축 
+		// vAxis[i] : 회전하지 않았을 때의 기저축 x 회전행렬 -> TRansform 4x4 에서 회전 정보를 받는다. 
 		m_arrWorldDir[i] = m_arrRelativeDir[i] = XMVector3TransformNormal(vAxis[i], matRotation);
 
 	}
@@ -65,7 +65,7 @@ void CTransform::finalupdate()
 		// World Dir 구하기 
 		for (int i = 0; i < (int)DIR_TYPE::END; ++i)
 		{
-			m_arrWorldDir[i] = XMVector3TransformNormal(m_arrRelativeDir[i], matParentWorld);
+			m_arrWorldDir[i] = XMVector3TransformNormal(m_arrRelativeDir[i], matParentWorld); // 부모의 상태에서 회전만 영향을 받는다. 
 			m_arrWorldDir[i].Normalize();
 
 

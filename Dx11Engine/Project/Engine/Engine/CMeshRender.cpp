@@ -5,6 +5,9 @@
 #include "CMaterial.h"
 
 #include "CTransform.h"
+#include "CAnimation2D.h"
+#include "CAnimator2D.h"
+
 
 CMeshRender::CMeshRender()
 	: CComponent(COMPONENT_TYPE::MESHRENDER)
@@ -51,9 +54,21 @@ void CMeshRender::render()
 	if (nullptr == m_pMesh || nullptr == m_pMtrl)
 		return;
 
+	if (Animator2D())
+	{
+		Animator2D()->UpdateData();
+
+	}
+
 	Transform()->UpdateData();
 	m_pMtrl->UpdateData();
 	m_pMesh->render();
+
+	if (Animator2D())
+	{
+		Animator2D()->Clear();
+
+	}
 }
 
 
