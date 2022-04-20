@@ -12,12 +12,18 @@ class CAnimation2D
 private:
 	vector<tAnim2DFrame>	m_vecFrm;
 	Ptr<CTexture>			m_pAtlasTex;
-	
+	Vec2					m_vBackgroundSize;
+
+
 	CAnimator2D*			m_pOwner;
 
 	int						m_iCurFrmIdx;
 	float					m_fAccTime;
 	bool					m_bFinish;
+
+public:
+	tAnim2DFrame& GetFrame(int _iFrmIdx) { return m_vecFrm[_iFrmIdx]; }
+	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
 
 
 public:
@@ -26,7 +32,8 @@ public:
 	virtual void UpdateData() override;
 
 public:
-	void Create(Ptr<CTexture> _Atlas, Vec2 _vLT, Vec2 _vSlice
+	void Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel
+		, Vec2 _vLT, Vec2 _vSlice
 		, Vec2 _vStep, float _fDuration, int _iFrameCount);
 
 	bool IsFinish() { return m_bFinish; }

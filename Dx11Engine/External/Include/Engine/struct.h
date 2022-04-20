@@ -13,7 +13,7 @@ struct Vertex
 {
 	Vec3 vPos;		// 좌표	
 	Vec4 vColor;	// 색상
-
+	Vec2 vOffset;
 	Vec2 vUV;
 
 };
@@ -29,20 +29,26 @@ struct tAnim2DFrame
 	Vec2	vSlice;		
 	float	fDuration;	// 노출 유지 시간
 
+	Vec2	vOffset;
+
+
 };
 
 
 struct tAnim2D
 {
-	int     useAnim2D; // Animation 정보 사용 유무
-	float   Atlas_Width;
-	float   Atlas_Height;   // 해상도 정보 
 
 	Vec2	vLT;
 	Vec2	vSlice;
-	Vec2	vBaseSize;
+	Vec2	vBackgroundSize;		//
+	Vec2	vOffset;
+	// 16 byte 
 
-	Vec3    Anim2D_Padding;
+	int     useAnim2D;		// Animation 정보 사용 유무
+	float   Atlas_Width;
+	float   Atlas_Height;   // 해상도 정보 
+	float	Anim2D_Padding;
+
 
 };
 

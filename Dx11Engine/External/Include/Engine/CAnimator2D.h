@@ -10,7 +10,7 @@ class CAnimator2D :
 {
 private:
     map<wstring, CAnimation2D*> m_mapAnim;
-    CAnimation2D* m_pCurAnim;
+    CAnimation2D*               m_pCurAnim;
 
     bool                        m_bRepeat;
 
@@ -29,9 +29,9 @@ public:
         6. 총 몇장 7. 프레임별 유지 시간 8. 
     */
     void CreateAnim(const wstring& _strName
-        , Ptr<CTexture> _pAtlas, Vec2 _vLeftTopPixel
-        , Vec2 _vSlicePixel, Vec2 _vStepPixel
-        , float _fDuration, int _iFrameCount);
+        , Ptr<CTexture> _pAtlas, Vec2 _vBackgroundSizePixel
+        , Vec2 _vLeftTopPixel, Vec2 _vSlicePixel
+        , Vec2 _vStepPixel, float _fDuration, int _iFrameCount);
 
     void Play(const wstring& _strName, bool _bRepeat);
 

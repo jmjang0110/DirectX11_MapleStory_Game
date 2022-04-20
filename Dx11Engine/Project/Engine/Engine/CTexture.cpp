@@ -51,7 +51,7 @@ int CTexture::Load(const wstring& _strFilePath)
 
     m_pSRV->GetResource((ID3D11Resource**)m_pTex2D.GetAddressOf());
 
-
+    m_pTex2D->GetDesc(&m_tDesc);
 
     return S_OK;
 }

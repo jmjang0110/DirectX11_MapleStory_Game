@@ -42,17 +42,25 @@ cbuffer SCALAR_PARAM : register(b1)
 
 cbuffer ANIM2D : register(b2)
 {
-    int     g_useAnim2D; // Animation 정보 사용 유무
-    float   g_Atlas_Width;
-    float   g_Atlas_Height;   // 해상도 정보 
+    /*
+             자료 넘길 때 16 byte 씩 자료형을 넘겨야 한다. ! 
+
+    */
     
-    float g_vLT;
-    float g_vSlice;
-    float g_BaseSize;
+    float2 g_vLT;                // 아틀라스에서 최상단 UV 좌표            // 8 byte
+    float2 g_vSlice;             // 아틀라스에서 출력을 위해 자를 사이즈   // 8 byte 
+    // 16 byte
     
+    float2 g_vBackgroundSize;    // 아틀라스에서 가져올 단위               // 8 byte 
+    float2 g_vOffset;                                                      // 8 byte
+    // 16 byte
     
+    int     g_useAnim2D;        // Animation 정보 사용 유무 // 4 byte
+    float   g_Atlas_Width;                                  // 4 byte
+    float   g_Atlas_Height;     // 해상도 정보              // 4 byte
+    float     g_Anim2D_Padding;                             // 4 byte
+    // 16  byte 
     
-    int     g_Anim2D_Padding;
 }
 
 

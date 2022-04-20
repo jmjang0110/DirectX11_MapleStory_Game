@@ -27,6 +27,8 @@
 #include "CTexture.h"
 #include "CPrefab.h"
 
+#include "CAnimator2D.h"
+#include "CAnimation2D.h"
 
 
 CSceneMgr::CSceneMgr()
@@ -139,48 +141,19 @@ void CSceneMgr::AddMainPlayerObj()
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");
 
 
-	//// Player Object
-	//CGameObject* pObject = new CGameObject;
-	//pObject->SetName(L"Player");
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
-	//pObject->AddComponent(new CCollider2D);
-	//pObject->AddComponent(new CPlayerScript);
-
-	//pObject->Transform()->SetScale(Vec3(300.f, 300.f, 1.f));
-
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-
-	////int a = 0;
-	////pObject->MeshRender()->GetDynamicMaterial()->SetScalarParam(L"IsColorRed", &a);
-
-	//float fLimit = 0.3333f;
-	//pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
-	//pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
-
-
-	//
-	////pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(L"OutputTex", pTex);
-
-	//pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
-	//pObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
-
-	//m_pCurScene->AddObject(pObject, L"Player");
-
-
 	// Player Object
 	CGameObject* pObject = new CGameObject;
 	pObject->SetName(L"Player");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CAnimator2D);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 500.f);
 	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
 	float fLimit = 0.3333f;
 	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
@@ -189,6 +162,16 @@ void CSceneMgr::AddMainPlayerObj()
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
 	pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
 	pObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
+
+	Ptr<CTexture> pAnimAtlas = CResMgr::GetInst()->Load<CTexture>(L"PlayerAtlas", L"texture\\link_0.png");
+	pObject->Animator2D()->CreateAnim(L"WALK_DOWN", pAnimAtlas, Vec2(200.f, 200.f)
+		, Vec2(0.f, 260.f), Vec2(60.f, 65.f), Vec2(60.f, 0.f), 0.2f, 10);
+
+
+
+
+	pObject->Animator2D()->Play(L"WALK_DOWN", true);
+
 
 	CGameObject* pChildObj = pObject->Clone();
 	pChildObj->SetName(L"ChildObject");
@@ -224,7 +207,7 @@ void CSceneMgr::AddMonsterObj()
 	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
 	pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
