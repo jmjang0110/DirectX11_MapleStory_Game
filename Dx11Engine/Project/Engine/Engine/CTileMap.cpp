@@ -22,10 +22,23 @@ CTileMap::~CTileMap()
 }
 
 
+
+
+void CTileMap::finalupdate()
+{
+}
+
+void CTileMap::UpdateData()
+{
+}
+
+
+
 void CTileMap::render()
 {
 
 
+
+
+
 }
-
-

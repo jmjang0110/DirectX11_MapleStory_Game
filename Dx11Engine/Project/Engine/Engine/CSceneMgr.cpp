@@ -47,9 +47,10 @@ void CSceneMgr::init()
 {
 	// ----- Layer ¼³Á¤ -----  
 	m_pCurScene = new CScene;	
-	m_pCurScene->SetLayerName(0, L"Default");
-	m_pCurScene->SetLayerName(1, L"Player");
-	m_pCurScene->SetLayerName(2, L"Monster");
+	m_pCurScene->SetLayerName(0, L"Tile");
+	m_pCurScene->SetLayerName(1, L"Default");
+	m_pCurScene->SetLayerName(2, L"Player");
+	m_pCurScene->SetLayerName(3, L"Monster");
 	
 	// ----- Texture Load -> CResMgr -----
 	LoadTextures();
@@ -264,6 +265,12 @@ void CSceneMgr::AddTauromacisObj()
 
 
 	
+}
+
+void CSceneMgr::AddTileMapObj()
+{
+
+
 }
 
 void CSceneMgr::AddCameraObj()

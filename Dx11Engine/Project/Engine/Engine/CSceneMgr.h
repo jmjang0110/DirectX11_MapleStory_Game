@@ -40,6 +40,7 @@ public:
 	void AddMonsterObj();
 
 	void AddTauromacisObj();
+	void AddTileMapObj();
 
 
 
