@@ -11,6 +11,9 @@
 #include "CMeshRender.h"
 #include "CCollider2D.h"
 
+
+#include "CRenderComponent.h"
+
 CGameObject::CGameObject()
 	: m_arrCom{}
 	, m_pParent(nullptr)
@@ -182,6 +185,26 @@ void CGameObject::AddComponent(CComponent* _component)
 
 	m_arrCom[(UINT)eType] = _component;
 	_component->m_pOwner = this;
+
+	switch (eType)
+	{
+	
+	case COMPONENT_TYPE::MESHRENDER:
+	case COMPONENT_TYPE::TILEMAP:
+	case COMPONENT_TYPE::PARTICLESYSTEM:
+	case COMPONENT_TYPE::LANDSCAPE:
+	case COMPONENT_TYPE::DECAL:
+	{
+		// 하나의 오브젝트에 Render 기능을 가진 
+		// 컴포넌트는 2개이상 3이상 들어올 수 없다. 
+		assert(!m_pRenderComponent);
+		m_pRenderComponent = (CRenderComponent*)_component;
+	}
+
+		break;
+	default:
+		break;
+	}
 }
 
 void CGameObject::Destroy()

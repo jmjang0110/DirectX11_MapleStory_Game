@@ -13,7 +13,7 @@ struct Vertex
 {
 	Vec3 vPos;		// 좌표	
 	Vec4 vColor;	// 색상
-	Vec2 vOffset;
+
 	Vec2 vUV;
 
 };
@@ -27,9 +27,9 @@ struct tAnim2DFrame
 {
 	Vec2	vLT;
 	Vec2	vSlice;		
+	Vec2	vOffset;
 	float	fDuration;	// 노출 유지 시간
 
-	Vec2	vOffset;
 
 
 };

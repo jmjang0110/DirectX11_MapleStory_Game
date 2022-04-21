@@ -20,7 +20,7 @@ CAnimation2D::~CAnimation2D()
 
 void CAnimation2D::finalupdate()
 {
-
+	
 	if (m_bFinish)
 		return;
 
@@ -46,7 +46,7 @@ void CAnimation2D::UpdateData()
 	static CConstBuffer* pBuffer = CDevice::GetInst()->GetCB(CB_TYPE::ANIM2D);
 
 	tAnim2D info = {};
-	info.useAnim2D = 1;
+	info.useAnim2D = 1;						// 상수버퍼에 전달 
 	info.Atlas_Width = m_pAtlasTex->Width();
 	info.Atlas_Height = m_pAtlasTex->Height();
 
@@ -85,10 +85,10 @@ void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel, Vec2
 	{
 		tAnim2DFrame frm = {};
 
-		if (i == 3)
+		/*if (i == 3 || i == 4 || i == 5)
 		{
 			frm.vOffset = Vec2(10.f, 0.f) / Vec2(fWidth, fHeight);
-		}
+		}*/
 
 
 		frm.vLT = vLT + (vStep * (float)i);

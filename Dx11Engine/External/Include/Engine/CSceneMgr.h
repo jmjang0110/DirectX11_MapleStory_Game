@@ -39,6 +39,9 @@ public:
 	void AddMainPlayerObj();
 	void AddMonsterObj();
 
+	void AddTauromacisObj();
+
+
 
 	// ----- MAKE TOOL OBJECT ------
 	void AddCameraObj();

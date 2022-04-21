@@ -19,6 +19,7 @@ class CGameObject :
 private:
     vector<CGameObject*>    m_vecChild;
     CComponent*             m_arrCom[(UINT)COMPONENT_TYPE::END];
+    CComponent*             m_pRenderComponent;
 
     CGameObject*            m_pParent;
 

@@ -61,8 +61,12 @@ void CSceneMgr::init()
 	AddCameraObj();
 	
 	// ----- MAKE RENDER OBJECT -----
-	AddMainPlayerObj();
+	AddTauromacisObj();
+	//AddMainPlayerObj();
 	AddMonsterObj();
+
+	
+
 
 
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
@@ -132,6 +136,9 @@ void CSceneMgr::LoadTextures()
 	*/
 	CResMgr::GetInst()->Load<CTexture>(L"PlayerTexture", L"texture\\Player.bmp");
 	CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\MagicCircle.png");
+
+	// Monster Texture Load 
+	CResMgr::GetInst()->Load<CTexture>(L"Tauromacis", L"texture\\MapleStoryMonster\\Tauromacis.png");
 
 
 }
@@ -216,6 +223,47 @@ void CSceneMgr::AddMonsterObj()
 	m_pCurScene->AddObject(pObject, L"Monster");
 
 
+}
+
+void CSceneMgr::AddTauromacisObj()
+{
+
+	CGameObject* pObj = new CGameObject;
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Tauromacis");
+
+
+	pObj->SetName(L"Tauromacis");
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new CMeshRender);
+	pObj->AddComponent(new CCollider2D);
+	pObj->AddComponent(new CAnimator2D);
+
+	pObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
+	pObj->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 1.f));
+
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	float fLimit = 0.3333f;
+	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObj->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+	
+	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
+	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	pObj->Collider2D()->SetOffsetScale(Vec2(200.f, 200.f));
+
+	pObj->Animator2D()->CreateAnim(L"STOP", pTex, Vec2(200.f, 200.f)
+		, Vec2(5.f, 0.f), Vec2(176.f ,160.f), Vec2(186.25f, 0.f), 0.2f, 7);
+
+
+
+
+	pObj->Animator2D()->Play(L"STOP", true);
+	m_pCurScene->AddObject(pObj, L"Monster");
+
+
+	
 }
 
 void CSceneMgr::AddCameraObj()

@@ -39,13 +39,14 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	}
 
 
-	CKeyMgr::GetInst()->init();
 	CPathMgr::GetInst()->init();
+	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
+
 	CRenderMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
-	
+
 
 	return S_OK;
 }

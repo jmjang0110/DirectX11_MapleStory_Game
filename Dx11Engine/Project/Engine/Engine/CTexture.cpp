@@ -40,7 +40,7 @@ int CTexture::Load(const wstring& _strFilePath)
         return E_FAIL;
 
 
-    // System memory 에 불러와진 픽셀 데이터를 GPU 에 보낸다   
+    // System memory 에 불려와진 픽셀 데이터를 GPU 에 보낸다   
     hr = CreateShaderResourceView(DEVICE, m_Image.GetImages()
         , m_Image.GetImageCount()
         , m_Image.GetMetadata()

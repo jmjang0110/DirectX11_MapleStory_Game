@@ -78,11 +78,14 @@ void CPlayerScript::lateupdate()
 
 void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+	if (_OtherObject->GetScript() == nullptr)
+		return;
+
 	if (_OtherObject->GetName() == L"Missile")
 	{
 		int a = 0;
 	}
-
+	
 	// C++ RTTI 를 이용한 타입 구분
 	if (typeid(CMissileScript).hash_code() == typeid(*_OtherObject->GetScript()).hash_code())
 	{

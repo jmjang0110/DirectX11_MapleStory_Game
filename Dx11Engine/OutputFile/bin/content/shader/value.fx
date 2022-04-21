@@ -71,13 +71,11 @@ Texture2D g_tex_3 : register(t3);
 Texture2D g_tex_4 : register(t4);
 Texture2D g_tex_5 : register(t5);
 
-
 TextureCube g_texcube_0 : register(t6);
 TextureCube g_texcube_1 : register(t7);
 
 Texture2DArray g_texarr_0 : register(t8);
 Texture2DArray g_texarr_1 : register(t9);
-
 
 Texture2D g_Atlas : register(t10);
 
