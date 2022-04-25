@@ -65,8 +65,8 @@ void CSceneMgr::init()
 	// ----- MAKE RENDER OBJECT -----
 	AddTauromacisObj();
 	//AddMainPlayerObj();
-	AddMonsterObj();
-	AddTileMapObj();
+	//AddMonsterObj();
+	//AddTileMapObj();
 
 	
 

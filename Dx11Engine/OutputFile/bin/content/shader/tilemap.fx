@@ -2,6 +2,13 @@
 #define _TILEMAP
 
 #include "value.fx"
+#include "struct.fx"
+
+StructuredBuffer<tTileData> TileDataBuffer : register(t16);
+
+
+// Shader 에사 수정될 수 있는 경우  : Compute Shader 
+//RWStructuredBuffer<tTileData> TileDataBuffer_RW : register(u0); 
 
 // ==============
 // TileMap Shader
@@ -10,7 +17,6 @@
 // Depth : LESS
 #define TileCountX g_int_0
 #define TileCountY g_int_1
-
 #define SliceSizeUV g_vec2_0
 // ==============
 
@@ -52,10 +58,10 @@ float4 PS_TileMap(VTX_OUT _in) : SV_Target
     
     // 타일 데이터에 접근하면, 각 타일 별로 좌상단 UV 값이 들어있다.
     // 만약 이미지 설정이 안된 타일이면 버림
-    if (-1 == arrTileData[TileDataIdx].iImgIdx)
+    if (-1 == TileDataBuffer[TileDataIdx].iImgIdx)
         discard;
     
-    float2 vLeftTopUV = arrTileData[TileDataIdx].vLTUV;
+    float2 vLeftTopUV = TileDataBuffer[TileDataIdx].vLTUV;
     
     // 0~1 의 UV 를 NxM 타일 크기로 확장 UV 의 소수점 부분을 샘플링 용도로 사용한다.
     float2 vImgUV = frac(vUV);

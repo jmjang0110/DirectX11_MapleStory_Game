@@ -46,7 +46,8 @@ void CAnimator2D::finalupdate()
 
 	if (m_pCurAnim->IsFinish() && m_bRepeat)
 	{
-		m_pCurAnim->Reset();
+		m_pCurAnim->Reset(); // 애니메이션을 반복한다. 
+
 	}
 }
 

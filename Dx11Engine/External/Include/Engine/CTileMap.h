@@ -2,9 +2,11 @@
 #include "CRenderComponent.h"
 
 #include "CTexture.h"
+#include "CStructuredBuffer.h"
 
 class CTileMap :
     public CRenderComponent
+
 {
 private:
     Ptr<CTexture>        m_pAtlasTex;        // 텍스쳐 정보  
@@ -20,7 +22,9 @@ private:
     UINT                 m_iTileCountY;
 
     vector<tTileData>    m_vecTileData; // 타일별 정보를 vector 로 관리한다. 
-     
+  
+    CStructuredBuffer* m_pBuffer;
+
 
 public:
     void SetAtlasTex(Ptr<CTexture> _pAtlasTex)
@@ -49,6 +53,8 @@ public:
     CLONE(CTileMap)
 public:
     CTileMap();
+    CTileMap(const CTileMap& _origin);
     ~CTileMap();
 };
+
 

@@ -63,17 +63,7 @@ cbuffer ANIM2D : register(b2)
     
 }
 
-struct tTileData
-{
-    int iImgIdx;        // 4 byte
-    float2 vLTUV;       // 8 byte
-    int iPadding;       // 4 vyte : 16 byte 맞춰주기 위해 
-};
 
-cbuffer TILEMAP : register(b3)
-{
-    tTileData arrTileData[2000];
-}
 
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
@@ -89,6 +79,10 @@ Texture2DArray g_texarr_0 : register(t8);
 Texture2DArray g_texarr_1 : register(t9);
 
 Texture2D g_Atlas : register(t10);
+
+
+// texture : 128 개 사용 가능 
+
 
 
 SamplerState g_sam_0 : register(s0); // Anisotropic Filter

@@ -136,6 +136,9 @@
     <ClInclude Include="CTileMap.h">
       <Filter>Engine\05. Component\08~12 RenderComponent\09. TileMap</Filter>
     </ClInclude>
+    <ClInclude Include="CStructuredBuffer.h">
+      <Filter>Engine\03. Manager\01. Device\structuredBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -254,6 +257,9 @@
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
       <Filter>Engine\05. Component\08~12 RenderComponent\09. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CStructuredBuffer.cpp">
+      <Filter>Engine\03. Manager\01. Device\structuredBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +419,9 @@
     <Filter Include="Engine\05. Component\08~12 RenderComponent\11. LandScape">
       <UniqueIdentifier>{f858e8bb-cd93-42cf-b9db-ba767b724670}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Manager\01. Device\structuredBuffer">
+      <UniqueIdentifier>{d0650f57-7eaa-4130-bd96-7fd7a90e50e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -431,6 +440,9 @@
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
     <FxCompile Include="tilemap.fx">
+      <Filter>Engine\ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="struct.fx">
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
   </ItemGroup>

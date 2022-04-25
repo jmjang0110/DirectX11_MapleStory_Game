@@ -4,7 +4,7 @@
 #include "CDevice.h"
 
 CConstBuffer::CConstBuffer(CB_TYPE _eType)
-	: m_eCBType(_eType)	
+	: m_eCBType(_eType)
 	, m_Desc{}
 {
 }
@@ -19,7 +19,7 @@ void CConstBuffer::UpdateData()
 	CONTEXT->HSSetConstantBuffers((UINT)m_eCBType, 1, m_CB.GetAddressOf());
 	CONTEXT->DSSetConstantBuffers((UINT)m_eCBType, 1, m_CB.GetAddressOf());
 	CONTEXT->GSSetConstantBuffers((UINT)m_eCBType, 1, m_CB.GetAddressOf());
-	CONTEXT->PSSetConstantBuffers((UINT)m_eCBType, 1, m_CB.GetAddressOf());	
+	CONTEXT->PSSetConstantBuffers((UINT)m_eCBType, 1, m_CB.GetAddressOf());
 }
 
 int CConstBuffer::Create(UINT _iBufferSize)

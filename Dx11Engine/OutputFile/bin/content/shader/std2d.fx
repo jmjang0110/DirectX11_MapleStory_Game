@@ -55,10 +55,10 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }
                 
         vOutColor = g_Atlas.Sample(g_sam_1, vUV);
-        //if (vOutColor.a <= g_float_0)
-        //{
-        //    return float4(0.f, 1.f, 0.f, 1.f);
-        //}
+        if (vOutColor.a <= g_float_0)
+        {
+            return float4(0.f, 1.f, 0.f, 1.f);
+        }
     }
     else
     {

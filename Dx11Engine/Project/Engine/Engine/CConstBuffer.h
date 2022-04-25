@@ -15,7 +15,7 @@ public:
     int Create(UINT _iBufferSize);
 
     void SetData(void* _pData, UINT _iSize);
-        
+
     virtual CConstBuffer* Clone() { return nullptr; }
 
 public:
