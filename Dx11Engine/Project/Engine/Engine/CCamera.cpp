@@ -80,20 +80,20 @@ void CCamera::SortGameObject()
 		for (size_t j = 0; j < vecObj.size(); ++j)
 		{
 			// 1. MeshRender Component 를 갖고있는지 확인
-			CMeshRender* pMeshRender = vecObj[j]->MeshRender();
-			if (nullptr == pMeshRender)
+			CRenderComponent* pRenderCom = vecObj[j]->GetRenderComponent();
+			if (nullptr == pRenderCom)
 				continue;
 
-			if (nullptr == pMeshRender
-				|| nullptr == pMeshRender->GetMesh()
-				|| nullptr == pMeshRender->GetMaterial()
-				|| nullptr == pMeshRender->GetMaterial()->GetShader())
+			if (nullptr == pRenderCom
+				|| nullptr == pRenderCom->GetMesh()
+				|| nullptr == pRenderCom->GetMaterial()
+				|| nullptr == pRenderCom->GetMaterial()->GetShader())
 			{
 				continue;
 			}
 
 			// 2. SHADER_DOMAIN 확인 
-			Ptr<CGraphicsShader> pShader = pMeshRender->GetMaterial()->GetShader();
+			Ptr<CGraphicsShader> pShader = pRenderCom->GetMaterial()->GetShader();
 
 			switch (pShader->GetShaderDomain())
 			{

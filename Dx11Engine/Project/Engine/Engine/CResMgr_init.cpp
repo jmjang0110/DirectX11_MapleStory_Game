@@ -155,12 +155,24 @@ void CResMgr::CreateEngineShader()
 	AddRes<CGraphicsShader>(L"Std2DAlphaBlendShader", pShader);
 
 
+	// TileMap Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
+	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+
+	pShader->AddTexParamInfo(L"TileMapAtlas", TEX_PARAM::TEX_0);
+
+	AddRes<CGraphicsShader>(L"TileMapShader", pShader);
 
 	// Collider2D Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Collider2D");
 	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Collider2D");
 		
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
@@ -183,9 +195,10 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
 	AddRes<CMaterial>(L"Std2DAlphaBlendMtrl", pMtrl);
 
+	// TileMap Mtrl 
 	pMtrl = new CMaterial;
-	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMapMtrl");
-	AddRes<CMaterial>(L"TilemapMtrl", pMtrl);
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
+	AddRes<CMaterial>(L"TileMapMtrl", pMtrl);
 
 
 	// Collider2DMtrl 

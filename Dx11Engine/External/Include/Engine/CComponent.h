@@ -18,8 +18,7 @@ public:
     virtual void update() {}
     virtual void lateupdate() {}
     virtual void finalupdate() = 0;
-    virtual void render() {}
-
+    
 
 
 public:

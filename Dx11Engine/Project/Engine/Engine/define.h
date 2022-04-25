@@ -52,7 +52,9 @@ enum class CB_TYPE
 	TRANSFORM,		// b0
 	SCALAR_PARAM,	// b1
 	ANIM2D,			// b2
-	GLOBAL,			// b3
+	
+	TILEMAP,		// b3 ( Test ) 
+	//GLOBAL,			// b3
 	END,
 };
 

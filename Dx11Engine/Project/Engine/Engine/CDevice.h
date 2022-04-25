@@ -37,7 +37,7 @@ private:
 
 	ComPtr<ID3D11SamplerState>		m_arrSam[2];
 
-public:
+ public:
 	int init(HWND _hWnd, Vec2 _vRenderResolution);
 
 	void Present(){ m_pSwapChain->Present(0, 0); }

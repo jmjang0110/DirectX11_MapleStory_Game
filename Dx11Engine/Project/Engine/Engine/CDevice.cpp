@@ -348,6 +348,10 @@ int CDevice::CreateConstBuffer()
 	m_arrCB[(UINT)CB_TYPE::ANIM2D] = new CConstBuffer(CB_TYPE::ANIM2D);
 	m_arrCB[(UINT)CB_TYPE::ANIM2D]->Create(sizeof(tAnim2D));
 
+	m_arrCB[(UINT)CB_TYPE::TILEMAP] = new CConstBuffer(CB_TYPE::TILEMAP);
+	m_arrCB[(UINT)CB_TYPE::TILEMAP]->Create(sizeof(tTileData) * 2000);
+
+
 	return S_OK;
 }
 

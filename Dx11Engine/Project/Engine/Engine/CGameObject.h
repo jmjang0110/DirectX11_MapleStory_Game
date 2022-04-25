@@ -7,11 +7,12 @@ class CComponent;
 class CTransform;
 class CMeshRender;
 class CCollider2D;
-class CScript;
-class CCamera;
 class CAnimator2D;
+class CCamera;
+class CTimeMap;
+class CScript;
 
-
+class CRenderComponent;
 
 class CGameObject :
     public CEntity
@@ -19,7 +20,7 @@ class CGameObject :
 private:
     vector<CGameObject*>    m_vecChild;
     CComponent*             m_arrCom[(UINT)COMPONENT_TYPE::END];
-    CRenderComponent*             m_pRenderComponent;
+    CRenderComponent*       m_pRenderComponent;
 
     CGameObject*            m_pParent;
 
@@ -38,9 +39,6 @@ public:
 public:
     CGameObject* GetParent() { return m_pParent; }
     const vector<CGameObject*>& GetChild() { return m_vecChild; }
-    CRenderComponent* GetRenderComponent() { return m_pRenderComponent; }
-
-
 
     // Deregister ==> 등록 취소(등록->미등록)
     // Unregister ==> 등록 안됨(등록 x == 등록->미등록, 애초에 등록된적 없음)
@@ -55,21 +53,21 @@ public:
 public:
     void AddChild(CGameObject* _pChild);
     void AddComponent(CComponent* _component);
-    CComponent* GetComponent(COMPONENT_TYPE _eType){ return m_arrCom[(UINT)_eType];  }
-        
+    CComponent* GetComponent(COMPONENT_TYPE _eType) { return m_arrCom[(UINT)_eType]; }
+    CRenderComponent* GetRenderComponent() { return m_pRenderComponent; }
+
     void Destroy();
 
     GET_COMPONENT(Transform, TRANSFORM)
     GET_COMPONENT(MeshRender, MESHRENDER)
-    GET_COMPONENT(Collider2D, COLLIDER2D)
     GET_COMPONENT(Camera, CAMERA)
+    GET_COMPONENT(Collider2D, COLLIDER2D)
     GET_COMPONENT(Animator2D, ANIMATOR2D)
     GET_COMPONENT(TileMap, TILEMAP)
 
+        CScript* GetScript() { return (CScript*)m_arrCom[(UINT)COMPONENT_TYPE::SCRIPT]; }
 
-    CScript* GetScript() { return (CScript*)m_arrCom[(UINT)COMPONENT_TYPE::SCRIPT]; }
-
-public: 
+public:
     CLONE(CGameObject)
 
 public:

@@ -20,7 +20,24 @@ struct Vertex
 
 typedef Vertex Vtx;
 
-//==========
+// =======
+// TileMap
+// =======
+struct tTileData
+{
+	int		iImgIdx;
+	Vec2	vLTUV;		// 원하는 타일의 UV 좌상단 좌표 
+	int		iPadding;
+
+	tTileData()
+		: iImgIdx(-1)
+		, iPadding(0)
+	{}
+};
+
+
+
+// ============
 // Animation2D
 // ============
 struct tAnim2DFrame

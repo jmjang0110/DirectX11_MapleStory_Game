@@ -75,8 +75,19 @@ void CRenderMgr::render()
 		if (nullptr == m_vecCam[i])
 			continue;
 
-		m_vecCam[i]->render();
+		m_vecCam[i]->SortGameObject();
 
+		g_transform.matView = m_vecCam[i]->GetViewMat();
+		g_transform.matProj = m_vecCam[i]->GetProjMat();
+
+		// Foward ¹°Ã¼ ·»´õ¸µ
+		m_vecCam[i]->render_forward();
+
+		// Masked ¹°Ã¼ ·»´õ¸µ
+		m_vecCam[i]->render_masked();
+
+		// Alpha ¹°Ã¼ ·»´õ¸µ
+		m_vecCam[i]->render_opaque();
 	}
 
 

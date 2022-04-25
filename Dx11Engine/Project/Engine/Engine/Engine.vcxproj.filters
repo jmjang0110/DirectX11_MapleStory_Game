@@ -407,10 +407,10 @@
     <Filter Include="Engine\05. Component\08~12 RenderComponent\08. MeshRender">
       <UniqueIdentifier>{78ebec49-80a4-4763-b8a9-3ac508e84505}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Component\08~12 RenderComponent\11. Decal">
+    <Filter Include="Engine\05. Component\08~12 RenderComponent\12. Decal">
       <UniqueIdentifier>{05855d34-a528-4b6c-acee-fe4b10878a15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Component\08~12 RenderComponent\12. LandScape">
+    <Filter Include="Engine\05. Component\08~12 RenderComponent\11. LandScape">
       <UniqueIdentifier>{f858e8bb-cd93-42cf-b9db-ba767b724670}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

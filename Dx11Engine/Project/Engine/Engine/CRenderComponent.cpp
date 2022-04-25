@@ -1,23 +1,11 @@
 #include "pch.h"
 #include "CRenderComponent.h"
 
-#include "CMesh.h"
-#include "CMaterial.h"
-
-#include "CTransform.h"
-#include "CAnimator2D.h"
-
-
-void CRenderComponent::render()
-{
-}
-
 CRenderComponent::CRenderComponent(COMPONENT_TYPE _type)
 	: CComponent(_type)
 	, m_pMesh(nullptr)
 	, m_pMtrl(nullptr)
 {
-
 }
 
 CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
@@ -26,8 +14,15 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 	, m_pMtrl(nullptr)
 	, m_pSharedMtrl(_origin.m_pMtrl)
 	, m_pDynamicMtrl(nullptr)
-
 {
+	if (nullptr == _origin.m_pDynamicMtrl)
+	{
+		GetDynamicMaterial();
+	}
+	else if (nullptr != m_pSharedMtrl)
+	{
+		SetSharedMaterial(m_pSharedMtrl);
+	}
 }
 
 CRenderComponent::~CRenderComponent()
@@ -36,33 +31,6 @@ CRenderComponent::~CRenderComponent()
 		delete m_pDynamicMtrl.Get();
 }
 
-
-
-void CRenderComponent::finalupdate()
-{
-}
-
-void CRenderComponent::render()
-{
-	if (nullptr == GetMesh() || nullptr == GetMaterial())
-		return;
-
-	if (Animator2D())
-	{
-		Animator2D()->UpdateData();
-	}
-
-
-	Transform()->UpdateData();
-	GetMesh()->UpdateData();
-	GetMaterial()->render();
-
-
-	if (Animator2D())
-	{
-		CAnimator2D::Clear();
-	}
-}
 
 
 void CRenderComponent::SetSharedMaterial(Ptr<CMaterial> _pMtrl)
@@ -88,4 +56,3 @@ Ptr<CMaterial> CRenderComponent::GetDynamicMaterial()
 	m_pMtrl = m_pDynamicMtrl;
 	return m_pMtrl;
 }
-

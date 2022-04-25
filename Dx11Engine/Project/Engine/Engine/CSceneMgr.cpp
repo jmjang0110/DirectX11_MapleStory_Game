@@ -30,6 +30,7 @@
 #include "CAnimator2D.h"
 #include "CAnimation2D.h"
 
+#include "CTileMap.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pCurScene(nullptr)
@@ -65,6 +66,7 @@ void CSceneMgr::init()
 	AddTauromacisObj();
 	//AddMainPlayerObj();
 	AddMonsterObj();
+	AddTileMapObj();
 
 	
 
@@ -240,7 +242,7 @@ void CSceneMgr::AddTauromacisObj()
 	pObj->AddComponent(new CAnimator2D);
 
 	pObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
-	pObj->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 1.f));
+	pObj->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 1.f));
 
 
 	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -269,6 +271,31 @@ void CSceneMgr::AddTauromacisObj()
 
 void CSceneMgr::AddTileMapObj()
 {
+	// TileMap Object
+	CGameObject* pObject = new CGameObject;
+	pObject->AddComponent(new CTransform);
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 600.f));
+	pObject->Transform()->SetRelativeScale(1000.f, 1000.f, 1.f);
+
+	pObject->AddComponent(new CTileMap);
+
+	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"TileMapAtlas", L"texture//TILE_32.bmp");
+	pObject->TileMap()->SetAtlasTex(pTileAtlas);
+	pObject->TileMap()->SetTileSize(Vec2(64.f, 64.f));
+	pObject->TileMap()->SetTileMapCount(16, 16);
+
+	for (int i = 0; i < 8; ++i)
+	{
+		pObject->TileMap()->SetTileData(i, 0);
+	}
+
+	for (int i = 8; i < 256; ++i)
+	{
+		pObject->TileMap()->SetTileData(i, 2);
+	}
+	pObject->TileMap()->SetTileData(7, -1);
+
+	m_pCurScene->AddObject(pObject, L"Tile");
 
 
 }

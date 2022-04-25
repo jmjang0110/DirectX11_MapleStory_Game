@@ -4,6 +4,8 @@
 #include "CMesh.h"
 #include "CMaterial.h"
 #include "CRenderComponent.h"
+#include "CMesh.h"
+#include "CMaterial.h"
 
 
 class CMeshRender :
