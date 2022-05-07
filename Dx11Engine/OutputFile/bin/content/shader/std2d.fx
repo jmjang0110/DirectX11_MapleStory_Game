@@ -46,30 +46,32 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         float2 vUV = _in.vUV * g_vBackgroundSize;
         vUV = vUV - (g_vBackgroundSize - g_vSlice) / 2.f + g_vLT - g_vOffset;
         
-        // 삐져나간 애들 날려버림 
         if (vUV.x < g_vLT.x || g_vLT.x + g_vSlice.x < vUV.x
             || vUV.y < g_vLT.y || g_vLT.y + g_vSlice.y < vUV.y)
         {
-            return float4(1.f, 0.f, 0.f, 1.f);
-            //discard;
+            discard;
         }
                 
         vOutColor = g_Atlas.Sample(g_sam_1, vUV);
-        if (vOutColor.a <= g_float_0)
-        {
-            return float4(0.f, 1.f, 0.f, 1.f);
-        }
     }
     else
     {
-        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        // g_tex_0.GetDimensions(); -> 텍스쳐의 가로 세로 해상도  
+        //if(IsBind(g_tex_0))
+        if (g_btex_0)
+        {
+            vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        }
+        else
+        {
+            vOutColor = float4(1.f, 0.f, 1.f, 1.f);
+        }
     }
     
-    if (vOutColor.a <= g_float_0)
-    {
-        discard;
-    }
-        
+    //if (vOutColor.a <= g_float_0)
+    //{
+    //    discard;
+    //}        
    
     return vOutColor;
 }

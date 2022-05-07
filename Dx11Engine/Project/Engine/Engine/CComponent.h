@@ -18,7 +18,6 @@ public:
     virtual void update() {}
     virtual void lateupdate() {}
     virtual void finalupdate() = 0;
-    
 
 
 public:
@@ -26,11 +25,13 @@ public:
     CGameObject* GetOwner() { return m_pOwner; }
 
     GET_OTHER_COMPONENT(Transform)
-        GET_OTHER_COMPONENT(MeshRender)
-        GET_OTHER_COMPONENT(Collider2D)
-        GET_OTHER_COMPONENT(Animator2D)
+    GET_OTHER_COMPONENT(MeshRender)
+    GET_OTHER_COMPONENT(Collider2D)
+    GET_OTHER_COMPONENT(Animator2D)
+    GET_OTHER_COMPONENT(TileMap)
+    GET_OTHER_COMPONENT(ParticleSystem)
 
-        CComponent* Clone() = 0;
+    CComponent* Clone() = 0;
 
 public:
     CComponent(COMPONENT_TYPE _eType);

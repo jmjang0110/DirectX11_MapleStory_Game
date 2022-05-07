@@ -54,6 +54,7 @@ void CCameraMoveScript::update()
 		Vec3 vRot = Transform()->GetRelativeRotation();
 
 		Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
+
 		vRot.y += DT * vMouseDir.x * XM_PI; // 카메라가 y 축 기준 회전을 해야 왼쪽 오른쪽으로 보인다. 
 		vRot.x -= DT * vMouseDir.y * XM_PI;	// 카메라가 x 축 기준 회전을 해야 위 아래 로 보인다. 
 

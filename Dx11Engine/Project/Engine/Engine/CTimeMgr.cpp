@@ -53,18 +53,21 @@ void CTimeMgr::update()
 
 	// 시간 누적
 	m_fAddTime += m_fDT;
-	
+
 	// 누적시간이 1초를 넘는 순간
 	if (m_fAddTime >= 1.f)
 	{
 		m_fAddTime = m_fAddTime - 1.f; // 초과한 양을 남겨둔다.
 
 		wchar_t szStr[256] = L"";
-		wsprintf(szStr, L"FPS : %d", m_iFPS);		
+		wsprintf(szStr, L"FPS : %d", m_iFPS);
 		SetWindowTextW(CCore::GetInst()->GetMainHwnd(), szStr);
 
 		m_iFPS = 0;
-	}	
+	}
 
 	m_fCurTime += m_fDT;
+
+	g_global.fDT = m_fDT;
+	g_global.fAccTime += m_fDT;
 }

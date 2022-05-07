@@ -19,23 +19,29 @@ CMaterial::~CMaterial()
 
 void CMaterial::UpdateData()
 {
-	CConstBuffer* pCB = CDevice::GetInst()->GetCB(CB_TYPE::SCALAR_PARAM);
-	pCB->SetData(&m_Param, sizeof(tScalarParam));
-	pCB->UpdateData();
+	
 
 	for (UINT i = 0; i < (UINT)TEX_PARAM::END; ++i)
 	{
 		if (nullptr != m_arrTex[i])
 		{
+			// i 번호에 tex 바인딩 
 			m_arrTex[i]->UpdateData((int)PIPELINE_STAGE::ALL, i);
+			m_Param.bTex[i] = 1;
+
 		}
 		else
 		{
 			// PIpeLine Stage 에 이전에세팅해놨던(잔류) 레지스터 값을 clear 하겠다. 
 			//m_arrTex[i]->Clear(i);
 			CTexture::Clear(i);
+			m_Param.bTex[i] = 0;
 		}
 	}
+
+	CConstBuffer* pCB = CDevice::GetInst()->GetCB(CB_TYPE::SCALAR_PARAM);
+	pCB->SetData(&m_Param, sizeof(tScalarParam));
+	pCB->UpdateData();
 
 
 	if (nullptr != m_pShader)

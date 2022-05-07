@@ -83,6 +83,14 @@ void CMesh::render()
 	CONTEXT->DrawIndexed(m_iIdxCount, 0, 0);
 }
 
+void CMesh::render_particle(UINT _iCount)
+{
+	UpdateData();
+
+	CONTEXT->DrawIndexedInstanced(m_iIdxCount, _iCount, 0, 0, 0);
+}
+
+
 void CMesh::UpdateData()
 {
 	UINT iStride = sizeof(Vtx);

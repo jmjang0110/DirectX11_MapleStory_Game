@@ -15,5 +15,17 @@ struct tTileData
 };
 
 
+struct tParticle
+{
+    float3      vPos;
+    float3      vScale;
+    float3      vDir;
+    float4      vColor;
+
+    int         Alive;
+    float2      Padding;
+};
+
+
 
 #endif

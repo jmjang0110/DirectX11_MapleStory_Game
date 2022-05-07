@@ -23,7 +23,9 @@ private:
 
     vector<tTileData>    m_vecTileData; // 타일별 정보를 vector 로 관리한다. 
   
-    CStructuredBuffer* m_pBuffer;
+    CStructuredBuffer*   m_pBuffer;
+
+    bool                m_bBufferUpdated;
 
 
 public:

@@ -5,11 +5,14 @@
 
 class CComponent;
 class CTransform;
-class CMeshRender;
 class CCollider2D;
 class CAnimator2D;
 class CCamera;
-class CTimeMap;
+
+class CMeshRender;
+class CTileMap;
+class CParticleSystem;
+
 class CScript;
 
 class CRenderComponent;
@@ -64,8 +67,9 @@ public:
     GET_COMPONENT(Collider2D, COLLIDER2D)
     GET_COMPONENT(Animator2D, ANIMATOR2D)
     GET_COMPONENT(TileMap, TILEMAP)
+    GET_COMPONENT(ParticleSystem, PARTICLESYSTEM);;
 
-        CScript* GetScript() { return (CScript*)m_arrCom[(UINT)COMPONENT_TYPE::SCRIPT]; }
+   CScript* GetScript() { return (CScript*)m_arrCom[(UINT)COMPONENT_TYPE::SCRIPT]; }
 
 public:
     CLONE(CGameObject)

@@ -52,6 +52,52 @@ struct tAnim2DFrame
 };
 
 
+
+
+// ========
+// Particle 
+// ========
+struct tParticle
+{
+	Vec3	vPos;
+	Vec3	vScale;
+	Vec3	vDir;
+	Vec4	vColor;
+
+	int		Alive;
+	Vec2	Padding;
+};
+
+
+
+// ===================
+// 상수버퍼 대응 구조체
+// ===================
+struct tTransform
+{
+	Matrix matWorld;
+	Matrix matView;
+	Matrix matProj;
+
+	Matrix matWV;
+	Matrix matWVP;
+};
+
+struct tScalarParam
+{
+	// 각각 16 바이트 안맞추면 err 남 
+	int iArr[4];
+	float fArr[4];
+	Vec2 v2Arr[4];
+	Vec4 v4Arr[4];
+	Matrix matArr[4];
+
+	int bTex[10];
+	int iPadding[2];
+
+};
+
+
 struct tAnim2D
 {
 
@@ -69,24 +115,9 @@ struct tAnim2D
 
 };
 
-// ===================
-// 상수버퍼 대응 구조체
-// ===================
-struct tTransform
+struct tGlobal
 {
-	Matrix matWorld;
-	Matrix matView;
-	Matrix matProj;
-
-	Matrix matWV;
-	Matrix matWVP;
-};
-
-struct tScalarParam
-{
-	int iArr[4];
-	float fArr[4];
-	Vec2 v2Arr[4];
-	Vec4 v4Arr[4];
-	Matrix matArr[4];
+	Vec2	vResolution;
+	float	fDT;
+	float	fAccTime;
 };

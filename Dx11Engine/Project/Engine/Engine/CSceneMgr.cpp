@@ -19,6 +19,9 @@
 #include "CMeshRender.h"
 #include "CCamera.h"
 #include "CCollider2D.h"
+#include "CAnimator2D.h"
+#include "CTileMap.h"
+#include "CParticleSystem.h"
 
 #include "CPlayerScript.h"
 #include "CCameraMoveScript.h"
@@ -27,10 +30,7 @@
 #include "CTexture.h"
 #include "CPrefab.h"
 
-#include "CAnimator2D.h"
-#include "CAnimation2D.h"
-
-#include "CTileMap.h"
+#include "CTestShader.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pCurScene(nullptr)
@@ -63,18 +63,65 @@ void CSceneMgr::init()
 	AddCameraObj();
 	
 	// ----- MAKE RENDER OBJECT -----
-	AddTauromacisObj();
+	//AddTauromacisObj();
 	//AddMainPlayerObj();
 	//AddMonsterObj();
 	//AddTileMapObj();
 
+
+	/*
+		// 주의 사항 
+		D3D11_BIND_UNORDERED_ACCESS
+		D3D11_BIND_SHADER_RESOURCE
+		조합은 가능하지만 여기에 추가해서 
+
+		D3D11_BIND_DEPTH_STENCIL 은 불가능하다 .
+		Depth Stencil 바인딩은 따로 (유일하게)설정해야한다. 
+		
+	*/
+
+	// texture Create 하기 
+	Ptr<CTexture> pTestTex = CResMgr::GetInst()->CreateTexture(L"TestTexture", 512, 512
+		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE);
+
 	
+	// Compute Shader 실행 
+	Ptr<CTestShader> pCS = (CTestShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"TestCS").Get();
+	pCS->SetOutputTexture(pTestTex);
+	pCS->SetColor(Vec4(0.f, 1.f, 0.f, 1.f));
+	pCS->Excute();
+
+
+	// Player Object
+	/*CGameObject* pPlayer = new CGameObject;
+	pPlayer->AddComponent(new CTransform);
+	pPlayer->AddComponent(new CMeshRender);
+
+	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+	pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pPlayer->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTestTex);
+
+
+	m_pCurScene->AddObject(pPlayer, L"Player");*/
+
+
+	// Particle Object 
+	CGameObject* pParticleObj = new CGameObject;
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	m_pCurScene->AddObject(pParticleObj, L"Default");
 
 
 
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
 
 	m_pCurScene->start();
+
+
 }
 
 void CSceneMgr::progress()

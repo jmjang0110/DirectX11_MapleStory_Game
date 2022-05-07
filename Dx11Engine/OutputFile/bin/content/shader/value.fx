@@ -38,6 +38,21 @@ cbuffer SCALAR_PARAM : register(b1)
     matrix g_mat_1;
     matrix g_mat_2;
     matrix g_mat_3;
+    
+    // 해당 텍스쳐가 바인딩 되어있는지 확인 
+    int g_btex_0;
+    int g_btex_1;
+    int g_btex_2;
+    int g_btex_3;
+    int g_btex_4;
+    int g_btex_5;
+    int g_btex_6;
+    int g_btex_7;
+    int g_btex_8;
+    int g_btex_9;
+    
+    int iPadding1;
+    int iPadding2;
 }
 
 cbuffer ANIM2D : register(b2)
@@ -63,7 +78,12 @@ cbuffer ANIM2D : register(b2)
     
 }
 
-
+cbuffer GLOBAL : register(b3)
+{
+    float2 vResolution;
+    float fDT;
+    float fAccTime;
+}
 
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
@@ -88,6 +108,7 @@ Texture2D g_Atlas : register(t10);
 SamplerState g_sam_0 : register(s0); // Anisotropic Filter
 SamplerState g_sam_1 : register(s1); // Point Filter
 
+#include "func.fx"
 
 #endif
 

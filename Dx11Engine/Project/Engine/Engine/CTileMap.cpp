@@ -14,6 +14,7 @@ CTileMap::CTileMap()
 	, m_iColCount(0)
 	, m_iTileCountX(0)
 	, m_iTileCountY(0)
+	, m_bBufferUpdated(false)
 {
 	// 메쉬, 재질
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -33,6 +34,7 @@ CTileMap::CTileMap(const CTileMap& _origin)
 	, m_iTileCountY(_origin.m_iTileCountY)
 	, m_vecTileData(_origin.m_vecTileData)
 	, m_pBuffer(nullptr)
+	, m_bBufferUpdated(_origin.m_bBufferUpdated)
 {
 	m_pBuffer = new CStructuredBuffer;
 }
@@ -59,9 +61,15 @@ void CTileMap::UpdateData()
 
 	GetMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_0, &m_vSliceUV);
 
-	// 모든 타일 데이터(m_vecTileData) 를 구조화버퍼를 통해 t16 레지스터로 바인딩
-	//m_pBuffer->SetData(m_vecTileData.data(), sizeof(tTileData) * m_iTileCountX * m_iTileCountY);
-	//m_pBuffer->UpdateData(PIPELINE_STAGE::PS, 16);
+
+	if (false == m_bBufferUpdated)
+	{
+		// 모든 타일 데이터(m_vecTileData) 를 구조화버퍼를 통해 t16 레지스터로 바인딩
+		m_pBuffer->SetData(m_vecTileData.data(), m_iTileCountX * m_iTileCountY);
+		m_pBuffer->UpdateData(PIPELINE_STAGE::PS, 16);
+		m_bBufferUpdated = true;
+
+	}
 
 	//pCB->SetData(m_vecTileData.data(), sizeof(tTileData) * m_iTileCountX * m_iTileCountY);
 	//pCB->UpdateData();
@@ -105,6 +113,9 @@ void CTileMap::SetTileData(int _iTileIdx, int _iImgIdx)
 	int iCol = m_vecTileData[_iTileIdx].iImgIdx % m_iColCount;
 
 	m_vecTileData[_iTileIdx].vLTUV = Vec2(m_vSliceUV.x * iCol, m_vSliceUV.y * iRow);
+	m_bBufferUpdated = false;
+
+
 }
 
 void CTileMap::ClearTileData()

@@ -3,6 +3,9 @@
 
 #include "CConstBuffer.h"
 
+#include "CResMgr.h"
+
+
 CDevice::CDevice()
 	: m_hWnd(nullptr)
 	, m_tSwapChainDesc{}
@@ -22,6 +25,7 @@ int CDevice::init(HWND _hWnd, Vec2 _vRenderResolution)
 {
 	m_hWnd = _hWnd;
 	m_vRenderResolution = _vRenderResolution;
+	g_global.vResolution = m_vRenderResolution;
 
 	UINT iFlag = 0;
 #ifdef _DEBUG
@@ -62,9 +66,16 @@ int CDevice::init(HWND _hWnd, Vec2 _vRenderResolution)
 		return E_FAIL;
 	}
 
+	Ptr<CTexture> pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTexture");
+	Ptr<CTexture> pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTexture");
+
+
 	// RenderTargetView, DepthStencilView 전달
 	// Render 시 출력 버퍼 및 깊이버퍼 지정
-	m_pDeviceContext->OMSetRenderTargets(1, m_RTV.GetAddressOf(), m_DSV.Get());
+	m_pDeviceContext->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf()
+		, pDSTex->GetDSV().Get());
+
+
 
 
 	// ViewPort
@@ -93,6 +104,7 @@ int CDevice::init(HWND _hWnd, Vec2 _vRenderResolution)
 		return E_FAIL;
 	}
 
+	// 블렌드 스테이트 생성
 	if (FAILED(CreateBlendState()))
 	{
 		return E_FAIL;
@@ -159,44 +171,17 @@ int CDevice::CreateView()
 	// SwapChain 이 가지고있는 버퍼(렌더 타겟 버퍼) 를 전달하는 역할
 	ComPtr<ID3D11Texture2D> pBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)pBuffer.GetAddressOf());
+	CResMgr::GetInst()->CreateTexture(L"RenderTargetTexture", pBuffer);
 
-	m_pDevice->CreateRenderTargetView(pBuffer.Get(), nullptr, m_RTV.GetAddressOf());
-
-	if (nullptr == m_RTV)
-		return E_FAIL;
 
 	// Depth Stencil Texture 만들기
-	D3D11_TEXTURE2D_DESC desc = {};
+	Ptr<CTexture> pDepthStencilTex = CResMgr::GetInst()->CreateTexture(L"DepthStencilTexture", (UINT)m_vRenderResolution.x, (UINT)m_vRenderResolution.y
+		, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL);
 
-	desc.Width = (UINT)m_vRenderResolution.x;
-	desc.Height = (UINT)m_vRenderResolution.y;
-	desc.MipLevels = 0;
-	desc.ArraySize = 1;
 
-	desc.CPUAccessFlags = 0;
-	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-	desc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
-	desc.MiscFlags = 0;
-
-	desc.SampleDesc.Count = 1;
-	desc.SampleDesc.Quality = 0;
-
-	desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	
-	m_pDevice->CreateTexture2D(&desc, nullptr, m_pDepthStencilTarget.GetAddressOf());
-
-	if (nullptr == m_pDepthStencilTarget)
-		return E_FAIL;
-
-	// Depth Stencil View
-	m_pDevice->CreateDepthStencilView(m_pDepthStencilTarget.Get(), nullptr, m_DSV.GetAddressOf());
-
-	if (nullptr == m_DSV)
-	{
-		return E_FAIL;
-	}
 
 	return S_OK;
+
 }
 
 int CDevice::CreateRasterizerState()
@@ -348,6 +333,8 @@ int CDevice::CreateConstBuffer()
 	m_arrCB[(UINT)CB_TYPE::ANIM2D] = new CConstBuffer(CB_TYPE::ANIM2D);
 	m_arrCB[(UINT)CB_TYPE::ANIM2D]->Create(sizeof(tAnim2D));
 
+	m_arrCB[(UINT)CB_TYPE::GLOBAL] = new CConstBuffer(CB_TYPE::GLOBAL);
+	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tGlobal));
 
 
 	return S_OK;
@@ -387,6 +374,12 @@ void CDevice::CreateSamplerState()
 
 void CDevice::ClearTarget()
 {
-	m_pDeviceContext->ClearRenderTargetView(m_RTV.Get(), Vec4(0.65f, 0.65f, 0.65f, 1.f));
-	m_pDeviceContext->ClearDepthStencilView(m_DSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	static CTexture* pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTexture").Get();
+	static CTexture* pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTexture").Get();
+
+
+	m_pDeviceContext->ClearRenderTargetView(pRTTex->GetRTV().Get(), Vec4(0.65f, 0.65f, 0.65f, 1.f));
+	m_pDeviceContext->ClearDepthStencilView(pDSTex->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+
+
 }

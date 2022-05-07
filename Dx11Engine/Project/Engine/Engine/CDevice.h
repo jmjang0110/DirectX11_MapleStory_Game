@@ -15,11 +15,15 @@ private:
 	ComPtr<ID3D11DeviceContext>		m_pDeviceContext;	// GPU Rendering 제어
 
 	ComPtr<IDXGISwapChain>			m_pSwapChain;
-	ComPtr<ID3D11Texture2D>			m_pRenderTarget;
-	ComPtr<ID3D11Texture2D>			m_pDepthStencilTarget;
 
-	ComPtr<ID3D11RenderTargetView>	m_RTV;
-	ComPtr<ID3D11DepthStencilView>	m_DSV;
+	// RenderTarget / View : texture
+	//ComPtr<ID3D11Texture2D>			m_pRenderTarget;
+	//ComPtr<ID3D11RenderTargetView>	m_RTV;
+
+	// DepthStencilTarget / View : texture -> ResMgr 에서 관리로 바뀜 
+	//ComPtr<ID3D11Texture2D>			m_pDepthStencilTarget;
+	//ComPtr<ID3D11DepthStencilView>	m_DSV;
+
 
 	D3D11_VIEWPORT					m_tViewPort;
 	DXGI_SWAP_CHAIN_DESC			m_tSwapChainDesc;

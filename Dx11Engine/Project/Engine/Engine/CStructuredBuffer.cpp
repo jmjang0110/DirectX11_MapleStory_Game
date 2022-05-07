@@ -7,6 +7,8 @@ CStructuredBuffer::CStructuredBuffer()
 	: m_desc{}
 	, m_iElementSize(0)
 	, m_iElementCount(0)
+	, m_iRecentBindNumSRV(-1)
+	, m_iRecentBindNumUAV(-1)
 	, m_eType(SB_TYPE::READ_ONLY)
 {
 }
@@ -27,15 +29,31 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 	m_eType = _eType;
 
 	// desc 작성
-	m_desc.ByteWidth = m_iElementSize * m_iElementCount; // ( 구조체 ) 
-	// 버퍼 용도 : ID3D11Buffer -> GPU -> ShaderResourceView -> Texture Register  
-	m_desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE; 
-	m_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED; // 추가 플래그 : 구조화 버퍼임을 알린다. 
-	m_desc.StructureByteStride = m_iElementSize; // 구조화 버퍼 한칸 단위 간격 
+	m_desc.ByteWidth = m_iElementSize * m_iElementCount;
+	m_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+	m_desc.StructureByteStride = m_iElementSize;
 
-	m_desc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
-	// CPUAccessFlags : GPU에 저장된 버퍼 정보를 System Memory 로 가져올 수 있느냐 
-	m_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; 
+	m_desc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
+	m_desc.CPUAccessFlags = 0;
+
+
+	/*
+		m_desc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
+		m_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
+
+		-->> 이 두 flag 가 호환이 안되기 때문에 Dynamic -> Default 해야 됨 
+
+	*/
+
+	if (SB_TYPE::READ_ONLY == m_eType)
+	{
+		m_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	}
+	else
+	{
+		m_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
+	}
+
 
 	// 초기 Initial Data 가 있는 경우
 	if (nullptr != _pInitialData)
@@ -60,5 +78,89 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 		return E_FAIL;
 	}
 
+
+	// SB_TYPE 이 Read_Write
+	if (SB_TYPE::READ_WRITE == m_eType)
+	{
+		D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+
+		uavDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+		uavDesc.Buffer.NumElements = m_iElementCount;
+
+		if (FAILED(DEVICE->CreateUnorderedAccessView(m_SB.Get(), &uavDesc, m_UAV.GetAddressOf())))
+		{
+			return E_FAIL;
+		}
+	}
+
 	return S_OK;
+}
+
+void CStructuredBuffer::SetData(void* _pSrc, UINT _iElementCount)
+{
+	D3D11_MAPPED_SUBRESOURCE tSub = {};
+
+	CONTEXT->Map(m_SB.Get(), 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &tSub);
+	memcpy(tSub.pData, _pSrc, (size_t)m_iElementSize * (size_t)_iElementCount);
+	CONTEXT->Unmap(m_SB.Get(), 0);
+}
+
+void CStructuredBuffer::UpdateData(UINT _iStage, UINT _iRegisterNum)
+{
+	if (_iStage & PIPELINE_STAGE::VS)
+		CONTEXT->VSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+
+	if (_iStage & PIPELINE_STAGE::HS)
+		CONTEXT->HSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+
+	if (_iStage & PIPELINE_STAGE::DS)
+		CONTEXT->DSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+
+	if (_iStage & PIPELINE_STAGE::GS)
+		CONTEXT->GSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+
+	if (_iStage & PIPELINE_STAGE::PS)
+		CONTEXT->PSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+
+	m_iRecentBindNumSRV = _iRegisterNum;
+}
+
+void CStructuredBuffer::UpdateData_CS(UINT _iRegisterNum, bool _bShaderResource)
+{
+	if (_bShaderResource)
+	{
+		m_iRecentBindNumSRV = _iRegisterNum;
+		CONTEXT->CSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+	}
+	else
+	{
+		assert(m_UAV.Get());
+
+		m_iRecentBindNumUAV = _iRegisterNum;
+		UINT i = -1;
+		CONTEXT->CSSetUnorderedAccessViews(_iRegisterNum, 1, m_UAV.GetAddressOf(), &i);
+	}
+}
+
+void CStructuredBuffer::Clear()
+{
+	if (-1 != m_iRecentBindNumSRV)
+	{
+		ID3D11ShaderResourceView* pSRV = nullptr;
+		CONTEXT->VSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
+		CONTEXT->HSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
+		CONTEXT->DSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
+		CONTEXT->GSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
+		CONTEXT->PSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
+		CONTEXT->CSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
+		m_iRecentBindNumSRV = -1;
+	}
+
+	if (-1 != m_iRecentBindNumUAV)
+	{
+		ID3D11UnorderedAccessView* pUAV = nullptr;
+		UINT i = -1;
+		CONTEXT->CSSetUnorderedAccessViews(m_iRecentBindNumUAV, 1, &pUAV, &i);
+		m_iRecentBindNumUAV = -1;
+	}
 }

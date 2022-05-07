@@ -12,6 +12,7 @@ private:
 
 public:
     virtual void UpdateData() override;
+    void UpdateData_CS();
     int Create(UINT _iBufferSize);
 
     void SetData(void* _pData, UINT _iSize);

@@ -53,8 +53,8 @@ enum class CB_TYPE
 	SCALAR_PARAM,	// b1
 	ANIM2D,			// b2
 	
-	TILEMAP,		// b3 ( Test ) 
-	//GLOBAL,			// b3
+	//TILEMAP,		// b3 ( Test ) 
+	GLOBAL,			// b3
 	END,
 };
 
@@ -192,7 +192,7 @@ enum class TEX_PARAM
 };
 
 
-enum class PIPELINE_STAGE
+enum  PIPELINE_STAGE
 {
 	VS = 0x01,
 	HS = 0x02,

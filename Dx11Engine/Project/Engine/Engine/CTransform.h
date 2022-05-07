@@ -25,7 +25,9 @@ public:
 
     void SetRelativePos(const Vec3& _vPos) { m_vRelativePos = _vPos; }
     void SetRelativeScale(const Vec3& _vScale) { m_vRelativeScale = _vScale; }
-    void SetRelativeRotation(const Vec3 _vRot) { m_vRelativeRot = _vRot; }
+    void SetRelativeRotation(const Vec3 _vRot) { 
+        int i = 0;
+        m_vRelativeRot = _vRot; }
 
     const Vec3& GetRelativePos() { return m_vRelativePos; }
     const Vec3& GetRelativeScale() { return m_vRelativeScale; }

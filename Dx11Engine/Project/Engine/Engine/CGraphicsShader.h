@@ -42,36 +42,34 @@ private:
     ComPtr<ID3D11GeometryShader>    m_GS;
     ComPtr<ID3D11PixelShader>       m_PS;
 
+    SHADER_DOMAIN                   m_eDomain;
+
     RS_TYPE                         m_eRSType;
     DS_TYPE                         m_eDSType;
     BS_TYPE                         m_eBSType;
-
-    SHADER_DOMAIN                   m_eDomain;
 
     ComPtr<ID3D11InputLayout>       m_InputLayout;
     D3D11_PRIMITIVE_TOPOLOGY        m_eTopology;
 
     vector<tScalarParamInfo>        m_vecScalarParamInfo;
     vector<tTexParamInfo>           m_vecTexParamInfo;
-    
+
 
 public:
     int CreateVertexShader(const wstring& _strRelativePath, const string& _strFunc);
     //void CreateHullShader();
     //void CreateDomainShader();
-    //void CreateGeometryShader();
+    int CreateGeometryShader(const wstring& _strRelativePath, const string& _strFunc);
     int CreatePixelShader(const wstring& _strRelativePath, const string& _strFunc);
-
 
     void SetShaderDomain(SHADER_DOMAIN _eDomain) { m_eDomain = _eDomain; }
     void SetRSType(RS_TYPE _eType) { m_eRSType = _eType; }
     void SetDSType(DS_TYPE _eType) { m_eDSType = _eType; }
     void SetBSType(BS_TYPE _eType) { m_eBSType = _eType; }
+    void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _eTopology) { m_eTopology = _eTopology; }
 
-    void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _eTopology){m_eTopology = _eTopology;}
     D3D11_PRIMITIVE_TOPOLOGY GetTopology() { return m_eTopology; }
-    SHADER_DOMAIN GetShaderDomain(){ return m_eDomain; }
-
+    SHADER_DOMAIN GetShaderDomain() { return m_eDomain; }
 
     virtual void UpdateData() override;
 

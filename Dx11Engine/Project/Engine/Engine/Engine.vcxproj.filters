@@ -139,6 +139,18 @@
     <ClInclude Include="CStructuredBuffer.h">
       <Filter>Engine\03. Manager\01. Device\structuredBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="CComputeShader.h">
+      <Filter>Engine\07. Resource\07. Shader\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleSystem.h">
+      <Filter>Engine\05. Component\08~12 RenderComponent\10. ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="CTestShader.h">
+      <Filter>Engine\ShaderCode\ComputeShader\TestShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleUpdateShader.h">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -260,6 +272,18 @@
     </ClCompile>
     <ClCompile Include="CStructuredBuffer.cpp">
       <Filter>Engine\03. Manager\01. Device\structuredBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="CComputeShader.cpp">
+      <Filter>Engine\07. Resource\07. Shader\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleSystem.cpp">
+      <Filter>Engine\05. Component\08~12 RenderComponent\10. ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CTestShader.cpp">
+      <Filter>Engine\ShaderCode\ComputeShader\TestShader</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleUpdateShader.cpp">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,6 +446,18 @@
     <Filter Include="Engine\03. Manager\01. Device\structuredBuffer">
       <UniqueIdentifier>{d0650f57-7eaa-4130-bd96-7fd7a90e50e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ShaderCode\ComputeShader">
+      <UniqueIdentifier>{cdd33940-16dd-4737-ac96-f4b6c757bf42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ShaderCode\GraphicsShader">
+      <UniqueIdentifier>{bb8e9ca6-0652-4e36-978f-8369672f9b76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ShaderCode\ComputeShader\TestShader">
+      <UniqueIdentifier>{07dfee7e-eede-4cec-a2b1-93efdd948341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ShaderCode\ComputeShader\Particle">
+      <UniqueIdentifier>{b72c47a0-b152-474c-9fc7-db5fd852c505}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -433,16 +469,28 @@
     <FxCompile Include="test.fx">
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
-    <FxCompile Include="std2d.fx">
-      <Filter>Engine\ShaderCode</Filter>
-    </FxCompile>
     <FxCompile Include="value.fx">
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
-    <FxCompile Include="tilemap.fx">
+    <FxCompile Include="struct.fx">
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
-    <FxCompile Include="struct.fx">
+    <FxCompile Include="std2d.fx">
+      <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
+    <FxCompile Include="tilemap.fx">
+      <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
+    <FxCompile Include="testcs.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\TestShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Particle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="particlerender.fx">
+      <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
+    <FxCompile Include="func.fx">
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
   </ItemGroup>

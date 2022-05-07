@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "CRenderMgr.h"
 
+#include "CDevice.h"
+#include "CConstBuffer.h"
 
 #include "CCamera.h"
-#include "CDevice.h"
 
 CRenderMgr::CRenderMgr()
 	:m_pEditorCam(nullptr)
@@ -33,6 +34,14 @@ void CRenderMgr::render()
 {
 	if (m_vecCam.empty())
 		return;
+	
+
+
+	// Global 상수 업데이트
+	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetCB(CB_TYPE::GLOBAL);
+	pGlobalCB->SetData(&g_global, sizeof(tGlobal));
+	pGlobalCB->UpdateData();
+	pGlobalCB->UpdateData_CS();
 
 	// ==========
 	// 화면 Clear 
