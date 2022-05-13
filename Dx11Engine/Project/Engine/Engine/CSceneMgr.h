@@ -43,6 +43,9 @@ public:
 	void AddTileMapObj();
 
 
+	void AddAttack1AnimObj();
+
+
 
 	// ----- MAKE TOOL OBJECT ------
 	void AddCameraObj();

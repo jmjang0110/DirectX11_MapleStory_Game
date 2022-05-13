@@ -5,7 +5,6 @@
 
 #include "CResMgr.h"
 
-
 CDevice::CDevice()
 	: m_hWnd(nullptr)
 	, m_tSwapChainDesc{}
@@ -17,7 +16,7 @@ CDevice::CDevice()
 }
 
 CDevice::~CDevice()
-{	
+{
 	Safe_Del_Arr(m_arrCB);
 }
 
@@ -26,6 +25,7 @@ int CDevice::init(HWND _hWnd, Vec2 _vRenderResolution)
 	m_hWnd = _hWnd;
 	m_vRenderResolution = _vRenderResolution;
 	g_global.vResolution = m_vRenderResolution;
+
 
 	UINT iFlag = 0;
 #ifdef _DEBUG
@@ -66,16 +66,12 @@ int CDevice::init(HWND _hWnd, Vec2 _vRenderResolution)
 		return E_FAIL;
 	}
 
-	Ptr<CTexture> pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTexture");
-	Ptr<CTexture> pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTexture");
-
-
 	// RenderTargetView, DepthStencilView 전달
 	// Render 시 출력 버퍼 및 깊이버퍼 지정
-	m_pDeviceContext->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf()
-		, pDSTex->GetDSV().Get());
+	Ptr<CTexture> pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTex");
+	Ptr<CTexture> pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTex");
 
-
+	m_pDeviceContext->OMSetRenderTargets(1, pRTTex->GetRTV().GetAddressOf(), pDSTex->GetDSV().Get());
 
 
 	// ViewPort
@@ -135,7 +131,7 @@ int CDevice::CreateSwapchain()
 	desc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
 	desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 
-	
+
 	desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.Flags = 0;
 	desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -156,7 +152,7 @@ int CDevice::CreateSwapchain()
 	pDXGIAdaptor->GetParent(__uuidof(IDXGIFactory), (void**)pDXGIFactory.GetAddressOf());
 
 	pDXGIFactory->CreateSwapChain(m_pDevice.Get(), &desc, m_pSwapChain.GetAddressOf());
-		
+
 	if (nullptr == m_pSwapChain)
 	{
 		return E_FAIL;
@@ -167,21 +163,16 @@ int CDevice::CreateSwapchain()
 
 int CDevice::CreateView()
 {
-	// Render Target View
-	// SwapChain 이 가지고있는 버퍼(렌더 타겟 버퍼) 를 전달하는 역할
+	// Render Target Texture	
 	ComPtr<ID3D11Texture2D> pBuffer = nullptr;
 	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)pBuffer.GetAddressOf());
-	CResMgr::GetInst()->CreateTexture(L"RenderTargetTexture", pBuffer);
-
+	CResMgr::GetInst()->CreateTexture(L"RenderTargetTex", pBuffer, true);
 
 	// Depth Stencil Texture 만들기
-	Ptr<CTexture> pDepthStencilTex = CResMgr::GetInst()->CreateTexture(L"DepthStencilTexture", (UINT)m_vRenderResolution.x, (UINT)m_vRenderResolution.y
-		, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL);
-
-
+	Ptr<CTexture> pDepthStencilTex = CResMgr::GetInst()->CreateTexture(L"DepthStencilTex", (UINT)m_vRenderResolution.x, (UINT)m_vRenderResolution.y
+		, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL, true);
 
 	return S_OK;
-
 }
 
 int CDevice::CreateRasterizerState()
@@ -199,7 +190,7 @@ int CDevice::CreateRasterizerState()
 	desc.FillMode = D3D11_FILL_SOLID;
 	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::CULL_FRONT].GetAddressOf());
 	if (FAILED(hr))
-		return E_FAIL;	 
+		return E_FAIL;
 
 
 	// 양면 모두 그리기, (주로 단면 형태의 메쉬를 앞 뒤에서 볼때)
@@ -208,13 +199,13 @@ int CDevice::CreateRasterizerState()
 	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::CULL_NONE].GetAddressOf());
 	if (FAILED(hr))
 		return E_FAIL;
-	
+
 	// 양면 모두 그리기, 뼈대 픽셀만 렌더링
 	desc.CullMode = D3D11_CULL_NONE;
 	desc.FillMode = D3D11_FILL_WIREFRAME;
 	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::WIRE_FRAME].GetAddressOf());
 	if (FAILED(hr))
-		return E_FAIL;	
+		return E_FAIL;
 
 
 	return S_OK;
@@ -222,19 +213,10 @@ int CDevice::CreateRasterizerState()
 
 int CDevice::CreateDepthStencilState()
 {
-	// 스텐실 옵션은 아직 사용하지 않음
-	/*
-	desc.StencilEnable = false;
-	desc.BackFace;
-	desc.FrontFace;
-	desc.StencilReadMask;
-	desc.StencilWriteMask;
-	*/
-
 
 	// Less (Default)
 	m_arrDS[(UINT)DS_TYPE::LESS] = nullptr;
-	
+
 
 	// LessEqual
 	D3D11_DEPTH_STENCIL_DESC desc = {};
@@ -283,7 +265,7 @@ int CDevice::CreateDepthStencilState()
 
 
 	// No Test No Write
-	desc.DepthEnable = false;	
+	desc.DepthEnable = false;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 
 	if (FAILED(DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::NO_TEST_NO_WRITE].GetAddressOf())))
@@ -293,6 +275,8 @@ int CDevice::CreateDepthStencilState()
 	return S_OK;
 }
 
+
+
 int CDevice::CreateBlendState()
 {
 	m_arrBS[(UINT)BS_TYPE::DEFAULT] = nullptr;
@@ -300,7 +284,7 @@ int CDevice::CreateBlendState()
 
 	D3D11_BLEND_DESC desc = {};
 
-	desc.AlphaToCoverageEnable = false;		// 커버레이지 옵션 사용 유무
+	desc.AlphaToCoverageEnable = true;		// 커버레이지 옵션 사용 유무
 	desc.IndependentBlendEnable = false;	// 렌더타겟 블랜드스테이드 독립실행
 
 	desc.RenderTarget[0].BlendEnable = true;			// 블랜딩 스테이트 사용
@@ -335,7 +319,6 @@ int CDevice::CreateConstBuffer()
 
 	m_arrCB[(UINT)CB_TYPE::GLOBAL] = new CConstBuffer(CB_TYPE::GLOBAL);
 	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tGlobal));
-
 
 	return S_OK;
 }
@@ -374,12 +357,9 @@ void CDevice::CreateSamplerState()
 
 void CDevice::ClearTarget()
 {
-	static CTexture* pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTexture").Get();
-	static CTexture* pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTexture").Get();
-
+	static CTexture* pRTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTex").Get();
+	static CTexture* pDSTex = CResMgr::GetInst()->FindRes<CTexture>(L"DepthStencilTex").Get();
 
 	m_pDeviceContext->ClearRenderTargetView(pRTTex->GetRTV().Get(), Vec4(0.65f, 0.65f, 0.65f, 1.f));
 	m_pDeviceContext->ClearDepthStencilView(pDSTex->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-
-
 }

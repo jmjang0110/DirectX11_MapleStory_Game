@@ -64,11 +64,22 @@ struct tParticle
 	Vec3	vDir;
 	Vec4	vColor;
 
+	float     fInclination;   // 기울기 
+	Vec3      vTop;           // 꼭지점 
+	int       TextureTypeNum;
+
 	int		Alive;
-	Vec2	Padding;
+	float	m_fCurTime;	// 생존 시간 
+	float	m_fMaxTime; // 최대 생명 시간 
 };
 
+struct tParticleData
+{
+	int iAliveCount;
+	Vec3 vPadding;
 
+
+};
 
 // ===================
 // 상수버퍼 대응 구조체
@@ -82,6 +93,8 @@ struct tTransform
 	Matrix matWV;
 	Matrix matWVP;
 };
+
+
 
 struct tScalarParam
 {
@@ -117,7 +130,9 @@ struct tAnim2D
 
 struct tGlobal
 {
-	Vec2	vResolution;
+	Vec2	vResolution; // RenderTarget Resolution
+	Vec2    vNoiseResolution; // NoiseTexture Resolution
 	float	fDT;
 	float	fAccTime;
+	Vec2    vPadding;
 };

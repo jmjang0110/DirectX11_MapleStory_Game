@@ -81,8 +81,10 @@ cbuffer ANIM2D : register(b2)
 cbuffer GLOBAL : register(b3)
 {
     float2 vResolution;
+    float2 vNoiseResolution;
     float fDT;
     float fAccTime;
+    float2 vPadding; 
 }
 
 Texture2D g_tex_0 : register(t0);
@@ -99,6 +101,11 @@ Texture2DArray g_texarr_0 : register(t8);
 Texture2DArray g_texarr_1 : register(t9);
 
 Texture2D g_Atlas : register(t10);
+
+// Global Noise Texture 
+Texture2D g_noise_01 : register(t70);
+Texture2D g_noise_02 : register(t71);
+Texture2D g_noise_cloud : register(t72);
 
 
 // texture : 128 개 사용 가능 

@@ -94,15 +94,13 @@ enum class BS_TYPE
 };
 
 
-// 쉐이더의 렌더링 시점에 따른 분류 
-
+// 쉐이더의 렌더링 시점에 따른 분류
 enum class SHADER_DOMAIN
 {
-	DOMAIN_FORWARD, // 불투명 
-	DOMAIN_MASKED,  // 불투명, 투명 
-	DOMAIN_OPAQUE,  // 반투명 
-	
-
+	DOMAIN_FORWARD,	// 불투명
+	DOMAIN_MASKED,	// 불투명, 투명
+	DOMAIN_TRANSLUCENT,	// 반투명
+	DOMAIN_POSTPROCESS, // 후 처리
 };
 
 enum class COMPONENT_TYPE
@@ -216,4 +214,16 @@ enum class EVENT_TYPE
 	CHANGE_AI_STATE,	// lParam : FSM Adress, wParam : Next State Type
 
 	END,
+};
+
+
+// ======== ToDo =======
+enum class PARTICLE_TYPE
+{
+	BOMB,		 // 폭발 
+	FIRECRACKER, // 폭죽
+	MAGIC_CIRCLE, // 마법진
+	END,
+	
+
 };

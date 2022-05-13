@@ -11,6 +11,8 @@ private:
     wstring     m_strRelativePath;
     UINT        m_iRefCount;
 
+    bool        m_bEngineRes; // 엔진 내부에서 사용하는 자원 
+
 
 protected:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; }
@@ -20,6 +22,9 @@ protected:
 public:
     const wstring& GetKey() { return m_strKey; }
     const wstring& GetRelativePath() { return m_strRelativePath; }
+    
+    bool  IsEngineRes() { return m_bEngineRes; }
+
 
 protected:    
     virtual int Load(const wstring& _strFilePath) = 0;    

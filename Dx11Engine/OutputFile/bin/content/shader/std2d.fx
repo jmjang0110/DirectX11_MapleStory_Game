@@ -68,10 +68,12 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }
     }
     
-    //if (vOutColor.a <= g_float_0)
-    //{
-    //    discard;
-    //}        
+    if (vOutColor.a <= g_float_0)
+    {
+        discard;
+    }
+    
+ 
    
     return vOutColor;
 }

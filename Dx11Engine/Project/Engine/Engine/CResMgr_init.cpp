@@ -134,6 +134,26 @@ void CResMgr::CreateEngineMesh()
 
 void CResMgr::CreateEngineTexture()
 {
+	Ptr<CTexture> pNoise01 = Load<CTexture>(L"noise_01", L"texture//noise//noise_01.png");
+	Ptr<CTexture> pNoise02 = Load<CTexture>(L"noise_02", L"texture//noise//noise_02.png");
+	Ptr<CTexture> pNoiseCloud = Load<CTexture>(L"noise_cloud", L"texture//noise//noise_cloud.jpg");
+
+	/*
+		모든 Shader 시점에서 t70, t71, t72 - register 에 접근해보면  
+		Compute Shader 시점 , Rendering shader 시점이 됐던 간에 
+		binding 되어 있다. 
+	*/
+	pNoise01->UpdateData(PIPELINE_STAGE::ALL, 70);
+	pNoise01->UpdateData_CS(70, true);
+
+	pNoise02->UpdateData(PIPELINE_STAGE::ALL, 71);
+	pNoise02->UpdateData_CS(71, true);
+
+	pNoiseCloud->UpdateData(PIPELINE_STAGE::ALL, 72);
+	pNoiseCloud->UpdateData_CS(72, true);
+
+	g_global.vNoiseResolution = Vec2(pNoise01->Width(), pNoise01->Height());
+
 }
 void CResMgr::CreateEngineShader()
 {
@@ -161,7 +181,7 @@ void CResMgr::CreateEngineShader()
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2DAlpha");
 	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2DAlpha");
 
-	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
 	pShader->SetDSType(DS_TYPE::NO_WRITE);
@@ -189,7 +209,7 @@ void CResMgr::CreateEngineShader()
 	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Collider2D");
 	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Collider2D");
 		
-	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
 
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
@@ -205,13 +225,27 @@ void CResMgr::CreateEngineShader()
 	pShader->CreateGeometryShader(L"Shader\\particlerender.fx", "GS_ParticleRender");
 	pShader->CreatePixelShader(L"Shader\\particlerender.fx", "PS_ParticleRender");
 
-	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->SetDSType(DS_TYPE::NO_WRITE);
 	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);	
 
 	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
+
+	// PostProcess Shader
+	pShader = new CGraphicsShader;
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	pShader->CreateVertexShader(L"Shader\\postprocess.fx", "VS_PostProcess");
+	pShader->CreatePixelShader(L"Shader\\postprocess.fx", "PS_PostProcess");
+
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_POSTPROCESS);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+
+	AddRes<CGraphicsShader>(L"PostProcessShader", pShader);
+
 }
 
 void CResMgr::CreateEngineMaterial()
@@ -241,6 +275,13 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes<CMaterial>(L"ParticleRenderMtrl", pMtrl);
+
+	// PostProcess Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
+	pMtrl->SetTexParam(TEX_PARAM::TEX_0, FindRes<CTexture>(L"PostProcessTex"));
+	AddRes<CMaterial>(L"PostProcessMtrl", pMtrl);
+
 }
 
 
@@ -260,6 +301,23 @@ void CResMgr::CreateEngineComputeShader()
 	pCS = new CParticleUpdateShader;
 	pCS->CreateComputeShader(L"Shader\\particle.fx", "CS_Particle");
 	AddRes<CComputeShader>(L"ParticleUpdateShader", pCS);
+
+	// Particle Update Shader - BOMB
+	pCS = new CParticleUpdateShader;
+	pCS->CreateComputeShader(L"Shader\\BombParticle.fx", "CS_Particle");
+	AddRes<CComputeShader>(L"ParticleUpdateShader_Bomb", pCS);
+
+	// Particle Update Shader - Magic_Circle
+	pCS = new CParticleUpdateShader;
+	pCS->CreateComputeShader(L"Shader\\MagicCircleParticle.fx", "CS_Particle");
+	AddRes<CComputeShader>(L"ParticleUpdateShader_MagicCircle", pCS);
+
+	// Particle Update Shader - Fire Cracker
+	pCS = new CParticleUpdateShader;
+	pCS->CreateComputeShader(L"Shader\\FirecrackerParticle.fx", "CS_Particle");
+	AddRes<CComputeShader>(L"ParticleUpdateShader_FireCracker", pCS);
+
+
 }
 
 

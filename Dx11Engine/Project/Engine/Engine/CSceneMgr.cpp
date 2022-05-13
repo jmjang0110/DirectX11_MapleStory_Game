@@ -67,6 +67,7 @@ void CSceneMgr::init()
 	//AddMainPlayerObj();
 	//AddMonsterObj();
 	//AddTileMapObj();
+	//AddAttack1AnimObj();
 
 
 	/*
@@ -80,13 +81,13 @@ void CSceneMgr::init()
 		
 	*/
 
-	// texture Create 하기 
-	Ptr<CTexture> pTestTex = CResMgr::GetInst()->CreateTexture(L"TestTexture", 512, 512
-		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE);
+	// Texture Create 하기
+	Ptr<CTexture> pTestTex = CResMgr::GetInst()->CreateTexture(L"TestTexture", 1024, 1024
+		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
 
-	
-	// Compute Shader 실행 
+	// ComputeShader 실행하기
 	Ptr<CTestShader> pCS = (CTestShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"TestCS").Get();
+
 	pCS->SetOutputTexture(pTestTex);
 	pCS->SetColor(Vec4(0.f, 1.f, 0.f, 1.f));
 	pCS->Excute();
@@ -113,9 +114,31 @@ void CSceneMgr::init()
 	pParticleObj->AddComponent(new CTransform);
 	pParticleObj->AddComponent(new CParticleSystem);
 
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::BOMB);
+	pParticleObj->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+
+	m_pCurScene->AddObject(pParticleObj, L"Default");
+
+	// Test PArtcile
+	pParticleObj = new CGameObject;
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::MAGIC_CIRCLE);
+	pParticleObj->Transform()->SetRelativePos(300.f, 0.f, 500.f);
+
 	m_pCurScene->AddObject(pParticleObj, L"Default");
 
 
+	// Test PArtcile
+	pParticleObj = new CGameObject;
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::FIRECRACKER);
+	pParticleObj->Transform()->SetRelativePos(-300.f, -20.f, 500.f);
+
+	m_pCurScene->AddObject(pParticleObj, L"Default");
 
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
 
@@ -189,6 +212,7 @@ void CSceneMgr::LoadTextures()
 
 	// Monster Texture Load 
 	CResMgr::GetInst()->Load<CTexture>(L"Tauromacis", L"texture\\MapleStoryMonster\\Tauromacis.png");
+	CResMgr::GetInst()->Load<CTexture>(L"Attack1", L"texture\\Attack1.png");
 
 
 }
@@ -347,6 +371,8 @@ void CSceneMgr::AddTileMapObj()
 
 }
 
+
+
 void CSceneMgr::AddCameraObj()
 {
 	// Camera Object 추가
@@ -393,4 +419,44 @@ void CSceneMgr::ClearLayer()
 }
 
 
+
+
+void CSceneMgr::AddAttack1AnimObj()
+{
+
+	CGameObject* pObj = new CGameObject;
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Attack1");
+
+
+	pObj->SetName(L"Attack1");
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new CMeshRender);
+	pObj->AddComponent(new CCollider2D);
+	pObj->AddComponent(new CAnimator2D);
+
+	pObj->Transform()->SetRelativePos(Vec3(-400.f, 0.f, 500.f));
+	pObj->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 1.f));
+
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	float fLimit = 0.3333f;
+	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObj->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+
+	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
+	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	pObj->Collider2D()->SetOffsetScale(Vec2(200.f, 200.f));
+
+	pObj->Animator2D()->CreateAnim(L"ATTACK1", pTex, Vec2(200.f, 200.f)
+		, Vec2(5.f, 0.f), Vec2(176.f, 160.f), Vec2(186.25f, 0.f), 0.2f, 7);
+
+
+
+
+	pObj->Animator2D()->Play(L"ATTACK1", true);
+	m_pCurScene->AddObject(pObj, L"Default");
+
+}
 

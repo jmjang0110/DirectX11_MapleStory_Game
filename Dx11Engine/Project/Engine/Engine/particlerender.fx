@@ -14,6 +14,9 @@
 
 
 // Parameter
+// =======
+#define PARTICLE_TYPE_NUM g_int_2
+// =======
 #define PARTICLE_INDEX  g_int_1
 #define POS_INHERIT     g_int_0
 // ====================
@@ -69,6 +72,8 @@ void GS_ParticleRender(point VTX_OUT _in[1], inout TriangleStream<GS_OUT> _outpu
     else
     { // 부모의 좌표에 영향을 안 받음 
         vParticleWorldPos = ParticleBuffer[ID].vPos;
+
+
     }
     
     // World 좌표를 View, Proj 으로 변환
@@ -118,9 +123,24 @@ float4 PS_ParticleRender(GS_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
     
-    if (g_btex_0)
+    if (g_btex_0 && PARTICLE_TYPE_NUM == 0)
     {
-        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+            vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor;
+   
+    }
+    else if (g_btex_1 && PARTICLE_TYPE_NUM == 1)
+    {
+       
+            vOutColor = g_tex_1.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor;
+       
+       
+    }
+    else if (g_btex_2 && PARTICLE_TYPE_NUM == 2)
+    {
+        if (0 <= _in.InstID && _in.InstID <= 300)
+            vOutColor = g_tex_2.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor;
+        else
+            vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor;
     }
     else
     {

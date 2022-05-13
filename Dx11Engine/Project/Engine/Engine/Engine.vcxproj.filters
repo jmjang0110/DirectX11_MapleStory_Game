@@ -285,6 +285,9 @@
     <ClCompile Include="CParticleUpdateShader.cpp">
       <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="CRenderMgr_Init.cpp">
+      <Filter>Engine\03. Manager\02. RenderMgr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Default">
@@ -492,6 +495,18 @@
     </FxCompile>
     <FxCompile Include="func.fx">
       <Filter>Engine\ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="MagicCircleParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="BombParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="FirecrackerParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="postprocess.fx">
+      <Filter>Engine\ShaderCode\GraphicsShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

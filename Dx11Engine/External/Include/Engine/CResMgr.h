@@ -38,20 +38,19 @@ public:
 	RES_TYPE GetResType();
 
 	template<typename type>
-	Ptr<type> Load(const wstring& _strKey, const wstring& _strRelativePath);
+	Ptr<type> Load(const wstring& _strKey, const wstring& _strRelativePath, bool _bEngineRes = false);
 
 	template<typename type>
 	Ptr<type> FindRes(const wstring& _strKey);
 
 	template<typename type>
-	void AddRes(const wstring& _strKey, type* _pRes);
+	void AddRes(const wstring& _strKey, type* _pRes, bool _bEngineRes = false);
 
 	// _flag : D3D11_BIND_FLAG
-	Ptr<CTexture> CreateTexture(const wstring& _strKey
-		, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _format, UINT _flag);
+	Ptr<CTexture> CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight
+		, DXGI_FORMAT _format, UINT _flag, bool _bEngineRes = false);
 
-
-	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _pTex2D);
+	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _pTex2D, bool _bEngineRes = false);
 
 };
 
@@ -74,13 +73,13 @@ inline RES_TYPE CResMgr::GetResType()
 		return RES_TYPE::TEXTURE;
 	//else if (info.hash_code() == typeid(CMesh).hash_code())
 	//	return RES_TYPE::MESH;
-	
+
 
 	return RES_TYPE::END;
 }
 
 template<typename type>
-Ptr<type> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath)
+Ptr<type> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath, bool _bEngineRes)
 {
 	RES_TYPE eType = GetResType<type>();
 
@@ -100,6 +99,7 @@ Ptr<type> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath)
 
 	pRes->SetKey(_strKey);
 	pRes->SetRelativePath(_strRelativePath);
+	pRes->m_bEngineRes = _bEngineRes;
 
 	m_Res[(UINT)eType].insert(make_pair(_strKey, pRes));
 
@@ -120,7 +120,7 @@ Ptr<type> CResMgr::FindRes(const wstring& _strKey)
 }
 
 template<typename type>
-void CResMgr::AddRes(const wstring& _strKey, type* _pRes)
+void CResMgr::AddRes(const wstring& _strKey, type* _pRes, bool _bEngineRes)
 {
 	RES_TYPE eType = GetResType<type>();
 
@@ -128,6 +128,8 @@ void CResMgr::AddRes(const wstring& _strKey, type* _pRes)
 
 	assert(nullptr == pRes);
 
+	_pRes->SetKey(_strKey);
+	_pRes->m_bEngineRes = _bEngineRes;
+
 	m_Res[(UINT)eType].insert(make_pair(_strKey, _pRes));
 }
-

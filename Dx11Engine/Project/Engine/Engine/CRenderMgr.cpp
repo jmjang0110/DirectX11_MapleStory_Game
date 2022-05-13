@@ -5,9 +5,11 @@
 #include "CConstBuffer.h"
 
 #include "CCamera.h"
+#include "CResMgr.h"
+
 
 CRenderMgr::CRenderMgr()
-	:m_pEditorCam(nullptr)
+	: m_pEditorCam(nullptr)
 {
 
 }
@@ -15,18 +17,10 @@ CRenderMgr::CRenderMgr()
 CRenderMgr::~CRenderMgr()
 {
 
-
-}
-
-void CRenderMgr::init()
-{
-
-
 }
 
 void CRenderMgr::update()
 {
-
 
 }
 
@@ -34,8 +28,6 @@ void CRenderMgr::render()
 {
 	if (m_vecCam.empty())
 		return;
-	
-
 
 	// Global 상수 업데이트
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetCB(CB_TYPE::GLOBAL);
@@ -43,42 +35,32 @@ void CRenderMgr::render()
 	pGlobalCB->UpdateData();
 	pGlobalCB->UpdateData_CS();
 
-	// ==========
-	// 화면 Clear 
-	// ==========
+	// Rendering 시작
 	CDevice::GetInst()->ClearTarget();
 
-
-
-	// ==========
-	// 화면 Draw 
-	// ==========
-
-	// *******************************
-	// [ Main Camera 시점으로 Render ]
-	// *******************************
-	
-	// [ 0 ] Camera : Main Camera  
+	// 메인 카메라 시점으로 렌더링
 	CCamera* pMainCam = m_vecCam[0];
-	
-	// Camera 가 찍는 Layer 의 오브젝트들을 Shader Domain 에 따라 분류해둠 
+
+	// Camera 가 찍는 Layer 의 오브젝트들을 Shader Domain 에 따라 분류해둠
 	pMainCam->SortGameObject();
 
-	// Render 시점에 g_transform 의 데이터를 GPU 로 보낸다. 
 	g_transform.matView = pMainCam->GetViewMat();
 	g_transform.matProj = pMainCam->GetProjMat();
 
-	// Forward 물체 렌더링 
+	// Foward 물체 렌더링
 	pMainCam->render_forward();
-	// Masked 물체 렌더링 
+
+	// Masked 물체 렌더링
 	pMainCam->render_masked();
-	// Alpha 물체 렌더링 
-	pMainCam->render_opaque();
+
+	// Alpha 물체 렌더링
+	pMainCam->render_translucent();
+
+	// PostProcess 물체 렌더링
+	pMainCam->render_postprocess();
 
 
-	// ******************************
-	// [ Sub Camera 시점으로 Render ]
-	// ******************************
+	// Sub 카메라 시점으로 렌더링
 	for (int i = 1; i < m_vecCam.size(); ++i)
 	{
 		if (nullptr == m_vecCam[i])
@@ -96,44 +78,38 @@ void CRenderMgr::render()
 		m_vecCam[i]->render_masked();
 
 		// Alpha 물체 렌더링
-		m_vecCam[i]->render_opaque();
+		m_vecCam[i]->render_translucent();
 	}
 
 
-	// ============
-	// 화면 Present 
-	// ============
-	CDevice::GetInst()->Present();
 
+	CDevice::GetInst()->Present();
 }
 
 void CRenderMgr::RegisterCamera(CCamera* _pCam)
 {
-	// 카메라가 RenderMgr 에 최초 등록 되는 경우 
+	// 카메라가 RenderMgr에 최초 등록 되는 경우
 	if (-1 == _pCam->m_iCamIdx)
 	{
 		m_vecCam.push_back(_pCam);
-		int iIdx = m_vecCam.size() - 1;
+		int iIdx = (int)m_vecCam.size() - 1;
 		_pCam->m_iCamIdx = iIdx;
 	}
 	else
 	{
 		if (m_vecCam.size() <= _pCam->m_iCamIdx)
 		{
-			m_vecCam.resize((size_t)_pCam->m_iCamIdx + 1);;
+			m_vecCam.resize((size_t)_pCam->m_iCamIdx + 1);
 		}
-		
-		m_vecCam[_pCam->m_iCamIdx] = _pCam;
 
+		m_vecCam[_pCam->m_iCamIdx] = _pCam;
 	}
-		
 }
 
 void CRenderMgr::SwapCameraIndex(CCamera* _pCam, int _iChangeIdx)
 {
 	for (size_t i = 0; i < m_vecCam.size(); ++i)
 	{
-		// 등록된 카메라를 찾았다면 
 		if (_pCam == m_vecCam[i])
 		{
 			if (nullptr != m_vecCam[_iChangeIdx])
@@ -142,12 +118,17 @@ void CRenderMgr::SwapCameraIndex(CCamera* _pCam, int _iChangeIdx)
 				_pCam->m_iCamIdx = _iChangeIdx;
 
 				return;
-
 			}
 		}
 	}
 
 	assert(nullptr);
+}
 
+void CRenderMgr::CopyTargetToPostProcess()
+{
+	Ptr<CTexture> pRenderTarget = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTex");
+	Ptr<CTexture> pPostProcess = CResMgr::GetInst()->FindRes<CTexture>(L"PostProcessTex");
 
+	CONTEXT->CopyResource(pPostProcess->GetTex2D().Get(), pRenderTarget->GetTex2D().Get());
 }

@@ -38,15 +38,15 @@ CComputeShader::~CComputeShader()
 void CComputeShader::Excute()
 {
 	// 리소스 바인딩
-	UpdateData();
+	UpdateData();	//  particle.fx -> RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);	bind
 
 	// 상수 업데이트
 	static CConstBuffer* pCB = CDevice::GetInst()->GetCB(CB_TYPE::SCALAR_PARAM);
 	pCB->SetData(&m_Param, sizeof(tScalarParam));
-	pCB->UpdateData_CS();
+	pCB->UpdateData_CS();							// cbuffer SCALAR_PARAM : register(b1); bind
 
 	// 사용할 컴퓨트 쉐이더 세팅
-	CONTEXT->CSSetShader(m_CS.Get(), nullptr, 0);
+	CONTEXT->CSSetShader(m_CS.Get(), nullptr, 0);	// particle.fx -> Compute Shader setting 
 
 	// 컴퓨트 쉐이더 실행(그룹 개수 지정)
 	CONTEXT->Dispatch(m_iGroupX, m_iGroupY, m_iGroupZ);
@@ -54,7 +54,6 @@ void CComputeShader::Excute()
 	// 리소스 해제
 	Clear();
 }
-
 void CComputeShader::Excute(UINT _GroupX, UINT _GroupY, UINT _GroupZ)
 {
 	UpdateData();

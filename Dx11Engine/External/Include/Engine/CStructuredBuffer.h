@@ -7,6 +7,18 @@ enum class SB_TYPE
     READ_WRITE,
 };
 
+/*
+* 
+*   [CPU]       |         [GPU]
+*   <-----      |  [m_SB_Read]  <-
+    ( GetData ) |           | (Copy)     |->  m_SRV --- bind ---> register(t)
+                |               [m_SB]-  |
+                |           |( Copy)     |->  m_UAV --- bind ---> register(u)
+     ----->     |  [m_SB_Write] ->
+    ( SetData ) |
+
+*/
+
 class CStructuredBuffer :
     public CEntity
 {
@@ -15,7 +27,14 @@ private:
     ComPtr<ID3D11ShaderResourceView>    m_SRV;
     ComPtr<ID3D11UnorderedAccessView>   m_UAV;
 
+    ComPtr<ID3D11Buffer>                m_SB_Write;
+    ComPtr<ID3D11Buffer>                m_SB_Read;
+
     D3D11_BUFFER_DESC                   m_desc;
+    D3D11_BUFFER_DESC                   m_desc_write;
+    D3D11_BUFFER_DESC                   m_desc_read;
+
+    
 
     UINT                                m_iElementSize;
     UINT                                m_iElementCount;
@@ -24,7 +43,7 @@ private:
     int                                 m_iRecentBindNumUAV; // 최근 바인딩 레지스터 번호(u)
 
     SB_TYPE                             m_eType;
-    bool                                m_bCpuRead;
+    bool                                m_bCpuAccess;
 
 public:
     UINT GetBufferSize() { return m_iElementSize * m_iElementCount; }
@@ -32,8 +51,10 @@ public:
     UINT GetElementSize() { return m_iElementSize; }
 
 public:
-    int Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _eType, bool _bCpuAccessRead, void* _pInitialData);
+    int Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _eType, bool _bCpuAccess, void* _pInitialData);
     void SetData(void* _pSrc, UINT _iElementCount);
+    void GetData(void* _pDst);
+
 
     // PIPELINE_STAGE
     void UpdateData(UINT _iStage, UINT _iRegisterNum);
