@@ -6,8 +6,7 @@
 #include "func.fx"
 
 // =======================
-// Particle Update Shader _PARTICLE_MAGIC_CIRCLE_
-
+// Particle Update Shader
 #define MaxThreadCount      g_int_0
 #define MaxParticleCount    g_int_1
 
@@ -25,6 +24,7 @@
 #define StartScale          g_vec4_2
 #define EndScale            g_vec4_3
 
+
 // =======================
 
 RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
@@ -40,20 +40,29 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
     if (0 == ParticleBuffer[_id.x].Alive)
     {
         int iOriginValue = DataBuffer[0].iAliveCount;
-        int iInputValue = DataBuffer[0].iAliveCount - 1;
-        int iOutValue = 0;
-    
-        // Alive 기회가 없으면 리턴
-        if (iOriginValue <= 0)
-            return;
-    
-        InterlockedExchange(DataBuffer[0].iAliveCount, iInputValue, iOutValue);
-    
-        // 활성화 성공한 경우
-        if (iOriginValue == iOutValue)
-        {
-            ParticleBuffer[_id.x].Alive = 1;
         
+        // Alive 기회가 있으면 반복
+        while (0 < iOriginValue)
+        {
+            int iInputValue = iOriginValue - 1;
+            int iOutValue = 0;
+    
+            InterlockedCompareExchange(DataBuffer[0].iAliveCount, iOriginValue, iInputValue, iOutValue);
+    
+            // 활성화 성공한 경우, Alive 를 True 로 변경
+            if (iOriginValue == iOutValue)
+            {
+                ParticleBuffer[_id.x].Alive = 1;
+                break;
+            }
+            
+            iOriginValue = DataBuffer[0].iAliveCount;
+        }
+        
+        
+        // 활성화 된 파티클의 초기값을 랜덤하게 부여
+        if (ParticleBuffer[_id.x].Alive)
+        {
             // 랜덤한 위치 부여
             float2 vSampleUV = float2(((float) _id.x / (float) MaxThreadCount) + fAccTime, fAccTime);
             vSampleUV.y += sin(vSampleUV.x * 3.141592f * 2.f) * 0.5f;
@@ -65,24 +74,16 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
                 , GaussianSample(g_noise_01, vSampleUV + float2(0.2f, 0.f)).r
                 , GaussianSample(g_noise_01, vSampleUV + float2(0.3f, 0.f)).r
             };
-                        
             
             ParticleBuffer[_id.x].vPos = WorldPos + (vOut - 0.5f) * CreateRange; // 파티클 생성 위치 
             ParticleBuffer[_id.x].vScale = float3(10.f, 10.f, 1.f); // 파티클 초기 크기 
             ParticleBuffer[_id.x].vDir = normalize(vRandom - 0.5f); // 파티클 진행 방향 
-            
-            // =========================
-            ParticleBuffer[_id.x].vPos.x = cos(ParticleBuffer[_id.x].m_fCurTime * vRandom.g) + WorldPos.x;
-          
-            //===========================   
-            
-            
+                        
+
             ParticleBuffer[_id.x].m_fCurTime = 0.f;
             ParticleBuffer[_id.x].m_fMaxTime = MinLifeTime + (MaxLifeTime - MinLifeTime) * vOut.r;
             
-            if (400 == _id.x)
-                ParticleBuffer[_id.x].m_fMaxTime *= 3.f;
-
+            
         }
     }
     
@@ -112,6 +113,7 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
         
         if( 0 <= _id.x && _id.x < 100)
         {
+            ParticleBuffer[_id.x].vPos.y = WorldPos.y;
             ParticleBuffer[_id.x].vPos.z = sin(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.z;
             ParticleBuffer[_id.x].vPos.x = cos(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.x;
             ParticleBuffer[_id.x].vScale = vScale;
@@ -120,7 +122,7 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
         }
         else if (100 <= _id.x && _id.x < 200)
         {
-            ParticleBuffer[_id.x].vPos.y = sin(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f;
+            ParticleBuffer[_id.x].vPos.y = sin(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.y;
             ParticleBuffer[_id.x].vPos.z = cos(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.z;
             
             ParticleBuffer[_id.x].vScale = vScale;
@@ -130,7 +132,7 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
         {
             ParticleBuffer[_id.x].vPos.z = sin(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.z;
             ParticleBuffer[_id.x].vPos.x = cos(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.x;
-            ParticleBuffer[_id.x].vPos.y = ParticleBuffer[_id.x].vPos.x - WorldPos.x;
+            ParticleBuffer[_id.x].vPos.y = ParticleBuffer[_id.x].vPos.x - WorldPos.x + WorldPos.y;
             
             ParticleBuffer[_id.x].vScale = vScale;
             ParticleBuffer[_id.x].vColor = vColor;
@@ -139,7 +141,7 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
         {
             ParticleBuffer[_id.x].vPos.z = sin(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.z;
             ParticleBuffer[_id.x].vPos.x = cos(ParticleBuffer[_id.x].m_fCurTime * 3.f) * 50.f + WorldPos.x;
-            ParticleBuffer[_id.x].vPos.y = (ParticleBuffer[_id.x].vPos.x - WorldPos.x) * -1;
+            ParticleBuffer[_id.x].vPos.y = (ParticleBuffer[_id.x].vPos.x - WorldPos.x) * -1 + WorldPos.y;
             
             ParticleBuffer[_id.x].vScale = vScale;
             ParticleBuffer[_id.x].vColor = vColor;

@@ -461,6 +461,9 @@
     <Filter Include="Engine\ShaderCode\ComputeShader\Particle">
       <UniqueIdentifier>{b72c47a0-b152-474c-9fc7-db5fd852c505}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\ShaderCode\ComputeShader\Particle\MyEffect">
+      <UniqueIdentifier>{711d1e78-dc2a-476e-b4d0-879717015573}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -496,17 +499,23 @@
     <FxCompile Include="func.fx">
       <Filter>Engine\ShaderCode</Filter>
     </FxCompile>
-    <FxCompile Include="MagicCircleParticle.fx">
-      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="BombParticle.fx">
-      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="FirecrackerParticle.fx">
-      <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
-    </FxCompile>
     <FxCompile Include="postprocess.fx">
       <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
+    <FxCompile Include="BuffParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle\MyEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="BombParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle\MyEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="FirecrackerParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle\MyEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="MagicCircleParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle\MyEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="hypotrochoids.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\Particle\MyEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

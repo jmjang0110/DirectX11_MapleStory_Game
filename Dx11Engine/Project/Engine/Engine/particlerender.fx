@@ -142,6 +142,36 @@ float4 PS_ParticleRender(GS_OUT _in) : SV_Target
         else
             vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor;
     }
+    else if( PARTICLE_TYPE_NUM == 3)
+    {
+         vOutColor = g_tex_3.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Light
+        //if (_in.InstID == 0)
+        //    vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Thunderbolt
+        //else if (_in.InstID == 1)
+        //    vOutColor = g_tex_1.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Bolt
+        //else if(_in.InstID == 2)
+        //    vOutColor = g_tex_2.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Cloud
+            
+        //else if (30 <= _in.InstID && _in.InstID < 40)
+        //    vOutColor = g_tex_2.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor;
+        //else if (40 <= _in.InstID && _in.InstID < 50)
+            //vOutColor = g_tex_3.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Light
+        
+    }
+    else if (PARTICLE_TYPE_NUM == 4)
+    {
+        vOutColor = g_tex_1.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Bolt
+    }
+    else if(PARTICLE_TYPE_NUM == 5)
+    {
+        vOutColor = g_tex_2.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Bolt
+    
+        }
+    else if(PARTICLE_TYPE_NUM == 6)
+    {
+        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV) * ParticleBuffer[_in.InstID].vColor; // Bolt
+        
+    }
     else
     {
         vOutColor = ParticleBuffer[_in.InstID].vColor;

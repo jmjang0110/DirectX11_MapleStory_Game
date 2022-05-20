@@ -233,6 +233,10 @@ void CResMgr::CreateEngineShader()
 
 	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
 
+	//===================================== ToDo
+
+	//=======================================
+
 	// PostProcess Shader
 	pShader = new CGraphicsShader;
 
@@ -276,6 +280,12 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes<CMaterial>(L"ParticleRenderMtrl", pMtrl);
 
+	//===================================== ToDo
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
+	AddRes<CMaterial>(L"ParticleRenderMtrl2", pMtrl);
+	//=======================================
+// 
 	// PostProcess Mtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
@@ -317,6 +327,16 @@ void CResMgr::CreateEngineComputeShader()
 	pCS->CreateComputeShader(L"Shader\\FirecrackerParticle.fx", "CS_Particle");
 	AddRes<CComputeShader>(L"ParticleUpdateShader_FireCracker", pCS);
 
+	// Particle Update Shader - BuffEffect
+	pCS = new CParticleUpdateShader;
+	pCS->CreateComputeShader(L"Shader\\BuffParticle.fx", "CS_Particle");
+	AddRes<CComputeShader>(L"ParticleUpdateShader_BuffEffect", pCS);
+
+
+	// Particle Update Shader - Hypo Star
+	pCS = new CParticleUpdateShader;
+	pCS->CreateComputeShader(L"Shader\\hypotrochoids.fx", "CS_Particle");
+	AddRes<CComputeShader>(L"ParticleUpdateShader_HypoStar", pCS);
 
 }
 

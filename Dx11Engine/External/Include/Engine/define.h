@@ -223,6 +223,10 @@ enum class PARTICLE_TYPE
 	BOMB,		 // Æø¹ß 
 	FIRECRACKER, // ÆøÁ×
 	MAGIC_CIRCLE, // ¸¶¹ýÁø
+	BUFF_EFFECT,
+	ICE_SPIKE,
+	ICE_SPRING,
+	HYPO_STAR,
 	END,
 	
 

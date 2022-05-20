@@ -93,53 +93,20 @@ void CSceneMgr::init()
 	pCS->Excute();
 
 
-	// Player Object
-	/*CGameObject* pPlayer = new CGameObject;
-	pPlayer->AddComponent(new CTransform);
-	pPlayer->AddComponent(new CMeshRender);
+	//AddParticle();
 
-	pPlayer->Transform()->SetRelativePos(0.f, 0.f, 500.f);
-	pPlayer->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
-	pPlayer->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pPlayer->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-
-	pPlayer->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTestTex);
-
-
-	m_pCurScene->AddObject(pPlayer, L"Player");*/
-
-
-	// Particle Object 
+	// Particle Object Star
 	CGameObject* pParticleObj = new CGameObject;
 	pParticleObj->AddComponent(new CTransform);
 	pParticleObj->AddComponent(new CParticleSystem);
 
-	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::BOMB);
-	pParticleObj->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::HYPO_STAR);
+	pParticleObj->Transform()->SetRelativePos(0.f, 200.f, 500.f);
 
 	m_pCurScene->AddObject(pParticleObj, L"Default");
 
-	// Test PArtcile
-	pParticleObj = new CGameObject;
-	pParticleObj->AddComponent(new CTransform);
-	pParticleObj->AddComponent(new CParticleSystem);
-
-	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::MAGIC_CIRCLE);
-	pParticleObj->Transform()->SetRelativePos(300.f, 0.f, 500.f);
-
-	m_pCurScene->AddObject(pParticleObj, L"Default");
-
-
-	// Test PArtcile
-	pParticleObj = new CGameObject;
-	pParticleObj->AddComponent(new CTransform);
-	pParticleObj->AddComponent(new CParticleSystem);
-
-	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::FIRECRACKER);
-	pParticleObj->Transform()->SetRelativePos(-300.f, -20.f, 500.f);
-
-	m_pCurScene->AddObject(pParticleObj, L"Default");
-
+	
+	
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
 
 	m_pCurScene->start();
@@ -404,6 +371,78 @@ void CSceneMgr::AddMissilePrefab()
 	CResMgr::GetInst()->AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pMissileObj));
 
 
+
+}
+
+void CSceneMgr::AddParticle()
+{
+
+	// Particle Object 
+	/*CGameObject* pParticleObj = new CGameObject;
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::BOMB);
+	pParticleObj->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+
+	m_pCurScene->AddObject(pParticleObj, L"Default");*/
+	//CGameObject* pParticleObj = new CGameObject;
+	//// Test PArtcile
+	/*pParticleObj = new CGameObject;
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::MAGIC_CIRCLE);
+	pParticleObj->Transform()->SetRelativePos(300.f, 0.f, 500.f);
+
+	m_pCurScene->AddObject(pParticleObj, L"Default");*/
+
+
+	//// Test PArtcile
+	/*pParticleObj = new CGameObject;
+	pParticleObj->AddComponent(new CTransform);
+	pParticleObj->AddComponent(new CParticleSystem);
+
+	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::FIRECRACKER);
+	pParticleObj->Transform()->SetRelativePos(-0.f, -20.f, 500.f);
+
+	m_pCurScene->AddObject(pParticleObj, L"Default");
+
+	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");*/
+
+	//// Test PArtcile
+	//pParticleObj = new CGameObject;
+	//pParticleObj->AddComponent(new CTransform);
+	//pParticleObj->AddComponent(new CParticleSystem);
+
+	//pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::BUFF_EFFECT);
+	//pParticleObj->Transform()->SetRelativePos(-0.f, -300.f, 500.f);
+
+	//m_pCurScene->AddObject(pParticleObj, L"Default");
+
+
+
+
+	//// Test PArtcile
+	//pParticleObj = new CGameObject;
+	//pParticleObj->AddComponent(new CTransform);
+	//pParticleObj->AddComponent(new CParticleSystem);
+
+	//pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::ICE_SPRING);
+	//pParticleObj->Transform()->SetRelativePos(-0.f, -300.f, 500.f);
+
+	//m_pCurScene->AddObject(pParticleObj, L"Default");
+
+
+	////// Test PArtcile
+	//pParticleObj = new CGameObject;
+	//pParticleObj->AddComponent(new CTransform);
+	//pParticleObj->AddComponent(new CParticleSystem);
+
+	//pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::ICE_SPIKE);
+	//pParticleObj->Transform()->SetRelativePos(-0.f, -300.f, 500.f);
+
+	//m_pCurScene->AddObject(pParticleObj, L"Default");
 
 }
 

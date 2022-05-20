@@ -79,6 +79,7 @@ void CS_Particle(int3 _id : SV_DispatchThreadID)
             ParticleBuffer[_id.x].vScale = float3(10.f, 10.f, 1.f);                 // 파티클 초기 크기 
             ParticleBuffer[_id.x].vDir = normalize(vRandom - 0.5f);                 // 파티클 진행 방향 
                         
+
             ParticleBuffer[_id.x].m_fCurTime = 0.f;
             ParticleBuffer[_id.x].m_fMaxTime = MinLifeTime + (MaxLifeTime - MinLifeTime) * vOut.r;
             

@@ -178,7 +178,7 @@ void CStructuredBuffer::GetData(void* _pDst)
 
 	// Read Buffer -> Sysmem
 	CONTEXT->Map(m_SB_Read.Get(), 0, D3D11_MAP::D3D11_MAP_READ, 0, &tSub);
-	memcpy(_pDst, tSub.pData, (size_t)m_iElementSize * (size_t)m_iElementCount);
+	memcpy(_pDst, tSub.pData, (size_t)m_iElementSize * 1);// (size_t)m_iElementCount);
 	CONTEXT->Unmap(m_SB_Read.Get(), 0);
 
 
