@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CImGuiMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ImGui\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformUI.cpp">
+      <Filter>ImGui\UI\InspectorUI\ComponentUI\01. TransformUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUI.cpp">
+      <Filter>ImGui\UI\InspectorUI\ComponentUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderUI.cpp">
+      <Filter>ImGui\UI\InspectorUI\ComponentUI\07. MeshRenderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="InspectorUI.cpp">
+      <Filter>ImGui\UI\InspectorUI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="CImGuiMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx11.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ImGui\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformUI.h">
+      <Filter>ImGui\UI\InspectorUI\ComponentUI\01. TransformUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUI.h">
+      <Filter>ImGui\UI\InspectorUI\ComponentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderUI.h">
+      <Filter>ImGui\UI\InspectorUI\ComponentUI\07. MeshRenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="InspectorUI.h">
+      <Filter>ImGui\UI\InspectorUI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="39Engine.ico">
+      <Filter>Default</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Default">
+      <UniqueIdentifier>{983d369a-dc67-4fc4-a539-9a1ed9eb7681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{c0efb076-602c-4518-a8bc-8296dc366f2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{794b9d47-3920-4196-8ae1-b7a59c48eed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\Code">
+      <UniqueIdentifier>{86c865c2-9c6f-4746-a845-01847847525f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI">
+      <UniqueIdentifier>{081d2c16-d698-415a-a11a-9f64b0aae8d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\InspectorUI">
+      <UniqueIdentifier>{feedea03-6ace-437b-87e9-a6b5aad10fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\InspectorUI\ComponentUI">
+      <UniqueIdentifier>{e44d06bc-bab5-4cab-8d84-3f64c32e4426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\InspectorUI\ComponentUI\01. TransformUI">
+      <UniqueIdentifier>{f5ba4670-0db7-4a84-8758-830f9fc0e73a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\InspectorUI\ComponentUI\07. MeshRenderUI">
+      <UniqueIdentifier>{a2cf5616-8103-4784-b665-c96e92e18528}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
