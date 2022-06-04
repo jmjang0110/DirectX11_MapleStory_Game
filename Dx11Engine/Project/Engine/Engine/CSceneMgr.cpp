@@ -26,6 +26,7 @@
 #include "CPlayerScript.h"
 #include "CCameraMoveScript.h"
 #include "CMissileScript.h"
+#include "CMonsterScript.h"
 
 #include "CTexture.h"
 #include "CPrefab.h"
@@ -64,6 +65,9 @@ void CSceneMgr::init()
 	
 	// ----- MAKE RENDER OBJECT -----
 	//AddTauromacisObj();
+	//AddMagicClaw();
+	AddAncientMixGolem();
+
 	//AddMainPlayerObj();
 	//AddMonsterObj();
 	//AddTileMapObj();
@@ -96,14 +100,14 @@ void CSceneMgr::init()
 	//AddParticle();
 
 	// Particle Object Star
-	CGameObject* pParticleObj = new CGameObject;
+	/*CGameObject* pParticleObj = new CGameObject;
 	pParticleObj->AddComponent(new CTransform);
 	pParticleObj->AddComponent(new CParticleSystem);
 
 	pParticleObj->ParticleSystem()->SetParticleType(PARTICLE_TYPE::HYPO_STAR);
 	pParticleObj->Transform()->SetRelativePos(0.f, 200.f, 500.f);
 
-	m_pCurScene->AddObject(pParticleObj, L"Default");
+	m_pCurScene->AddObject(pParticleObj, L"Default");*/
 
 	
 	
@@ -213,7 +217,7 @@ void CSceneMgr::AddMainPlayerObj()
 
 	Ptr<CTexture> pAnimAtlas = CResMgr::GetInst()->Load<CTexture>(L"PlayerAtlas", L"texture\\link_0.png");
 	pObject->Animator2D()->CreateAnim(L"WALK_DOWN", pAnimAtlas, Vec2(200.f, 200.f)
-		, Vec2(0.f, 260.f), Vec2(60.f, 65.f), Vec2(60.f, 0.f), 0.2f, 10);
+		, Vec2(0.f, 260.f), Vec2(60.f, 65.f), Vec2(60.f, 0.f), 0.2f, 10, false);
 
 
 
@@ -295,7 +299,7 @@ void CSceneMgr::AddTauromacisObj()
 	pObj->Collider2D()->SetOffsetScale(Vec2(200.f, 200.f));
 
 	pObj->Animator2D()->CreateAnim(L"STOP", pTex, Vec2(200.f, 200.f)
-		, Vec2(5.f, 0.f), Vec2(176.f ,160.f), Vec2(186.25f, 0.f), 0.2f, 7);
+		, Vec2(5.f, 0.f), Vec2(176.f ,160.f), Vec2(186.25f, 0.f), 0.2f, 7, false);
 
 
 
@@ -336,6 +340,107 @@ void CSceneMgr::AddTileMapObj()
 	m_pCurScene->AddObject(pObject, L"Tile");
 
 
+}
+
+void CSceneMgr::AddMagicClaw()
+{
+	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"MagicClaw", L"texture//MagicClaw.png");
+	CGameObject* pObj = new CGameObject;
+
+
+	pObj->SetName(L"MagicClaw");
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new CMeshRender);
+	pObj->AddComponent(new CCollider2D);
+	pObj->AddComponent(new CAnimator2D);
+
+	pObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
+	pObj->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 1.f));
+
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	float fLimit = 0.3333f;
+	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObj->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+
+	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
+	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	pObj->Collider2D()->SetOffsetScale(Vec2(200.f, 200.f));
+
+	pObj->Animator2D()->CreateAnim(L"HIT", pTex, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(102.f, 100.f), Vec2(102.f, 0.f), 0.3f, 5, false);
+
+	pObj->Animator2D()->Play(L"HIT", true);
+	m_pCurScene->AddObject(pObj, L"Monster");
+
+
+
+}
+
+void CSceneMgr::AddAncientMixGolem()
+{
+	Ptr<CTexture> pTex_Die = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Die", L"texture//AncientMixGolem//Die.png");
+	Ptr<CTexture> pTex_Move = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Move", L"texture//AncientMixGolem//Move.png");
+	Ptr<CTexture> pTex_Stand = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Stand", L"texture//AncientMixGolem//Stand.png");
+	Ptr<CTexture> pTex_Attack1 = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Attack1", L"texture//AncientMixGolem//Attack1.png");
+	Ptr<CTexture> pTex_Skill1 = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Skill1", L"texture//AncientMixGolem//Skill1.png");
+	Ptr<CTexture> pTex_Attack2 = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Attack2", L"texture//AncientMixGolem//Attack2.png");
+	Ptr<CTexture> pTex_Skill2 = CResMgr::GetInst()->Load<CTexture>(L"AncientMixGolem_Skill2", L"texture//AncientMixGolem//Skill2.png");
+	
+	CGameObject* pObj = new CGameObject;
+
+
+	pObj->SetName(L"AncientMixGolem");
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new CMeshRender);
+	pObj->AddComponent(new CCollider2D);
+	pObj->AddComponent(new CAnimator2D);
+	pObj->AddComponent(new CMonsterScript);
+
+
+	pObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
+	pObj->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 1.f));
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	float fLimit = 0.3333f;
+	//float fLimit = 0.4444f;
+	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObj->MeshRender()->SetUVReverse(true);
+	pObj->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex_Stand.Get());
+
+	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
+	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	pObj->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
+
+	pObj->Animator2D()->CreateAnim(L"MOVE", pTex_Move, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(233.f, 191.f), Vec2(233.f, 0.f), 0.15f, 8, false);
+
+	pObj->Animator2D()->CreateAnim(L"DIE", pTex_Die, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(303.f, 221.f), Vec2(303.f, 221.f), 0.1f, 19, 3, 8);
+
+	pObj->Animator2D()->CreateAnim(L"STAND", pTex_Stand, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(230.f, 188.f), Vec2(230.f, 0.f), 0.15f, 6 , false);
+
+	pObj->Animator2D()->CreateAnim(L"ATTACK1", pTex_Attack1, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(431.f, 235.f), Vec2(431.f, 249.f), 0.15f, 21, 3, 8);
+
+	pObj->Animator2D()->CreateAnim(L"SKILL1", pTex_Skill1, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(164.f, 148.f), Vec2(164.f, 148.f), 0.1f, 5, 1, 5);
+
+	pObj->Animator2D()->CreateAnim(L"ATTACK2", pTex_Attack2, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(270.f, 267.f), Vec2(270.f, 250.f), 0.15f, 27, 4, 8);
+
+	pObj->Animator2D()->CreateAnim(L"SKILL2", pTex_Skill2, Vec2(500.f, 500.f)
+		, Vec2(0.f, 0.f), Vec2(352.f, 448.f), Vec2(352.f, 448.f), 0.1f,16, 2, 8);
+	   
+
+	pObj->Animator2D()->Play(L"SKILL2", true);
+
+	m_pCurScene->AddObject(pObj, L"Monster");
 }
 
 
@@ -482,6 +587,9 @@ void CSceneMgr::AddAttack1AnimObj()
 
 	float fLimit = 0.3333f;
 	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+
+
+
 	pObj->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
 
 	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
@@ -489,7 +597,7 @@ void CSceneMgr::AddAttack1AnimObj()
 	pObj->Collider2D()->SetOffsetScale(Vec2(200.f, 200.f));
 
 	pObj->Animator2D()->CreateAnim(L"ATTACK1", pTex, Vec2(200.f, 200.f)
-		, Vec2(5.f, 0.f), Vec2(176.f, 160.f), Vec2(186.25f, 0.f), 0.2f, 7);
+		, Vec2(5.f, 0.f), Vec2(176.f, 160.f), Vec2(186.25f, 0.f), 0.2f, 7, false);
 
 
 

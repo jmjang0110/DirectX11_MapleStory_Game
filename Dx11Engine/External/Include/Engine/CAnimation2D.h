@@ -41,6 +41,17 @@ public:
 	}
 
 
+	// ====================  - 세로 정보도 포함한다. ( Todo )
+
+public:
+	// 프레임의 행과 열 개수를 추가한다. 
+	void Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel, Vec2 _vLT, Vec2 _vSlice,
+		Vec2 _vStep, float _fDuration, int _iFrameCount, int RowNum, int ColumnNum);
+
+
+
+
+	// ====================
 public:
 	CLONE(CAnimation2D)
 

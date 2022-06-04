@@ -7,6 +7,7 @@
 #include "CDevice.h"
 #include "CConstBuffer.h"
 
+
 CAnimation2D::CAnimation2D()
 	: m_iCurFrmIdx(0)
 	, m_fAccTime(0.f)
@@ -63,6 +64,7 @@ void CAnimation2D::UpdateData()
 
 }
 
+// 가로 프레임을 기준 
 void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel, Vec2 _vLT, Vec2 _vSlice, Vec2 _vStep
 	, float _fDuration, int _iFrameCount)
 {
@@ -98,3 +100,55 @@ void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel, Vec2
 		m_vecFrm.push_back(frm);
 	}
 }
+
+// 프레임의 행과 열의 개수를 추가해서 
+// 세로 프레임까지 이어서 Frame 을 추가
+void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel, 
+	Vec2 _vLT, Vec2 _vSlice, Vec2 _vStep, float _fDuration
+	, int _iFrameCount, int RowNum, int ColumnNum)
+{
+	assert(_Atlas.Get());
+
+	m_pAtlasTex = _Atlas;
+
+	float fWidth = m_pAtlasTex->Width();
+	float fHeight = m_pAtlasTex->Height();
+
+	// 픽셀 좌표를 0~1 UV 로 전환
+	Vec2 vLT = _vLT / Vec2(fWidth, fHeight);
+	Vec2 vSlice = _vSlice / Vec2(fWidth, fHeight);
+	Vec2 vStep = _vStep / Vec2(fWidth, fHeight);
+
+	m_vBackgroundSize = _vBackgroundSizePixel / Vec2(fWidth, fHeight);
+
+	// 프레임 정보 생성
+	tAnim2DFrame frm = {};
+
+
+	for (int i = 0; i < RowNum; ++i)
+	{
+		
+		int colNum = ColumnNum;
+		if (_iFrameCount < ColumnNum)
+			colNum = _iFrameCount;
+		for (int j = 0; j < colNum; ++j)
+		{
+			
+			frm = {};
+			frm.vLT.y += vLT.y + (vStep.y * (float)i);
+			frm.vLT.x = vLT.x + (vStep.x * (float)j);
+			frm.vSlice = vSlice;
+			frm.fDuration = _fDuration;
+
+			m_vecFrm.push_back(frm);
+		}
+
+		_iFrameCount -= ColumnNum;
+	}
+
+
+
+}
+
+
+

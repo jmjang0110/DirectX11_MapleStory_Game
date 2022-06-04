@@ -5,6 +5,8 @@
 #include "CDevice.h"
 #include "CConstBuffer.h"
 
+
+
 CAnimator2D::CAnimator2D()
 	: CComponent(COMPONENT_TYPE::ANIMATOR2D)
 	, m_pCurAnim(nullptr)
@@ -82,13 +84,29 @@ CAnimation2D* CAnimator2D::FindAnim(const wstring& _strName)
 void CAnimator2D::CreateAnim(const wstring& _strName, Ptr<CTexture> _pAtlas
 	, Vec2 _vBackgroundSizePixel, Vec2 _vLeftTopPixel
 	, Vec2 _vSlicePixel, Vec2 _vStepPixel
-	, float _fDuration, int _iFrameCount)
+	, float _fDuration, int _iFrameCount, bool IsRow)
 {
 	assert(!FindAnim(_strName));
 
 	CAnimation2D* anim = new CAnimation2D;
 	anim->SetName(_strName);
-	anim->Create(_pAtlas, _vBackgroundSizePixel, _vLeftTopPixel, _vSlicePixel, _vStepPixel, _fDuration, _iFrameCount);
+
+	if (IsRow == false)
+	{
+		anim->Create(_pAtlas, _vBackgroundSizePixel, _vLeftTopPixel, _vSlicePixel
+			, _vStepPixel, _fDuration, _iFrameCount);
+
+
+	}
+	else
+	{
+		// test : DIE An
+		anim->Create(_pAtlas, _vBackgroundSizePixel, _vLeftTopPixel, _vSlicePixel
+			, _vStepPixel, _fDuration, _iFrameCount, 3 , 8);
+
+
+	}
+
 
 	m_mapAnim.insert(make_pair(_strName, anim));
 	anim->m_pOwner = this;
@@ -103,3 +121,25 @@ void CAnimator2D::Play(const wstring& _strName, bool _bRepeat)
 
 	m_pCurAnim = pAnim;
 }
+
+
+void CAnimator2D::CreateAnim(const wstring& _strName, Ptr<CTexture> _pAtlas
+	, Vec2 _vBackgroundSizePixel, Vec2 _vLeftTopPixel, Vec2 _vSlicePixel
+	, Vec2 _vStepPixel, float _fDuration, int _iFrameCount, int RowNum, int ColumnNum)
+{
+	assert(!FindAnim(_strName));
+
+	CAnimation2D* anim = new CAnimation2D;
+	anim->SetName(_strName);
+
+
+	// test : DIE An
+	anim->Create(_pAtlas, _vBackgroundSizePixel, _vLeftTopPixel, _vSlicePixel
+		, _vStepPixel, _fDuration, _iFrameCount, RowNum, ColumnNum);
+
+
+	m_mapAnim.insert(make_pair(_strName, anim));
+	anim->m_pOwner = this;
+
+}
+

@@ -151,6 +151,9 @@
     <ClInclude Include="CParticleUpdateShader.h">
       <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="CMonsterScript.h">
+      <Filter>Engine\Scripts\MonsterScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -287,6 +290,9 @@
     </ClCompile>
     <ClCompile Include="CRenderMgr_Init.cpp">
       <Filter>Engine\03. Manager\02. RenderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterScript.cpp">
+      <Filter>Engine\Scripts\MonsterScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

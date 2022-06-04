@@ -14,7 +14,7 @@ CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
 	, m_pMtrl(nullptr)
 	, m_pSharedMtrl(_origin.m_pMtrl)
 	, m_pDynamicMtrl(nullptr)
-{
+{ 
 	if (nullptr == _origin.m_pDynamicMtrl)
 	{
 		GetDynamicMaterial();

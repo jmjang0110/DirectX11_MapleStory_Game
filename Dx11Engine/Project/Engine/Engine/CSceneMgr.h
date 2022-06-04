@@ -42,6 +42,10 @@ public:
 	void AddTauromacisObj();
 	void AddTileMapObj();
 
+	void AddMagicClaw();
+	void AddAncientMixGolem();
+
+
 
 	void AddAttack1AnimObj();
 

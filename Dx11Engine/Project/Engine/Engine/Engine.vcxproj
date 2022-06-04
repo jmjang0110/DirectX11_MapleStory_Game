@@ -187,6 +187,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CMeshRender.h" />
     <ClInclude Include="CMissileScript.h" />
+    <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CParticleSystem.h" />
     <ClInclude Include="CParticleUpdateShader.h" />
     <ClInclude Include="CPathMgr.h" />
@@ -239,6 +240,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CMeshRender.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
+    <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CParticleSystem.cpp" />
     <ClCompile Include="CParticleUpdateShader.cpp" />
     <ClCompile Include="CPathMgr.cpp" />

@@ -7,6 +7,8 @@
 #include "CTransform.h"
 #include "CAnimator2D.h"
 
+
+
 CMeshRender::CMeshRender()
 	: CRenderComponent(COMPONENT_TYPE::MESHRENDER)
 
@@ -45,3 +47,27 @@ void CMeshRender::render()
 }
 
 
+
+void CMeshRender::SetUVReverse(bool _reverse)
+{
+	int ImageReverse = 0;
+	if (true == _reverse)
+		ImageReverse = 1;
+	else 
+		ImageReverse = 0;
+
+	GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &ImageReverse);
+}
+
+void CMeshRender::SetUVUpsideDown(bool _upsideDown)
+{
+	int ImageUpsideDown = 0;
+
+	if (true == _upsideDown)
+		ImageUpsideDown = 1;
+	else
+		ImageUpsideDown = 0;
+
+	GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::INT_1, &ImageUpsideDown);
+
+}

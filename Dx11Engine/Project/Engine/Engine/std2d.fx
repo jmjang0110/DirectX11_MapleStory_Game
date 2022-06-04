@@ -25,6 +25,9 @@ struct VTX_OUT
 // BlendState : Default
 // DepthStencilState : LESS
 // DOMAIN : Masked
+#define Image_Reverse           g_int_0 // 좌우 반전 [ 1 : 적용o / 0 : 적용 x ] 
+#define Image_UpsideDown        g_int_1 // 상하 반전 [ 1 : 적용o / 0 : 적용 x ] 
+
 // =========================
 VTX_OUT VS_Std2D(VTX_IN _in)
 {
@@ -43,6 +46,12 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     // Animation 정보가 있는 경우
     if (g_useAnim2D)
     {
+        
+        if (Image_Reverse == 1)
+            _in.vUV.x = 1.f - _in.vUV.x; // 좌우 반전 
+        if (Image_UpsideDown == 1)
+            _in.vUV.y = 1.f - _in.vUV.y; // 상하 반전 
+        
         float2 vUV = _in.vUV * g_vBackgroundSize;
         vUV = vUV - (g_vBackgroundSize - g_vSlice) / 2.f + g_vLT - g_vOffset;
         
@@ -51,8 +60,13 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         {
             discard;
         }
+        
+        
                 
         vOutColor = g_Atlas.Sample(g_sam_1, vUV);
+        vOutColor += 0.25f; // 약간 밝게 ?
+        
+
     }
     else
     {
@@ -72,8 +86,7 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     {
         discard;
     }
-    
- 
+
    
     return vOutColor;
 }
