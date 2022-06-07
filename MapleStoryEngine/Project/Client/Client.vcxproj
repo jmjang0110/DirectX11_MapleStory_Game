@@ -160,6 +160,8 @@
     <ClInclude Include="CameraUI.h" />
     <ClInclude Include="CImGuiMgr.h" />
     <ClInclude Include="ComponentUI.h" />
+    <ClInclude Include="ComputeShaderUI.h" />
+    <ClInclude Include="GraphicsShaderUI.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -174,7 +176,9 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="MaterialUI.h" />
     <ClInclude Include="MeshRenderUI.h" />
+    <ClInclude Include="MeshUI.h" />
     <ClInclude Include="ParamUI.h" />
+    <ClInclude Include="ParticleSystemUI.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ResInfoUI.h" />
     <ClInclude Include="Resource.h" />
@@ -191,6 +195,8 @@
     <ClCompile Include="CameraUI.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
+    <ClCompile Include="ComputeShaderUI.cpp" />
+    <ClCompile Include="GraphicsShaderUI.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -203,7 +209,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaterialUI.cpp" />
     <ClCompile Include="MeshRenderUI.cpp" />
+    <ClCompile Include="MeshUI.cpp" />
     <ClCompile Include="ParamUI.cpp" />
+    <ClCompile Include="ParticleSystemUI.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

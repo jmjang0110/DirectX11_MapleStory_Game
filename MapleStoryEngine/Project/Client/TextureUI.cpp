@@ -1,7 +1,17 @@
 #include "pch.h"
 #include "TextureUI.h"
 
+
+#include "InspectorUI.h"
+#include "CImGuiMgr.h"
+
 #include <Engine/CTexture.h>
+#include <Engine/CResMgr.h>
+#include <Engine/CTexture.h>
+#include <Engine/CRes.h>
+
+
+
 
 TextureUI::TextureUI()
 	: ResInfoUI("Texture", RES_TYPE::TEXTURE)
@@ -60,3 +70,26 @@ void TextureUI::render_update()
 
 }
 
+
+void TextureUI::TextureSelect_toMtrl(DWORD_PTR _param)
+{
+
+	string strSelectedName = (char*)_param;
+	wstring strTexKey = wstring(strSelectedName.begin(), strSelectedName.end());
+
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(strTexKey);
+	assert(pTex.Get());
+
+	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+	CRes* pTargetRes = pInspectorUI->GetTargetRes();
+	
+	assert(!(nullptr == pTargetRes));
+
+	if (RES_TYPE::MATERIAL == pTargetRes->GetResType())
+	{
+		CMaterial* pMtrl = (CMaterial*)pTargetRes;
+		pMtrl->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+
+
+	}
+}

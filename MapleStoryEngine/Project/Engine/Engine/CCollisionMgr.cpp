@@ -76,7 +76,9 @@ void CCollisionMgr::CollisionBetweenLayer(const vector<CGameObject*>& _left, con
 			bool bDead = pLeftCol->GetOwner()->IsDead() || pRightCol->GetOwner()->IsDead();
 
 			// 두 충돌체 중 하나라도 비활성화 상태인지
-			bool bDeactive = pLeftCol->GetOwner()->IsActive() || pRightCol->GetOwner()->IsActive();
+			bool bDeactive = !pLeftCol->GetOwner()->IsActive() || !pRightCol->GetOwner()->IsActive()
+				|| !pLeftCol->IsActive() || !pRightCol->IsActive();
+
 
 			// 이전 프레임에서는 충돌하지 않고 있었고, 현재 둘중 하나 이상이 비활성화 상태이면 충돌 검사를 하지 않겠다.
 			if (bDeactive && false == iter->second)

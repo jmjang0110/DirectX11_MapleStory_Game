@@ -22,6 +22,10 @@ public:
     void SetTargetObject(CGameObject* _pTarget);
     void SetTargetResource(CRes* _pTargetRes);
 
+    // ============= ToDo 
+    const CGameObject* GetTargetObject() { return m_pTargetObject; }
+     CRes* GetTargetRes() { return m_pTargetRes; }
+
 public:
     virtual void update() override;
     virtual void render_update() override;

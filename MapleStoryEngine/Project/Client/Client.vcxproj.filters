@@ -74,6 +74,18 @@
     <ClCompile Include="ParamUI.cpp">
       <Filter>ImGui\UI\Module\ParamUI</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicsShaderUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI\GraphicsShaderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShaderUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI\ComputeShaderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\MeshUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystemUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -162,6 +174,18 @@
     </ClInclude>
     <ClInclude Include="ParamUI.h">
       <Filter>ImGui\UI\Module\ParamUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsShaderUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI\GraphicsShaderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShaderUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI\ComputeShaderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\MeshUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystemUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +280,18 @@
     </Filter>
     <Filter Include="ImGui\UI\Module\ParamUI">
       <UniqueIdentifier>{681540ad-d8e7-4055-91bf-72efef3f403d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI">
+      <UniqueIdentifier>{cded5e4e-2aea-48fb-b20e-0488f1175d38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI\GraphicsShaderUI">
+      <UniqueIdentifier>{9cd2bf5d-c0ff-4deb-a735-cb84b7c50b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\ShaderUI\ComputeShaderUI">
+      <UniqueIdentifier>{5aa56ca1-dcca-4d57-a90a-dc47b61e2f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\MeshUI">
+      <UniqueIdentifier>{0873bfd7-624b-44e0-9d34-55a460004576}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

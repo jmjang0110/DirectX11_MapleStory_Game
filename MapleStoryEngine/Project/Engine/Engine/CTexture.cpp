@@ -192,7 +192,7 @@ void CTexture::UpdateData_CS(UINT _iRegisterNum, bool _bShaderResource)
     }
     else
     {
-        UINT i = -1;
+        UINT i = -1; // -1 넣으면 모든 비트가 전부다 1로 된다 
         CONTEXT->CSSetUnorderedAccessViews(_iRegisterNum, 1, m_pUAV.GetAddressOf(), &i);
     }    
 }

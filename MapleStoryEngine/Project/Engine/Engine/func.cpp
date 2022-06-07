@@ -1,5 +1,6 @@
 #include "pch.h"
 
+// COMPONENT_TYPE 
 const wchar_t* ToWString(COMPONENT_TYPE _type)
 {
     static const wchar_t* szWString[(UINT)COMPONENT_TYPE::END] = 
@@ -42,6 +43,7 @@ const char* ToString(COMPONENT_TYPE _type)
     return szString[(UINT)_type];
 }
 
+// RES_TYPE 
 const wchar_t* ToWString(RES_TYPE _type)
 {
     static const wchar_t* szWString[(UINT)RES_TYPE::END] =
@@ -76,7 +78,150 @@ const char* ToString(RES_TYPE _type)
     return szString[(UINT)_type];
 }
 
+// ============== Todo ===========================================
 
+// SHADER_DOMAIN
+const wchar_t* ToWString(SHADER_DOMAIN _type)
+{
+    static const wchar_t* szWString[(UINT)SHADER_DOMAIN::END] =
+    {
+        L"DOMAIN_FORWARD",
+        L"DOMAIN_MASKED",
+        L"DOMAIN_TRANSLUCENT",
+        L"DOMAIN_POSTPROCESS",
+    };
+
+    return szWString[(UINT)_type];
+}
+
+const char* ToString(SHADER_DOMAIN _type)
+{
+    static const char* szString[(UINT)SHADER_DOMAIN::END] =
+    {
+        "DOMAIN_FORWARD",
+        "DOMAIN_MASKED",
+        "DOMAIN_TRANSLUCENT",
+        "DOMAIN_POSTPROCESS",
+    };
+
+    return szString[(UINT)_type];
+}
+
+// RS_TYPE - RasterizerState
+const wchar_t* ToWString(RS_TYPE _type)
+{
+    static const wchar_t* szWString[(UINT)RS_TYPE::END] =
+    {
+        L"CULL_BACK",
+        L"CULL_FRONT",
+        L"CULL_NONE",
+        L"WIRE_FRAME",
+    };
+
+    return szWString[(UINT)_type];
+}
+
+// RasterizerState
+const char* ToString(RS_TYPE _type)
+{
+    static const char* szString[(UINT)RS_TYPE::END] =
+    {
+        "CULL_BACK",
+        "CULL_FRONT",
+        "CULL_NONE",
+        "WIRE_FRAME",
+    };
+
+    return szString[(UINT)_type];
+}
+
+// DS_TYPE - DepthSTencil State
+const wchar_t* ToWString(DS_TYPE _type)
+{
+    static const wchar_t* szWString[(UINT)DS_TYPE::END] =
+    {
+        L"LESS",
+        L"LESS_EQUAL",
+        L"GREATER",
+        L"GREATER_EQUAL",
+        L"NO_TEST",
+        L"NO_WRITE",
+        L"NO_TEST_NO_WRITE",
+    };
+
+    return szWString[(UINT)_type];
+}
+
+// DS_TYPE
+const char* ToString(DS_TYPE _type)
+{
+    static const char* szString[(UINT)DS_TYPE::END] =
+    {
+       "LESS",
+       "LESS_EQUAL",
+       "GREATER",
+       "GREATER_EQUAL",
+       "NO_TEST",
+       "NO_WRITE",
+       "NO_TEST_NO_WRITE",
+    };
+
+    return szString[(UINT)_type];
+}
+
+// BS_TYPE - Blend State State
+const wchar_t* ToWString(BS_TYPE _type)
+{
+    static const wchar_t* szWString[(UINT)BS_TYPE::END] =
+    {
+        L"DEFAULT",
+        L"ALPHA_BLEND",
+    };
+
+    return szWString[(UINT)_type];
+}
+
+// BS_TYPE
+const char* ToString(BS_TYPE _type)
+{
+    static const char* szString[(UINT)BS_TYPE::END] =
+    {
+       "DEFAULT",
+       "ALPHA_BLEND",
+
+    };
+
+    return szString[(UINT)_type];
+}
+
+// CB_TYPE - const Buffer Type 
+const wchar_t* ToWString(CB_TYPE _type)
+{
+    static const wchar_t* szWString[(UINT)CB_TYPE::END] =
+    {
+        L"TRANSFORM",
+        L"SCALAR_PARAM",
+        L"ANIM2D",
+        L"GLOBAL",
+    };
+
+    return szWString[(UINT)_type];
+}
+// CB_TYPE - const Buffer Type 
+const char* ToString(CB_TYPE _type)
+{
+    static const char* szString[(UINT)CB_TYPE::END] =
+    {
+        "TRANSFORM",
+        "SCALAR_PARAM",
+        "ANIM2D",
+        "GLOBAL",
+    };
+
+    return szString[(UINT)_type];
+}
+
+// Set/Get wstring To/From File 
 const void SaveWString(const wstring& _str, FILE* _pFile)
 {
     const wchar_t* pStr = _str.c_str();

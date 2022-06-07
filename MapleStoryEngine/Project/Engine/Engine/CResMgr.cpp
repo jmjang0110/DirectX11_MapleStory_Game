@@ -26,7 +26,7 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, UINT _iWidth, UINT 
 	pTexture->SetKey(_strKey);
 	pTexture->m_bEngineRes = _bEngineRes;
 
-	AddRes<CTexture>(_strKey, pTexture);
+	AddRes<CTexture>(_strKey, pTexture, _bEngineRes);
 
 	return pTexture;
 }
@@ -42,7 +42,7 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, ComPtr<ID3D11Textur
 	pTexture->SetKey(_strKey);
 	pTexture->m_bEngineRes = _bEngineRes;
 
-	AddRes<CTexture>(_strKey, pTexture);
+	AddRes<CTexture>(_strKey, pTexture, _bEngineRes);
 
 	return pTexture;
 }

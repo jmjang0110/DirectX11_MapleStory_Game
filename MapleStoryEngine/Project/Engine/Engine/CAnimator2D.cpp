@@ -72,7 +72,6 @@ void CAnimator2D::UpdateData()
 	int Hflip = m_pCurAnim->GetHorizontalFlip();
 	int Vflip = m_pCurAnim->GetVerticalFlip();
 
-
 	GetOwner()->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &Hflip);
 	GetOwner()->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::INT_1, &Vflip);
 

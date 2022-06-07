@@ -10,7 +10,8 @@
 // SV_GroupThreadID     : 그룹 내에서의 스레드 인덱스
 // SV_GroupIndex        : 그룹 내에서의 스레드 인덱스를 1차원 값으로 변환
 // SV_GroupID           : 스레드가 속한 그룹의 인덱스
-// SV_DispatchThreadID  : 모든 스레드를 기준으로 했을 때의 인덱스
+// SV_DispatchThreadID  : 모든 스레드를 기준으로 했을 때의 인덱스 - 겹치지 않고 고유하다 .
+// 쓰레드 하나당 픽셀 하나를 대응한다. 
 
 RWTexture2D<float4> g_RWTex_0 : register(u0);
 
@@ -18,7 +19,7 @@ RWTexture2D<float4> g_RWTex_0 : register(u0);
 #define HEIGHT  g_int_1
 #define Color   g_vec4_0
 
-[numthreads(32, 32, 1)]
+[numthreads(32, 32, 1)] // 하나의 그룹 당 Thread 개수이다. 
 void CS_Test(int3 _id : SV_DispatchThreadID)
 {
     if (_id.x < 0 || WIDTH <= _id.x || _id.y < 0 || HEIGHT <= _id.y)

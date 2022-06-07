@@ -35,6 +35,7 @@ enum class SCENE_STATE
 	PLAY,
 	STOP,
 	PAUSE,
+
 };
 
 enum class RES_TYPE
@@ -102,6 +103,8 @@ enum class SHADER_DOMAIN
 	DOMAIN_MASKED,	// 불투명, 투명
 	DOMAIN_TRANSLUCENT,	// 반투명
 	DOMAIN_POSTPROCESS, // 후 처리
+	END,
+
 };
 
 

@@ -29,6 +29,15 @@ public:
     void render();
     void render_particle(UINT _iCount);
 
+    // ============= Todo for UI =============
+public:
+    void* GetVtxMem() { return m_pVtxSys; }
+    void* GetIdxMem() { return m_pIdxSys; }
+    UINT GetVtxCnt() { return m_iVtxCount; }
+    UINT GetIdxCnt() { return m_iIdxCount; }
+
+
+
 public:
     CMesh();
     ~CMesh();

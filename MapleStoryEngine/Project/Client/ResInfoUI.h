@@ -20,6 +20,6 @@ public:
 
 public:
     ResInfoUI(const string& _strName, RES_TYPE _eType);
-    ~ResInfoUI();
+    virtual ~ResInfoUI();
 };
 

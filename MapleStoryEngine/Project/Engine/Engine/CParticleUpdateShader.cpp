@@ -16,8 +16,10 @@ void CParticleUpdateShader::UpdateData()
 {
 	m_ParticleBuffer->UpdateData_CS(0, false);
 	m_ParticleDataBuffer->UpdateData_CS(1, false);
-
-	m_iGroupX =  m_ParticleBuffer->GetElementCount() / m_iGroupPerThreadCountX + !!(m_ParticleBuffer->GetElementCount() % m_iGroupPerThreadCountX);
+	
+	// 해상도에 맞게 그룹개수가 지정된다.  
+	m_iGroupX =  m_ParticleBuffer->GetElementCount() / m_iGroupPerThreadCountX 
+		+ !!(m_ParticleBuffer->GetElementCount() % m_iGroupPerThreadCountX);
 	m_iGroupY = 1;
 	m_iGroupZ = 1;
 

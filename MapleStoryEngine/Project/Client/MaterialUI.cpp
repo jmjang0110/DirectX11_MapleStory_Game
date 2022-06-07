@@ -3,8 +3,18 @@
 
 
 #include "ParamUI.h"
+#include "ListUI.h"
+#include "CImGuiMgr.h"
+
+#include "MeshRenderUI.h"
+#include "TextureUI.h"
+#include "InspectorUI.h"
+
+
+
 #include <Engine/CMaterial.h>
 #include <Engine/CGraphicsShader.h>
+#include <Engine/CResMgr.h>
 
 MaterialUI::MaterialUI()
 	: ResInfoUI("Material", RES_TYPE::MATERIAL)
@@ -48,7 +58,24 @@ void MaterialUI::render_update()
 
 	ImGui::Text("Shader");
 	ImGui::SameLine(100);
-	ImGui::InputText("##ShaderName", (char*)strShaderName.c_str(), strShaderName.capacity(), ImGuiInputTextFlags_ReadOnly);
+	if (ImGui::BeginCombo("##ShaderName", strShaderName.c_str(), 0))
+	{
+			// ListUI 활성화한다.
+			const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::GRAPHICS_SHADER);
+			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+			pListUI->Clear();
+			pListUI->SetTitle("Shader List");
+
+			for (const auto& pair : mapRes)
+			{
+				pListUI->AddList(string(pair.first.begin(), pair.first.end()));
+			}
+
+			pListUI->Activate();
+			pListUI->SetDBCEvent(this, (DBCLKED)&MaterialUI::ShaderSelect);
+
+		ImGui::EndCombo();
+	}
 
 	// Shader Parameter 확인
 	if (nullptr == pShader)
@@ -90,6 +117,7 @@ void MaterialUI::render_update()
 		}
 	}
 
+	// ParamUI::Param_Tex =>> 이미지 띄운다. 
 	const vector<tTexParamInfo>& vecTexParamInfo = pShader->GetTexParamInfo();
 
 	for (size_t i = 0; i < vecTexParamInfo.size(); ++i)
@@ -112,5 +140,52 @@ void MaterialUI::render_update()
 			pMtrl->SetTexParam(vecTexParamInfo[i].eTexParam, pTex);
 			break;
 		}
+	}
+
+	// Mtrl 의 Outpute Tex 변경 
+	ImGui::SameLine();
+	if (ImGui::Button("Select\n Tex"))
+	{
+		// ListUI 활성화한다.
+		const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::TEXTURE);
+		ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+		pListUI->Clear();
+		pListUI->SetTitle("Texture List");
+
+		for (const auto& pair : mapRes)
+		{
+			pListUI->AddList(string(pair.first.begin(), pair.first.end()));
+		}
+
+		pListUI->Activate();
+		pListUI->SetDBCEvent(this, (DBCLKED)&TextureUI::TextureSelect_toMtrl);
+	}
+
+
+
+
+}
+
+
+
+void MaterialUI::ShaderSelect(DWORD_PTR _param)
+{
+
+	string strSelectedName = (char*)_param;
+	wstring strTexKey = wstring(strSelectedName.begin(), strSelectedName.end());
+
+	Ptr<CGraphicsShader> pGShader = CResMgr::GetInst()->FindRes<CGraphicsShader>(strTexKey);
+	assert(pGShader.Get());
+
+	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+	CRes* pTargetRes = pInspectorUI->GetTargetRes();
+
+	assert(!(nullptr == pTargetRes));
+
+	if (RES_TYPE::MATERIAL == pTargetRes->GetResType())
+	{
+		CMaterial* pMtrl = (CMaterial*)pTargetRes;
+		pMtrl->SetShader(pGShader);
+
 	}
 }

@@ -78,6 +78,8 @@ void CComputeShader::Excute(UINT _GroupX, UINT _GroupY, UINT _GroupZ)
 
 int CComputeShader::CreateComputeShader(const wstring& _strRelativePath, const string& _strFunc)
 {
+	SetRelativePath(_strRelativePath);
+
 	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 
 	// 컴퓨트 쉐이더(HLSL) 컴파일

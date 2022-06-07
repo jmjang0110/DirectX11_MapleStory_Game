@@ -8,6 +8,8 @@
 
 CScene::CScene()
 	: m_arrLayer{}
+	, m_eSceneState(SCENE_STATE::STOP)
+
 {
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{

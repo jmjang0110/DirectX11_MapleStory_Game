@@ -320,10 +320,7 @@ void Animator2DUI::SelectAtlasTexture()
 		m_vecTexList.push_back(string(pair.first.begin(), pair.first.end()));
 	}
 
-	static int item_current_idx2 = 0;
-
 	string m_pChoosenAtlas_TexKey = "";
-
 	if (nullptr != m_pChoosenAtlas)
 		m_pChoosenAtlas_TexKey = string(m_pChoosenAtlas->GetKey().begin(), m_pChoosenAtlas->GetKey().end());
 
@@ -332,21 +329,15 @@ void Animator2DUI::SelectAtlasTexture()
 
 		for (int n = 0; n < m_vecTexList.size(); ++n)
 		{
-			const bool is_selected2 = (item_current_idx2 == n);
-			if (ImGui::Selectable(m_vecTexList[n].c_str(), is_selected2))
+			if (ImGui::Selectable(m_vecTexList[n].c_str()))
 			{
-				item_current_idx2 = n;
-				m_vecTexList[n].c_str();
-
+			
 				// Tex ¼±ÅÃ 
 				wstring TexKey = wstring(m_vecTexList[n].begin(), m_vecTexList[n].end());
 				m_pChoosenAtlas = CResMgr::GetInst()->FindRes<CTexture>(TexKey);
 
 			}
 
-			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-			if (is_selected2)
-				ImGui::SetItemDefaultFocus();
 		}
 		ImGui::EndCombo();
 	}

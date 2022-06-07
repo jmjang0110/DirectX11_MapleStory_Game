@@ -49,6 +49,18 @@ const char* ToString(COMPONENT_TYPE _type);
 const wchar_t* ToWString(RES_TYPE _type);
 const char* ToString(RES_TYPE _type);
 
+// To Do 
+const wchar_t* ToWString(SHADER_DOMAIN _type);
+const char* ToString(SHADER_DOMAIN _type);
+const wchar_t* ToWString(RS_TYPE _type);
+const char* ToString(RS_TYPE _type);
+const wchar_t* ToWString(CB_TYPE _type);
+const char* ToString(CB_TYPE _type);
+
+const wchar_t* ToWString(DS_TYPE _type);
+const char* ToString(DS_TYPE _type);
+const wchar_t* ToWString(BS_TYPE _type);
+const char* ToString(BS_TYPE _type);
 
 const void SaveWString(const wstring& _str, FILE* _pFile);
 const void LoadWString(wstring& _str, FILE* _pFile);

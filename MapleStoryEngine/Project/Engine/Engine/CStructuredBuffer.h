@@ -7,6 +7,18 @@ enum class SB_TYPE
     READ_WRITE,
 };
 
+/*
+*
+*   [CPU]       |         [GPU]
+*   <-----      |  [m_SB_Read]  <-
+    ( GetData ) |           | (Copy)     |->  m_SRV --- bind ---> register(t)
+                |               [m_SB]-  |
+                |           |( Copy)     |->  m_UAV --- bind ---> register(u)
+     ----->     |  [m_SB_Write] ->
+    ( SetData ) |
+
+*/
+
 class CStructuredBuffer :
     public CEntity
 {

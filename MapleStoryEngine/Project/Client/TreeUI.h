@@ -6,8 +6,9 @@ class TreeUI;
 class TreeNode
 {
 private:
-    TreeUI* m_pTreeUI;
-    TreeNode* m_pParent;
+    TreeUI*             m_pTreeUI;
+    TreeNode*           m_pParent;
+
     vector<TreeNode*>   m_vecChild;
     bool                m_bLeaf;
     bool                m_bSelected;

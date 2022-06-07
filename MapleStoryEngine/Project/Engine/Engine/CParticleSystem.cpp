@@ -23,7 +23,7 @@ CParticleSystem::CParticleSystem()
 	, m_fParticleCreateDistance(50.f)
 	, m_fParticleCreateTerm(0.02f)
 {
-	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
+	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh")); 
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleRenderMtrl"));
 
 	m_CS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateShader").Get();

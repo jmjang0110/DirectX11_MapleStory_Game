@@ -42,6 +42,43 @@ public:
     virtual void render()   override;
 
     CLONE(CParticleSystem);
+
+    // ========== Todo 
+public:
+    UINT    GetMaxCount() { return m_iMaxCount; }
+    int    GetPosInherit() { return m_bPosInherit; }
+
+    int    GetAliveCount() { return m_iAliveCount; }
+    float    GetMinLifeTime() { return m_fMinLifeTime; }
+    float    GetMaxLifeTime() { return m_fMaxLifeTime; }
+    float    GetStartSpeed() { return m_fStartSpeed; }
+    float    GetEndSpeed() { return m_fEndSpeed; }
+    Vec4    GetStartColor() { return m_vStartColor; }
+    Vec4    GetEndColor() { return m_vEndColor; }
+    Vec3    GetStartScale() { return m_vStartScale; }
+    Vec3    GetEndScale() { return m_vEndScale; }
+
+    float    GetParticleCreateDIstance() { m_fParticleCreateDistance ; }
+    float    GetParticleCreateTerm() { m_fParticleCreateTerm; }
+
+public:
+    void SetMaxCount(UINT _maxCnt) { m_iMaxCount = _maxCnt; }
+    void SetPosInherit(int _posInherit) { m_bPosInherit = _posInherit; }
+
+    void SetAliveCount(int _AliveCnt) { m_iAliveCount = _AliveCnt; }
+    void SetMinLifeTime(float _MinLifeTime) { m_fMinLifeTime = _MinLifeTime; }
+    void SetMaxLifeTime(float _MaxLifeTime) { m_fMaxLifeTime = _MaxLifeTime; }
+    void SetStartSpeed(float _StartSpeed) { m_fStartSpeed = _StartSpeed; }
+    void SetEndSpeed(float _EndSpeed) { m_fEndSpeed = _EndSpeed; }
+    void SetStartColor(Vec4 _StartColor) { m_vStartColor = _StartColor; }
+    void SetEndColor(Vec4 _EndColor) { m_vEndColor = _EndColor; }
+    void SetStartScale(Vec3 _StartScale) { m_vStartScale = _StartScale; }
+    void SetEndScale(Vec3 _EndScale) { m_vEndScale = _EndScale; }
+
+    void SetParticleCreateDIstance(float _dist) { m_fParticleCreateDistance = _dist; }
+    void SetParticleCreateTerm(float _term) { m_fParticleCreateTerm = _term; }
+
+
 public:
     CParticleSystem();
     CParticleSystem(const CParticleSystem& _origin);

@@ -63,6 +63,7 @@ void CSceneMgr::init()
 	CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\MagicCircle.png");
 	CResMgr::GetInst()->Load<CTexture>(L"Tauromacis", L"texture\\Tauromacis.png");
 	CResMgr::GetInst()->Load<CTexture>(L"RedWheel", L"texture\\RedGearWheel.png");
+	CResMgr::GetInst()->Load<CTexture>(L"Back", L"Texture\\0_100.png");
 
 	
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");
@@ -107,31 +108,31 @@ void CSceneMgr::init()
 	
 
 	// Plane Object
-	//CGameObject* pObject = new CGameObject;
-	//pObject->SetName(L"Background");
+	CGameObject* pObject = new CGameObject;
+	pObject->SetName(L"Background");
 
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
-	////pObject->AddComponent(new CPlayerScript);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	//pObject->AddComponent(new CPlayerScript);
 
-	//pObject->Transform()->SetRelativePos(0.f, 0.f, 500.f);
-	//pObject->Transform()->SetRelativeScale(1600.f, 900.f, 1.f);
+	pObject->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+	pObject->Transform()->SetRelativeScale(1600.f, 900.f, 1.f);
 
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PaperBurnMtrl"));
-	//pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PaperBurnMtrl"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
 
-	//m_pCurScene->AddObject(pObject, L"Default");
+	m_pCurScene->AddObject(pObject, L"Default");
 
 
 	// Particle Object 
-	/*CGameObject* pParticleObj = new CGameObject;
+	CGameObject* pParticleObj = new CGameObject;
 	pParticleObj->SetName(L"ParticleObject_01");
 
 	pParticleObj->AddComponent(new CTransform);
 	pParticleObj->AddComponent(new CParticleSystem);
 
-	pParticleObj->Transform()->SetRelativePos(0.f, 0.f, 500.f);
+	pParticleObj->Transform()->SetRelativePos(-200.f, 0.f, 500.f);
 
 	Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"Particle_01", L"texture\\particle\\AlphaCircle.png");
 	pParticleObj->ParticleSystem()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, pParticleTex);
@@ -139,10 +140,10 @@ void CSceneMgr::init()
 	m_pCurScene->AddObject(pParticleObj, L"Default");
 
 
-	pParticleObj = pParticleObj->Clone();
-	pParticleObj->SetName(L"ParticleObject_02");
-	pParticleObj->Transform()->SetRelativePos(-500.f, 0.f, 500.f);
-	m_pCurScene->AddObject(pParticleObj, L"Default");*/
+	//pParticleObj = pParticleObj->Clone();
+	//pParticleObj->SetName(L"ParticleObject_02");
+	//pParticleObj->Transform()->SetRelativePos(-500.f, 0.f, 500.f);
+	//m_pCurScene->AddObject(pParticleObj, L"Default");
 
 
 
@@ -338,6 +339,7 @@ void CSceneMgr::Add_MapleStory_Player()
 {
 	Ptr<CTexture> pBody = CResMgr::GetInst()->Load<CTexture>(L"walk1", L"texture\\walk1.png");
 
+	// Body
 	CGameObject* pObj = new CGameObject;
 	pObj->SetName(L"MapleStoryPlayer");
 
@@ -371,6 +373,7 @@ void CSceneMgr::Add_MapleStory_Player()
 	pObj->Animator2D()->Play(L"WALK1", true);
 	Ptr<CTexture> pHead = CResMgr::GetInst()->Load<CTexture>(L"frontHead", L"texture\\frontHead.png");
 
+	// Head
 	CGameObject* pObjChild = new CGameObject;
 	pObjChild->SetName(L"MapleStoryPlayer_frontHead");
 
@@ -399,7 +402,36 @@ void CSceneMgr::Add_MapleStory_Player()
 
 
 	pObjChild->Animator2D()->Play(L"HEAD", true);
+
+
+	// Eye 
+	Ptr<CTexture> pEye = CResMgr::GetInst()->Load<CTexture>(L"FaceBlink", L"texture\\face_blink.png");
+
+
+	CGameObject* pObjEye = new CGameObject;
+	pObjEye->SetName(L"MapleStoryPlayer_Eye");
+
+	pObjEye->AddComponent(new CTransform);
+	pObjEye->AddComponent(new CMeshRender);
+	pObjEye->AddComponent(new CAnimator2D);
+
+	pObjEye->Transform()->SetRelativePos(-4.f, -3.f, -1.f);
+	pObjEye->Transform()->SetIgnoreParentScale(true);
+	pObjEye->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
+
+	pObjEye->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObjEye->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	pObjEye->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObjEye->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pEye.Get());
 	
+	pObjEye->Animator2D()->CreateAnim(L"BLINK", pEye, Vec2(300.f, 300.f)
+		, Vec2(0.f, 0.f), Vec2(26.f, 16.f), Vec2(26.f, 16.f), 0.1f, 6, 2, 3);
+
+
+	pObjEye->Animator2D()->Play(L"BLINK", true);
+
+	pObjChild->AddChild(pObjEye);
 	pObj->AddChild(pObjChild);
 	m_pCurScene->AddObject(pObj, L"Player");
 	//m_pCurScene->AddObject(pObjChild, L"Player");

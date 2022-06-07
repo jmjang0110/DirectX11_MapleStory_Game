@@ -11,6 +11,12 @@
 #include "MaterialUI.h"
 #include "TextureUI.h"
 #include "Animator2DUI.h"
+#include "GraphicsShaderUI.h"
+#include "ComputeShaderUI.h"
+#include "MeshUI.h"
+#include "ParticleSystemUI.h"
+
+
 
 
 #include <Engine/CFileMgr.h>
@@ -47,6 +53,12 @@ InspectorUI::InspectorUI()
 	AddChild(pComUI);
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = pComUI;
 
+	// PArticle SYstem UI
+	pComUI = new ParticleSystemUI;
+	AddChild(pComUI);
+	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = pComUI;
+
+
 
 	// ==============
 	// ResInfoUI 积己
@@ -58,10 +70,29 @@ InspectorUI::InspectorUI()
 	AddChild(pResInfoUI);
 	m_arrResUI[(UINT)RES_TYPE::MATERIAL] = pResInfoUI;
 
+
+	// MeshUI
+	pResInfoUI = new MeshUI;
+	AddChild(pResInfoUI);
+	m_arrResUI[(UINT)RES_TYPE::MESH] = pResInfoUI;
+
+
 	// TextureUI
 	pResInfoUI = new TextureUI;
 	AddChild(pResInfoUI);
 	m_arrResUI[(UINT)RES_TYPE::TEXTURE] = pResInfoUI;
+
+	// GraphicsShaderUI
+	pResInfoUI = new GraphicsShaderUI;
+	AddChild(pResInfoUI);
+	m_arrResUI[(UINT)RES_TYPE::GRAPHICS_SHADER] = pResInfoUI;
+
+	// ComputeShaderUI
+	pResInfoUI = new ComputeShaderUI;
+	AddChild(pResInfoUI);
+	m_arrResUI[(UINT)RES_TYPE::COMPUTE_SHADER] = pResInfoUI;
+
+
 }
 
 InspectorUI::~InspectorUI()
@@ -170,6 +201,9 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 
 void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 {
+
+	m_pTargetRes = _pTargetRes;
+
 	// ComponentUI 傈何 厚劝己拳
 	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
 	{

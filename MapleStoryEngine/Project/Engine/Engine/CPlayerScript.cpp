@@ -109,7 +109,7 @@ void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 		_OtherObject->Destroy();
 	}
 }
-
+    
 void CPlayerScript::SaveToFile(FILE* _pFile)
 {
 	CScript::SaveToFile(_pFile);

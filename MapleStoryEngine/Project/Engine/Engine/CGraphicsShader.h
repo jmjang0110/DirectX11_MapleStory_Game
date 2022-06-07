@@ -73,6 +73,12 @@ public:
 
     virtual void UpdateData() override;
 
+    // ======== To Do =============
+    // 등록된 pipieline을 반환 
+    PIPELINE_STAGE GetPipelineStage();
+    RS_TYPE GetRSType() { return m_eRSType; }
+    DS_TYPE GetDSType() { return m_eDSType; }
+    BS_TYPE GetBSType() { return m_eBSType; }
 
 public:
     void AddScalarParamInfo(const wstring& _strDesc, SCALAR_PARAM _eParamType);

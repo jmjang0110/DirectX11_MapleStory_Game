@@ -27,7 +27,7 @@
 
 // =======================
 
-RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
+RWStructuredBuffer<tParticle> ParticleBuffer : register(u0); // RW : 읽기 쓰기가 동시에 가능하다..
 RWStructuredBuffer<tParticleData> DataBuffer : register(u1);
 
 [numthreads(32, 1, 1)]

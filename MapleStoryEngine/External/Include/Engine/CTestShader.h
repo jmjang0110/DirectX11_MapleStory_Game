@@ -25,6 +25,11 @@ public:
     virtual void UpdateData();
     virtual void Clear();
 
+    // ======== Todo ==========
+public:
+    Ptr<CTexture> GetOutputTex() { return m_pOutputTex; }
+
+
 
 public:
     CTestShader();

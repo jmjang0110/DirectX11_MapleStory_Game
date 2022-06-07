@@ -78,9 +78,6 @@ CTexture* ParamUI::Param_Tex(const string& _strName, CTexture* _pCurTex)
 
 
 	// List UI È°¼ºÈ­
-
-
-
 	return _pCurTex;
 }
 

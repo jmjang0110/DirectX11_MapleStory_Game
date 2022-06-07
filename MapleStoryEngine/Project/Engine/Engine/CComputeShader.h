@@ -15,10 +15,12 @@ private:
     ComPtr<ID3D11ComputeShader>     m_CS;
 
 protected:
+    // 그룹 개수 
     UINT                            m_iGroupX;
     UINT                            m_iGroupY;
     UINT                            m_iGroupZ;
 
+    // 그룹 당 쓰레드 개수 
     UINT                            m_iGroupPerThreadCountX;
     UINT                            m_iGroupPerThreadCountY;
     UINT                            m_iGroupPerThreadCountZ;
@@ -40,6 +42,11 @@ protected:
 
 public:
     int CreateComputeShader(const wstring& _strRelativePath, const string& _strFunc);
+
+    // ========== Todo ===============
+    Vec3 GetGroupPerThreadCount() { return Vec3(m_iGroupPerThreadCountX, m_iGroupPerThreadCountY, m_iGroupPerThreadCountZ); }
+    Vec3 GetGroupCount() { return Vec3(m_iGroupX, m_iGroupY, m_iGroupZ); }
+    tScalarParam    GetScalarParam() { return m_Param; }
 
 
 public:

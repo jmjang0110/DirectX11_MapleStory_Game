@@ -118,7 +118,7 @@ void CImGuiMgr::clear()
 
 void CImGuiMgr::CreateUI()
 {
-    CGameObject* pTargetObj = CSceneMgr::GetInst()->FindObjectByName(L"MapleStoryPlayer");
+    CGameObject* pTargetObj = CSceneMgr::GetInst()->FindObjectByName(L"ParticleObject_01");
 
     // InspectorUI »ý¼º
     InspectorUI* pUI = new InspectorUI;

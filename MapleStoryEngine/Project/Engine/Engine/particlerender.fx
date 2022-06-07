@@ -23,6 +23,7 @@ StructuredBuffer<tParticle> ParticleBuffer : register(t16);
 struct VTX_IN
 {       
     uint InstID : SV_InstanceID;
+   
 };
 
 struct VTX_OUT

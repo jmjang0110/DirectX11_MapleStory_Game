@@ -30,6 +30,9 @@ CGraphicsShader::~CGraphicsShader()
 
 int CGraphicsShader::CreateVertexShader(const wstring& _strRelativePath, const string& _strVSFunc)
 {	
+	SetRelativePath(_strRelativePath);
+
+
 	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 
 	// 버텍스 쉐이더(HLSL) 컴파일
@@ -63,6 +66,8 @@ int CGraphicsShader::CreateVertexShader(const wstring& _strRelativePath, const s
 
 int CGraphicsShader::CreateGeometryShader(const wstring& _strRelativePath, const string& _strFunc)
 {
+	SetRelativePath(_strRelativePath);
+
 	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 
 	// 버텍스 쉐이더(HLSL) 컴파일
@@ -88,6 +93,8 @@ int CGraphicsShader::CreateGeometryShader(const wstring& _strRelativePath, const
 
 int CGraphicsShader::CreatePixelShader(const wstring& _strRelativePath, const string& _strFunc)
 {
+	SetRelativePath(_strRelativePath);
+
 	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 
 	// 버텍스 쉐이더(HLSL) 컴파일
@@ -127,6 +134,8 @@ void CGraphicsShader::UpdateData()
 	CONTEXT->OMSetBlendState(CDevice::GetInst()->GetBS(m_eBSType).Get(), Vec4(), 0xffffffff);
 }
 
+
+
 void CGraphicsShader::AddScalarParamInfo(const wstring& _strDesc, SCALAR_PARAM _eParamType)
 {
 	m_vecScalarParamInfo.push_back(tScalarParamInfo{_strDesc, _eParamType});
@@ -140,4 +149,42 @@ void CGraphicsShader::AddTexParamInfo(const wstring& _strDesc, TEX_PARAM _eParam
 void CGraphicsShader::AddInputLayout(D3D11_INPUT_ELEMENT_DESC _desc)
 {
 	g_vecLayout.push_back(_desc);
+}
+
+
+
+
+	// ======= Todo ===========================
+	
+	// 등록된 pipieline을 반환 
+PIPELINE_STAGE CGraphicsShader::GetPipelineStage()
+{
+	PIPELINE_STAGE pipeline= PIPELINE_STAGE::ALL;
+
+	// 비트연산 XOR ( ^ )이용 :  
+	/*
+		0 XOR 0 = 0
+		0 XOR 1 = 1
+		1 XOR 0 = 1
+		1 XOR 1 = 0
+	*/
+
+	if (nullptr == m_VS.Get())
+		pipeline = (PIPELINE_STAGE)(pipeline ^ PIPELINE_STAGE::VS);
+
+	if (nullptr == m_HS.Get())
+		pipeline = (PIPELINE_STAGE)(pipeline ^ PIPELINE_STAGE::HS);
+
+	if (nullptr == m_DS.Get())
+		pipeline = (PIPELINE_STAGE)(pipeline ^ PIPELINE_STAGE::DS);
+
+	if (nullptr == m_GS.Get())
+		pipeline = (PIPELINE_STAGE)(pipeline ^ PIPELINE_STAGE::GS);
+
+	if (nullptr == m_PS.Get())
+		pipeline = (PIPELINE_STAGE)(pipeline ^ PIPELINE_STAGE::PS);
+
+
+	return pipeline;
+
 }
