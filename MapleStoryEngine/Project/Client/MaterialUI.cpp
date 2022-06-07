@@ -72,7 +72,7 @@ void MaterialUI::render_update()
 			}
 
 			pListUI->Activate();
-			pListUI->SetDBCEvent(this, (DBCLKED)&MaterialUI::ShaderSelect);
+			pListUI->SetDBCEvent(this, (DBCLKED)&MaterialUI::ShaderSelected);
 
 		ImGui::EndCombo();
 	}
@@ -136,8 +136,13 @@ void MaterialUI::render_update()
 		case TEX_PARAM::TEX_CUBE_1:
 		case TEX_PARAM::TEX_ARR_0:
 		case TEX_PARAM::TEX_ARR_1:
-			CTexture* pTex = ParamUI::Param_Tex(strDesc, pMtrl->GetTexParam(vecTexParamInfo[i].eTexParam).Get());
-			pMtrl->SetTexParam(vecTexParamInfo[i].eTexParam, pTex);
+			if (ParamUI::Param_Tex(strDesc, pMtrl->GetTexParam(vecTexParamInfo[i].eTexParam).Get()
+				, this, (DBCLKED)&MaterialUI::TextureSelected))
+			{
+				// 수정해야할 Tex Param 이 TEX_0 인지, TEX_1 인지.... 
+
+				m_eSelectedTexParam = vecTexParamInfo[i].eTexParam; 			
+			}
 			break;
 		}
 	}
@@ -161,14 +166,10 @@ void MaterialUI::render_update()
 		pListUI->SetDBCEvent(this, (DBCLKED)&TextureUI::TextureSelect_toMtrl);
 	}
 
-
-
-
 }
 
-
-
-void MaterialUI::ShaderSelect(DWORD_PTR _param)
+// Delegate 용
+void MaterialUI::ShaderSelected(DWORD_PTR _param)
 {
 
 	string strSelectedName = (char*)_param;
@@ -188,4 +189,18 @@ void MaterialUI::ShaderSelect(DWORD_PTR _param)
 		pMtrl->SetShader(pGShader);
 
 	}
+}
+
+// Delegate 용
+void MaterialUI::TextureSelected(DWORD_PTR _ptr)
+{
+	string str = (char*)_ptr;
+	wstring strKey = wstring(str.begin(), str.end());
+
+	CTexture* pSelectedTex = CResMgr::GetInst()->FindRes<CTexture>(strKey).Get();
+
+	CMaterial* pMtrl = dynamic_cast<CMaterial*>(GetTargetRes());
+	assert(pMtrl);
+
+	pMtrl->SetTexParam(m_eSelectedTexParam, pSelectedTex);
 }

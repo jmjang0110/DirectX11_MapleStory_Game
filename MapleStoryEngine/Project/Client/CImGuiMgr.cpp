@@ -11,6 +11,7 @@
 
 #include "UI.h"
 #include "ParamUI.h"
+#include "SceneOutliner.h"
 
 
 
@@ -128,6 +129,12 @@ void CImGuiMgr::CreateUI()
     // ResourceUI 持失
     ResourceUI* pResUI = new ResourceUI;
     m_mapUI.insert(make_pair(pResUI->GetName(), pResUI));
+
+
+    // SceneOutLiner
+    SceneOutliner* pSceneOutliner = new SceneOutliner;
+    m_mapUI.insert(make_pair(pSceneOutliner->GetName(), pSceneOutliner));
+
 
     // ListUI 持失
     ListUI* pListUI = new ListUI;

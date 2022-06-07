@@ -73,7 +73,6 @@ void TreeNode::render_update()
 
 
 
-
 // ======
 // TreeUI
 // ======
@@ -83,6 +82,7 @@ TreeUI::TreeUI(bool _bDummyRoot)
 	, m_pSelectedNode(nullptr)
 	, m_bUseDummyRoot(_bDummyRoot)
 	, m_bShowDummy(false)
+	, m_bUseFrame(false)
 	, m_pCInst(nullptr)
 	, m_CFunc(nullptr)
 	, m_pDBCInst(nullptr)

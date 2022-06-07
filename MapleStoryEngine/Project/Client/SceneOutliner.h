@@ -1,7 +1,9 @@
 #pragma once
 #include "UI.h"
 
-class TreeUI;
+#include "TreeUI.h"
+
+class CGameObject;
 
 class SceneOutliner :
     public UI
@@ -12,6 +14,13 @@ private:
 public:
     virtual void update() override;
     virtual void render_update() override;
+
+public:
+    void Reset();
+    void ObjectClicked(DWORD_PTR _dw);
+
+    void AddGameObjectToTree(CGameObject* _pObject, TreeNode* _pDestNode);
+
 
 public:
     SceneOutliner();

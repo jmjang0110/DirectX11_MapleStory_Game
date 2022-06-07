@@ -6,7 +6,7 @@ class TreeUI;
 class TreeNode
 {
 private:
-    TreeUI*             m_pTreeUI;
+    TreeUI*             m_pTreeUI; // Dummy Tree 이다 이밑으러 들어가는 것들이 찐 
     TreeNode*           m_pParent;
 
     vector<TreeNode*>   m_vecChild;
@@ -55,6 +55,8 @@ private:
 
     const bool  m_bUseDummyRoot;
     bool        m_bShowDummy;
+    bool        m_bUseFrame;
+
 
     // Clicked Delegate
     UI* m_pCInst;
@@ -74,7 +76,9 @@ public:
 
 public:
     void ShowDummyRoot(bool _bTrue) { m_bShowDummy = _bTrue; }
+    void UseFrame(bool _b) { m_bUseFrame = _b; }
     TreeNode* AddTreeNode(TreeNode* _pParentNode, const string& _strName, DWORD_PTR _dwData = 0);
+    TreeNode* GetDummyNode() { return m_pRootNode; }
 
     void SetClickedDelegate(UI* _pInst, CLICKED _Func) { m_pCInst = _pInst; m_CFunc = _Func; }
     void SetDoubleClickedDelegate(UI* _pInst, CLICKED _Func) { m_pDBCInst = _pInst; m_DBCFunc = _Func; }
@@ -90,4 +94,5 @@ public:
 
     friend class TreeNode;
 };
+
 

@@ -27,6 +27,16 @@ public:
      CRes* GetTargetRes() { return m_pTargetRes; }
 
 public:
+    void SaveGameObj();
+    void SaveLayer();
+    void SaveScene();
+
+    void LoadGameObj();
+    void LoadLayer();
+    void LoadScene();
+
+
+public:
     virtual void update() override;
     virtual void render_update() override;
 

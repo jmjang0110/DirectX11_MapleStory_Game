@@ -173,6 +173,7 @@ Ptr<CTexture> CMaterial::GetTexParam(TEX_PARAM _eType)
 }
 
 
+
 void CMaterial::SetTexParam(TEX_PARAM _eType, Ptr<CTexture> _pTex)
 {
 	switch (_eType)

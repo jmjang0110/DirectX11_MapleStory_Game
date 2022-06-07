@@ -161,8 +161,9 @@ void ComputeShaderUI::ShowTestShader(CComputeShader* _pComputeShader)
 		Ptr<CTexture> pOutputTex = pShader->GetOutputTex();
 		string name = "Output Tex";
 
-		CTexture* pTex = ParamUI::Param_Tex(name, pOutputTex.Get());
+		//CTexture* pTex = ParamUI::Param_Tex(name, pOutputTex.Get());
 
+		ParamUI::Param_Tex(name, pOutputTex.Get());
 
 	}
 
