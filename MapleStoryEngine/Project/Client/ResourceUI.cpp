@@ -12,6 +12,8 @@ ResourceUI::ResourceUI()
 {
 	m_TreeUI = new TreeUI(true);
 	m_TreeUI->SetTitle("Resource");
+	m_TreeUI->UseFrame(true);
+
 	AddChild(m_TreeUI);
 
 	// Clicked Delegate µî·Ï

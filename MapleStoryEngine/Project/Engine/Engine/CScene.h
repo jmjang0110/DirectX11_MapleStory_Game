@@ -33,6 +33,9 @@ public:
 public:
     void SaveToFile(FILE* _pFile);
     void LoadFromFile(FILE* _pFile);
+
+    CLayer* GetAllLayer() { return m_arrLayer[0]; }
+
     // ======== File ============
 
     

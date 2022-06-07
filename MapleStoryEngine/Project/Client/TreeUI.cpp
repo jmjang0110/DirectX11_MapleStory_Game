@@ -46,11 +46,11 @@ void TreeNode::update()
 void TreeNode::render_update()
 {
 	// ImGuiTreeNodeFlags_	
-	ImGuiTreeNodeFlags eFlag = ImGuiTreeNodeFlags_None;
+	ImGuiTreeNodeFlags eFlag = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow;
 
 	if (m_bLeaf)
 		eFlag |= ImGuiTreeNodeFlags_Leaf;
-	if (nullptr == m_pParent || m_pParent->m_strName == "DummyRoot")
+	if (m_pTreeUI->m_bUseFrame && (nullptr == m_pParent || m_pParent->m_strName == "DummyRoot"))
 		eFlag |= ImGuiTreeNodeFlags_Framed;
 	if (m_bSelected)
 		eFlag |= ImGuiTreeNodeFlags_Selected;

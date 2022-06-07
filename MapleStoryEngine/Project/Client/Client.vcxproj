@@ -184,6 +184,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceUI.h" />
     <ClInclude Include="SceneOutliner.h" />
+    <ClInclude Include="SceneOutlinerTool.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextureUI.h" />
     <ClInclude Include="TransformUI.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="ResInfoUI.cpp" />
     <ClCompile Include="ResourceUI.cpp" />
     <ClCompile Include="SceneOutliner.cpp" />
+    <ClCompile Include="SceneOutlinerTool.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TransformUI.cpp" />
     <ClCompile Include="TreeUI.cpp" />

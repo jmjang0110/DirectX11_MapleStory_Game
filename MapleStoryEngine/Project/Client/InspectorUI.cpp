@@ -110,54 +110,7 @@ void InspectorUI::update()
 			Activate();
 	}*/
 
-	bool bFile = true;
-	//ImGui::Begin("FileMgr", &bFile);
 
-	if (ImGui::Button("Save fo file this TargetObj"))
-		CFileMgr::GetInst()->SaveToFile<CGameObject>((DWORD_PTR)m_pTargetObject);
-
-	if (ImGui::Button("Load from file this TargetObj"))
-	{
-		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		if (nullptr != pCurScene)
-		{
-			CGameObject* pPrevTargetObj = m_pTargetObject->Clone();
-
-
-			int layerIdx = m_pTargetObject->GetLayerIdx();
-			wstring layerName;
-			if (layerIdx == 0)
-				layerName = L"Tile";
-			else if (layerIdx == 1)
-				layerName = L"Default";
-			else if (layerIdx == 2)
-				layerName = L"Player";
-			else if (layerIdx == 3)
-				layerName = L"Monster";
-
-			CLayer* layer = pCurScene->GetLayer(layerName);
-			layer->DeregisterObject(m_pTargetObject);
-
-			m_pTargetObject = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pTargetObject);
-			
-			if (m_pTargetObject->GetLayerIdx() < 0)
-			{
-				m_pTargetObject = pPrevTargetObj;
-				layer->AddObject(m_pTargetObject);
-			}
-			else
-			{
-				SetTargetObject(m_pTargetObject);
-				layer->AddObject(m_pTargetObject);
-
-			}
-
-		}
-
-		
-
-		
-	}
 
 	//ImGui::End();
 
@@ -166,7 +119,61 @@ void InspectorUI::update()
 
 void InspectorUI::render_update()
 {
+	// 현재 TargetObject 를 파일에 저장한다. 
+	if (ImGui::Button("Save to File  "))
+		CFileMgr::GetInst()->SaveToFile<CGameObject>((DWORD_PTR)m_pTargetObject);
 
+	if (ImGui::Button("Load from File"))
+	{
+		CGameObject* pNewObj = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pTargetObject);
+
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+		// 몇번째 Layer에 저장할 것인지 정한다 
+		CLayer* pArrLayer = pCurScene->GetAllLayer();
+		int LayerCnt = 0;
+
+		for (int i = 0; i < MAX_LAYER; ++i)
+		{
+			if (nullptr != &pArrLayer[i])
+			{
+				++LayerCnt;
+				ImGui::Text("%d", i);
+
+
+			}
+		}
+	}
+
+	// 현재 TargetObject 를 파일로부터 로드한 Obj 로 바꾼다. 
+	if (ImGui::Button("Load from File to this Object"))
+	{
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		if (nullptr != pCurScene)
+		{
+			CGameObject* pPrevTargetObj = m_pTargetObject->Clone();
+			CLayer* pLayer = pCurScene->GetLayer(m_pTargetObject->GetLayerIdx());
+
+			pLayer->DeregisterObject(m_pTargetObject);
+
+			m_pTargetObject = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pTargetObject);
+
+			if (m_pTargetObject->GetLayerIdx() < 0)
+			{
+				m_pTargetObject = pPrevTargetObj;
+				pLayer->AddObject(m_pTargetObject);
+			}
+			else
+			{
+				SetTargetObject(m_pTargetObject);
+				pLayer->AddObject(m_pTargetObject);
+
+			}
+
+		}
+	}
+	
+	ImGui::Separator();
 }
 
 

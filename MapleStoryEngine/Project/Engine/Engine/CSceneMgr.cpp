@@ -53,6 +53,8 @@ CSceneMgr::~CSceneMgr()
 void CSceneMgr::init()
 {
 	m_pCurScene = new CScene;	
+	m_pCurScene->SetName(L"firstScene");
+
 	m_pCurScene->SetLayerName(0, L"Tile");
 	m_pCurScene->SetLayerName(1, L"Default");
 	m_pCurScene->SetLayerName(2, L"Player");

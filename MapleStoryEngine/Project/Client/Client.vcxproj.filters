@@ -86,6 +86,9 @@
     <ClCompile Include="ParticleSystemUI.cpp">
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem</Filter>
     </ClCompile>
+    <ClCompile Include="SceneOutlinerTool.cpp">
+      <Filter>ImGui\UI\00. SceneTool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -186,6 +189,9 @@
     </ClInclude>
     <ClInclude Include="ParticleSystemUI.h">
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneOutlinerTool.h">
+      <Filter>ImGui\UI\00. SceneTool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +298,9 @@
     </Filter>
     <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\MeshUI">
       <UniqueIdentifier>{0873bfd7-624b-44e0-9d34-55a460004576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\00. SceneTool">
+      <UniqueIdentifier>{562b95fb-2b1a-4e18-87d2-830954b47d8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

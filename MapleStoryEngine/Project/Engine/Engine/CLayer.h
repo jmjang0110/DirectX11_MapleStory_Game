@@ -21,7 +21,7 @@ public:
     void update();
     void lateupdate();
     void finalupdate();
-    void render();
+   // void render();
 
 public:
     void AddObject(CGameObject* _pObj);
