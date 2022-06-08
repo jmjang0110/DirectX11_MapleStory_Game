@@ -43,10 +43,12 @@ void TreeNode::update()
 	}
 }
 
+static int a = 0;
+
 void TreeNode::render_update()
 {
 	// ImGuiTreeNodeFlags_	
-	ImGuiTreeNodeFlags eFlag = ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_OpenOnArrow;
+	ImGuiTreeNodeFlags eFlag = 0;// ImGuiTreeNodeFlags_OpenOnArrow;// | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 
 	if (m_bLeaf)
 		eFlag |= ImGuiTreeNodeFlags_Leaf;
@@ -57,7 +59,8 @@ void TreeNode::render_update()
 
 	if (ImGui::TreeNodeEx(m_strName.c_str(), eFlag))
 	{
-		if (ImGui::IsItemClicked())
+
+		if (ImGui::IsItemHovered())
 		{
 			m_pTreeUI->SetSelectedNode(this);
 		}
@@ -70,6 +73,7 @@ void TreeNode::render_update()
 		ImGui::TreePop();
 	}
 }
+
 
 
 
@@ -104,7 +108,10 @@ TreeUI::~TreeUI()
 void TreeUI::update()
 {
 	if (nullptr == m_pRootNode)
+	{
+		m_pSelectedNode = nullptr;
 		return;
+	}
 
 	// 트리UI 가 부착된 부모 UI 의 사이즈를 받아온다.
 	Vec2 vSize = GetParentUI()->GetSize();
@@ -112,6 +119,7 @@ void TreeUI::update()
 	SetSize(vSize);
 
 	m_pRootNode->update();
+
 
 	// 자식 UI 업데이트
 	UI::update();
@@ -138,6 +146,18 @@ void TreeUI::render_update()
 	else
 	{
 		m_pRootNode->render_update();
+	}
+
+	// KeyBinding 호출
+	if (ImGui::IsWindowFocused())
+	{
+		for (size_t i = 0; i < m_vecKeyBind.size(); ++i)
+		{
+			if (KEY_TAP(m_vecKeyBind[i].eKey))
+			{
+				(m_vecKeyBind[i].pInst->*m_vecKeyBind[i].pFunc)((DWORD_PTR)m_pSelectedNode);
+			}
+		}
 	}
 }
 
@@ -166,6 +186,23 @@ TreeNode* TreeUI::AddTreeNode(TreeNode* _pParentNode, const string& _strName, DW
 	return pNewNode;
 }
 
+
+void TreeUI::SetKeyBinding(KEY _eKey, UI* _pInst, KEY_FUNC _Func)
+{
+	m_vecKeyBind.push_back(tTreeKey{ _eKey, _pInst, _Func });
+}
+
+void TreeUI::Clear()
+{
+	SAFE_DELETE(m_pRootNode);
+	m_pRootNode = nullptr;
+	m_pSelectedNode = nullptr;
+
+	if (m_bUseDummyRoot)
+	{
+		AddTreeNode(nullptr, "DummyRoot");
+	}
+}
 
 void TreeUI::SetSelectedNode(TreeNode* _pNode)
 {

@@ -15,13 +15,19 @@
 #include "ComputeShaderUI.h"
 #include "MeshUI.h"
 #include "ParticleSystemUI.h"
+#include "Collider2DUI.h"
+#include "ListUI.h"
 
+
+
+#include "CImGuiMgr.h"
 
 
 
 #include <Engine/CFileMgr.h>
 #include <Engine/CSceneMgr.h>
 #include <Engine/CLayer.h>
+#include <Engine/CResMgr.h>
 
 
 
@@ -58,6 +64,10 @@ InspectorUI::InspectorUI()
 	AddChild(pComUI);
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = pComUI;
 
+	//Collider2D SYstem UI
+	pComUI = new Collider2DUI;
+	AddChild(pComUI);
+	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D] = pComUI;
 
 
 	// ==============
@@ -188,6 +198,28 @@ void InspectorUI::render_update()
 
 			if (ImGui::Button("Add Component"))
 			{
+				
+				// ListUI 활성화한다.
+				//const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::COMPONENT);
+					
+				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+				pListUI->Clear();
+				pListUI->SetTitle("Component List");
+
+				for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
+				{
+					if (nullptr == m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
+					{
+						pListUI->AddList(ToString((COMPONENT_TYPE)i));
+
+					}
+
+				}
+
+				pListUI->Activate();
+				// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
+				pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddComponent);
+				
 
 			}
 
@@ -201,7 +233,6 @@ void InspectorUI::render_update()
 }
 
 
-
 void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 {
 	m_pTargetObject = _pTarget;
@@ -210,7 +241,10 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 	{
 		if (nullptr != m_arrComUI[i])
 		{
-			if (m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
+			// Object 가 nullptr 인 경우
+			if (nullptr == m_pTargetObject)
+				m_arrComUI[i]->Deactivate();
+			else if (m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
 			{
 				m_arrComUI[i]->Activate();
 				m_arrComUI[i]->SetTargetObject(m_pTargetObject);
@@ -229,7 +263,6 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 			m_arrResUI[i]->Deactivate();
 	}
 }
-
 void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 {
 
@@ -261,3 +294,18 @@ void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 	}
 
 }
+
+
+
+//  AddComponent 버튼에서 Component 를  눌렸을 때 일어날 함수 
+
+void InspectorUI::AddComponent(DWORD_PTR _param)
+{
+	string strSelectedName = (char*)_param;
+
+	// 들어온 컴퍼넌트 이름을 통해서 TargetObject에 component 를 추가하자. 
+}
+
+
+
+

@@ -220,7 +220,7 @@ enum class EVENT_TYPE
 	ACTIVATE_COMPONENT,		// lParam : Component Adress
 	DEACTIVATE_COMOPNENT,   // lParam : Component Adress
 
-	STAGE_CHANGE,		// lParam : Next Stage Enum
+	SCENE_CHANGE,		// lParam : Next Stage Enum
 	CHANGE_AI_STATE,	// lParam : FSM Adress, wParam : Next State Type
 
 	END,

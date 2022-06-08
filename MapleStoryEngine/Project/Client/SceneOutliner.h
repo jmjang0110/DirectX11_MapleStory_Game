@@ -20,6 +20,7 @@ public:
     void ObjectClicked(DWORD_PTR _dw);
 
     void AddGameObjectToTree(CGameObject* _pObject, TreeNode* _pDestNode);
+    void PressDelete(DWORD_PTR _dw);
 
 
 public:

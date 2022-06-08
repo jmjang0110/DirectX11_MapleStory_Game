@@ -1,6 +1,9 @@
 #pragma once
 #include "UI.h"
 
+#include <Engine/CKeyMgr.h>
+
+
 class TreeUI;
 
 enum class OBJECT_TYPE
@@ -63,6 +66,15 @@ public:
 
 typedef void(UI::* CLICKED)(DWORD_PTR);
 typedef void(UI::* DRAG_DROP)(DWORD_PTR, DWORD_PTR);
+typedef CLICKED KEY_FUNC;
+
+
+struct tTreeKey
+{
+    KEY eKey;
+    UI* pInst;
+    CLICKED pFunc;
+};
 
 
 class TreeUI :
@@ -89,6 +101,9 @@ private:
     UI* m_pDADInst;
     DRAG_DROP   m_DADFunc;
 
+    // Key Binding Delegate
+    vector<tTreeKey>    m_vecKeyBind;
+
 public:
     virtual void update() override;
     virtual void render_update() override;
@@ -102,6 +117,9 @@ public:
     void SetClickedDelegate(UI* _pInst, CLICKED _Func) { m_pCInst = _pInst; m_CFunc = _Func; }
     void SetDoubleClickedDelegate(UI* _pInst, CLICKED _Func) { m_pDBCInst = _pInst; m_DBCFunc = _Func; }
     void SetDragAndDropDelegate(UI* _pInst, DRAG_DROP _Func) { m_pDADInst = _pInst; m_DADFunc = _Func; }
+    void SetKeyBinding(KEY _eKey, UI* _pInst, KEY_FUNC _Func);
+
+    void Clear();
 
 private:
     void SetSelectedNode(TreeNode* _pNode);

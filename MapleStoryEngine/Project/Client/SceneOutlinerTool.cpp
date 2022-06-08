@@ -2,6 +2,9 @@
 #include "SceneOutlinerTool.h"
 
 #include <Engine/CSceneMgr.h>
+#include <Engine/CEventMgr.h>
+
+
 #include <Engine/CScene.h>
 #include <Engine/CLayer.h>
 #include <Engine/CGameObject.h>
@@ -30,6 +33,10 @@ SceneOutlinerTool::SceneOutlinerTool()
 	// Clicked Delegate 등록
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&SceneOutlinerTool::ObjectClicked);
 
+	// Delete Pressed 등록 
+	m_TreeUI->SetKeyBinding(KEY::DEL, this, (CLICKED)&SceneOutlinerTool::PressDelete);
+
+
 	Reset();
 }
 
@@ -41,6 +48,12 @@ SceneOutlinerTool::~SceneOutlinerTool()
 
 void SceneOutlinerTool::update()
 {
+
+	if (CEventMgr::GetInst()->HasOccurObjEvent())
+	{
+		Reset();
+
+	}
 	UI::update();
 
 
@@ -71,7 +84,7 @@ void SceneOutlinerTool::render_update()
 				if (nullptr != m_pSelectedScene && nullptr != m_pSelectedLayer)
 				{
 					// 삭제하기 전에 해당 m_TreeUI 를 UI:: vecChild 에서 빼야한다. 
-					DeleteChild(m_TreeUI);
+					DeleteChild(m_TreeUI); 
 
 					m_TreeUI = new TreeUI(true);
 					m_TreeUI->SetTitle("SceneOutlinerTool");
@@ -101,6 +114,9 @@ void SceneOutlinerTool::render_update()
 
 void SceneOutlinerTool::Reset()
 {
+	m_TreeUI->Clear();
+
+
 	// 현재 Scene 을 가져온다.
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
@@ -123,7 +139,6 @@ void SceneOutlinerTool::Reset()
 			PushGameObjectToTree(vecRoots[i], pLayerNode);
 		}
 	}
-	int i = 0;
 
 
 }
@@ -213,3 +228,18 @@ void SceneOutlinerTool::PushGameObjectToTree(CGameObject* _pObject, TreeNode* _p
 
 
 
+void SceneOutlinerTool::PressDelete(DWORD_PTR _dw)
+{
+	TreeNode* pNode = (TreeNode*)_dw;
+
+	if (nullptr == pNode)
+		return;
+
+	CGameObject* pTargetObj = (CGameObject*)pNode->GetData();
+	pTargetObj->Destroy();
+
+	// InspectorUI 를 찾아서 Object 를 nullptr 로 세팅한다.
+
+	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+	pInspectorUI->SetTargetObject(nullptr);
+}

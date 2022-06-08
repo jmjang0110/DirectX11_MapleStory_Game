@@ -9,6 +9,8 @@ enum class COLLIDER2D_TYPE
 {
     BOX,
     CIRCLE,
+    END,
+
 };
 
 class CCollider2D :
@@ -31,17 +33,23 @@ private:
 public:
     void SetCollider2DType(COLLIDER2D_TYPE _type);
 
-    void SetOffsetPos(Vec2 _vOffsetPos){m_vOffsetPos = _vOffsetPos;}
+    void SetOffsetPos(Vec2 _vOffsetPos) { m_vOffsetPos = _vOffsetPos; }
+    Vec2 GetOffsetPos() { return m_vOffsetPos; }
     void SetOffsetPos(float _x, float _y) { m_vOffsetPos = Vec2(_x, _y); }
+
 
     void SetOffsetScale(Vec2 _vOffsetScale);
     void SetOffsetScale(float _x, float _y);
+    Vec2 GetOffsetScale() { return m_vOffsetScale; }
+
 
     COLLIDER2D_TYPE GetCollider2DType() { return m_eColliderType; }
     Vec3 GetWorldPos() { return m_matColWorld.Translation(); }
     Vec3 GetWorldScale() { return Vec3(m_vOffsetScale); }
 
     Matrix GetWorldMat() { return m_matColWorld; }
+
+    int GetCollisionCount() { return m_iCollisionCount; }
 
 public:
     virtual void finalupdate() override;

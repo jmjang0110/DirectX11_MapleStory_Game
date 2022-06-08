@@ -89,6 +89,9 @@
     <ClCompile Include="SceneOutlinerTool.cpp">
       <Filter>ImGui\UI\00. SceneTool</Filter>
     </ClCompile>
+    <ClCompile Include="Collider2DUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\03. Collider2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -192,6 +195,9 @@
     </ClInclude>
     <ClInclude Include="SceneOutlinerTool.h">
       <Filter>ImGui\UI\00. SceneTool</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider2DUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\03. Collider2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

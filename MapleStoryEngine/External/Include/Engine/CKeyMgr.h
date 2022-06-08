@@ -66,6 +66,7 @@ enum class KEY
 	BACK,
 	ESC,
 	TAB,
+	DEL,
 
 	LBTN,
 	RBTN,
@@ -83,7 +84,7 @@ enum class KEY_STATE
 
 
 struct tKeyInfo
-{	
+{
 	KEY_STATE	eState;		// 현재 키 상태
 	bool		bPrevCheck;	// 이전 프레임에서 키가 눌렸는지 체크
 };

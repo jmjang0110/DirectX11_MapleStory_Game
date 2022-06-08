@@ -43,6 +43,7 @@ Animator2DUI::~Animator2DUI()
 
 void Animator2DUI::update()
 {
+	ComponentUI::update();
 
 }
 

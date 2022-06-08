@@ -159,6 +159,7 @@
     <ClInclude Include="Animator2DUI.h" />
     <ClInclude Include="CameraUI.h" />
     <ClInclude Include="CImGuiMgr.h" />
+    <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComponentUI.h" />
     <ClInclude Include="ComputeShaderUI.h" />
     <ClInclude Include="GraphicsShaderUI.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="Animator2DUI.cpp" />
     <ClCompile Include="CameraUI.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
+    <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
     <ClCompile Include="ComputeShaderUI.cpp" />
     <ClCompile Include="GraphicsShaderUI.cpp" />

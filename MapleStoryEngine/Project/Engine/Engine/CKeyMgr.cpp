@@ -62,12 +62,13 @@ int g_iVK[(UINT)KEY::KEY_END] =
 
 	VK_LSHIFT,
 	VK_LMENU,
-	VK_LCONTROL,	
+	VK_LCONTROL,
 	VK_SPACE,
 	VK_RETURN,
 	VK_BACK,
 	VK_ESCAPE,
-	VK_TAB,	
+	VK_TAB,
+	VK_DELETE,
 
 	VK_LBUTTON,
 	VK_RBUTTON,
@@ -87,8 +88,8 @@ void CKeyMgr::init()
 {
 	for (UINT i = 0; i < (UINT)KEY::KEY_END; ++i)
 	{
-		m_vecKey.push_back(tKeyInfo{ KEY_STATE::NONE, false } );
-	}	
+		m_vecKey.push_back(tKeyInfo{ KEY_STATE::NONE, false });
+	}
 }
 
 void CKeyMgr::update()
@@ -143,7 +144,7 @@ void CKeyMgr::update()
 		m_vMouseDir = m_vMousePos - m_vMousePrevPos;
 		m_vMouseDir.y *= -1.f;
 	}
-		
+
 	// 윈도우가 포커싱 되어있지 않다.
 	else
 	{
