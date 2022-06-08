@@ -19,6 +19,13 @@ class SceneOutlinerTool :
 private:
     TreeUI* m_TreeUI;
 
+    // 선택된 SCene Layer GameObject 저장 
+private:
+    CScene*         m_pSelectedScene;
+    CLayer*         m_pSelectedLayer;
+    CGameObject*    m_pSelectedGameObject;
+
+
 public:
     virtual void update() override;
     virtual void render_update() override;

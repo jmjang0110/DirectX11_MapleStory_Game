@@ -3,6 +3,16 @@
 
 class TreeUI;
 
+enum class OBJECT_TYPE
+{
+    NONE,
+    SCENE,
+    LAYER,
+    GAME_OBJECT,
+    END,
+
+};
+
 class TreeNode
 {
 private:
@@ -15,6 +25,7 @@ private:
 
     string              m_strName;
     DWORD_PTR           m_dwData;
+
 
 
 public:
@@ -32,6 +43,14 @@ public:
     const string& GetName() { return m_strName; }
     DWORD_PTR GetData() { return m_dwData; }
 
+
+    // ========= Todo ============
+private:
+    OBJECT_TYPE m_StoreObjType;
+public:
+    void SetObjType(OBJECT_TYPE _Type) { m_StoreObjType = _Type; }
+    OBJECT_TYPE GetObjType() { return m_StoreObjType; }
+    // ===========================
 
 public:
     TreeNode();

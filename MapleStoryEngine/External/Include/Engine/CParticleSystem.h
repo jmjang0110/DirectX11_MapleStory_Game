@@ -58,9 +58,8 @@ public:
     Vec3    GetStartScale() { return m_vStartScale; }
     Vec3    GetEndScale() { return m_vEndScale; }
 
-    float    GetParticleCreateDIstance() { m_fParticleCreateDistance ; }
-    float    GetParticleCreateTerm() { m_fParticleCreateTerm; }
-
+    float    GetParticleCreateDIstance() { return  m_fParticleCreateDistance; }
+    float    GetParticleCreateTerm() { return  m_fParticleCreateTerm; }
 public:
     void SetMaxCount(UINT _maxCnt) { m_iMaxCount = _maxCnt; }
     void SetPosInherit(int _posInherit) { m_bPosInherit = _posInherit; }
