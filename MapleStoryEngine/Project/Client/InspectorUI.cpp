@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "InspectorUI.h"
 
-#include <Engine/CKeyMgr.h>
-
 #include "TransformUI.h"
 #include "MeshRenderUI.h"
 #include "CameraUI.h"
@@ -18,16 +16,23 @@
 #include "Collider2DUI.h"
 #include "ListUI.h"
 
-
-
 #include "CImGuiMgr.h"
-
-
 
 #include <Engine/CFileMgr.h>
 #include <Engine/CSceneMgr.h>
 #include <Engine/CLayer.h>
 #include <Engine/CResMgr.h>
+#include <Engine/CKeyMgr.h>
+
+// COMPONENT-TYPE
+#include <Engine/CTransform.h>
+#include <Engine/CCamera.h>
+#include <Engine/CCollider2D.h>
+#include <Engine/CAnimator2D.h>
+#include <Engine/CMeshRender.h>
+#include <Engine/CTileMap.h>
+#include <Engine/CParticleSystem.h>
+
 
 
 
@@ -129,106 +134,8 @@ void InspectorUI::update()
 
 void InspectorUI::render_update()
 {
-	if (ImGui::BeginChild("FileMgr", ImVec2(230.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar))
-	{
-		// 현재 TargetObject 를 파일에 저장한다. 
-		if (ImGui::Button("Save to File  "))
-			CFileMgr::GetInst()->SaveToFile<CGameObject>((DWORD_PTR)m_pTargetObject);
 
-		if (ImGui::Button("Load from File"))
-		{
-			CGameObject* pNewObj = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pTargetObject);
-
-			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-
-			// 몇번째 Layer에 저장할 것인지 정한다 
-			CLayer* pArrLayer = pCurScene->GetAllLayer();
-			int LayerCnt = 0;
-
-			for (int i = 0; i < MAX_LAYER; ++i)
-			{
-				if (nullptr != &pArrLayer[i])
-				{
-					++LayerCnt;
-					ImGui::Text("%d", i);
-
-
-				}
-			}
-		}
-
-		// 현재 TargetObject 를 파일로부터 로드한 Obj 로 바꾼다. 
-		if (ImGui::Button("Load from File to this Object"))
-		{
-			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-			if (nullptr != pCurScene)
-			{
-				CGameObject* pPrevTargetObj = m_pTargetObject->Clone();
-				CLayer* pLayer = pCurScene->GetLayer(m_pTargetObject->GetLayerIdx());
-
-				pLayer->DeregisterObject(m_pTargetObject);
-
-				m_pTargetObject = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pTargetObject);
-
-				if (m_pTargetObject->GetLayerIdx() < 0)
-				{
-					m_pTargetObject = pPrevTargetObj;
-					pLayer->AddObject(m_pTargetObject);
-				}
-				else
-				{
-					SetTargetObject(m_pTargetObject);
-					pLayer->AddObject(m_pTargetObject);
-
-				}
-
-			}
-		}
-
-		ImGui::EndChild();
-
-	}
-
-	ImGui::SameLine();
-
-	if (nullptr != m_pTargetObject)
-	{
-		if (ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar))
-		{
-
-			if (ImGui::Button("Add Component"))
-			{
-				
-				// ListUI 활성화한다.
-				//const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::COMPONENT);
-					
-				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
-				pListUI->Clear();
-				pListUI->SetTitle("Component List");
-
-				for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
-				{
-					if (nullptr == m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
-					{
-						pListUI->AddList(ToString((COMPONENT_TYPE)i));
-
-					}
-
-				}
-
-				pListUI->Activate();
-				// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
-				pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddComponent);
-				
-
-			}
-
-
-
-			ImGui::EndChild();
-		}
-	}
-
+	GameObjectTool_SubFunc();
 	ImGui::Separator();
 }
 
@@ -301,11 +208,134 @@ void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 
 void InspectorUI::AddComponent(DWORD_PTR _param)
 {
-	string strSelectedName = (char*)_param;
+	string strComType= (char*)_param;
 
-	// 들어온 컴퍼넌트 이름을 통해서 TargetObject에 component 를 추가하자. 
+	// 들어온 컴퍼넌트 이름을 통해서 TargetObject에 component 를 추가하자.
+
+	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
+	{
+		if (strComType == ToString((COMPONENT_TYPE(i))))
+		{
+			COMPONENT_TYPE ComType = (COMPONENT_TYPE)i;
+			if (nullptr != m_pTargetObject)
+			{
+				switch (ComType)
+				{
+				case COMPONENT_TYPE::TRANSFORM:
+				{
+					m_pTargetObject->AddComponent(new CTransform);
+				}
+					break;
+				case COMPONENT_TYPE::CAMERA:
+				{
+					m_pTargetObject->AddComponent(new CCamera);
+					m_pTargetObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+					m_pTargetObject->Camera()->CheckLayerMaskAll();
+
+
+				}
+					break;
+				case COMPONENT_TYPE::COLLIDER2D:
+				{
+					m_pTargetObject->AddComponent(new CCollider2D);
+				}
+					break;
+
+				case COMPONENT_TYPE::ANIMATOR2D:
+				{
+					m_pTargetObject->AddComponent(new CAnimator2D);
+				}
+					break;
+
+				case COMPONENT_TYPE::MESHRENDER:
+				{
+					m_pTargetObject->AddComponent(new CMeshRender);
+					m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+					m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+				}
+					break;
+				case COMPONENT_TYPE::TILEMAP:
+				{
+					m_pTargetObject->AddComponent(new CTileMap);
+				}
+					break;
+				case COMPONENT_TYPE::PARTICLESYSTEM:
+				{
+					m_pTargetObject->AddComponent(new CParticleSystem);
+				}
+					break;
+
+				case COMPONENT_TYPE::COLLIDER3D:
+				case COMPONENT_TYPE::ANIMATOR3D:
+				case COMPONENT_TYPE::BOUNDINGBOX:
+				case COMPONENT_TYPE::LANDSCAPE:
+				case COMPONENT_TYPE::DECAL:
+				case COMPONENT_TYPE::SCRIPT:
+				default:
+					return;
+
+				}
+
+
+				if (m_pTargetObject->GetComponent(ComType))
+				{
+					m_arrComUI[i]->Activate();
+					m_arrComUI[i]->SetTargetObject(m_pTargetObject);
+				}
+			}
+		}
+
+
+	}
+
+
+
 }
 
 
 
+// =======================================================					=======================================================
+// =======================================================		SUB Func	=======================================================
+// =======================================================					=======================================================
+
+
+void InspectorUI::GameObjectTool_SubFunc()
+{
+
+	if (nullptr != m_pTargetObject)
+	{
+		if (ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar))
+		{
+
+			if (ImGui::Button("Add Component"))
+			{
+
+				// ListUI 활성화한다.
+				//const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::COMPONENT);
+
+				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+				pListUI->Clear();
+				pListUI->SetTitle("Component List");
+
+				for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
+				{
+					if (nullptr == m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
+					{
+						pListUI->AddList(ToString((COMPONENT_TYPE)i));
+
+					}
+
+				}
+
+				pListUI->Activate();
+				// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
+				pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddComponent);
+
+			}
+
+			ImGui::EndChild();
+		}
+	}
+
+}
 

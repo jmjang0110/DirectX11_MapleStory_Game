@@ -13,8 +13,14 @@
 #include "CImGuiMgr.h"
 #include "InspectorUI.h"
 
-#include <Engine/CLayer.h>
-#include <Engine/CScene.h>
+#include <Engine/CResMgr.h>
+#include <Engine/CMesh.h>
+#include <Engine/CTransform.h>
+#include <Engine/CMeshRender.h>
+
+
+#include <Engine/CFileMgr.h>
+
 
 
 SceneOutlinerTool::SceneOutlinerTool()
@@ -22,6 +28,7 @@ SceneOutlinerTool::SceneOutlinerTool()
 	, m_pSelectedScene(nullptr)
 	, m_pSelectedLayer(nullptr)
 	, m_pSelectedGameObject(nullptr)
+	, m_RecentClickedType(OBJECT_TYPE::NONE)
 {
 	m_TreeUI = new TreeUI(true);
 	m_TreeUI->SetTitle("SceneOutlinerTool");
@@ -61,6 +68,8 @@ void SceneOutlinerTool::update()
 
 void SceneOutlinerTool::render_update()
 {
+	FileMgrTool_SubFunc();
+	
 
 	if (ImGui::Button("New GameObject", ImVec2(120, 0)))
 		ImGui::OpenPopup("Create New Obj");
@@ -69,6 +78,32 @@ void SceneOutlinerTool::render_update()
 		if (ImGui::BeginPopupModal("Create New Obj", &unused_open))
 		{
 			ImGui::Text("Set New GameObject Name!\n\n");
+
+
+			if (nullptr != m_pSelectedScene)
+			{
+				ImGui::Text("select Scene - ");
+				ImGui::SameLine();
+				string sName = string(m_pSelectedScene->GetName().begin(), m_pSelectedScene->GetName().end());
+				ImGui::TextColored(ImVec4(0.0f, 0.5f, 0.5f, 1.f), sName.c_str());
+
+			}
+			else
+				ImGui::TextColored(ImVec4(1.f, 0.0f, 0.0f, 1.f), "YOU MUST SELECT SCENE!");
+
+			if (nullptr != m_pSelectedLayer)
+			{
+				ImGui::Text("select Layer - ");
+				ImGui::SameLine();
+				string sName = string(m_pSelectedLayer->GetName().begin(), m_pSelectedLayer->GetName().end());
+				ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.8f, 1.f),sName.c_str());
+				ImGui::Text("Add This Obj to this Layer");
+
+			}
+			else
+				ImGui::TextColored(ImVec4(1.f, 0.0f, 0.0f, 1.f), "YOU MUST SELECT LAYER!");
+
+
 
 			static char buf[512];
 			ImGui::InputText("SetName", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
@@ -81,23 +116,18 @@ void SceneOutlinerTool::render_update()
 				CGameObject* NewObj = new CGameObject;
 				NewObj->SetName(newName);
 				
+				// Create GameObject
 				if (nullptr != m_pSelectedScene && nullptr != m_pSelectedLayer)
 				{
-					// 삭제하기 전에 해당 m_TreeUI 를 UI:: vecChild 에서 빼야한다. 
-					DeleteChild(m_TreeUI); 
-
-					m_TreeUI = new TreeUI(true);
-					m_TreeUI->SetTitle("SceneOutlinerTool");
-					m_TreeUI->UseFrame(false);
-					m_TreeUI->ShowDummyRoot(false);
-
-					AddChild(m_TreeUI);
-
-					// Clicked Delegate 등록
-					m_TreeUI->SetClickedDelegate(this, (CLICKED)&SceneOutlinerTool::ObjectClicked);
-				
-					m_pSelectedScene->AddObject(NewObj, m_pSelectedLayer->GetName());
+					// 기본적으로 CTransform 을 갖는다. 
+					NewObj->AddComponent(new CTransform);
 					
+					NewObj->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+					NewObj->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
+
+					
+					m_pSelectedScene->AddObject(NewObj, m_pSelectedLayer->GetName());
+					// TReeUI 에 추가하기 위해서 Reset() 
 					Reset();
 
 				}
@@ -150,6 +180,8 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 	string strKey = pNode->GetName();
 	OBJECT_TYPE _ObjType = pNode->GetObjType();
 	DWORD_PTR data = pNode->GetData();
+	m_RecentClickedType = _ObjType;
+
 
 	switch (_ObjType)
 	{
@@ -158,13 +190,21 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 	case OBJECT_TYPE::SCENE:
 	{
 		m_pSelectedScene = (CScene*)data;
+		m_pSelectedGameObject = nullptr;
+		m_pSelectedLayer = nullptr;
+
+		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+		pInspectorUI->SetTargetObject(nullptr);
 
 	}
 		break;
 	case OBJECT_TYPE::LAYER:
 	{
 		m_pSelectedLayer = (CLayer*)data;
+		m_pSelectedGameObject = nullptr;
 
+		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+		pInspectorUI->SetTargetObject(nullptr);
 	}
 		break;
 	case OBJECT_TYPE::GAME_OBJECT:
@@ -242,4 +282,77 @@ void SceneOutlinerTool::PressDelete(DWORD_PTR _dw)
 
 	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	pInspectorUI->SetTargetObject(nullptr);
+}
+
+
+
+
+
+
+
+
+void SceneOutlinerTool::FileMgrTool_SubFunc()
+{
+
+	if (ImGui::BeginChild("FileMgr", ImVec2(230.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar))
+	{
+		string strCurObjectType;
+		if (m_RecentClickedType == OBJECT_TYPE::NONE)
+			strCurObjectType = "None - ";
+		if (m_RecentClickedType == OBJECT_TYPE::SCENE)
+			strCurObjectType = "Scene - ";
+		if (m_RecentClickedType == OBJECT_TYPE::LAYER)
+			strCurObjectType = "Layer - ";
+		if (m_RecentClickedType == OBJECT_TYPE::GAME_OBJECT)
+			strCurObjectType = "GameObject - ";
+
+		ImGui::Text(strCurObjectType.c_str());
+		ImGui::SameLine(100);
+		// 현재 TargetObject 를 파일에 저장한다. 
+		if (ImGui::Button("Save to File"))
+		{
+			switch (m_RecentClickedType)
+			{
+			case OBJECT_TYPE::NONE:
+				break;
+			case OBJECT_TYPE::SCENE:
+			{
+				CFileMgr::GetInst()->SaveToFile<CScene>((DWORD_PTR)m_pSelectedScene);
+
+			}
+				break;
+			case OBJECT_TYPE::LAYER:
+			{
+				CFileMgr::GetInst()->SaveToFile<CLayer>((DWORD_PTR)m_pSelectedLayer);
+
+			}
+				break;
+			case OBJECT_TYPE::GAME_OBJECT:
+			{
+				CFileMgr::GetInst()->SaveToFile<CGameObject>((DWORD_PTR)m_pSelectedGameObject);
+
+			}
+				break;
+
+			}
+		}
+
+		ImGui::Text(strCurObjectType.c_str());
+		ImGui::SameLine(100);
+		if (ImGui::Button("Load from File"))
+		{
+			CGameObject* pNewObj = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pSelectedGameObject);
+
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+			// 몇번째 Layer에 저장할 것인지 정한다 
+			CLayer* pArrLayer = pCurScene->GetAllLayer();
+
+		}
+
+		
+		ImGui::EndChild();
+
+	}
+
 }

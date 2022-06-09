@@ -26,7 +26,7 @@ Animator2DUI::Animator2DUI()
 	, m_SwapIdx(Vec2(-1, -1))
 	, m_pNewAnim2D(nullptr)
 {
-	SetSize(Vec2(0.f, 200.f));
+	SetSize(Vec2(0.f, 100.f));
 
 	m_NewFrameInfo.fDuration = 0.1f;
 	m_NewFrameInfo.vLT = Vec2(0.f, 0.f);

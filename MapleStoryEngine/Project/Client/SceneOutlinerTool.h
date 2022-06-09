@@ -43,7 +43,13 @@ public:
     void PressDelete(DWORD_PTR _dw);
     void ObjectClicked(DWORD_PTR _dw);
 
+    // ======== File ==============
+private:
+    OBJECT_TYPE m_RecentClickedType;
 
+    void FileMgrTool_SubFunc();
+
+    // ======== File ==============
 
 public:
     SceneOutlinerTool();

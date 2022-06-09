@@ -27,10 +27,11 @@ MaterialUI::~MaterialUI()
 
 void MaterialUI::update()
 {
+	ResInfoUI::update();
 	// To Do
 
 
-	ResInfoUI::update();
+
 }
 
 void MaterialUI::render_update()

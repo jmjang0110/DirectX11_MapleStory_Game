@@ -8,6 +8,7 @@ Collider2DUI::Collider2DUI()
 	: ComponentUI("Collider2D", COMPONENT_TYPE::COLLIDER2D)
 {
 
+	SetSize(Vec2(0.f, 150.f));
 
 }
 

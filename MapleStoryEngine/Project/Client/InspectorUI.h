@@ -26,6 +26,10 @@ public:
     const CGameObject* GetTargetObject() { return m_pTargetObject; }
      CRes* GetTargetRes() { return m_pTargetRes; }
 
+private:
+    void GameObjectTool_SubFunc();
+     // =================
+
 public:
     void SaveGameObj();
     void SaveLayer();
@@ -39,6 +43,12 @@ public:
 public:
     virtual void update() override;
     virtual void render_update() override;
+
+
+    // TODO AddConponent ±â´É 
+public:
+    void AddComponent(DWORD_PTR _param);
+
 
 
 

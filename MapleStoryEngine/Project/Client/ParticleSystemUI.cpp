@@ -8,6 +8,8 @@ ParticleSystemUI::ParticleSystemUI()
 	: ComponentUI("ParticleSystem", COMPONENT_TYPE::PARTICLESYSTEM)
 
 {
+	SetSize(Vec2(0.f, 380.f));
+
 }
 
 ParticleSystemUI::~ParticleSystemUI()

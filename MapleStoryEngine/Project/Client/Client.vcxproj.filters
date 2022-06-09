@@ -92,6 +92,9 @@
     <ClCompile Include="Collider2DUI.cpp">
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI\03. Collider2D</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\imgui_stdlib.cpp">
+      <Filter>ImGui\Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -198,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="Collider2DUI.h">
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI\03. Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_stdlib.h">
+      <Filter>ImGui\Code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -60,7 +60,7 @@ void TreeNode::render_update()
 	if (ImGui::TreeNodeEx(m_strName.c_str(), eFlag))
 	{
 
-		if (ImGui::IsItemHovered())
+		if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
 		{
 			m_pTreeUI->SetSelectedNode(this);
 		}
@@ -220,4 +220,5 @@ void TreeUI::SetSelectedNode(TreeNode* _pNode)
 	{
 		(m_pCInst->*m_CFunc)((DWORD_PTR)m_pSelectedNode);
 	}
+
 }

@@ -12,7 +12,7 @@
 MeshRenderUI::MeshRenderUI()
 	: ComponentUI("MeshRender", COMPONENT_TYPE::MESHRENDER)
 {
-	SetSize(Vec2(0.f, 200.f));
+	SetSize(Vec2(0.f, 100.f));
 }
 
 MeshRenderUI::~MeshRenderUI()
