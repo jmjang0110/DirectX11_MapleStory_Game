@@ -42,6 +42,18 @@ void MeshRenderUI::render_update()
 	ImGui::Text("Mesh");
 	ImGui::SameLine(86.f);
 	ImGui::InputText("##MeshName", (char*)strMeshName.c_str(), strMeshName.capacity(), ImGuiInputTextFlags_ReadOnly);
+	
+	if (ImGui::BeginDragDropTarget())
+	{
+		DWORD_PTR dwData = 0;
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ResourceUI"))
+		{
+			memcpy(&dwData, payload->Data, sizeof(DWORD_PTR));
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+	
 	ImGui::SameLine();
 	if (ImGui::Button("##MeshListBtn", Vec2(15, 15)))
 	{

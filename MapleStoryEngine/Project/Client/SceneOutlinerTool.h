@@ -40,8 +40,10 @@ public:
     TreeNode* PushLayerToTree(CLayer* _pLayer, TreeNode* _pDestNode);
 
 
+    // Delegeate Funcs 
     void PressDelete(DWORD_PTR _dw);
     void ObjectClicked(DWORD_PTR _dw);
+    void DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop);
 
     // ======== File ==============
 private:

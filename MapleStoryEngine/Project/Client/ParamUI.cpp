@@ -78,6 +78,34 @@ bool ParamUI::Param_Tex(const string& _strName, CTexture* _pCurTex, UI* _pInst, 
 	}
 
 	ImGui::Image(texid, ImVec2(150, 150), uv_min, uv_max, tint_col, border_col);
+
+	bool DragDropSuccess = false;
+	if (ImGui::BeginDragDropTarget())
+	{
+		DWORD_PTR dwData = 0;
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Resource"))
+		{
+			memcpy(&dwData, payload->Data, sizeof(DWORD_PTR));
+			CRes* pRes = (CRes*)dwData;
+			if (RES_TYPE::TEXTURE == pRes->GetResType())
+			{
+				static string strKey;
+				strKey = string(pRes->GetKey().begin(), pRes->GetKey().end());
+
+				CImGuiMgr::GetInst()->AddDelegate(tUIDelegate{ _pInst , _pFunc , (DWORD_PTR)strKey.c_str() });
+				DragDropSuccess = true;
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
+	if (DragDropSuccess)
+	{
+		return true;
+
+
+	}
 	ImGui::SameLine();
 
 

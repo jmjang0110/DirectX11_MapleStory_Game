@@ -21,7 +21,7 @@ public:
 
     void AddGameObjectToTree(CGameObject* _pObject, TreeNode* _pDestNode);
     void PressDelete(DWORD_PTR _dw);
-
+    void DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop);
 
 public:
     SceneOutliner();

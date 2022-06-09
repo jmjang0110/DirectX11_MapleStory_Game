@@ -35,10 +35,15 @@ SceneOutlinerTool::SceneOutlinerTool()
 	m_TreeUI->UseFrame(false);
 	m_TreeUI->ShowDummyRoot(false);
 
+	m_TreeUI->UseDragDropSelf(true);
+	m_TreeUI->UseDragDropOuter(true);
+
 	AddChild(m_TreeUI);
 
 	// Clicked Delegate 등록
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&SceneOutlinerTool::ObjectClicked);
+
+	m_TreeUI->SetDragAndDropDelegate(this, (DRAG_DROP)&SceneOutlinerTool::DragAndDropDelegate);
 
 	// Delete Pressed 등록 
 	m_TreeUI->SetKeyBinding(KEY::DEL, this, (CLICKED)&SceneOutlinerTool::PressDelete);
@@ -70,9 +75,11 @@ void SceneOutlinerTool::render_update()
 {
 	FileMgrTool_SubFunc();
 	
-
-	if (ImGui::Button("New GameObject", ImVec2(120, 0)))
-		ImGui::OpenPopup("Create New Obj");
+	// Create New GameObject
+	if (OBJECT_TYPE::LAYER == m_RecentClickedType)
+	{
+		if (ImGui::Button("New GameObject", ImVec2(120, 0)))
+			ImGui::OpenPopup("Create New Obj");
 
 		bool unused_open = true;
 		if (ImGui::BeginPopupModal("Create New Obj", &unused_open))
@@ -96,7 +103,7 @@ void SceneOutlinerTool::render_update()
 				ImGui::Text("select Layer - ");
 				ImGui::SameLine();
 				string sName = string(m_pSelectedLayer->GetName().begin(), m_pSelectedLayer->GetName().end());
-				ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.8f, 1.f),sName.c_str());
+				ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.8f, 1.f), sName.c_str());
 				ImGui::Text("Add This Obj to this Layer");
 
 			}
@@ -115,29 +122,131 @@ void SceneOutlinerTool::render_update()
 
 				CGameObject* NewObj = new CGameObject;
 				NewObj->SetName(newName);
-				
+
 				// Create GameObject
 				if (nullptr != m_pSelectedScene && nullptr != m_pSelectedLayer)
 				{
 					// 기본적으로 CTransform 을 갖는다. 
 					NewObj->AddComponent(new CTransform);
-					
+
 					NewObj->Transform()->SetRelativePos(0.f, 0.f, 100.f);
 					NewObj->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 
-					
+
 					m_pSelectedScene->AddObject(NewObj, m_pSelectedLayer->GetName());
 					// TReeUI 에 추가하기 위해서 Reset() 
 					Reset();
 
 				}
-				
+
 
 				ImGui::CloseCurrentPopup();
-				
+
 			}
 			ImGui::EndPopup();
 		}
+	}
+	
+
+	// Create New Scene -- 미완성 
+	// 여러장의 Scene 을 어디에 저장해야하지 ?
+	 
+	if (OBJECT_TYPE::NONE == m_RecentClickedType || OBJECT_TYPE::SCENE == m_RecentClickedType)
+	{
+		if (ImGui::Button("New Scene", ImVec2(120, 0)))
+			ImGui::OpenPopup("Create New Scene");
+
+		bool unused_open = true;
+		if (ImGui::BeginPopupModal("Create New Scene", &unused_open))
+		{
+			ImGui::Text("Set New Scene Name!\n\n");
+			static char buf[512];
+			ImGui::InputText("SetName", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+
+
+			if (ImGui::Button("Complete"))
+			{
+				string name = buf;
+				wstring newName = wstring(name.begin(), name.end());
+
+				CScene* NewScene = new CScene;
+				NewScene->SetName(newName);
+
+				// Create Scene
+				Reset();
+
+			}
+
+
+			ImGui::EndPopup();
+
+		}
+
+		
+
+	}
+
+
+	// Create New Layer
+	if (OBJECT_TYPE::SCENE == m_RecentClickedType)
+	{
+		if (ImGui::Button("New Layer", ImVec2(120, 0)))
+			ImGui::OpenPopup("Create New Layer");
+
+		bool unused_open = true;
+		if (ImGui::BeginPopupModal("Create New Layer", &unused_open))
+		{
+			ImGui::Text("Set New Layer Name!\n\n");
+			static char buf[512];
+			ImGui::InputText("SetName", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+
+			ImGui::Text("Layer Idx");
+			int layerIdx;
+			ImGui::DragInt("##LayerIdx", &layerIdx, 1.f, 0, MAX_LAYER);
+
+			if (ImGui::Button("Complete"))
+			{
+				string name = buf;
+				wstring newName = wstring(name.begin(), name.end());
+
+				CLayer* NewLayer = new CLayer;
+				NewLayer->SetName(newName);
+
+				if (nullptr != m_pSelectedScene)
+				{
+					bool bCheckCreate = true;
+					CLayer** arrAllLayer = m_pSelectedScene->GetAllLayer();
+					// 해당 레이어 인덱스가 이미 있다면 
+					if (nullptr != arrAllLayer[layerIdx])
+						bCheckCreate = false;
+
+					for (int i = 0; i < MAX_LAYER; ++i)
+					{
+						// 존재하는 레이어 중에서 이름이 같은 게 있다면 
+						if (arrAllLayer[i]->GetName() == NewLayer->GetName())
+							bCheckCreate = false;
+					}
+
+					// Layer 생성 
+					if (bCheckCreate)
+					{
+						m_pSelectedScene->SetLayerName(layerIdx, newName);
+
+					}
+				}
+
+				// Create Scene
+				Reset();
+
+			}
+
+
+			ImGui::EndPopup();
+		}
+
+		
+	}
+
 	
 
 }
@@ -284,7 +393,13 @@ void SceneOutlinerTool::PressDelete(DWORD_PTR _dw)
 	pInspectorUI->SetTargetObject(nullptr);
 }
 
+void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop)
+{
+	CGameObject* pChildObject = (CGameObject*)_dwDrag;
+	CGameObject* pDropTargetObject = (CGameObject*)_dwDrop;
 
+	CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
+}
 
 
 
@@ -346,7 +461,7 @@ void SceneOutlinerTool::FileMgrTool_SubFunc()
 			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 			// 몇번째 Layer에 저장할 것인지 정한다 
-			CLayer* pArrLayer = pCurScene->GetAllLayer();
+			//CLayer* pArrLayer = pCurScene->GetAllLayer();
 
 		}
 

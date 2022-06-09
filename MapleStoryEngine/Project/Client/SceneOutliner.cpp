@@ -20,13 +20,17 @@ SceneOutliner::SceneOutliner()
 	m_TreeUI->SetTitle("SceneOutliner");
 	m_TreeUI->UseFrame(false);
 	m_TreeUI->ShowDummyRoot(false);
-
+	m_TreeUI->UseDragDropOuter(true);
+	m_TreeUI->UseDragDropSelf(true);
 
 
 	AddChild(m_TreeUI);
 
 	// Clicked Delegate 등록
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&SceneOutliner::ObjectClicked);
+
+	// Drag and Drop Delegate 등록
+	m_TreeUI->SetDragAndDropDelegate(this, (DRAG_DROP)&SceneOutliner::DragAndDropDelegate);
 
 	// Key Delegate 등록
 	m_TreeUI->SetKeyBinding(KEY::DEL, this, (CLICKED)&SceneOutliner::PressDelete);
@@ -117,4 +121,12 @@ void SceneOutliner::PressDelete(DWORD_PTR _dw)
 
 	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	pInspectorUI->SetTargetObject(nullptr);
+}
+
+void SceneOutliner::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop)
+{
+	CGameObject* pChildObject = (CGameObject*)_dwDrag;
+	CGameObject* pDropTargetObject = (CGameObject*)_dwDrop;
+
+	CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
 }
