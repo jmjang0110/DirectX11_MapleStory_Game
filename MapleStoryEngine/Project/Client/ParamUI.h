@@ -4,6 +4,12 @@ class CTexture;
 
 #include "ListUI.h"
 
+/*
+
+	생성목적
+	-   해당 객체의 파라미터로 지정된 값들을 출력하고
+		수정할 수 있게 하기 위해서 생성되었다. 
+*/
 class ParamUI
 {
 public:

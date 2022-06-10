@@ -214,25 +214,27 @@ void SceneOutlinerTool::render_update()
 
 				if (nullptr != m_pSelectedScene)
 				{
-					bool bCheckCreate = true;
-					CLayer** arrAllLayer = m_pSelectedScene->GetAllLayer();
-					// 해당 레이어 인덱스가 이미 있다면 
-					if (nullptr != arrAllLayer[layerIdx])
-						bCheckCreate = false;
+					//bool bCheckCreate = true;
+					//CLayer* arrAllLayer = m_pSelectedScene->GetAllLayer();
+			
 
-					for (int i = 0; i < MAX_LAYER; ++i)
-					{
-						// 존재하는 레이어 중에서 이름이 같은 게 있다면 
-						if (arrAllLayer[i]->GetName() == NewLayer->GetName())
-							bCheckCreate = false;
-					}
+					//// 해당 레이어 인덱스가 이미 있다면 
+					//if (nullptr != arrAllLayer[layerIdx])
+					//	bCheckCreate = false;
 
-					// Layer 생성 
-					if (bCheckCreate)
-					{
-						m_pSelectedScene->SetLayerName(layerIdx, newName);
+					//for (int i = 0; i < MAX_LAYER; ++i)
+					//{
+					//	// 존재하는 레이어 중에서 이름이 같은 게 있다면 
+					//	if (arrAllLayer[i]->GetName() == NewLayer->GetName())
+					//		bCheckCreate = false;
+					//}
 
-					}
+					//// Layer 생성 
+					//if (bCheckCreate)
+					//{
+					//	m_pSelectedScene->SetLayerName(layerIdx, newName);
+
+					//}
 				}
 
 				// Create Scene

@@ -54,7 +54,8 @@ public:
 
     bool IsDead() { return m_bDead; }
     bool IsActive() { return m_bActive; }
-    
+    bool IsAncestor(CGameObject* _pObj);
+
 
 
     // ======== File ============
@@ -62,8 +63,6 @@ public:
     virtual void SaveToFile(FILE* _pFile);
     virtual void LoadFromFile(FILE* _pFile);
 
-
-    int GetLayerIdx() { return m_iLayerIdx; }
 
     // ======== File ============
 
@@ -88,6 +87,9 @@ public:
     const vector<CScript*>& GetScripts() { return m_vecScript; }
     CScript* GetScript(UINT _iIdx);
     CScript* GetScriptByName(const wstring& _strName);
+
+    int GetLayerIndex() { return m_iLayerIdx; }
+
 
     template<typename T>
     T* GetScript();

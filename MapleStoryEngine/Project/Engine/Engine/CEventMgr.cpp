@@ -3,6 +3,7 @@
 
 #include "CSceneMgr.h"
 #include "CScene.h"
+#include "CLayer.h"
 #include "CGameObject.h"
 
 #include "CRenderMgr.h"
@@ -101,6 +102,18 @@ void CEventMgr::update()
 		}
 		break;
 
+		case EVENT_TYPE::DISCONNECT_PARENT:
+			// lParam : Parent Object, wParam : Child Object
+		{
+			CGameObject* pObject = (CGameObject*)m_vecEvent[i].lParam;
+			pObject->DisconnectBetweenParent();
+			int i = pObject->GetLayerIndex();
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->GetLayer(i)->RegisterObjectAsRoot(pObject);
+
+			m_bObjEvn = true;
+		}
+		break;
 
 		case EVENT_TYPE::SET_CAMEAR_INDEX:
 		{

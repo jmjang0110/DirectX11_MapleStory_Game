@@ -209,19 +209,20 @@ enum PIPELINE_STAGE
 
 enum class EVENT_TYPE
 {
-	CREATE_OBJ,			// lParam : Object Adress, wParam : Layer Index
-	DELETE_OBJ,			// lParam : Object Adress
-	ADD_CHILD,			// lParam : Parent Object, wParam : Child Object
-	SET_CAMEAR_INDEX,	// lParam : Camera Component Adress, wParam : Camera Change Index
+	CREATE_OBJ,				// lParam : Object Adress, wParam : Layer Index
+	DELETE_OBJ,				// lParam : Object Adress
+	ADD_CHILD,				// lParam : Parent Object, wParam : Child Object
+	DISCONNECT_PARENT,		// lParam : Object Adress
+	SET_CAMEAR_INDEX,		// lParam : Camera Component Adress, wParam : Camera Change Index
 
-	ACTIVATE_OBJECT,	// lParam : Object Adress
-	DEACTIVATE_OBJECT,  // lParam : Object Adress
+	ACTIVATE_OBJECT,		// lParam : Object Adress
+	DEACTIVATE_OBJECT,		// lParam : Object Adress
 
 	ACTIVATE_COMPONENT,		// lParam : Component Adress
 	DEACTIVATE_COMOPNENT,   // lParam : Component Adress
 
-	SCENE_CHANGE,		// lParam : Next Stage Enum
-	CHANGE_AI_STATE,	// lParam : FSM Adress, wParam : Next State Type
+	SCENE_CHANGE,			// lParam : Next Stage Enum
+	CHANGE_AI_STATE,		// lParam : FSM Adress, wParam : Next State Type
 
 	END,
 };

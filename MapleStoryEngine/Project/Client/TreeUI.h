@@ -83,6 +83,9 @@ class TreeUI :
 private:
     TreeNode* m_pRootNode;
     TreeNode* m_pSelectedNode;
+    TreeNode* m_pDragNode;
+    TreeNode* m_pDropNode;
+
 
     const bool  m_bUseDummyRoot;
     bool        m_bShowDummy;

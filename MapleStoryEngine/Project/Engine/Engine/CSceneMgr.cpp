@@ -292,6 +292,16 @@ void CSceneMgr::AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject
 	CEventMgr::GetInst()->AddEvent(info);
 }
 
+void CSceneMgr::DisconnectParent(CGameObject* _pObject)
+{
+	tEventInfo info = {};
+	info.eType = EVENT_TYPE::DISCONNECT_PARENT;
+	info.lParam = (DWORD_PTR)_pObject;
+
+	CEventMgr::GetInst()->AddEvent(info);
+}
+
+
 void CSceneMgr::ClearLayer()
 {
 	for (UINT i = 0; i < MAX_LAYER; ++i)

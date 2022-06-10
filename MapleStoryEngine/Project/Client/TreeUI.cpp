@@ -79,6 +79,10 @@ void TreeNode::render_update()
 
 				ImGui::Text(m_strName.c_str());
 				ImGui::EndDragDropSource();
+
+				m_pTreeUI->m_pDragNode = this;
+
+
 			}
 
 			// 내부 드롭을 허용한 경우에만 드롭체크
@@ -92,11 +96,8 @@ void TreeNode::render_update()
 					{
 						memcpy(&dwData, payload->Data, sizeof(DWORD_PTR));
 
-						// Drag and Drop Delegate 호출
-						if (m_pTreeUI->m_pDADInst && m_pTreeUI->m_DADFunc)
-						{
-							(m_pTreeUI->m_pDADInst->*m_pTreeUI->m_DADFunc)(dwData, m_dwData);
-						}
+						// Drop Node 를 알림
+						m_pTreeUI->m_pDropNode = this;
 					}
 
 					ImGui::EndDragDropTarget();
@@ -190,6 +191,26 @@ void TreeUI::render_update()
 	else
 	{
 		m_pRootNode->render_update();
+	}
+
+	// Drag Drop Check
+	if ((m_pDragNode && m_pDropNode)
+		|| m_pDragNode && KEY_AWAY(KEY::LBTN)) // KEY_AWAY : 뗐을 때 
+	{
+		if (m_pDADInst && m_DADFunc)
+		{
+			if (nullptr == m_pDropNode)
+			{
+				(m_pDADInst->*m_DADFunc)(m_pDragNode->GetData(), 0);
+			}
+			else
+			{
+				(m_pDADInst->*m_DADFunc)(m_pDragNode->GetData(), m_pDropNode->GetData());
+			}
+
+		}
+		m_pDragNode = nullptr;
+		m_pDropNode = nullptr;
 	}
 
 	// KeyBinding 호출
