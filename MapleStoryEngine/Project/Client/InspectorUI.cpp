@@ -5,7 +5,7 @@
 #include "MeshRenderUI.h"
 #include "CameraUI.h"
 
-
+#include "ScriptUI.h"
 #include "MaterialUI.h"
 #include "TextureUI.h"
 #include "Animator2DUI.h"
@@ -142,6 +142,16 @@ void InspectorUI::render_update()
 
 void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 {
+	// ======== Todo =================
+	/*
+		내가 만든 SceneOutlinerTool 에서는 SCene Layer 가 눌리는 상황도 있으므로 
+		Scene Layer 가 눌렸을 때는 nullptr 가 들어가게 만들었다. 예외처리 하자 
+	*/
+	if (nullptr == _pTarget)
+		return;
+
+	// ==============================
+
 	m_pTargetObject = _pTarget;
 
 	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
@@ -163,6 +173,22 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 		}
 	}
 
+	const vector<CScript*>& vecScripts = m_pTargetObject->GetScripts();
+	ScriptUI* pScriptUI = nullptr;
+
+	for (size_t i = 0; i < vecScripts.size(); ++i)
+	{
+		if (m_vecScriptUI.size() <= i)
+			pScriptUI = AddScriptUI();
+		else
+			pScriptUI = m_vecScriptUI[i];
+
+		pScriptUI->SetTargetObject(m_pTargetObject);
+		pScriptUI->SetTargetScript(vecScripts[i]);
+		pScriptUI->Activate();
+	}
+
+
 	// ResInfoUI 비활성화
 	for (int i = 0; i < (int)RES_TYPE::END; ++i)
 	{
@@ -181,6 +207,14 @@ void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 		if (nullptr != m_arrComUI[i] && m_arrComUI[i]->IsActive())
 			m_arrComUI[i]->Deactivate();
 	}
+
+
+	// ScriptUI 전부 비활성화
+	for (size_t i = 0; i < m_vecScriptUI.size(); ++i)
+	{
+		m_vecScriptUI[i]->Deactivate();
+	}
+
 
 	// 활성화 시킬 RES_TYPE 을 알아냄
 	RES_TYPE type = _pTargetRes->GetResType();
@@ -203,7 +237,18 @@ void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 }
 
 
+ScriptUI* InspectorUI::AddScriptUI()
+{
+	ScriptUI* pScriptUI = new ScriptUI;
+	pScriptUI->Deactivate();
+	AddChild(pScriptUI);
 
+	m_vecScriptUI.push_back(pScriptUI);
+
+	return pScriptUI;
+}
+
+// ============= TOdo =====================================================
 //  AddComponent 버튼에서 Component 를  눌렸을 때 일어날 함수 
 
 void InspectorUI::AddComponent(DWORD_PTR _param)

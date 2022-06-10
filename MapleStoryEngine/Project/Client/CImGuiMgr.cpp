@@ -149,12 +149,12 @@ void CImGuiMgr::CreateUI()
 
 
     // SceneOutLiner
-    SceneOutliner* pSceneOutliner = new SceneOutliner;
-    m_mapUI.insert(make_pair(pSceneOutliner->GetName(), pSceneOutliner));
+    //SceneOutliner* pSceneOutliner = new SceneOutliner;
+    //m_mapUI.insert(make_pair(pSceneOutliner->GetName(), pSceneOutliner));
 
     // 내가 만든거  
-//    SceneOutlinerTool* pSceneOutlinerTool = new SceneOutlinerTool;
-   // m_mapUI.insert(make_pair(pSceneOutlinerTool->GetName(), pSceneOutlinerTool));
+    SceneOutlinerTool* pSceneOutlinerTool = new SceneOutlinerTool;
+    m_mapUI.insert(make_pair(pSceneOutlinerTool->GetName(), pSceneOutlinerTool));
 
 
     // ListUI 생성

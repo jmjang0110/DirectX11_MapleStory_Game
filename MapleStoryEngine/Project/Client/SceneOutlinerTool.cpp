@@ -395,15 +395,37 @@ void SceneOutlinerTool::PressDelete(DWORD_PTR _dw)
 	pInspectorUI->SetTargetObject(nullptr);
 }
 
+
 void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop)
 {
 	CGameObject* pChildObject = (CGameObject*)_dwDrag;
 	CGameObject* pDropTargetObject = (CGameObject*)_dwDrop;
 
-	CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
+
+	// 드롭 목적지가 제대로 들어 온 경우
+	if (nullptr != pDropTargetObject)
+	{
+		if (pChildObject == pDropTargetObject
+			|| pDropTargetObject->IsAncestor(pChildObject))
+		{
+			return;
+		}
+
+		CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
+	}
+
+	// 자식 오브젝트의 목적지가 nullptr 인 경우
+	else
+	{
+		// 이미 최상위 부모 오브젝트는 이벤트 처리가 필요없다.
+		if (nullptr == pChildObject->GetParent())
+		{
+			return;
+		}
+
+		CSceneMgr::GetInst()->DisconnectParent(pChildObject);
+	}
 }
-
-
 
 
 

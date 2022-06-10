@@ -95,6 +95,9 @@
     <ClCompile Include="ImGui\imgui_stdlib.cpp">
       <Filter>ImGui\Code</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ScriptUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="ImGui\imgui_stdlib.h">
       <Filter>ImGui\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ScriptUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
