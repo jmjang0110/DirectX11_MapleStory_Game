@@ -141,7 +141,6 @@ void MaterialUI::render_update()
 				, this, (DBCLKED)&MaterialUI::TextureSelected))
 			{
 				// 수정해야할 Tex Param 이 TEX_0 인지, TEX_1 인지.... 
-
 				m_eSelectedTexParam = vecTexParamInfo[i].eTexParam; 			
 			}
 			break;

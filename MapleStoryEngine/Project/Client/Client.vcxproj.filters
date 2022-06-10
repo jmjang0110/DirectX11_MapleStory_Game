@@ -314,6 +314,9 @@
     <Filter Include="ImGui\UI\00. SceneTool">
       <UniqueIdentifier>{562b95fb-2b1a-4e18-87d2-830954b47d8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ScriptUI">
+      <UniqueIdentifier>{b1ccfb7b-7f70-452c-b472-50167a89dfb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

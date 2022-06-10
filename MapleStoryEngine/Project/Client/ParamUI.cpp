@@ -8,6 +8,7 @@
 
 
 int ParamUI::KeyCount = 0;
+// Param 값을 주소값으로 다이렉트로 받아서 수정한다. 
 
 void ParamUI::Param_Int(const string& _strName, int* _pInOut)
 {
