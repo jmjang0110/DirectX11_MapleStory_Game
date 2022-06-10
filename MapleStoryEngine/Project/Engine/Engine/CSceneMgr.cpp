@@ -174,6 +174,36 @@ void CSceneMgr::init()
 	//AddPlayer();
 	Add_MapleStory_Player();
 
+	pObject = new CGameObject;
+	pObject->SetName(L"tile");
+	pObject->AddComponent(new CTransform);
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, -1.5f));
+	pObject->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
+
+	pObject->AddComponent(new CTileMap);
+
+	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"TileMapAtlas", L"texture//TILE_32.bmp");
+	pObject->TileMap()->SetAtlasTex(pTileAtlas);
+	pObject->TileMap()->SetTileSize(Vec2(64.f, 64.f));
+	pObject->TileMap()->SetTileMapCount(4, 4);
+	
+
+	for (int i = 0; i < 8; ++i)
+	{
+		pObject->TileMap()->SetTileData(i, 0);
+	}
+
+	for (int i = 8; i < 16; ++i)
+	{
+		pObject->TileMap()->SetTileData(i, 2);
+	}
+	pObject->TileMap()->SetTileData(7, -1);
+
+	m_pCurScene->AddObject(pObject, L"Tile");
+
+
+
+
 
 	// 충돌 레이어 설정
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");

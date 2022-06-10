@@ -41,6 +41,14 @@ public:
     void SetTileData(int _iTileIdx, int _iImgIdx);
     void ClearTileData();
 
+    // =======Todo ===================
+public:
+    Ptr<CTexture> GetAtlasTex() { return m_pAtlasTex; }
+    Vec2 GetTileSize() { return m_vSlicePixel; }
+    UINT GetTileCountX() { return m_iTileCountX; }
+    UINT GetTileCountY() { return m_iTileCountY; }
+
+    // ===============================
 
 public:
     virtual void finalupdate() override;

@@ -127,7 +127,9 @@ namespace DirectX
 
             operator XMVECTOR() const { return XMLoadFloat2(this); }
 
-            
+     
+
+
             // Conversion
             operator ImVec2() const;
 

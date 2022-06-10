@@ -433,8 +433,7 @@ void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop
 void SceneOutlinerTool::FileMgrTool_SubFunc()
 {
 
-	if (ImGui::BeginChild("FileMgr", ImVec2(230.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar))
-	{
+	ImGui::BeginChild("FileMgr", ImVec2(230.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 		string strCurObjectType;
 		if (m_RecentClickedType == OBJECT_TYPE::NONE)
 			strCurObjectType = "None - ";
@@ -490,8 +489,8 @@ void SceneOutlinerTool::FileMgrTool_SubFunc()
 		}
 
 		
-		ImGui::EndChild();
-
-	}
+		
+	
+	ImGui::EndChild();
 
 }

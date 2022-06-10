@@ -15,6 +15,7 @@
 #include "ParticleSystemUI.h"
 #include "Collider2DUI.h"
 #include "ListUI.h"
+#include "TileMapUI.h"
 
 #include "CImGuiMgr.h"
 
@@ -74,6 +75,11 @@ InspectorUI::InspectorUI()
 	AddChild(pComUI);
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D] = pComUI;
 
+	// TileMapUI
+	pComUI = new TileMapUI;
+	AddChild(pComUI);
+	m_arrComUI[(UINT)COMPONENT_TYPE::TILEMAP] = pComUI;
+
 
 	// ==============
 	// ResInfoUI »ý¼º
@@ -106,6 +112,7 @@ InspectorUI::InspectorUI()
 	pResInfoUI = new ComputeShaderUI;
 	AddChild(pResInfoUI);
 	m_arrResUI[(UINT)RES_TYPE::COMPUTE_SHADER] = pResInfoUI;
+
 
 
 }
@@ -349,8 +356,8 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 	if (nullptr != m_pTargetObject)
 	{
-		if (ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar))
-		{
+		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+		
 
 			if (ImGui::Button("Add Component"))
 			{
@@ -378,8 +385,8 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 			}
 
-			ImGui::EndChild();
-		}
+		ImGui::EndChild();
+		
 	}
 
 }

@@ -98,6 +98,9 @@
     <ClCompile Include="ScriptUI.cpp">
       <Filter>ImGui\UI\01. InspectorUI\ScriptUI</Filter>
     </ClCompile>
+    <ClCompile Include="TileMapUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\09. TileMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -210,6 +213,9 @@
     </ClInclude>
     <ClInclude Include="ScriptUI.h">
       <Filter>ImGui\UI\01. InspectorUI\ScriptUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\09. TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

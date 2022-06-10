@@ -29,9 +29,9 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 	m_eType = _eType;
 
 	m_bCpuAccess = _bCpuAccess;
-	
+
 	// desc 작성
-	m_desc.ByteWidth = m_iElementSize * m_iElementCount;		
+	m_desc.ByteWidth = m_iElementSize * m_iElementCount;
 	m_desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	m_desc.StructureByteStride = m_iElementSize;
 
@@ -43,12 +43,12 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 	{
 		m_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	}
-	else 
+	else
 	{
 		m_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
-	}	
+	}
 
-	
+
 	// 초기 Initial Data 가 있는 경우
 	if (nullptr != _pInitialData)
 	{
@@ -59,7 +59,7 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 	else
 	{
 		DEVICE->CreateBuffer(&m_desc, nullptr, m_SB.GetAddressOf());
-	}	
+	}
 
 	// Shader Resource View 생성
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -85,11 +85,11 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 		{
 			return E_FAIL;
 		}
-	}	
+	}
 
 
 	if (m_bCpuAccess)
-	{		
+	{
 		// SysMem -> GPU Buffer
 		m_desc_write.ByteWidth = m_iElementSize * m_iElementCount;
 		m_desc_write.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
@@ -158,14 +158,14 @@ void CStructuredBuffer::GetData(void* _pDst)
 
 	// Read Buffer -> SysMem
 	D3D11_MAPPED_SUBRESOURCE tSub = {};
-	CONTEXT->Map(m_SB_Read.Get(), 0, D3D11_MAP::D3D11_MAP_READ, 0, &tSub);	
+	CONTEXT->Map(m_SB_Read.Get(), 0, D3D11_MAP::D3D11_MAP_READ, 0, &tSub);
 	memcpy(_pDst, tSub.pData, (size_t)m_iElementSize * (size_t)m_iElementCount);
 	CONTEXT->Unmap(m_SB_Read.Get(), 0);
 }
 
 void CStructuredBuffer::UpdateData(UINT _iStage, UINT _iRegisterNum)
 {
-	if (_iStage & PIPELINE_STAGE::VS)	
+	if (_iStage & PIPELINE_STAGE::VS)
 		CONTEXT->VSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
 
 	if (_iStage & PIPELINE_STAGE::HS)
@@ -178,7 +178,7 @@ void CStructuredBuffer::UpdateData(UINT _iStage, UINT _iRegisterNum)
 		CONTEXT->GSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
 
 	if (_iStage & PIPELINE_STAGE::PS)
-		CONTEXT->PSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());	
+		CONTEXT->PSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
 
 	m_iRecentBindNumSRV = _iRegisterNum;
 }
@@ -201,7 +201,7 @@ void CStructuredBuffer::UpdateData_CS(UINT _iRegisterNum, bool _bShaderResource)
 }
 
 void CStructuredBuffer::Clear()
-{	
+{
 	if (-1 != m_iRecentBindNumSRV)
 	{
 		ID3D11ShaderResourceView* pSRV = nullptr;
@@ -213,12 +213,12 @@ void CStructuredBuffer::Clear()
 		CONTEXT->CSSetShaderResources(m_iRecentBindNumSRV, 1, &pSRV);
 		m_iRecentBindNumSRV = -1;
 	}
-	
+
 	if (-1 != m_iRecentBindNumUAV)
 	{
 		ID3D11UnorderedAccessView* pUAV = nullptr;
 		UINT i = -1;
 		CONTEXT->CSSetUnorderedAccessViews(m_iRecentBindNumUAV, 1, &pUAV, &i);
 		m_iRecentBindNumUAV = -1;
-	}	
+	}
 }
