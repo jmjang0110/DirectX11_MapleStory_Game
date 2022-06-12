@@ -205,6 +205,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CTestShader.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTileMap.h" />
+    <ClInclude Include="CTilemapEditorScript.h" />
     <ClInclude Include="CTimeMgr.h" />
     <ClInclude Include="CTransform.h" />
     <ClInclude Include="define.h" />
@@ -260,6 +261,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CTestShader.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTileMap.cpp" />
+    <ClCompile Include="CTilemapEditorScript.cpp" />
     <ClCompile Include="CTimeMgr.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="Engine.cpp" />

@@ -26,6 +26,7 @@
 #include "CPlayerScript.h"
 #include "CCameraMoveScript.h"
 #include "CMissileScript.h"
+#include "CTilemapEditorScript.h"
 
 #include "CTexture.h"
 #include "CPrefab.h"
@@ -86,7 +87,7 @@ void CSceneMgr::init()
 	CGameObject* pMissileObj = new CGameObject;
 	pMissileObj->AddComponent(new CTransform);
 	pMissileObj->AddComponent(new CMeshRender);
-	pMissileObj->AddComponent(new CMissileScript);
+	//pMissileObj->AddComponent(new CMissileScript);
 		
 	pMissileObj->Transform()->SetRelativeScale(Vec3(50.f, 50.f, 1.f));
 	pMissileObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
@@ -178,19 +179,23 @@ void CSceneMgr::init()
 	pObject->SetName(L"tile");
 	pObject->AddComponent(new CTransform);
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, -1.5f));
-	pObject->Transform()->SetRelativeScale(100.f, 100.f, 1.f);
 
 	pObject->AddComponent(new CTileMap);
+	pObject->AddComponent(new CTilemapEditorScript);
+
 
 	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//yellowToyCastle//yellowToyCastleTile.png");
 	pObject->TileMap()->SetAtlasTex(pTileAtlas);
 	pObject->TileMap()->SetTileSize(Vec2(30.f, 30.f));
 	pObject->TileMap()->SetTileMapCount(9, 16);
 
+	pObject->Transform()->SetRelativeScale(9 * 30.f, 16 * 30.f, 1.f);
+
+
 
 	for (int i = 0; i < 9 * 16; ++i)
 	{
-		pObject->TileMap()->SetTileData(i, i);
+		pObject->TileMap()->SetTileData(i, -1);
 	}
 
 	/*for (int i = 8; i < 16; ++i)
@@ -207,7 +212,7 @@ void CSceneMgr::init()
 
 	
 
-	//m_pCurScene->SetSceneState(SCENE_STATE::PLAY);
+	m_pCurScene->SetSceneState(SCENE_STATE::PLAY);
 	m_pCurScene->start();
 }
 
@@ -386,7 +391,7 @@ void CSceneMgr::Add_MapleStory_Player()
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	//pObj->AddComponent(new CPlayerScript);
+	pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

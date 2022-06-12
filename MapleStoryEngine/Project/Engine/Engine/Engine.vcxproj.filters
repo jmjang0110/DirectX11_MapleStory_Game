@@ -154,6 +154,9 @@
     <ClInclude Include="CFileMgr.h">
       <Filter>Engine\03. Manager\00. FileMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CTilemapEditorScript.h">
+      <Filter>Engine\Scripts\TilemapEditorScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -294,6 +297,9 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="CFileMgr.cpp">
       <Filter>Engine\03. Manager\00. FileMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CTilemapEditorScript.cpp">
+      <Filter>Engine\Scripts\TilemapEditorScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,6 +476,9 @@
     </Filter>
     <Filter Include="Engine\03. Manager\00. FileMgr">
       <UniqueIdentifier>{f9b82a16-67bf-4619-a81b-c9a6bd7a233d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scripts\TilemapEditorScript">
+      <UniqueIdentifier>{dd3d68de-e7f8-48f8-9d97-3b23940f2143}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

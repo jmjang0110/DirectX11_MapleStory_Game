@@ -23,6 +23,8 @@
 class TreeUI;
 class CTexture;
 class TreeNode;
+class CGameObject;
+
 
 
 struct info
@@ -64,8 +66,10 @@ private:
     TileImgFile*                    m_pSelected_imgFile; // img File
     tile*                           m_pSelected_Tile;    
 
-    UINT                            m_iMapCountX;    // ¸Ê Å©±â 
-    UINT                            m_iMapCountY;
+    CGameObject*                    m_pTargetObject;
+
+    int                            m_iMapCountX;    // ¸Ê Å©±â 
+    int                            m_iMapCountY;
 
 public:
     virtual void update() override;

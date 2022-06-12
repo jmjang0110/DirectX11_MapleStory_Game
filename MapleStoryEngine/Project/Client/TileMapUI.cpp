@@ -9,6 +9,10 @@
 #include <Engine/CTexture.h>
 #include <Engine/CResMgr.h>
 #include <Engine/CTransform.h>
+#include <Engine/CKeyMgr.h>
+
+#include <Engine/CTilemapEditorScript.h>
+
 
 /*
 	
@@ -29,6 +33,7 @@ TileMapUI::TileMapUI()
 	, m_TreeUI(nullptr)
 	, m_iMapCountX(0)
 	, m_iMapCountY(0)
+	, m_pTargetObject(nullptr)
 
 {
 	SetSize(Vec2(0.f, 300.f));
@@ -48,6 +53,9 @@ TileMapUI::TileMapUI()
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&TileMapUI::TileClicked);
 	
 
+
+
+
 	Reset();
 
 }
@@ -62,42 +70,56 @@ void TileMapUI::update()
 	ComponentUI::update();
 
 
-
-
-
 }
 
 void TileMapUI::render_update()
 {
 	ComponentUI::render_update();
 
-
 	CGameObject* pObject = GetTargetObject();
 
-	int TileCountX = pObject->TileMap()->GetTileCountX();
-	int TileCountY = pObject->TileMap()->GetTileCountY();
+	if (nullptr == m_pTargetObject)
+	{
+		m_pTargetObject = pObject;
+
+		m_iMapCountX = pObject->TileMap()->GetTileCountX();
+		m_iMapCountY = pObject->TileMap()->GetTileCountY();
+
+	}
+
 
 	// TileCount
 	ImGui::PushItemWidth(100);
 	ImGui::Text("Tile Count");
 	ImGui::SameLine(150);
-	ImGui::InputInt("##TileCountX", &TileCountX);
+	ImGui::InputInt("##TileCountX", &m_iMapCountX);
 	ImGui::SameLine();
-	ImGui::InputInt("##TileCountY", &TileCountY);
+	ImGui::InputInt("##TileCountY", &m_iMapCountY);
 
-	pObject->TileMap()->SetTileMapCount(TileCountX, TileCountY);
+
+	ImGui::SameLine();
+	if (ImGui::Button("Setting"))
+	{
+		m_pTargetObject->TileMap()->SetTileMapCount(m_iMapCountX, m_iMapCountY);
+		// 타일 개수 / 사이즈 만큼 타일맵 크기를 늘려야한다. 
+		Vec2 SlicePixel = m_pTargetObject->TileMap()->GetTileSize();
+		m_pTargetObject->Transform()->SetRelativeScale(Vec3(m_iMapCountX * SlicePixel.x, m_iMapCountY * SlicePixel.y, 1.f));
+
+
+	}
+	
 	ImGui::PopItemWidth();
 
 
 	// Slice pixel Size 
 	ImGui::PushItemWidth(200);
-	Vec2 SlicePixel = pObject->TileMap()->GetTileSize();
+	Vec2 SlicePixel = m_pTargetObject->TileMap()->GetTileSize();
 	float pxSlice[2] = { SlicePixel.x , SlicePixel.y };
 
 	ImGui::Text("Tile px Size");
 	ImGui::SameLine(150); 
 	ImGui::InputFloat2("##TilepxSize", &pxSlice[0]);
-	pObject->TileMap()->SetTileSize(Vec2(pxSlice[0], pxSlice[1]));
+	m_pTargetObject->TileMap()->SetTileSize(Vec2(pxSlice[0], pxSlice[1]));
 	ImGui::PopItemWidth();
 
 
@@ -106,16 +128,23 @@ void TileMapUI::render_update()
 	m_TreeUI->render();
 	ImGui::EndChild();
 
-
-	// 타일 개수 / 사이즈 만큼 타일맵 크기를 늘려야한다. 
-	pObject->Transform()->SetRelativeScale(Vec3(TileCountX * pxSlice[0], TileCountY * pxSlice[1], 1.f));
-
-	// Show Tile 
-	for (int i = 1; i < TileCountX * TileCountY; ++i)
+	// EditorMode Button 
+	static bool bEditorMode = false;
+	ImGui::Checkbox("EditorMode", &bEditorMode);
+	if(bEditorMode)
 	{
-		pObject->TileMap()->SetTileData(i, -1);
+		CTilemapEditorScript* EditorScript =  GetTargetObject()->GetScript<CTilemapEditorScript>();
+
+		if (nullptr != EditorScript)
+		{
+			bool bMode = EditorScript->GetEditorMode();
+			EditorScript->SetEditorMode(!bMode);
+
+		}
 	}
-	pObject->TileMap()->SetTileData(0, -1);
+
+
+
 
 
 }
