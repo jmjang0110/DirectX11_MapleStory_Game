@@ -12,7 +12,6 @@ public:
     virtual void update();
     virtual void lateupdate();
 
-
 public:
     void SetEditorMode(bool _b) { m_bEditorMode = _b; }
     bool GetEditorMode() { return m_bEditorMode; }

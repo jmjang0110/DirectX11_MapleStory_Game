@@ -25,35 +25,39 @@ class CTexture;
 class TreeNode;
 class CGameObject;
 
+// ============ 정보 ============
 
-
-struct info
+struct TileInfo
 {
-    int                 iImgIdx;    // 이미지인덱스 번호 
-    Vec2                tileSize;   // px
+    TileInfo(int _imgidx = -1) { iImgIdx = _imgidx; }
+    int                 iImgIdx;            // 이미지인덱스 번호 
 };
 
+
+// ============ 타일 ============
 // bsc, enH0 ...
-struct tile
+struct Tile
 {
-    struct TileImgFile*  _parent;
-    wstring              Name;       // 타일 이미지 이름 
+    struct TileImgFile*     _parent;
+    wstring                 Name;           // 타일 이미지 이름 
    
-    vector<info>        vTilesInfo;
-    int                 iTileNum;    // 타일 개수 
-    Vec2                StartPos_px; // 아틀라스에서의 시작 위치
-    Vec2                AllTileSize; // UV 값을 구하기 위해서 아틀라스에서의 
-                                     // 해당 타일의 전체 사이즈를 구한다. 
+    int                     iImgIdxNum;    // 완성된 타일을 그리는데 필요한 이미지인덱스 개수 
+    int                     iRow;          // 행으로 몇개 타일 
+    int                     iCol;           // 열로 몇개 타일 
+
+    vector<TileInfo>        vTilesInfo;
+
 };
 
 
+// ============ img ============
 // img 파일 
 struct TileImgFile
 {
     wstring                 Name;
 
     Ptr<CTexture>           pAtlasTex;  // 타일 이미지
-    map<wstring, tile*>     imgFile;
+    map<wstring, Tile*>     imgFile;
 
 };
 
@@ -64,26 +68,35 @@ private:
     TreeUI*                         m_TreeUI;       
 
     TileImgFile*                    m_pSelected_imgFile; // img File
-    tile*                           m_pSelected_Tile;    
+    Tile*                           m_pSelected_Tile;
 
     CGameObject*                    m_pTargetObject;
 
     int                            m_iMapCountX;    // 맵 크기 
     int                            m_iMapCountY;
 
+    bool                            m_bEditMode;
+    bool                            m_bShowGrid;
+
+
+
 public:
     virtual void update() override;
     virtual void render_update() override;
+    void EditorUpdate();
 
 public:
     void Reset();
-
+    
     // ========== 이렇게 해야 되나... ==================
-    TreeNode* Push_darkpurpleToyCastle_toTree(TreeNode* _pDestNode);
+    TreeNode* Push_YellowToyCastleTile_toTree(TreeNode* _pDestNode);
 
 
     TreeNode* PushTileFiletoTree(wstring FileName, TileImgFile* pimgFile, TreeNode* _pDestNode);
-    TreeNode* PushTileImagetoTree(tile* _pTile, TreeNode* _pDestNode);
+    TreeNode* PushDummyFiletoTree(wstring FIleName, TreeNode* _pDestNode);
+    TreeNode* PushTiletoTree(Tile* _pTile, TreeNode* _pDestNode);
+
+    void CreateNewTile(TreeNode* _pDestNode, TileImgFile* _pimgFile);
 
 
 public:

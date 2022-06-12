@@ -23,6 +23,15 @@ private:
     bool                m_bBufferUpdated;
 
 
+private:
+    // Todo 
+    int m_iShowGrid; // 0 : No 1 : Yes 
+
+public:
+    // 0 : No 1 : Yes
+    void SetShowGrid(int _grid) { m_iShowGrid = _grid; }
+
+
 public:
     void SetAtlasTex(Ptr<CTexture> _pAtlasTex) 
     { 

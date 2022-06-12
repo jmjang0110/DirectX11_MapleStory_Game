@@ -15,6 +15,7 @@ CTileMap::CTileMap()
 	, m_iTileCountX(0)
 	, m_iTileCountY(0)
 	, m_bBufferUpdated(false)
+	, m_iShowGrid(0)
 {
 	// 메쉬, 재질
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -61,6 +62,7 @@ void CTileMap::UpdateData()
 
 	GetMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &m_iTileCountX);
 	GetMaterial()->SetScalarParam(SCALAR_PARAM::INT_1, &m_iTileCountY);
+	GetMaterial()->SetScalarParam(SCALAR_PARAM::INT_2, &m_iShowGrid);
 
 	GetMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_0, &m_vSliceUV);
 

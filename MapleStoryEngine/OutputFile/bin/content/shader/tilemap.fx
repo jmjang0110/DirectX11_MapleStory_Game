@@ -11,8 +11,10 @@ StructuredBuffer<tTileData> TileDataBuffer : register(t16);
 // Domain : Mask
 // Blend : Default
 // Depth : LESS
-#define TileCountX g_int_0
-#define TileCountY g_int_1
+#define TileCountX  g_int_0
+#define TileCountY  g_int_1
+#define ShowGrid    g_int_2 // 0 : No 1 : Yes
+
 #define SliceSizeUV g_vec2_0
 // ==============
 
@@ -56,13 +58,16 @@ float4 PS_TileMap(VTX_OUT _in) : SV_Target
     // 만약 이미지 설정이 안된 타일이면 버림
     if (-1 == TileDataBuffer[TileDataIdx].iImgIdx)
     {
-       
-        vOutColor = float4(0.5f, 1.f, 1.f, 1.f);
-        if (iTileRowCol.x + 0.03f < vUV.x && vUV.x < iTileRowCol.x + 0.97f
-            && iTileRowCol.y + 0.03f < vUV.y && vUV.y < iTileRowCol.y + 0.97f)
+       if(ShowGrid == 1)
         {
-            discard;
+            vOutColor = float4(0.5f, 1.f, 1.f, 1.f);
+            if (iTileRowCol.x + 0.03f < vUV.x && vUV.x < iTileRowCol.x + 0.97f
+            && iTileRowCol.y + 0.03f < vUV.y && vUV.y < iTileRowCol.y + 0.97f)
+            {
+                discard;
+            }
         }
+       
         
         //discard;
     }
