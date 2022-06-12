@@ -55,17 +55,30 @@ float4 PS_TileMap(VTX_OUT _in) : SV_Target
     // 타일 데이터에 접근하면, 각 타일 별로 좌상단 UV 값이 들어있다.
     // 만약 이미지 설정이 안된 타일이면 버림
     if (-1 == TileDataBuffer[TileDataIdx].iImgIdx)
-        discard;
-    
-    float2 vLeftTopUV = TileDataBuffer[TileDataIdx].vLTUV;
+    {
+       
+        vOutColor = float4(0.5f, 1.f, 1.f, 1.f);
+        if (iTileRowCol.x + 0.03f < vUV.x && vUV.x < iTileRowCol.x + 0.97f
+            && iTileRowCol.y + 0.03f < vUV.y && vUV.y < iTileRowCol.y + 0.97f)
+        {
+            discard;
+        }
+        
+        //discard;
+    }
+    else
+    {
+        float2 vLeftTopUV = TileDataBuffer[TileDataIdx].vLTUV;
     
     // 0~1 의 UV 를 NxM 타일 크기로 확장 UV 의 소수점 부분을 샘플링 용도로 사용한다.
-    float2 vImgUV = frac(vUV);
+        float2 vImgUV = frac(vUV);
     
     // 최종 Sample 위치 UV 를 계산한다.
-    float2 vSampleUI = vLeftTopUV + vImgUV * SliceSizeUV;
+        float2 vSampleUI = vLeftTopUV + vImgUV * SliceSizeUV;
     
-    vOutColor = g_tex_0.Sample(g_sam_1, vSampleUI);
+        vOutColor = g_tex_0.Sample(g_sam_1, vSampleUI);
+   // vOutColor *= 1.5f;
+    }
     
     return vOutColor;
 }

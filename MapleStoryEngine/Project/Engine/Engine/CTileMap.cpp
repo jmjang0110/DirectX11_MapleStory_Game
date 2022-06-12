@@ -45,6 +45,8 @@ CTileMap::~CTileMap()
 	SAFE_DELETE(m_pBuffer);
 }
 
+
+
 void CTileMap::finalupdate()
 {
 
@@ -126,8 +128,51 @@ void CTileMap::ClearTileData()
 
 	if (m_pBuffer->GetBufferSize() < iBufferSize)
 	{
-		m_pBuffer->Create(sizeof(tTileData), m_iTileCountX * m_iTileCountY, SB_TYPE::READ_WRITE, true, nullptr);
+		m_pBuffer->Create(sizeof(tTileData), m_iTileCountX * m_iTileCountY, SB_TYPE::READ_WRITE, true, nullptr); 
 	}
 
 	m_bBufferUpdated = false;
+}
+
+
+
+
+
+
+
+
+/*
+		================== Todo ==================
+*/
+void CTileMap::SetTileSize(Vec2 _vPixelSize, Vec2 _AllTileSize)
+{
+
+	m_vSlicePixel = _vPixelSize;
+	if (nullptr != m_pAtlasTex)
+		m_vSliceUV = m_vSlicePixel / Vec2(_AllTileSize.x , _AllTileSize.y);
+
+}
+
+void CTileMap::SetTileData(int _iTileIdx, int _iImgIdx, Vec2 _AllTileSize, Vec2 StartPos_px)
+{
+	Vec2 StartUV = Vec2(StartPos_px.x / m_pAtlasTex->Width(), StartPos_px.y / m_pAtlasTex->Height());
+
+	if (nullptr == m_pAtlasTex)
+	{
+		return;
+	}
+
+	m_vecTileData[_iTileIdx].iImgIdx = _iImgIdx;
+
+	// 아틀라스에서 타일의 행, 렬 개수 구하기
+	m_iColCount = (UINT)_AllTileSize.x / (UINT)m_vSlicePixel.x;
+	m_iRowCount = (UINT)_AllTileSize.y  / (UINT)m_vSlicePixel.y;
+
+	int iRow = m_vecTileData[_iTileIdx].iImgIdx / m_iColCount;
+	int iCol = m_vecTileData[_iTileIdx].iImgIdx % m_iColCount;
+
+	m_vecTileData[_iTileIdx].vLTUV = StartUV + Vec2(m_vSliceUV.x * iCol, m_vSliceUV.y * iRow);
+
+	m_bBufferUpdated = false;
+
 }

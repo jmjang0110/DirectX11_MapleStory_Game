@@ -216,19 +216,20 @@ void Animator2DUI::TextureSelect(DWORD_PTR _param)
 void Animator2DUI::render_update_CreateAnim2DTool()
 {
 		// 모달 사이즈 조정 
-		Vec2 Size = CDevice::GetInst()->GetRenderResolution();
+		/*Vec2 Size = CDevice::GetInst()->GetRenderResolution();
 		Size.x -= 50.f * 4;
 		Size.y -= 50.f * 4;
 		ImGui::SetNextWindowSize(Size);
-		ImVec2 vWinSize = ImGui::GetWindowContentRegionMax();
+		ImVec2 vWinSize = ImGui::GetWindowContentRegionMax();*/
 
 		
 		// 모달은 가운데 고정 ( 위치 조정 )
-		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-		ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		/*ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));*/
 		//bool bModal = IsModal();
 		ImGui::OpenPopup("Create Animation 2D!");
-		if (ImGui::BeginPopupModal("Create Animation 2D!", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		bool unused_open = true;
+		if (ImGui::BeginPopupModal("Create Animation 2D!",&unused_open))
 		{
 			ImGui::Text("Create Animation by Texture 2D \n\n");
 			ImGui::SameLine();
@@ -325,6 +326,7 @@ void Animator2DUI::SelectAtlasTexture()
 	if (nullptr != m_pChoosenAtlas)
 		m_pChoosenAtlas_TexKey = string(m_pChoosenAtlas->GetKey().begin(), m_pChoosenAtlas->GetKey().end());
 
+	ImGui::PushItemWidth(300.f);
 	if (ImGui::BeginCombo("Atlas Texture", m_pChoosenAtlas_TexKey.c_str(), ImGuiComboFlags_NoArrowButton))
 	{
 
@@ -344,6 +346,7 @@ void Animator2DUI::SelectAtlasTexture()
 	}
 
 
+	ImGui::PopItemWidth();
 
 
 }

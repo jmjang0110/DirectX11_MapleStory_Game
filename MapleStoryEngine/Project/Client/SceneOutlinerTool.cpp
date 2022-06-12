@@ -353,9 +353,8 @@ TreeNode* SceneOutlinerTool::PushLayerToTree(CLayer* _pLayer, TreeNode* _pDestNo
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
 		, "Layer - " + string(_pLayer->GetName().begin(), _pLayer->GetName().end())
 		, (DWORD_PTR)_pLayer);
+
 	pNode->SetObjType(OBJECT_TYPE::LAYER);
-
-
 	return pNode;
 
 }

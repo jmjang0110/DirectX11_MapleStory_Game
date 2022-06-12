@@ -97,10 +97,11 @@ void UI::render()
 
 			for (size_t i = 0; i < m_vecChildUI.size(); ++i)
 			{
-				m_vecChildUI[i]->render();
 
-				if (m_vecChildUI[i]->IsActive())
-					ImGui::Separator();
+					m_vecChildUI[i]->render();
+
+					if (m_vecChildUI[i]->IsActive())
+						ImGui::Separator();
 			}
 
 			ImGui::EndChild();

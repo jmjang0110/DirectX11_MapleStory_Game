@@ -182,27 +182,24 @@ void CSceneMgr::init()
 
 	pObject->AddComponent(new CTileMap);
 
-	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"TileMapAtlas", L"texture//TILE_32.bmp");
+	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//yellowToyCastle//yellowToyCastleTile.png");
 	pObject->TileMap()->SetAtlasTex(pTileAtlas);
-	pObject->TileMap()->SetTileSize(Vec2(64.f, 64.f));
-	pObject->TileMap()->SetTileMapCount(4, 4);
-	
+	pObject->TileMap()->SetTileSize(Vec2(30.f, 30.f));
+	pObject->TileMap()->SetTileMapCount(9, 16);
 
-	for (int i = 0; i < 8; ++i)
+
+	for (int i = 0; i < 9 * 16; ++i)
 	{
-		pObject->TileMap()->SetTileData(i, 0);
+		pObject->TileMap()->SetTileData(i, i);
 	}
 
-	for (int i = 8; i < 16; ++i)
+	/*for (int i = 8; i < 16; ++i)
 	{
 		pObject->TileMap()->SetTileData(i, 2);
 	}
-	pObject->TileMap()->SetTileData(7, -1);
+	pObject->TileMap()->SetTileData(7, -1);*/
 
 	m_pCurScene->AddObject(pObject, L"Tile");
-
-
-
 
 
 	// 충돌 레이어 설정

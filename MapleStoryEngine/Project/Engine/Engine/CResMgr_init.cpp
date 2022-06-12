@@ -211,7 +211,8 @@ void CResMgr::CreateEngineShader()
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
 
 	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_MASKED);
-	pShader->SetRSType(RS_TYPE::CULL_NONE);		
+	pShader->SetRSType(RS_TYPE::CULL_NONE);	
+	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
 
 	pShader->AddTexParamInfo(L"TileMapAtlas", TEX_PARAM::TEX_0);
 

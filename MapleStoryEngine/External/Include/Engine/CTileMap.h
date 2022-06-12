@@ -48,6 +48,13 @@ public:
     UINT GetTileCountX() { return m_iTileCountX; }
     UINT GetTileCountY() { return m_iTileCountY; }
 
+    // for MapleStory 
+    // - 수동으로 UV 값을 조정 하고 m_pAtlasTex->width 이런게 아니라 
+    // 내가 지정한 tile 의 전체 크기로 세팅되게 
+    void SetTileSize(Vec2 _vPixelSize, Vec2 _AllTileSize);
+    void SetTileData(int _iTileIdx, int _iImgIdx, Vec2 _AllTileSize, Vec2 StartPos_px);
+
+
     // ===============================
 
 public:
