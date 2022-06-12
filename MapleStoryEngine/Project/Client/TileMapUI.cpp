@@ -249,7 +249,7 @@ void TileMapUI::EditorUpdate()
 			// 자동으로 다음 타일로 변환 
 			wstring tileName = m_pSelected_Tile->Name;
 
-			int infonum = _wtoi(&tileName[0]); //  "0_bsc", "1_bsc", "2_bsc"
+			int infonum = _wtoi(&tileName[0]); //  "0_bsc" -> "1_bsc" -> "2_bsc" ~~~
 			if (infonum + 1 < m_pSelected_Tile->_parent->num)
 			{
 				wstring nextTileNum = std::to_wstring(infonum + 1);
@@ -418,43 +418,293 @@ TreeNode* TileMapUI::Push_YellowToyCastleTile_toTree(TreeNode* _pDestNode)
 	TreeNode* PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
 
+	// "enH0" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"enH0";
+	pPack->num = 3;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
 
+	// "enH0" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"enH1";
+	pPack->num = 3;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
 
-	
+	// "enH0" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"enV0";
+	pPack->num = 2;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+
+	// "enH0" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"enV1";
+	pPack->num = 2;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+
+	// "edDU" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"edDU";
+	pPack->num = 4;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+
+	// "sIL" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"sIL";
+	pPack->num = 2;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+
+	// "sIR" - Tile Package
+	pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"sIR";
+	pPack->num = 2;
+	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+
 	return nullptr;
 
 }
 
-void TileMapUI::CreateNewTilesInfo(TreeNode* _pDestNode, TilePackage* _pPackage,TileImgFile* _pimgFile)
+void TileMapUI::CreateNewTilesInfo(TreeNode* _pDestNode, TilePackage* _pPackage, TileImgFile* _pimgFile)
 {
+	if (_pPackage->name == L"bsc")
+	{
+		// Create bsc info
+		int imgidx = 0;
+		for (int i = 0; i < _pPackage->num; ++i)
+		{
+			Tile* pTile = new Tile;
+			string number;
+			pTile->Name = std::to_wstring(i) + L"_bsc";
+			pTile->_parent = _pPackage;
+			pTile->iImgIdxNum = 6;
+			pTile->iRow = 2;
+			pTile->iCol = 3;
 
-	// Create bsc info
-	int imgidx = 0;
-	for (int i = 0; i < 6; ++i)
+
+			pTile->vTilesInfo.push_back(TileInfo(imgidx));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 2));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 9));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 10));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 11));
+
+			_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+			PushTiletoTree(pTile, _pDestNode);
+
+			imgidx += 3;
+
+			if (i == 2)
+				imgidx = 18;
+		}
+	}
+
+	else if (_pPackage->name == L"enH0")
+	{
+		// Create enH0 info
+		int imgidx = 36;
+		for (int i = 0; i < _pPackage->num; ++i)
+		{
+			Tile* pTile = new Tile;
+			string number;
+			pTile->Name = std::to_wstring(i) + L"_enH0";
+			pTile->_parent = _pPackage;
+			pTile->iImgIdxNum = 3;
+			pTile->iRow = 1;
+			pTile->iCol = 3;
+
+
+			pTile->vTilesInfo.push_back(TileInfo(imgidx));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 2));
+
+			_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+			PushTiletoTree(pTile, _pDestNode);
+
+			imgidx += 3;
+		}
+	}
+	else if (_pPackage->name == L"enH1")
+	{
+		// Create enH0 info
+		int imgidx = 45;
+		for (int i = 0; i < _pPackage->num; ++i)
+		{
+			Tile* pTile = new Tile;
+			string number;
+			pTile->Name = std::to_wstring(i) + L"enH1";
+			pTile->_parent = _pPackage;
+			pTile->iImgIdxNum = 3;
+			pTile->iRow = 1;
+			pTile->iCol = 3;
+
+
+			pTile->vTilesInfo.push_back(TileInfo(imgidx));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 2));
+
+			_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+			PushTiletoTree(pTile, _pDestNode);
+
+			imgidx += 3;
+		}
+	}
+	else if (_pPackage->name == L"enV0")
+	{
+		// Create enH0 info
+		int imgidx = 63;
+		for (int i = 0; i < _pPackage->num; ++i)
+		{
+			Tile* pTile = new Tile;
+			string number;
+			pTile->Name = std::to_wstring(i) + L"enV0";
+			pTile->_parent = _pPackage;
+			pTile->iImgIdxNum = 2;
+			pTile->iRow = 2;
+			pTile->iCol = 1;
+
+
+			pTile->vTilesInfo.push_back(TileInfo(imgidx));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 9));
+
+			_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+			PushTiletoTree(pTile, _pDestNode);
+
+			imgidx += 1;
+		}
+	}
+	else if (_pPackage->name == L"enV1")
+	{
+		// Create enH0 info
+		int imgidx = 66;
+		for (int i = 0; i < _pPackage->num; ++i)
+		{
+			Tile* pTile = new Tile;
+			string number;
+			pTile->Name = std::to_wstring(i) + L"enV1";
+			pTile->_parent = _pPackage;
+			pTile->iImgIdxNum = 4;
+			pTile->iRow = 2;
+			pTile->iCol = 2;
+
+
+			pTile->vTilesInfo.push_back(TileInfo(imgidx));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 9));
+			pTile->vTilesInfo.push_back(TileInfo(imgidx + 10));
+
+
+			_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+			PushTiletoTree(pTile, _pDestNode);
+
+			imgidx += 2;
+		}
+	}
+	else if (_pPackage->name == L"edDU")
+	{
+	// Create enH0 info
+	int imgidx = 54;
+	for (int i = 0; i < _pPackage->num; ++i)
 	{
 		Tile* pTile = new Tile;
 		string number;
-		pTile->Name = std::to_wstring(i) + L"_bsc";
+		pTile->Name = std::to_wstring(i) + L"edDU";
 		pTile->_parent = _pPackage;
-		pTile->iImgIdxNum = 6;
-		pTile->iRow = 2;
+		pTile->iImgIdxNum = 4;
+		pTile->iRow = 1;
+		pTile->iCol = 2;
+
+
+		pTile->vTilesInfo.push_back(TileInfo(imgidx));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
+
+		_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+		PushTiletoTree(pTile, _pDestNode);
+
+		imgidx += 2;
+	}
+	}
+	else if (_pPackage->name == L"sIL")
+	{
+	// Create enH0 info
+	int imgidx = 90;
+	for (int i = 0; i < _pPackage->num; ++i)
+	{
+		Tile* pTile = new Tile;
+		string number;
+		pTile->Name = std::to_wstring(i) + L"sIL";
+		pTile->_parent = _pPackage;
+		pTile->iImgIdxNum = 9;
+		pTile->iRow = 3;
 		pTile->iCol = 3;
 
 
 		pTile->vTilesInfo.push_back(TileInfo(imgidx));
 		pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
 		pTile->vTilesInfo.push_back(TileInfo(imgidx + 2));
+
 		pTile->vTilesInfo.push_back(TileInfo(imgidx + 9));
-		pTile->vTilesInfo.push_back(TileInfo(imgidx + 10));
-		pTile->vTilesInfo.push_back(TileInfo(imgidx + 11));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 9 + 1));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 9 + 2));
+
+
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 18));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 18 + 1));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 18 + 2));
 
 		_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
 		PushTiletoTree(pTile, _pDestNode);
 
-		imgidx += 3;
+		imgidx += 27;
+	}
+	}
 
-		if (i == 2)
-			imgidx = 18;
+	else if (_pPackage->name == L"sIR")
+	{
+	// Create enH0 info
+	int imgidx = 93;
+	for (int i = 0; i < _pPackage->num; ++i)
+	{
+		Tile* pTile = new Tile;
+		string number;
+		pTile->Name = std::to_wstring(i) + L"sIR";
+		pTile->_parent = _pPackage;
+		pTile->iImgIdxNum = 9;
+		pTile->iRow = 3;
+		pTile->iCol = 3;
+
+
+		pTile->vTilesInfo.push_back(TileInfo(imgidx));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 1));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 2));
+
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 9));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 9 + 1));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 9 + 2));
+
+
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 18));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 18 + 1));
+		pTile->vTilesInfo.push_back(TileInfo(imgidx + 18 + 2));
+
+		_pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
+		PushTiletoTree(pTile, _pDestNode);
+
+		imgidx += 27;
+	}
 	}
 
 }
