@@ -17,16 +17,12 @@
     sIRD - 우측 경사 (계단 - Vertical Flip)
 
 */
-//  타일 정보 
-
-
 class TreeUI;
 class CTexture;
 class TreeNode;
 class CGameObject;
 
 // ============ 정보 ============
-
 struct TileInfo
 {
     TileInfo(int _imgidx = -1) { iImgIdx = _imgidx; }
@@ -35,20 +31,27 @@ struct TileInfo
 
 
 // ============ 타일 ============
-// bsc, enH0 ...
 struct Tile
 {
-    struct TileImgFile*     _parent;
-    wstring                 Name;           // 타일 이미지 이름 
+    struct TilePackage*     _parent;
+    wstring                 Name;            // 타일 이미지 이름 
    
-    int                     iImgIdxNum;    // 완성된 타일을 그리는데 필요한 이미지인덱스 개수 
-    int                     iRow;          // 행으로 몇개 타일 
-    int                     iCol;           // 열로 몇개 타일 
+    int                     iImgIdxNum;      // 완성된 타일을 그리는데 필요한 이미지인덱스 개수 
+    int                     iRow;            // 행으로 몇개 타일 
+    int                     iCol;            // 열로 몇개 타일 
 
     vector<TileInfo>        vTilesInfo;
 
 };
 
+// ============ 패키지 ==========
+struct TilePackage
+{
+    struct TileImgFile* _parent;
+
+    wstring name;                           // 패키지 이름 
+    int num;                                // 패키지가 갖고 있는 타일 개수 
+};
 
 // ============ img ============
 // img 파일 
@@ -56,10 +59,13 @@ struct TileImgFile
 {
     wstring                 Name;
 
-    Ptr<CTexture>           pAtlasTex;  // 타일 이미지
+    Ptr<CTexture>           pAtlasTex;      // 타일 이미지
     map<wstring, Tile*>     imgFile;
 
 };
+
+
+
 
 class TileMapUI :
     public ComponentUI
@@ -92,11 +98,11 @@ public:
     TreeNode* Push_YellowToyCastleTile_toTree(TreeNode* _pDestNode);
 
 
-    TreeNode* PushTileFiletoTree(wstring FileName, TileImgFile* pimgFile, TreeNode* _pDestNode);
-    TreeNode* PushDummyFiletoTree(wstring FIleName, TreeNode* _pDestNode);
-    TreeNode* PushTiletoTree(Tile* _pTile, TreeNode* _pDestNode);
-
-    void CreateNewTile(TreeNode* _pDestNode, TileImgFile* _pimgFile);
+    TreeNode* PushTileFiletoTree(wstring FileName, TileImgFile* pimgFile, TreeNode* _pDestNode); // img
+    TreeNode* PushPackageFiletoTree(TilePackage* pPack, TreeNode* _pDestNode);                   //  pack
+    TreeNode* PushTiletoTree(Tile* _pTile, TreeNode* _pDestNode);                                //  Tile
+     
+    void CreateNewTilesInfo(TreeNode* _pDestNode, TilePackage* _pPackage, TileImgFile* _pimgFile);                       //  info 
 
 
 public:

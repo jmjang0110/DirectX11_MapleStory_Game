@@ -36,7 +36,7 @@ using std::wstring;
 #include <assert.h>
 #include <commdlg.h>
 
-
+#include <wchar.h>
 
 #include "define.h"
 #include "struct.h"

@@ -232,7 +232,8 @@ void TileMapUI::EditorUpdate()
 
 							}
 						}
-					
+
+						
 				}
 				// ======================
 			}
@@ -241,6 +242,41 @@ void TileMapUI::EditorUpdate()
 
 	}
 
+	if (KEY_AWAY(KEY::LBTN))
+	{
+		if (m_pSelected_Tile)
+		{
+			// 자동으로 다음 타일로 변환 
+			wstring tileName = m_pSelected_Tile->Name;
+
+			int infonum = _wtoi(&tileName[0]); //  "0_bsc", "1_bsc", "2_bsc"
+			if (infonum + 1 < m_pSelected_Tile->_parent->num)
+			{
+				wstring nextTileNum = std::to_wstring(infonum + 1);
+				tileName[0] = nextTileNum[0];
+				m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+
+				map<wstring, Tile*>::iterator iter = m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+
+				if (iter != m_pSelected_Tile->_parent->_parent->imgFile.end())
+					m_pSelected_Tile = iter->second;
+			}
+			else
+			{
+				wstring nextTileNum = std::to_wstring(0);
+				tileName[0] = nextTileNum[0];
+
+				m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+
+				map<wstring, Tile*>::iterator iter = m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+
+				if (iter != m_pSelected_Tile->_parent->_parent->imgFile.end())
+					m_pSelected_Tile = iter->second;
+
+			}
+		}
+	
+	}
 
 	if (KEY_PRESSED(KEY::RBTN))
 	{
@@ -328,12 +364,12 @@ TreeNode* TileMapUI::PushTileFiletoTree(const wstring _FileName, TileImgFile* pi
 	return pNode;
 }
 
-TreeNode* TileMapUI::PushDummyFiletoTree(wstring FIleName, TreeNode* _pDestNode)
+TreeNode* TileMapUI::PushPackageFiletoTree(TilePackage * pPack, TreeNode* _pDestNode)
 {
-
+	
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
-		, string(FIleName.begin(), FIleName.end())
-		, (DWORD_PTR)nullptr);
+		, string(pPack->name.begin(), pPack->name.end())
+		, (DWORD_PTR)pPack);
 
 	return pNode;
 }
@@ -357,9 +393,6 @@ void TileMapUI::TileClicked(DWORD_PTR _dw)
 	if (OBJECT_TYPE::NONE == pNode->GetObjType()) // 더미노드 라고 정함 
 		return;
 
-	if (pNode->GetName() == "darkpurpleToyCaslte.img")
-		return;
-
 	DWORD_PTR data = pNode->GetData();
 	m_pSelected_Tile = (Tile*)data;
 
@@ -377,125 +410,22 @@ TreeNode* TileMapUI::Push_YellowToyCastleTile_toTree(TreeNode* _pDestNode)
 	wstring TilemapRelativePath = L"texture//tilemap//" + pimgFile->Name + L"//";
 	pimgFile->pAtlasTex = CResMgr::GetInst()->Load<CTexture>(pimgFile->Name, TilemapRelativePath + pimgFile->Name + L"Tile.png");
 
-	// tile - bsc 
-	wstring TilePackageName = L"bsc";
-	TreeNode* PackageNode = PushDummyFiletoTree(TilePackageName, _pDestNode);
+	// "bsc" - Tile Package
+	TilePackage* pPack = new TilePackage;
+	pPack->_parent = pimgFile;
+	pPack->name = L"bsc";
+	pPack->num = 6;
+	TreeNode* PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
+	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
 
 
-	CreateNewTile(PackageNode, pimgFile);
 
-	//Tile* pTile = new Tile;
-	//pTile->Name = L"bsc_0";
-	//pTile->_parent = pimgFile;
-	//pTile->iImgIdxNum = 6;
-	//pTile->iRow = 2;
-	//pTile->iCol = 3;
-
-
-	//pTile->vTilesInfo.push_back(TileInfo(0));
-	//pTile->vTilesInfo.push_back(TileInfo(1));
-	//pTile->vTilesInfo.push_back(TileInfo(2));
-	//pTile->vTilesInfo.push_back(TileInfo(9));
-	//pTile->vTilesInfo.push_back(TileInfo(10));
-	//pTile->vTilesInfo.push_back(TileInfo(11));
-
-	//pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
-	//PushTiletoTree(pTile, PackageNode);
-
-
-	//pTile = new Tile;
-	//pTile->Name = L"bsc_1";
-	//pTile->_parent = pimgFile;
-	//pTile->iImgIdxNum = 6;
-	//pTile->iRow = 2;
-	//pTile->iCol = 3;
-
-	//pTile->vTilesInfo.push_back(TileInfo(3));
-	//pTile->vTilesInfo.push_back(TileInfo(4));
-	//pTile->vTilesInfo.push_back(TileInfo(5));
-	//pTile->vTilesInfo.push_back(TileInfo(12));
-	//pTile->vTilesInfo.push_back(TileInfo(13));
-	//pTile->vTilesInfo.push_back(TileInfo(14));
-
-	//pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
-	//PushTiletoTree(pTile, PackageNode);
-
-
-	//pTile = new Tile;
-	//pTile->Name = L"bsc_2";
-	//pTile->_parent = pimgFile;
-	//pTile->iImgIdxNum = 6;
-	//pTile->iRow = 2;
-	//pTile->iCol = 3;
-
-	//pTile->vTilesInfo.push_back(TileInfo(6));
-	//pTile->vTilesInfo.push_back(TileInfo(7));
-	//pTile->vTilesInfo.push_back(TileInfo(8));
-	//pTile->vTilesInfo.push_back(TileInfo(15));
-	//pTile->vTilesInfo.push_back(TileInfo(16));
-	//pTile->vTilesInfo.push_back(TileInfo(17));
-
-	//pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
-	//PushTiletoTree(pTile, PackageNode);
-
-	//pTile = new Tile;
-	//pTile->Name = L"bsc_3";
-	//pTile->_parent = pimgFile;
-	//pTile->iImgIdxNum = 6;
-	//pTile->iRow = 2;
-	//pTile->iCol = 3;
-
-	//pTile->vTilesInfo.push_back(TileInfo(18));
-	//pTile->vTilesInfo.push_back(TileInfo(19));
-	//pTile->vTilesInfo.push_back(TileInfo(20));
-	//pTile->vTilesInfo.push_back(TileInfo(27));
-	//pTile->vTilesInfo.push_back(TileInfo(28));
-	//pTile->vTilesInfo.push_back(TileInfo(29));
-
-	//pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
-	//PushTiletoTree(pTile, PackageNode);
-
-
-	//pTile = new Tile;
-	//pTile->Name = L"bsc_4";
-	//pTile->_parent = pimgFile;
-	//pTile->iImgIdxNum = 6;
-	//pTile->iRow = 2;
-	//pTile->iCol = 3;
-
-	//pTile->vTilesInfo.push_back(TileInfo(21));
-	//pTile->vTilesInfo.push_back(TileInfo(22));
-	//pTile->vTilesInfo.push_back(TileInfo(23));
-	//pTile->vTilesInfo.push_back(TileInfo(30));
-	//pTile->vTilesInfo.push_back(TileInfo(31));
-	//pTile->vTilesInfo.push_back(TileInfo(32));
-
-	//pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
-	//PushTiletoTree(pTile, PackageNode);
-
-	//pTile = new Tile;
-	//pTile->Name = L"bsc_5";
-	//pTile->_parent = pimgFile;
-	//pTile->iImgIdxNum = 6;
-	//pTile->iRow = 2;
-	//pTile->iCol = 3;
-
-	//pTile->vTilesInfo.push_back(TileInfo(24));
-	//pTile->vTilesInfo.push_back(TileInfo(25));
-	//pTile->vTilesInfo.push_back(TileInfo(26));
-	//pTile->vTilesInfo.push_back(TileInfo(33));
-	//pTile->vTilesInfo.push_back(TileInfo(34));
-	//pTile->vTilesInfo.push_back(TileInfo(35));
-
-	//pimgFile->imgFile.insert(make_pair(pTile->Name, pTile));
-	//PushTiletoTree(pTile, PackageNode);
-
-
+	
 	return nullptr;
 
 }
 
-void TileMapUI::CreateNewTile(TreeNode* _pDestNode, TileImgFile* _pimgFile)
+void TileMapUI::CreateNewTilesInfo(TreeNode* _pDestNode, TilePackage* _pPackage,TileImgFile* _pimgFile)
 {
 
 	// Create bsc info
@@ -504,8 +434,8 @@ void TileMapUI::CreateNewTile(TreeNode* _pDestNode, TileImgFile* _pimgFile)
 	{
 		Tile* pTile = new Tile;
 		string number;
-		pTile->Name = L"bsc_" + std::to_wstring(i);
-		pTile->_parent = _pimgFile;
+		pTile->Name = std::to_wstring(i) + L"_bsc";
+		pTile->_parent = _pPackage;
 		pTile->iImgIdxNum = 6;
 		pTile->iRow = 2;
 		pTile->iCol = 3;
@@ -526,8 +456,6 @@ void TileMapUI::CreateNewTile(TreeNode* _pDestNode, TileImgFile* _pimgFile)
 		if (i == 2)
 			imgidx = 18;
 	}
-
-	
 
 }
 
