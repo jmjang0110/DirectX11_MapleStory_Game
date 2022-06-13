@@ -138,29 +138,66 @@ void TileMapUI::render_update()
 
 	// Tilemap list
 
-	//ImGui::BeginChild("tilemaplist", ImVec2(150.f, 200.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+	
 	m_TreeUI->render();
-	//ImGui::EndChild();
+	
 
 	// EditorMode Button 
 	ImGui::Checkbox("EditorMode", &m_bEditMode);
 	ImGui::Checkbox("Show Grid", &m_bShowGrid);
+	ImGui::Checkbox("Auto Set Next Tile", &m_bAutoSetNextTile);
+
 
 	if (m_bShowGrid == true)
 		GetTargetObject()->TileMap()->SetShowGrid(1);
 	else
 		GetTargetObject()->TileMap()->SetShowGrid(0);
 
-
-
 	if(m_bEditMode)
 		EditorUpdate();
+
+
+	//ImGui::BeginChild("Selected Tile", ImVec2(200.f, 200.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+
+	if (nullptr != m_pSelected_Tile)
+	{
+		Ptr<CTexture> SelectedTile_Atlas = m_pSelected_Tile->_parent->_parent->pAtlasTex;
+		ImTextureID _texid = SelectedTile_Atlas->GetSRV().Get();
+
+		int MaxRow = SelectedTile_Atlas->Height() / 30.f;  // 행
+		int MaxCol = SelectedTile_Atlas->Width() /  30.f ; // 열 
+
+		ImVec2 size(30.f * m_pSelected_Tile->iCol, 30.f * m_pSelected_Tile->iRow);
+		ImGui::InvisibleButton("##empty", size);
+		const ImVec2 p0 = ImGui::GetItemRectMin();
+		const ImVec2 p1 = ImGui::GetItemRectMax();
+
+		ImGui::PushClipRect(p0, p1, true);
+		draw_list->AddRect(p0, p1, IM_COL32(120, 120, 120, 255)); // RGBA
+
+		int imgeIDx = m_pSelected_Tile->vTilesInfo[0].iImgIdx; // 처음것을 기준 a
+		Vec2 vLT = Vec2((imgeIDx % MaxCol) * 30.f, (imgeIDx / MaxCol) * 30.f);
+		Vec2 vSlice = Vec2(size.x, size.y);
+
+		ImVec2 uv0 = ImVec2((vLT.x) / SelectedTile_Atlas->Width(), (vLT.y) / SelectedTile_Atlas->Height());
+		ImVec2 uv1 = ImVec2((vLT.x + vSlice.x) / SelectedTile_Atlas->Width()
+			, (vLT.y + vSlice.y) / SelectedTile_Atlas->Height());
+
+		draw_list->AddImage(_texid, p0, p1, uv0, uv1);
+
+
+		ImGui::PopClipRect();
+	}
+	//ImGui::EndChild();
 
 
 }
 
 void TileMapUI::EditorUpdate()
 {
+
 	if (KEY_PRESSED(KEY::LBTN))
 	{
 
@@ -207,6 +244,8 @@ void TileMapUI::EditorUpdate()
 			if (0 <= vRealPos.x - vTileMapLT.x && vRealPos.x - vTileMapLT.x <= TileScale.x &&
 				0 <= vTileMapLT.y - vRealPos.y && vTileMapLT.y - vRealPos.y <= TileScale.y)
 			{
+				m_bTilemapInnerClicked = true;
+
 				int iCol = (vRealPos.x - vTileMapLT.x) / (GetTargetObject()->TileMap()->GetTileSize().x);
 				int iRow = (vTileMapLT.y - vRealPos.y) / (GetTargetObject()->TileMap()->GetTileSize().y);
 
@@ -215,9 +254,13 @@ void TileMapUI::EditorUpdate()
 
 				// test 클릭되면일단 무조건 0번이미지 인덱스로 타일 세팅 ** Test =
 				//GetTargetObject()->TileMap()->SetTileData(iIdx, 0);
+				tTileData tileData = GetTargetObject()->TileMap()->GetTileData(iIdx);
+				bool bTileSet = true;
+				if (-1 != tileData.iImgIdx)
+					bTileSet = false;
 
 				// 타일 세팅 ! ======================
-				if (m_pSelected_Tile)
+				if (m_pSelected_Tile && bTileSet)
 				{
 					
 						for (int i = 0; i < m_pSelected_Tile->iRow; ++i)
@@ -244,37 +287,42 @@ void TileMapUI::EditorUpdate()
 
 	if (KEY_AWAY(KEY::LBTN))
 	{
-		if (m_pSelected_Tile)
+		if (m_bAutoSetNextTile && m_bTilemapInnerClicked)
 		{
-			// 자동으로 다음 타일로 변환 
-			wstring tileName = m_pSelected_Tile->Name;
-
-			int infonum = _wtoi(&tileName[0]); //  "0_bsc" -> "1_bsc" -> "2_bsc" ~~~
-			if (infonum + 1 < m_pSelected_Tile->_parent->num)
+			m_bTilemapInnerClicked = false;
+			if (m_pSelected_Tile)
 			{
-				wstring nextTileNum = std::to_wstring(infonum + 1);
-				tileName[0] = nextTileNum[0];
-				m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+				// 자동으로 다음 타일로 변환 
+				wstring tileName = m_pSelected_Tile->Name;
 
-				map<wstring, Tile*>::iterator iter = m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+				int infonum = _wtoi(&tileName[0]); //  "0_bsc" -> "1_bsc" -> "2_bsc" ~~~
+				if (infonum + 1 < m_pSelected_Tile->_parent->num)
+				{
+					wstring nextTileNum = std::to_wstring(infonum + 1);
+					tileName[0] = nextTileNum[0];
+					m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
 
-				if (iter != m_pSelected_Tile->_parent->_parent->imgFile.end())
-					m_pSelected_Tile = iter->second;
-			}
-			else
-			{
-				wstring nextTileNum = std::to_wstring(0);
-				tileName[0] = nextTileNum[0];
+					map<wstring, Tile*>::iterator iter = m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
 
-				m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+					if (iter != m_pSelected_Tile->_parent->_parent->imgFile.end())
+						m_pSelected_Tile = iter->second;
+				}
+				else
+				{
+					wstring nextTileNum = std::to_wstring(0);
+					tileName[0] = nextTileNum[0];
 
-				map<wstring, Tile*>::iterator iter = m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
+					m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
 
-				if (iter != m_pSelected_Tile->_parent->_parent->imgFile.end())
-					m_pSelected_Tile = iter->second;
+					map<wstring, Tile*>::iterator iter = m_pSelected_Tile->_parent->_parent->imgFile.find(tileName);
 
+					if (iter != m_pSelected_Tile->_parent->_parent->imgFile.end())
+						m_pSelected_Tile = iter->second;
+
+				}
 			}
 		}
+		
 	
 	}
 

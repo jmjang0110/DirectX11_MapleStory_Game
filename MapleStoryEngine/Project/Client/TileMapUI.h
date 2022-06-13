@@ -83,6 +83,10 @@ private:
 
     bool                            m_bEditMode;
     bool                            m_bShowGrid;
+    bool                            m_bAutoSetNextTile;
+
+    int                            m_bTilemapInnerClicked;
+
 
 
 

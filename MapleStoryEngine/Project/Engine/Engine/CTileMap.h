@@ -56,6 +56,7 @@ public:
     Vec2 GetTileSize() { return m_vSlicePixel; }
     UINT GetTileCountX() { return m_iTileCountX; }
     UINT GetTileCountY() { return m_iTileCountY; }
+    tTileData GetTileData(UINT _tileIdx) { return m_vecTileData[_tileIdx]; }
 
     // for MapleStory 
     // - 수동으로 UV 값을 조정 하고 m_pAtlasTex->width 이런게 아니라 

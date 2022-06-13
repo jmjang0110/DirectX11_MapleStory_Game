@@ -224,8 +224,8 @@ void Animator2DUI::render_update_CreateAnim2DTool()
 
 		
 		// 모달은 가운데 고정 ( 위치 조정 )
-		/*ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-		ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));*/
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
 		//bool bModal = IsModal();
 		ImGui::OpenPopup("Create Animation 2D!");
 		bool unused_open = true;
