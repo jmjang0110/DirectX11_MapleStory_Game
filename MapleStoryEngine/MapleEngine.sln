@@ -6,9 +6,15 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Project\Client\Client.vcxproj", "{D240BC4F-80FA-47BF-8625-38B36AA11105}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AAF7D402-37DF-46A7-8FB5-F32A8E210DD9} = {AAF7D402-37DF-46A7-8FB5-F32A8E210DD9}
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30} = {21468C71-A3D2-481E-B5FD-EC83EB026A30}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Project\Engine\Engine\Engine.vcxproj", "{AAF7D402-37DF-46A7-8FB5-F32A8E210DD9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Script", "Project\Script\Script.vcxproj", "{21468C71-A3D2-481E-B5FD-EC83EB026A30}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AAF7D402-37DF-46A7-8FB5-F32A8E210DD9} = {AAF7D402-37DF-46A7-8FB5-F32A8E210DD9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +40,14 @@ Global
 		{AAF7D402-37DF-46A7-8FB5-F32A8E210DD9}.Release|x64.Build.0 = Release|x64
 		{AAF7D402-37DF-46A7-8FB5-F32A8E210DD9}.Release|x86.ActiveCfg = Release|Win32
 		{AAF7D402-37DF-46A7-8FB5-F32A8E210DD9}.Release|x86.Build.0 = Release|Win32
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Debug|x64.ActiveCfg = Debug|x64
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Debug|x64.Build.0 = Debug|x64
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Debug|x86.ActiveCfg = Debug|Win32
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Debug|x86.Build.0 = Debug|Win32
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Release|x64.ActiveCfg = Release|x64
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Release|x64.Build.0 = Release|x64
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Release|x86.ActiveCfg = Release|Win32
+		{21468C71-A3D2-481E-B5FD-EC83EB026A30}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

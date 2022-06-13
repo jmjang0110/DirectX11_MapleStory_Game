@@ -23,10 +23,6 @@
 #include "CTileMap.h"
 #include "CParticleSystem.h"
 
-#include "CPlayerScript.h"
-#include "CCameraMoveScript.h"
-#include "CMissileScript.h"
-
 #include "CTexture.h"
 #include "CPrefab.h"
 

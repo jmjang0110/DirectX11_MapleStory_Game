@@ -11,6 +11,22 @@
 #include "framework.h"
 
 #include <crtdbg.h>
+
+// 엔진 라이브러리
 #include <Engine/global.h>
+
+#ifdef _DEBUG
+#pragma comment(lib, "Engine/Engine_debug.lib")
+#else
+#pragma comment(lib, "Engine/Engine.lib")
+#endif
+
+// 스크립트 라이브러리
+#ifdef _DEBUG
+#pragma comment(lib, "Script/Script_debug.lib")
+#else
+#pragma comment(lib, "Script/Script.lib")
+#endif
+
 
 #endif //PCH_H

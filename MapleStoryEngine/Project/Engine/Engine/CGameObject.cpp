@@ -16,9 +16,6 @@
 
 #include "CScript.h"
 
-#include "CPlayerScript.h"
-#include "CCameraMoveScript.h"
-
 CGameObject::CGameObject()
 	: m_arrCom{}
 	, m_pParent(nullptr)
@@ -499,11 +496,14 @@ void CGameObject::LoadFromFile(FILE* _pFile)
 		LoadWString(ScriptName, _pFile);
 		CScript* ScriptObj = nullptr;
 
+		/*
 		if (ScriptName == L"CPlayerScript")
 			ScriptObj = new CPlayerScript;
 		else if (ScriptName == L"CameraMoveScript")
 			ScriptObj = new CCameraMoveScript;
 
+		*/
+		
 		if (ScriptObj != nullptr)
 		{
 			ScriptObj->LoadFromFile(_pFile);

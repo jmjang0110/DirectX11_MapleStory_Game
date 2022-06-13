@@ -8,7 +8,7 @@
 #ifdef _DEBUG
 static UINT g_iFlag = D3DCOMPILE_DEBUG;
 #else
-UINT g_iFlag = 0;
+static UINT g_iFlag = 0;
 #endif
 //
 //CComputeShader::CComputeShader()

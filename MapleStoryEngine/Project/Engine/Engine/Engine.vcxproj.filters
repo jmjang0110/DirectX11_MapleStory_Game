@@ -73,9 +73,6 @@
     <ClInclude Include="CScript.h">
       <Filter>Engine\05. Component\13. Script</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayerScript.h">
-      <Filter>Engine\Scripts\PlayerScript</Filter>
-    </ClInclude>
     <ClInclude Include="CSceneMgr.h">
       <Filter>Engine\03. Manager\07. SceneMgr</Filter>
     </ClInclude>
@@ -87,9 +84,6 @@
     </ClInclude>
     <ClInclude Include="CCamera.h">
       <Filter>Engine\05. Component\02. Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="CCameraMoveScript.h">
-      <Filter>Engine\Scripts\CameraMoveScript</Filter>
     </ClInclude>
     <ClInclude Include="extern.h">
       <Filter>Engine\01. Header</Filter>
@@ -111,9 +105,6 @@
     </ClInclude>
     <ClInclude Include="CPrefab.h">
       <Filter>Engine\07. Resource\01. Prefab</Filter>
-    </ClInclude>
-    <ClInclude Include="CMissileScript.h">
-      <Filter>Engine\Scripts\MissileScript</Filter>
     </ClInclude>
     <ClInclude Include="CCollider2D.h">
       <Filter>Engine\05. Component\03. Collider2D</Filter>
@@ -153,9 +144,6 @@
     </ClInclude>
     <ClInclude Include="CFileMgr.h">
       <Filter>Engine\03. Manager\00. FileMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="CTilemapEditorScript.h">
-      <Filter>Engine\Scripts\TilemapEditorScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,9 +207,6 @@
     <ClCompile Include="CScript.cpp">
       <Filter>Engine\05. Component\13. Script</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayerScript.cpp">
-      <Filter>Engine\Scripts\PlayerScript</Filter>
-    </ClCompile>
     <ClCompile Include="CSceneMgr.cpp">
       <Filter>Engine\03. Manager\07. SceneMgr</Filter>
     </ClCompile>
@@ -233,9 +218,6 @@
     </ClCompile>
     <ClCompile Include="CCamera.cpp">
       <Filter>Engine\05. Component\02. Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="CCameraMoveScript.cpp">
-      <Filter>Engine\Scripts\CameraMoveScript</Filter>
     </ClCompile>
     <ClCompile Include="extern.cpp">
       <Filter>Engine\01. Header</Filter>
@@ -251,9 +233,6 @@
     </ClCompile>
     <ClCompile Include="CPrefab.cpp">
       <Filter>Engine\07. Resource\01. Prefab</Filter>
-    </ClCompile>
-    <ClCompile Include="CMissileScript.cpp">
-      <Filter>Engine\Scripts\MissileScript</Filter>
     </ClCompile>
     <ClCompile Include="CCollider2D.cpp">
       <Filter>Engine\05. Component\03. Collider2D</Filter>
@@ -297,9 +276,6 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="CFileMgr.cpp">
       <Filter>Engine\03. Manager\00. FileMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="CTilemapEditorScript.cpp">
-      <Filter>Engine\Scripts\TilemapEditorScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -360,18 +336,6 @@
     <Filter Include="Engine\05. Component\01. Transform">
       <UniqueIdentifier>{488a8bb6-ba8d-4d86-b598-aac9e9b015fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Scripts">
-      <UniqueIdentifier>{45e4af56-8f35-40e1-8e45-1791d97965d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripts\PlayerScript">
-      <UniqueIdentifier>{751fa7cd-dc6a-44bf-8707-4bcc218ac02e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripts\MonsterScript">
-      <UniqueIdentifier>{c976f5df-d9e9-4db0-b27d-1d34fdfc59ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripts\MissileScript">
-      <UniqueIdentifier>{fa0e7ff2-9b55-472f-b4bf-9cd386e6bf6f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\07. SceneMgr">
       <UniqueIdentifier>{e20420fd-ae7b-40d4-bebd-1d572f1dcc26}</UniqueIdentifier>
     </Filter>
@@ -401,9 +365,6 @@
     </Filter>
     <Filter Include="Engine\05. Component\13. Script">
       <UniqueIdentifier>{ff03e518-d9da-478d-89f0-592827240b1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripts\CameraMoveScript">
-      <UniqueIdentifier>{8f4a3cc4-13d9-495c-bd9b-c748f1185139}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\03. Manager\08. EventMgr">
       <UniqueIdentifier>{9eb39801-d890-4267-874b-0f039d783258}</UniqueIdentifier>
@@ -476,9 +437,6 @@
     </Filter>
     <Filter Include="Engine\03. Manager\00. FileMgr">
       <UniqueIdentifier>{f9b82a16-67bf-4619-a81b-c9a6bd7a233d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scripts\TilemapEditorScript">
-      <UniqueIdentifier>{dd3d68de-e7f8-48f8-9d97-3b23940f2143}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -2,9 +2,9 @@
 #include "CScript.h"
 
 
-CScript::CScript()
+CScript::CScript(int _iScriptType)
 	: CComponent(COMPONENT_TYPE::SCRIPT)
-	, m_iScriptID(-1)
+	, m_iScriptID(_iScriptType)
 {
 }
 

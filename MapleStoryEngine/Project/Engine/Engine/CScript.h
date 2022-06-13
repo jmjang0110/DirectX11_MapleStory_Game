@@ -19,6 +19,10 @@ private:
     const int  m_iScriptID;    // 스크립트 구별용도(스크립트 타입)
 
 public:
+    int GetScriptType() { return m_iScriptID; }
+
+
+public:
     virtual void start() {}
     virtual void update() {}
     virtual void lateupdate() {}
@@ -36,8 +40,9 @@ public:
     virtual void LoadFromFile(FILE* _pFile);
 
     // ======== File ============
+
 public:
-    CScript();
+    CScript(int _iScriptType);
     ~CScript();
 };
 
