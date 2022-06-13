@@ -67,6 +67,7 @@ void CSceneMgr::init()
 	CResMgr::GetInst()->Load<CTexture>(L"Tauromacis", L"texture\\Tauromacis.png");
 	CResMgr::GetInst()->Load<CTexture>(L"RedWheel", L"texture\\RedGearWheel.png");
 	CResMgr::GetInst()->Load<CTexture>(L"Back", L"Texture\\0_100.png");
+	CResMgr::GetInst()->Load<CTexture>(L"castle", L"Texture\\castle.png");
 
 	
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");

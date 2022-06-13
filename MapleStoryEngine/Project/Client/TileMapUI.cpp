@@ -102,13 +102,12 @@ void TileMapUI::render_update()
 	// TileCount
 	ImGui::PushItemWidth(100);
 	ImGui::Text("Tile Count");
-	ImGui::SameLine(150);
+	ImGui::SameLine(100);
 	ImGui::InputInt("##TileCountX", &m_iMapCountX);
 	ImGui::SameLine();
 	ImGui::InputInt("##TileCountY", &m_iMapCountY);
 
 
-	ImGui::SameLine();
 	if (ImGui::Button("Setting"))
 	{
 		int i = 0;
@@ -130,7 +129,7 @@ void TileMapUI::render_update()
 	float pxSlice[2] = { SlicePixel.x , SlicePixel.y };
 
 	ImGui::Text("Tile px Size");
-	ImGui::SameLine(150); 
+	ImGui::SameLine(100);
 	ImGui::InputFloat2("##TilepxSize", &pxSlice[0]);
 	m_pTargetObject->TileMap()->SetTileSize(Vec2(pxSlice[0], pxSlice[1]));
 	ImGui::PopItemWidth();
