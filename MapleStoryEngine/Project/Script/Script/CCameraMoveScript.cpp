@@ -12,6 +12,7 @@ CCameraMoveScript::CCameraMoveScript()
 	, m_fCamSpeed(500.f)
 	
 {
+
 }
 
 CCameraMoveScript::~CCameraMoveScript()

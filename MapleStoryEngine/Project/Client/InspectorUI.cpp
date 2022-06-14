@@ -122,43 +122,27 @@ InspectorUI::~InspectorUI()
 }
 
 
+
 void InspectorUI::update()
 {
-	/*if (KEY_TAP(KEY::I))
+	if (KEY_TAP(KEY::I))
 	{
 		if (IsActive())
 			Deactivate();
 		else
 			Activate();
-	}*/
-
-
-
-	//ImGui::End();
-
-
+	}
 }
 
 void InspectorUI::render_update()
 {
 
-	GameObjectTool_SubFunc();
-	ImGui::Separator();
 }
+
 
 
 void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 {
-	// ======== Todo =================
-	/*
-		내가 만든 SceneOutlinerTool 에서는 SCene Layer 가 눌리는 상황도 있으므로 
-		Scene Layer 가 눌렸을 때는 nullptr 가 들어가게 만들었다. 예외처리 하자 
-	*/
-	if (nullptr == _pTarget)
-		return;
-
-	// ==============================
-
 	m_pTargetObject = _pTarget;
 
 	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
@@ -195,6 +179,17 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 		pScriptUI->Activate();
 	}
 
+	// ScriptUI 가 더 많이 있을때
+	if (vecScripts.size() < m_vecScriptUI.size())
+	{
+		// 대응하는 UI 를 제외한 나머지 ScriptUI 들을 비활성화 한다.ㄴ
+		for (int i = vecScripts.size(); i < m_vecScriptUI.size(); ++i)
+		{
+			m_vecScriptUI[i]->Deactivate();
+		}
+	}
+
+
 
 	// ResInfoUI 비활성화
 	for (int i = 0; i < (int)RES_TYPE::END; ++i)
@@ -203,11 +198,9 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 			m_arrResUI[i]->Deactivate();
 	}
 }
+
 void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 {
-
-	m_pTargetRes = _pTargetRes;
-
 	// ComponentUI 전부 비활성화
 	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
 	{
@@ -215,13 +208,11 @@ void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 			m_arrComUI[i]->Deactivate();
 	}
 
-
 	// ScriptUI 전부 비활성화
 	for (size_t i = 0; i < m_vecScriptUI.size(); ++i)
 	{
 		m_vecScriptUI[i]->Deactivate();
 	}
-
 
 	// 활성화 시킬 RES_TYPE 을 알아냄
 	RES_TYPE type = _pTargetRes->GetResType();
@@ -243,7 +234,6 @@ void InspectorUI::SetTargetResource(CRes* _pTargetRes)
 
 }
 
-
 ScriptUI* InspectorUI::AddScriptUI()
 {
 	ScriptUI* pScriptUI = new ScriptUI;
@@ -254,6 +244,7 @@ ScriptUI* InspectorUI::AddScriptUI()
 
 	return pScriptUI;
 }
+
 
 // ============= TOdo =====================================================
 //  AddComponent 버튼에서 Component 를  눌렸을 때 일어날 함수 

@@ -1,2 +1,0 @@
-CodeGen.exe - 학원 선생님이 만드신 자동으로 
-ScriptMgr 에 코드 생성되게끔 만든 프로그램 

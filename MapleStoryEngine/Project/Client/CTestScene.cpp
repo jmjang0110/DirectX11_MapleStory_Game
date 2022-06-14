@@ -19,9 +19,10 @@
 #include <Engine/CTileMap.h>
 #include <Engine/CParticleSystem.h>
 
-#include <Engine/CPlayerScript.h>
-#include <Engine/CCameraMoveScript.h>
-#include <Engine/CMissileScript.h>
+#include <Script/CPlayerScript.h>
+#include <Script/CCameraMoveScript.h>
+#include <Script/CMissileScript.h>
+
 
 #include <Engine/CTestShader.h>
 
@@ -148,8 +149,8 @@ void CTestScene::CreateTestScene()
 	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();
 
 
-	//AddPlayer();
-	Add_MapleStory_Player(pCurScene);
+	AddPlayer(pCurScene);
+	//Add_MapleStory_Player(pCurScene);
 
 	pObject = new CGameObject;
 	pObject->SetName(L"tile");
@@ -182,8 +183,7 @@ void CTestScene::CreateTestScene()
 	pCurScene->AddObject(pObject, L"Tile");
 
 
-
-
+	pCurScene->SetSceneState(SCENE_STATE::PLAY);
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
 
 
@@ -212,6 +212,7 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CAnimator2D);
+	pObject->AddComponent(new CPlayerScript);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 50.f);
 	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
@@ -252,7 +253,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	pObj->AddComponent(new CPlayerScript);
+	//pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

@@ -10,6 +10,9 @@ private:
     CGameObject*    m_Filter;
     float           m_fCamSpeed;
 
+   // Vec2 i;
+
+
 public:
     void SetFilter(CGameObject* _pFilterObject){m_Filter = _pFilterObject;}
 

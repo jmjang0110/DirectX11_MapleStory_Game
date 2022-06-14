@@ -27,8 +27,42 @@ void CPlayerScript::start()
 
 void CPlayerScript::update()
 {
+	//// 힘의 크기 
+	//float fForce = m_vForce.Length();
+
+	//if (0.f != fForce)
+	//{
+	//	// 힘의 방향 
+	//	m_vForce.Normalize();
+
+	//	// 가속도의 크기 F = M * A
+	//	float fAccel = fForce / m_fMass;
+
+	//	// 가속도 
+	//	m_vAccel = m_vForce * m_vAccel;
+
+	//	// 속도
+	//	m_vVelocity += m_vAccel * DT;
+	//}
+
+	//
+
+	// 속도에 따른 이동 
+	
 
 	Vec3 vPos = Transform()->GetRelativePos();
+
+	/*if (KEY_PRESSED(KEY::LEFT))
+		m_vForce += Vec3(-200.f, 0.f, 0.f);
+
+	if (KEY_PRESSED(KEY::RIGHT))
+		m_vForce += Vec3(200.f, 0.f, 0.f);
+	if (KEY_PRESSED(KEY::UP))
+		m_vForce += Vec3(0.f, 200.f, 0.f);
+	if (KEY_PRESSED(KEY::DOWN))
+		m_vForce += Vec3(0.f, -200.f, 0.f);*/
+
+	//Move();
 
 	if (KEY_PRESSED(KEY::LEFT))
 		vPos.x -= DT * 100.f;
@@ -82,6 +116,9 @@ void CPlayerScript::update()
 	}
 
 	Burnning();
+
+	//m_vForce = Vec3(0.f, 0.f, 0.f);
+
 }
 
 void CPlayerScript::lateupdate()
@@ -100,6 +137,7 @@ void CPlayerScript::Burnning()
 	Ptr<CMaterial> pMtrl = MeshRender()->GetMaterial();
 	pMtrl->SetScalarParam(SCALAR_PARAM::FLOAT_0, &m_fBurnStrength);
 }
+
 
 
 
@@ -130,3 +168,31 @@ void CPlayerScript::LoadFromFile(FILE* _pFile)
 	fread(&m_bBurn, sizeof(bool), 1, _pFile);
 }
 
+
+//
+//void CPlayerScript::Move()
+//{
+//
+//
+//
+//
+//	// 이동 속력
+//	float fSpeed = m_vVelocity.Length();
+//
+//	if (0.f != fSpeed)
+//	{
+//		// 이동 방향 
+//		Vec3 vDir = m_vVelocity;
+//		
+//		vDir.Normalize();
+//		
+//		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+//
+//		vPos += m_vVelocity * DT;
+//
+//		GetOwner()->Transform()->SetRelativePos(vPos);
+//	}
+//
+//
+//
+//}

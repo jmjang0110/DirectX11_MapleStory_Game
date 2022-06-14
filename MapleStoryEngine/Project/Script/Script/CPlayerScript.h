@@ -7,11 +7,22 @@ class CPlayerScript :
     public CScript
 {
 private:
-   // Ptr<CPrefab>    m_pMissilePrefab;
+    Ptr<CPrefab>    m_pMissilePrefab;
     float           m_fSpeed;
 
     float           m_fBurnStrength;
     bool            m_bBurn;
+
+private:
+
+
+private:
+    float            m_vForce; // 크기 , 방향 
+    float            m_vAccel;
+    float            m_vVelocity;
+    float            m_fMass;
+
+  //  Vec3 i;
 
 public:
     virtual void start();
@@ -30,6 +41,10 @@ public:
 
 private:
     void Burnning();
+
+private:
+    void Move();
+
 
 
 

@@ -12,6 +12,10 @@
 #include "ImGui/imgui_impl_win32.h"
 #include "CTestScene.h"
 
+
+
+
+
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
@@ -42,9 +46,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     // Engine Core 초기화
-    POINT Resolution = POINT{ 1600, 900 };
-    //Resolution = POINT{ 800, 450 }; //  임시로 좀 작게... 너무 커.. 
-    if (FAILED(CCore::GetInst()->init(g_hWnd, Resolution)))
+    if (FAILED(CCore::GetInst()->init(g_hWnd, POINT{ 1600, 900 })))
     {
         return 0;
     }
