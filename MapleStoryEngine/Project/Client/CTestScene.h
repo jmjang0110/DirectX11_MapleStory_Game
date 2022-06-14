@@ -9,8 +9,8 @@ public:
 
 
 	// ===== Todo ======
-	void Add_MapleStory_Player(CScene* _pCurScene);
-	void AddPlayer(CScene* _pCurScene);
+	static void Add_MapleStory_Player(CScene* _pCurScene);
+	static void AddPlayer(CScene* _pCurScene);
 
 };
 

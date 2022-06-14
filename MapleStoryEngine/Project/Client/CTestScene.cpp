@@ -149,7 +149,7 @@ void CTestScene::CreateTestScene()
 
 
 	//AddPlayer();
-	//Add_MapleStory_Player(pCurScene);
+	Add_MapleStory_Player(pCurScene);
 
 	pObject = new CGameObject;
 	pObject->SetName(L"tile");
