@@ -2,8 +2,9 @@
 #include "ScriptUI.h"
 
 #include <Engine/CScript.h>
-#include <Script/CSCriptMgr.h>
+#include <Script/CScriptMgr.h>
 
+#include "ParamUI.h"
 
 ScriptUI::ScriptUI()
 	: UI("Script")
@@ -37,4 +38,30 @@ void ScriptUI::render_update()
 
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
+
+	const vector<tScriptParamInfo>& vecParam = m_pTargetScript->GetScriptParam();
+
+	for (size_t i = 0; i < vecParam.size(); ++i)
+	{
+		switch (vecParam[i].eType)
+		{
+		case SCRIPTPARAM_TYPE::INT:
+			ParamUI::Param_Int(vecParam[i].strParamName, (int*)vecParam[i].pParam);
+			break;
+		case SCRIPTPARAM_TYPE::FLOAT:
+			ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam);
+			break;
+		case SCRIPTPARAM_TYPE::VEC2:
+			ParamUI::Param_Vec2(vecParam[i].strParamName, (Vec2*)vecParam[i].pParam);
+			break;
+		case SCRIPTPARAM_TYPE::VEC4:
+			ParamUI::Param_Vec4(vecParam[i].strParamName, (Vec4*)vecParam[i].pParam);
+			break;
+
+		case SCRIPTPARAM_TYPE::TEX:
+			break;
+		case SCRIPTPARAM_TYPE::PREFAB:
+			break;
+		}
+	}
 }

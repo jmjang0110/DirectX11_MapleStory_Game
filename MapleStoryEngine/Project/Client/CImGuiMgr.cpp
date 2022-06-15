@@ -127,8 +127,10 @@ void CImGuiMgr::clear()
     ImGui::DestroyContext();
 }
 
+#include "MenuUI.h"
 #include "InspectorUI.h"
 #include "ResourceUI.h"
+#include "SceneOutliner.h"
 #include "ListUI.h"
 
 #include "SceneOutlinerTool.h"
@@ -137,6 +139,12 @@ void CImGuiMgr::clear()
 void CImGuiMgr::CreateUI()
 {
     CGameObject* pTargetObj = CSceneMgr::GetInst()->FindObjectByName(L"ParticleObject_01");
+
+    // MenuBar 持失
+    MenuUI* pMenuUI = new MenuUI;
+    pMenuUI->Activate();
+    m_mapUI.insert(make_pair(pMenuUI->GetName(), pMenuUI));
+
 
     // InspectorUI 持失
     InspectorUI* pUI = new InspectorUI;

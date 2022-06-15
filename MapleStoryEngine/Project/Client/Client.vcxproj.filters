@@ -104,6 +104,9 @@
     <ClCompile Include="CTestScene.cpp">
       <Filter>TestScene</Filter>
     </ClCompile>
+    <ClCompile Include="MenuUI.cpp">
+      <Filter>ImGui\UI\04. MenuUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -223,6 +226,9 @@
     <ClInclude Include="CTestScene.h">
       <Filter>TestScene</Filter>
     </ClInclude>
+    <ClInclude Include="MenuUI.h">
+      <Filter>ImGui\UI\04. MenuUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="39Engine.ico">
@@ -337,6 +343,9 @@
     </Filter>
     <Filter Include="TestScene">
       <UniqueIdentifier>{6e5a8838-380c-4b41-bb13-8bbd9706f67a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\04. MenuUI">
+      <UniqueIdentifier>{6574f597-bc15-4354-b354-d2410556a578}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

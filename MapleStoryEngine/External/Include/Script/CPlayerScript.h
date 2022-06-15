@@ -17,12 +17,10 @@ private:
 
 
 private:
-    float            m_vForce; // 农扁 , 规氢 
-    float            m_vAccel;
-    float            m_vVelocity;
+    Vec3            m_vForce; // 农扁 , 规氢 
+    Vec3            m_vAccel;
+    Vec3            m_vVelocity;
     float            m_fMass;
-
-  //  Vec3 i;
 
 public:
     virtual void start();

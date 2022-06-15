@@ -19,6 +19,10 @@ using namespace::DirectX::PackedVector;
 #include "SimpleMath.h"
 using namespace DirectX::SimpleMath;
 
+#include <string>
+using std::string;
+using std::wstring;
+
 #include <vector>
 using std::vector;
 
@@ -29,14 +33,12 @@ using std::list;
 using std::map;
 using std::make_pair;
 
-#include <string>
-using std::string;
-using std::wstring;
 
 #include <assert.h>
 #include <commdlg.h>
-
 #include <wchar.h>
+
+
 
 #include "define.h"
 #include "struct.h"

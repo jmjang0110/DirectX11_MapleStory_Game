@@ -19,10 +19,12 @@
 #include <Engine/CTileMap.h>
 #include <Engine/CParticleSystem.h>
 
+// PLayerSCript 가 Script 프로젝트로 바꿨는데
+// < ENgine> 에서 바꿨기 때문에 터진거지....;; 
+
 #include <Script/CPlayerScript.h>
 #include <Script/CCameraMoveScript.h>
 #include <Script/CMissileScript.h>
-
 
 #include <Engine/CTestShader.h>
 
@@ -149,8 +151,8 @@ void CTestScene::CreateTestScene()
 	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();
 
 
-	AddPlayer(pCurScene);
-	//Add_MapleStory_Player(pCurScene);
+	//AddPlayer(pCurScene);
+	Add_MapleStory_Player(pCurScene);
 
 	pObject = new CGameObject;
 	pObject->SetName(L"tile");
@@ -158,47 +160,28 @@ void CTestScene::CreateTestScene()
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, -1.5f));
 
 	pObject->AddComponent(new CTileMap);
-	
 
-	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//yellowToyCastle//yellowToyCastleTile.png");
+
+	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png");
 	pObject->TileMap()->SetAtlasTex(pTileAtlas);
 	pObject->TileMap()->SetTileSize(Vec2(30.f, 30.f));
-	pObject->TileMap()->SetTileMapCount(9, 16);
+	pObject->TileMap()->SetTileMapCount(12, 20);
 
-	pObject->Transform()->SetRelativeScale(9 * 30.f, 16 * 30.f, 1.f);
-
-
-
-	for (int i = 0; i < 9 * 16; ++i)
-	{
-		pObject->TileMap()->SetTileData(i, -1);
-	}
-
-	/*for (int i = 8; i < 16; ++i)
-	{
-		pObject->TileMap()->SetTileData(i, 2);
-	}
-	pObject->TileMap()->SetTileData(7, -1);*/
+	pObject->Transform()->SetRelativeScale(12 * 30.f, 20 * 30.f, 1.f);
 
 	pCurScene->AddObject(pObject, L"Tile");
 
 
-	pCurScene->SetSceneState(SCENE_STATE::PLAY);
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
 
 
 	// 충돌 레이어 설정
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
 
+	pCurScene->start();
+	pCurScene->SetSceneState(SCENE_STATE::PLAY);
 
-	/*
-	 	pCurScene->SetSceneState(SCENE_STATE::PLAY);
-		pCurScene->start();
-
-	*/
 }
-
-
 
 void CTestScene::AddPlayer(CScene* _pCurScene)
 {
@@ -253,7 +236,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	//pObj->AddComponent(new CPlayerScript);
+	pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

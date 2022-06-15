@@ -7,13 +7,11 @@ class ScriptUI :
     public UI
 {
 private:
-    CGameObject* m_pTargetObject;
-    CScript* m_pTargetScript;
+    CGameObject*    m_pTargetObject;
+    CScript*        m_pTargetScript;
     COMPONENT_TYPE  m_eComType;
 
     bool            m_bActive;
-
-
 
 public:
     void SetTargetObject(CGameObject* _pTarget) { m_pTargetObject = _pTarget; }

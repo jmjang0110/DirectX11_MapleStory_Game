@@ -78,16 +78,19 @@ private:
 
     CGameObject*                    m_pTargetObject;
 
-    int                            m_iMapCountX;    // 맵 크기 
-    int                            m_iMapCountY;
+    int                             m_iMapCountX;    // 맵 크기 
+    int                             m_iMapCountY;
 
     bool                            m_bEditMode;
     bool                            m_bShowGrid;
     bool                            m_bAutoSetNextTile;
 
-    int                            m_bTilemapInnerClicked;
+    int                             m_bTilemapInnerClicked;
 
 
+    string                          m_Selected_imgFIle_Name;
+    vector<TreeNode*>               m_vimgNode;
+    bool                            m_bimgFIleChange;
 
 
 public:
@@ -99,21 +102,25 @@ public:
     void Reset();
     
     // ========== 이렇게 해야 되나... ==================
-    TreeNode* Push_YellowToyCastleTile_toTree(TreeNode* _pDestNode);
+    TreeNode* FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile);
 
 
-    TreeNode* PushTileFiletoTree(wstring FileName, TileImgFile* pimgFile, TreeNode* _pDestNode); // img
+    TreeNode* PushimgFiletoTree(wstring FileName, TreeNode* _pDestNode); // img
     TreeNode* PushPackageFiletoTree(TilePackage* pPack, TreeNode* _pDestNode);                   //  pack
     TreeNode* PushTiletoTree(Tile* _pTile, TreeNode* _pDestNode);                                //  Tile
      
     void CreateNewTilesInfo(TreeNode* _pDestNode, TilePackage* _pPackage, TileImgFile* _pimgFile);                       //  info 
 
 
+private:
+    Tile* FillTileInfo(int _TileID_Number,wstring PackageName, TilePackage* _pPackage
+        , int _startImgIdx, int _iAllImgIdxNum, int _row, int _col);
+    void ResetimgFile(string _imgFileName, TreeNode* _imgFIleNode);
+
 public:
     // delegate 
     void TileClicked(DWORD_PTR _dw);
-    int LoadTexture(const wstring& _strKey, const wstring& _strRelativePath);
-    
+  
 
 public:
     TileMapUI();

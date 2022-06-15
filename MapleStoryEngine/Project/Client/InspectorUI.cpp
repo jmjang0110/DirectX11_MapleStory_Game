@@ -143,6 +143,9 @@ void InspectorUI::render_update()
 
 void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 {
+	if (nullptr == _pTarget)
+		return;
+
 	m_pTargetObject = _pTarget;
 
 	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
@@ -163,32 +166,42 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 			}
 		}
 	}
-
-	const vector<CScript*>& vecScripts = m_pTargetObject->GetScripts();
-	ScriptUI* pScriptUI = nullptr;
-
-	for (size_t i = 0; i < vecScripts.size(); ++i)
+	// 오브젝트가 null 이면
+	if (nullptr == m_pTargetObject)
 	{
-		if (m_vecScriptUI.size() <= i)
-			pScriptUI = AddScriptUI();
-		else
-			pScriptUI = m_vecScriptUI[i];
-
-		pScriptUI->SetTargetObject(m_pTargetObject);
-		pScriptUI->SetTargetScript(vecScripts[i]);
-		pScriptUI->Activate();
-	}
-
-	// ScriptUI 가 더 많이 있을때
-	if (vecScripts.size() < m_vecScriptUI.size())
-	{
-		// 대응하는 UI 를 제외한 나머지 ScriptUI 들을 비활성화 한다.ㄴ
-		for (int i = vecScripts.size(); i < m_vecScriptUI.size(); ++i)
+		// 모든 스크립트UI 비활성화
+		for (int i = 0; i < m_vecScriptUI.size(); ++i)
 		{
 			m_vecScriptUI[i]->Deactivate();
 		}
 	}
+	else
+	{
+		const vector<CScript*>& vecScripts = m_pTargetObject->GetScripts();
+		ScriptUI* pScriptUI = nullptr;
 
+		for (size_t i = 0; i < vecScripts.size(); ++i)
+		{
+			if (m_vecScriptUI.size() <= i)
+				pScriptUI = AddScriptUI();
+			else
+				pScriptUI = m_vecScriptUI[i];
+
+			pScriptUI->SetTargetObject(m_pTargetObject);
+			pScriptUI->SetTargetScript(vecScripts[i]);
+			pScriptUI->Activate();
+		}
+
+		// ScriptUI 가 더 많이 있을때
+		if (vecScripts.size() < m_vecScriptUI.size())
+		{
+			// 대응하는 UI 를 제외한 나머지 ScriptUI 들을 비활성화 한다.ㄴ
+			for (int i = vecScripts.size(); i < m_vecScriptUI.size(); ++i)
+			{
+				m_vecScriptUI[i]->Deactivate();
+			}
+		}
+	}
 
 
 	// ResInfoUI 비활성화
@@ -251,7 +264,7 @@ ScriptUI* InspectorUI::AddScriptUI()
 
 void InspectorUI::AddComponent(DWORD_PTR _param)
 {
-	string strComType= (char*)_param;
+	string strComType = (char*)_param;
 
 	// 들어온 컴퍼넌트 이름을 통해서 TargetObject에 component 를 추가하자.
 
@@ -268,7 +281,7 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				{
 					m_pTargetObject->AddComponent(new CTransform);
 				}
-					break;
+				break;
 				case COMPONENT_TYPE::CAMERA:
 				{
 					m_pTargetObject->AddComponent(new CCamera);
@@ -277,18 +290,18 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 
 				}
-					break;
+				break;
 				case COMPONENT_TYPE::COLLIDER2D:
 				{
 					m_pTargetObject->AddComponent(new CCollider2D);
 				}
-					break;
+				break;
 
 				case COMPONENT_TYPE::ANIMATOR2D:
 				{
 					m_pTargetObject->AddComponent(new CAnimator2D);
 				}
-					break;
+				break;
 
 				case COMPONENT_TYPE::MESHRENDER:
 				{
@@ -296,17 +309,17 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 					m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 					m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 				}
-					break;
+				break;
 				case COMPONENT_TYPE::TILEMAP:
 				{
 					m_pTargetObject->AddComponent(new CTileMap);
 				}
-					break;
+				break;
 				case COMPONENT_TYPE::PARTICLESYSTEM:
 				{
 					m_pTargetObject->AddComponent(new CParticleSystem);
 				}
-					break;
+				break;
 
 				case COMPONENT_TYPE::COLLIDER3D:
 				case COMPONENT_TYPE::ANIMATOR3D:
@@ -348,36 +361,36 @@ void InspectorUI::GameObjectTool_SubFunc()
 	if (nullptr != m_pTargetObject)
 	{
 		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar);
-		
 
-			if (ImGui::Button("Add Component"))
+
+		if (ImGui::Button("Add Component"))
+		{
+
+			// ListUI 활성화한다.
+			//const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::COMPONENT);
+
+			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+			pListUI->Clear();
+			pListUI->SetTitle("Component List");
+
+			for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
 			{
-
-				// ListUI 활성화한다.
-				//const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::COMPONENT);
-
-				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
-				pListUI->Clear();
-				pListUI->SetTitle("Component List");
-
-				for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
+				if (nullptr == m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
 				{
-					if (nullptr == m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
-					{
-						pListUI->AddList(ToString((COMPONENT_TYPE)i));
-
-					}
+					pListUI->AddList(ToString((COMPONENT_TYPE)i));
 
 				}
 
-				pListUI->Activate();
-				// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
-				pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddComponent);
-
 			}
 
+			pListUI->Activate();
+			// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
+			pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddComponent);
+
+		}
+
 		ImGui::EndChild();
-		
+
 	}
 
 }

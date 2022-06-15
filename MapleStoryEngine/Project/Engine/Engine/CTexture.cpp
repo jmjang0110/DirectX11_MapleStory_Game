@@ -210,7 +210,10 @@ void CTexture::Clear(int _iRegisterNum)
 void CTexture::ClearCS(int _iRegisterNum)
 {
     ID3D11UnorderedAccessView* pUAV = nullptr;
+    ID3D11ShaderResourceView* pSRV = nullptr;
     UINT i = -1;
+
     CONTEXT->CSSetUnorderedAccessViews(_iRegisterNum, 1, &pUAV, &i);
+    CONTEXT->CSSetShaderResources(_iRegisterNum, 1, &pSRV);
 }
 

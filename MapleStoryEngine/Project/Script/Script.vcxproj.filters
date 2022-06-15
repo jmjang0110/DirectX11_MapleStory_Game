@@ -15,16 +15,16 @@
     <ClInclude Include="pch.h">
       <Filter>Default</Filter>
     </ClInclude>
-    <ClInclude Include="Script\CCameraMoveScript.h">
-      <Filter>Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\CMissileScript.h">
-      <Filter>Script</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\CPlayerScript.h">
-      <Filter>Script</Filter>
-    </ClInclude>
     <ClInclude Include="CScriptMgr.h" />
+    <ClInclude Include="CCameraMoveScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissileScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -33,15 +33,15 @@
     <ClCompile Include="Script.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="Script\CCameraMoveScript.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
-    <ClCompile Include="Script\CMissileScript.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
-    <ClCompile Include="Script\CPlayerScript.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
     <ClCompile Include="CScriptMgr.cpp" />
+    <ClCompile Include="CCameraMoveScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissileScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

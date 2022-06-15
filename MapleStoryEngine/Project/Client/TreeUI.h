@@ -9,6 +9,7 @@ class TreeUI;
 enum class OBJECT_TYPE
 {
     NONE,
+    DUMMY,
     SCENE,
     LAYER,
     GAME_OBJECT,
