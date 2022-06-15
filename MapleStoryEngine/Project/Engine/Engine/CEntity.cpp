@@ -20,25 +20,12 @@ CEntity::~CEntity()
 }
 
 
-void CEntity::SaveToFile(FILE* _pFile)
+void CEntity::SaveToScene(FILE* _pFile)
 {
-	SaveWString(m_strName, _pFile);
-	
-	//fwrite(&g_iNextID, sizeof(UINT), 1, _pFile);
-	//fwrite(&m_iID, sizeof(UINT), 1, _pFile);
-	
-
+	SaveWStringToFile(m_strName, _pFile);
 }
 
-void CEntity::LoadFromFile(FILE* _pFile, bool IsPrevRead)
+void CEntity::LoadFromScene(FILE* _pFile)
 {
-	if (IsPrevRead)
-		return;
-
-	LoadWString(m_strName, _pFile);
-	
-	//fread(&g_iNextID, sizeof(UINT), 1, _pFile);
-	//fread(&m_iID, sizeof(UINT), 1, _pFile);
-	
-
+	LoadWStringFromFile(m_strName, _pFile);
 }

@@ -29,14 +29,10 @@ public:
     SCENE_STATE GetSceneState() { return m_eSceneState; }
     void SetSceneState(SCENE_STATE _state) { m_eSceneState = _state; }
 
-    // ======== File ============
-public:
-    void SaveToFile(FILE* _pFile);
-    void LoadFromFile(FILE* _pFile);
 
+    // ============= Todo ===============
     CLayer** GetAllLayer() { return m_arrLayer; }
-
-    // ======== File ============
+    // ============= Todo ===============
 
     
 private:

@@ -155,25 +155,6 @@ void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 	}
 }
     
-void CPlayerScript::SaveToFile(FILE* _pFile)
-{
-	CScript::SaveToFile(_pFile);
-
-	fwrite(&m_fSpeed, sizeof(float), 1, _pFile);
-	fwrite(&m_fBurnStrength, sizeof(float), 1, _pFile);
-	fwrite(&m_bBurn, sizeof(bool), 1, _pFile);
-
-}
-
-void CPlayerScript::LoadFromFile(FILE* _pFile)
-{
-	CScript::LoadFromFile(_pFile);
-
-	fread(&m_fSpeed, sizeof(float), 1, _pFile);
-	fread(&m_fBurnStrength, sizeof(float), 1, _pFile);
-	fread(&m_bBurn, sizeof(bool), 1, _pFile);
-}
-
 
 
 void CPlayerScript::Move()

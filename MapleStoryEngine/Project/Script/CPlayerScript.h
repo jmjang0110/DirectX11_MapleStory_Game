@@ -30,12 +30,7 @@ public:
     virtual void OnCollisionEnter(CGameObject* _OtherObject) override;
 
 
-    // ======== File ============
-public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile);
 
-    // ======== File ============
 
 private:
     void Burnning();

@@ -56,17 +56,6 @@ public:
     bool IsActive() { return m_bActive; }
     bool IsAncestor(CGameObject* _pObj);
 
-
-
-    // ======== File ============
-public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile);
-
-
-    // ======== File ============
-
-
 public:
     void AddChild(CGameObject* _pChild);
     void AddComponent(CComponent* _component);
@@ -95,6 +84,8 @@ public:
     T* GetScript();
 
 public: 
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
     CLONE(CGameObject)
 
 public:

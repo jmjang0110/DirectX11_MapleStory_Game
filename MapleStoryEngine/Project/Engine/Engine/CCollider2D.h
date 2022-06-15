@@ -56,12 +56,7 @@ public:
     virtual void UpdateData() override;
     void render();
 
-    // ======== File ============
-public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile, bool IsPrevRead = false);
 
-    // ======== File ============
 
 
 

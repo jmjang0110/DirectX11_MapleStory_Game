@@ -48,6 +48,7 @@ enum class RES_TYPE
 	MESH,
 	TEXTURE,
 	SOUND,	
+	SCENEFILE,
 	END,
 };
 

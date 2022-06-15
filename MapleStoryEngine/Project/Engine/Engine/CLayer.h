@@ -35,14 +35,6 @@ public:
 
     CLONE(CLayer)
 
-
-       // ======== File ============
-public:
-    void SaveToFile(FILE* _pFile);
-    void LoadFromFile(FILE* _pFile);
-
-    // ======== File ============
-
 public:
     CLayer();
     ~CLayer();

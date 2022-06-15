@@ -33,24 +33,3 @@ void CComponent::Deactivate()
 	CEventMgr::GetInst()->AddEvent(info);
 }
 
-void CComponent::SaveToFile(FILE* _pFile)
-{
-	CEntity::SaveToFile(_pFile);
-
-	//fwrite(&m_eComType, sizeof(UINT), 1, _pFile);
-	//fwrite(&m_pOwner, sizeof(CGameObject*), 1, _pFile);
-	fwrite(&m_bActive, sizeof(bool), 1, _pFile);
-
-
-}
-
-void CComponent::LoadFromFile(FILE* _pFile, bool IsPrevRead)
-{
-	CEntity::LoadFromFile(_pFile, IsPrevRead);
-
-	//fread(&m_eComType, sizeof(UINT), 1, _pFile);
-	//fread(&m_pOwner, sizeof(CGameObject*), 1, _pFile);
-	fread(&m_bActive, sizeof(bool), 1, _pFile);
-}
-
-

@@ -178,7 +178,6 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CDevice.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEventMgr.h" />
-    <ClInclude Include="CFileMgr.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGraphicsShader.h" />
     <ClInclude Include="CKeyMgr.h" />
@@ -195,6 +194,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CRes.h" />
     <ClInclude Include="CResMgr.h" />
     <ClInclude Include="CScene.h" />
+    <ClInclude Include="CSceneFile.h" />
     <ClInclude Include="CSceneMgr.h" />
     <ClInclude Include="CScript.h" />
     <ClInclude Include="CShader.h" />
@@ -228,7 +228,6 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CDevice.cpp" />
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
-    <ClCompile Include="CFileMgr.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGraphicsShader.cpp" />
     <ClCompile Include="CKeyMgr.cpp" />
@@ -247,6 +246,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CResMgr.cpp" />
     <ClCompile Include="CResMgr_init.cpp" />
     <ClCompile Include="CScene.cpp" />
+    <ClCompile Include="CSceneFile.cpp" />
     <ClCompile Include="CSceneMgr.cpp" />
     <ClCompile Include="CScript.cpp" />
     <ClCompile Include="CShader.cpp" />

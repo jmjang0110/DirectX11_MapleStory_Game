@@ -45,13 +45,11 @@ public:
     void ObjectClicked(DWORD_PTR _dw);
     void DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop);
 
-    // ======== File ==============
+    // ======== Todo ==============
 private:
     OBJECT_TYPE m_RecentClickedType;
 
-    void FileMgrTool_SubFunc();
-
-    // ======== File ==============
+    // ======== Todo ==============
 
 public:
     SceneOutlinerTool();

@@ -166,7 +166,7 @@ void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel,
 
 void CAnimation2D::SaveToFile(FILE* _pFile)
 {
-	CEntity::SaveToFile(_pFile);
+	CEntity::SaveToScene(_pFile);
 
 	// ============== m_vecFrm ===================
 	tAnim2DFrame frm;
@@ -183,7 +183,7 @@ void CAnimation2D::SaveToFile(FILE* _pFile)
 	}
 
 	// Texture Key 값만 저장 
-	SaveWString(m_pAtlasTex->GetKey(), _pFile);
+	SaveWStringToFile(m_pAtlasTex->GetKey(), _pFile);
 	fwrite(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
 
 	fwrite(&m_iCurFrmIdx, sizeof(int), 1, _pFile);
@@ -198,7 +198,7 @@ void CAnimation2D::SaveToFile(FILE* _pFile)
 
 void CAnimation2D::LoadFromFile(FILE* _pFile, bool IsPrevRead)
 {
-	CEntity::LoadFromFile(_pFile);
+	CEntity::LoadFromScene(_pFile);
 
 	int vecFrmCnt = m_vecFrm.size();
 	fread(&vecFrmCnt, sizeof(int), 1, _pFile);
@@ -215,7 +215,7 @@ void CAnimation2D::LoadFromFile(FILE* _pFile, bool IsPrevRead)
 	}
 	
 	wstring key;
-	LoadWString(key, _pFile);
+	LoadWStringFromFile(key, _pFile);
 	m_pAtlasTex = CResMgr::GetInst()->FindRes<CTexture>(key);
 
 	fread(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);

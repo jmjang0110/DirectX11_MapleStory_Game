@@ -62,6 +62,12 @@ const char* ToString(DS_TYPE _type);
 const wchar_t* ToWString(BS_TYPE _type);
 const char* ToString(BS_TYPE _type);
 
-const void SaveWString(const wstring& _str, FILE* _pFile);
-const void LoadWString(wstring& _str, FILE* _pFile);
+
+void SaveStringToFile(const string& _str, FILE* _pFile);
+void LoadStringFromFile(string& _str, FILE* _pFile);
+
+void SaveWStringToFile(const wstring& _str, FILE* _pFile);
+void LoadWStringFromFile(wstring& _str, FILE* _pFile);
+
+
 

@@ -83,35 +83,4 @@ void CLayer::DeregisterObject(CGameObject* _pObj)
 
 
 
-void CLayer::SaveToFile(FILE* _pFile)
-{
-	int RootObjCnt = m_vecRoot.size();
-	fwrite(&RootObjCnt, sizeof(int), 1, _pFile);
-
-	for (int i = 0; i < m_vecRoot.size(); ++i)
-	{
-		m_vecRoot[i]->SaveToFile(_pFile);
-
-	}
-
-}
-
-void CLayer::LoadFromFile(FILE* _pFile)
-{
-	m_vecRoot.clear(); // 기존 오브젝트들을 지운다 .
-
-	int RootObjCnt = 0;
-	fread(&RootObjCnt, sizeof(int), 1, _pFile);
-
-
-
-	for (int i = 0; i < RootObjCnt; ++i)
-	{
-		CGameObject* RootObj = new CGameObject;
-		RootObj->LoadFromFile(_pFile);
-		m_vecRoot.push_back(RootObj);
-
-	}
-
-}
 

@@ -23,13 +23,6 @@ public:
     Ptr<CMaterial> GetDynamicMaterial();
 
 
-    // ======== File ============
-public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile, bool IsPrevRead = false);
-
-    // ======== File ============
-
 public:
     virtual void render() = 0;
 

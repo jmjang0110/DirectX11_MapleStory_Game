@@ -58,12 +58,7 @@ public:
 
     virtual CScript* Clone() = 0;
     
-    // ======== File ============
-public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile);
 
-    // ======== File ============
 
 public:
     CScript(int _iScriptType);

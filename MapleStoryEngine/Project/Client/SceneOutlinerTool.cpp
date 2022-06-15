@@ -19,10 +19,6 @@
 #include <Engine/CMeshRender.h>
 
 
-#include <Engine/CFileMgr.h>
-
-
-
 SceneOutlinerTool::SceneOutlinerTool()
 	: UI("SceneOutlinerTool")
 	, m_pSelectedScene(nullptr)
@@ -73,8 +69,7 @@ void SceneOutlinerTool::update()
 
 void SceneOutlinerTool::render_update()
 {
-	FileMgrTool_SubFunc();
-	
+
 	// Create New GameObject
 	if (OBJECT_TYPE::LAYER == m_RecentClickedType)
 	{
@@ -428,68 +423,3 @@ void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop
 
 
 
-
-void SceneOutlinerTool::FileMgrTool_SubFunc()
-{
-
-	ImGui::BeginChild("FileMgr", ImVec2(230.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar);
-		string strCurObjectType;
-		if (m_RecentClickedType == OBJECT_TYPE::NONE)
-			strCurObjectType = "None - ";
-		if (m_RecentClickedType == OBJECT_TYPE::SCENE)
-			strCurObjectType = "Scene - ";
-		if (m_RecentClickedType == OBJECT_TYPE::LAYER)
-			strCurObjectType = "Layer - ";
-		if (m_RecentClickedType == OBJECT_TYPE::GAME_OBJECT)
-			strCurObjectType = "GameObject - ";
-
-		ImGui::Text(strCurObjectType.c_str());
-		ImGui::SameLine(100);
-		// 현재 TargetObject 를 파일에 저장한다. 
-		if (ImGui::Button("Save to File"))
-		{
-			switch (m_RecentClickedType)
-			{
-			case OBJECT_TYPE::NONE:
-				break;
-			case OBJECT_TYPE::SCENE:
-			{
-				CFileMgr::GetInst()->SaveToFile<CScene>((DWORD_PTR)m_pSelectedScene);
-
-			}
-				break;
-			case OBJECT_TYPE::LAYER:
-			{
-				CFileMgr::GetInst()->SaveToFile<CLayer>((DWORD_PTR)m_pSelectedLayer);
-
-			}
-				break;
-			case OBJECT_TYPE::GAME_OBJECT:
-			{
-				CFileMgr::GetInst()->SaveToFile<CGameObject>((DWORD_PTR)m_pSelectedGameObject);
-
-			}
-				break;
-
-			}
-		}
-
-		ImGui::Text(strCurObjectType.c_str());
-		ImGui::SameLine(100);
-		if (ImGui::Button("Load from File"))
-		{
-			CGameObject* pNewObj = (CGameObject*)CFileMgr::GetInst()->LoadFromFile<CGameObject>((DWORD_PTR)m_pSelectedGameObject);
-
-			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-
-			// 몇번째 Layer에 저장할 것인지 정한다 
-			//CLayer* pArrLayer = pCurScene->GetAllLayer();
-
-		}
-
-		
-		
-	
-	ImGui::EndChild();
-
-}

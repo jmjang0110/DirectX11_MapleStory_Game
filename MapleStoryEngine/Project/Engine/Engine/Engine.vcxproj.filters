@@ -142,8 +142,8 @@
     <ClInclude Include="CParticleSystem.h">
       <Filter>Engine\05. Component\08~12. RenderComponent\10. ParticleSystem</Filter>
     </ClInclude>
-    <ClInclude Include="CFileMgr.h">
-      <Filter>Engine\03. Manager\00. FileMgr</Filter>
+    <ClInclude Include="CSceneFile.h">
+      <Filter>Engine\08. SceneFile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -274,8 +274,8 @@
       <Filter>Engine\03. Manager\02. RenderMgr</Filter>
     </ClCompile>
     <ClCompile Include="func.cpp" />
-    <ClCompile Include="CFileMgr.cpp">
-      <Filter>Engine\03. Manager\00. FileMgr</Filter>
+    <ClCompile Include="CSceneFile.cpp">
+      <Filter>Engine\08. SceneFile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -435,8 +435,8 @@
     <Filter Include="Engine\ShaderCode\ComputeShader\Particle">
       <UniqueIdentifier>{8e930d49-928c-4b1c-bb50-1020b9ca74be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\03. Manager\00. FileMgr">
-      <UniqueIdentifier>{f9b82a16-67bf-4619-a81b-c9a6bd7a233d}</UniqueIdentifier>
+    <Filter Include="Engine\08. SceneFile">
+      <UniqueIdentifier>{c917b6c0-d82f-4abc-a6eb-53b735698bba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

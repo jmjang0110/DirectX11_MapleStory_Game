@@ -11,9 +11,6 @@
 #include "CCollisionMgr.h"
 #include "CEventMgr.h"
 
-// ===================
-#include "CFileMgr.h"
-// ===================
 
 
 CCore::CCore()
@@ -50,8 +47,6 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	CRenderMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
-	
-	CFileMgr::GetInst()->Init();
 
 	return S_OK;
 }

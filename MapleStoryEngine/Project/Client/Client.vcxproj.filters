@@ -107,6 +107,9 @@
     <ClCompile Include="MenuUI.cpp">
       <Filter>ImGui\UI\04. MenuUI</Filter>
     </ClCompile>
+    <ClCompile Include="CSceneSaveLoad.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -228,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="MenuUI.h">
       <Filter>ImGui\UI\04. MenuUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneSaveLoad.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

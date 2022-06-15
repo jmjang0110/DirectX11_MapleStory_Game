@@ -56,6 +56,8 @@ const wchar_t* ToWString(RES_TYPE _type)
         L"MESH",
         L"TEXTURE",
         L"SOUND",
+        L"SCENEFILE",
+
     };
 
     return szWString[(UINT)_type];
@@ -73,6 +75,8 @@ const char* ToString(RES_TYPE _type)
         "MESH",
         "TEXTURE",
         "SOUND",
+        "SCENEFILE"
+
     };
 
     return szString[(UINT)_type];
@@ -194,6 +198,8 @@ const char* ToString(BS_TYPE _type)
     return szString[(UINT)_type];
 }
 
+
+
 // CB_TYPE - const Buffer Type 
 const wchar_t* ToWString(CB_TYPE _type)
 {
@@ -220,28 +226,36 @@ const char* ToString(CB_TYPE _type)
 
     return szString[(UINT)_type];
 }
-
-// Set/Get wstring To/From File 
-const void SaveWString(const wstring& _str, FILE* _pFile)
+void SaveStringToFile(const string& _str, FILE* _pFile)
 {
-    const wchar_t* pStr = _str.c_str();
-
-    size_t iLen = _str.length();
-
-    // 문자의 길이를 정수로 저장
-    fwrite(&iLen, sizeof(size_t), 1, _pFile);
-
-    // 문자 저장
-    fwrite(pStr, sizeof(wchar_t), iLen, _pFile);
+    BYTE len = (BYTE)_str.length();
+    fwrite(&len, sizeof(BYTE), 1, _pFile);
+    fwrite(_str.c_str(), sizeof(char), len, _pFile);
 }
 
-const void LoadWString(wstring& _str, FILE* _pFile)
+void LoadStringFromFile(string& _str, FILE* _pFile)
 {
-    size_t iLen = 0;
-    fread(&iLen, sizeof(size_t), 1, _pFile);
+    char szBuffer[256] = {};
+    BYTE len = 0;
+    fread(&len, sizeof(BYTE), 1, _pFile);
+    fread(szBuffer, sizeof(char), (size_t)len, _pFile);
 
-    wchar_t szData[256] = {};
-    fread(szData, sizeof(wchar_t), iLen, _pFile);
+    _str = szBuffer;
+}
 
-    _str = szData;
+void SaveWStringToFile(const wstring& _str, FILE* _pFile)
+{
+    BYTE len = (BYTE)_str.length();
+    fwrite(&len, sizeof(BYTE), 1, _pFile);
+    fwrite(_str.c_str(), sizeof(wchar_t), len, _pFile);
+}
+
+void LoadWStringFromFile(wstring& _str, FILE* _pFile)
+{
+    wchar_t szBuffer[256] = {};
+    BYTE len = 0;
+    fread(&len, sizeof(BYTE), 1, _pFile);
+    fread(szBuffer, sizeof(wchar_t), (size_t)len, _pFile);
+
+    _str = szBuffer;
 }

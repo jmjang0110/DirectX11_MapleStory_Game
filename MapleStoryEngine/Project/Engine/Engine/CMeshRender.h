@@ -13,12 +13,7 @@ public:
 
     CLONE(CMeshRender)
 
-     // ======== File ============
-public:
-    virtual void SaveToFile(FILE* _pFile);
-    virtual void LoadFromFile(FILE* _pFile, bool IsPrevRead = false);
 
-    // ======== File ============
 
 public:
     CMeshRender();    

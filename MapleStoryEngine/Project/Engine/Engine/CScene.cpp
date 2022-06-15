@@ -130,15 +130,3 @@ CLayer* CScene::GetLayer(const wstring& _strLayerName)
 	return nullptr;
 }
 
-void CScene::SaveToFile(FILE* _pFile)
-{
-	// 2 번 레이어만 한번 저장해보자 test 
-	m_arrLayer[2]->SaveToFile(_pFile);
-
-}
-
-void CScene::LoadFromFile(FILE* _pFile)
-{
-	m_arrLayer[2]->LoadFromFile(_pFile);
-
-}

@@ -1,10 +1,14 @@
 #include "pch.h"
 #include "MenuUI.h"
 
+#include <Engine/CCore.h>
+#include <Engine/CPathMgr.h>
+
 #include <Engine/CSceneMgr.h>
 #include <Engine/CScene.h>
-
 #include <Script/CScriptMgr.h>
+
+#include "CSceneSaveLoad.h"
 
 MenuUI::MenuUI()
     : UI("Menu")
@@ -17,6 +21,7 @@ MenuUI::~MenuUI()
 
 void MenuUI::update()
 {
+    Task();
 }
 
 void MenuUI::render()
@@ -24,7 +29,6 @@ void MenuUI::render()
     if (ImGui::BeginMainMenuBar())
     {
         render_update();
-
 
         ImGui::EndMainMenuBar();
     }
@@ -93,4 +97,70 @@ void MenuUI::render_update()
 
 
 
+}
+
+
+
+void MenuUI::Task()
+{
+    if (m_bSceneSave)
+    {
+        wchar_t szName[256] = {};
+
+        OPENFILENAME ofn = {};
+
+        ofn.lStructSize = sizeof(OPENFILENAME);
+        ofn.hwndOwner = CCore::GetInst()->GetMainHwnd();
+        ofn.lpstrFile = szName;
+        ofn.nMaxFile = sizeof(szName);
+        ofn.lpstrFilter = L"ALL\0*.*\0Scene\0*.scene\0";
+        ofn.nFilterIndex = 0;
+        ofn.lpstrFileTitle = nullptr;
+        ofn.nMaxFileTitle = 0;
+
+        wstring strTileFolder = CPathMgr::GetInst()->GetContentPath();
+        strTileFolder += L"scene";
+
+        ofn.lpstrInitialDir = strTileFolder.c_str();
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+        // Modal
+        if (GetSaveFileName(&ofn))
+        {
+            CSceneSaveLoad::SaveScene(CSceneMgr::GetInst()->GetCurScene(), szName);
+        }
+
+        m_bSceneSave = false;
+    }
+
+    else if (m_bSceneLoad)
+    {
+        wchar_t szName[256] = {};
+
+        OPENFILENAME ofn = {};
+
+        ofn.lStructSize = sizeof(OPENFILENAME);
+        ofn.hwndOwner = CCore::GetInst()->GetMainHwnd();
+        ofn.lpstrFile = szName;
+        ofn.nMaxFile = sizeof(szName);
+        ofn.lpstrFilter = L"ALL\0*.*\0Scene\0*.scene\0";
+        ofn.nFilterIndex = 0;
+        ofn.lpstrFileTitle = nullptr;
+        ofn.nMaxFileTitle = 0;
+
+        wstring strTileFolder = CPathMgr::GetInst()->GetContentPath();
+        strTileFolder += L"scene";
+
+        ofn.lpstrInitialDir = strTileFolder.c_str();
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+        // Modal
+        if (GetOpenFileName(&ofn))
+        {
+            CScene* pLoadScene = CSceneSaveLoad::LoadScene(szName);
+            CSceneMgr::GetInst()->ChangeScene(pLoadScene);
+        }
+
+        m_bSceneLoad = false;
+    }
 }

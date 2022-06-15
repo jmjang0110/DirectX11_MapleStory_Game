@@ -19,6 +19,9 @@ public:
     virtual void render() override;
     virtual void render_update() override;
 
+private:
+    void Task();
+
 public:
     MenuUI();
     ~MenuUI();

@@ -348,18 +348,72 @@ void CGameObject::Destroy()
 }
 
 
+
+
+void CGameObject::SaveToScene(FILE* _pFile)
+{
+	CEntity::SaveToScene(_pFile);
+
+	/*m_bActive;
+	m_bDynamicShadow;
+	m_bFrustumCulling;*/
+	fwrite(&m_bActive, sizeof(BYTE), 3, _pFile);
+
+	// Component 저장
+	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
+	{
+		if (nullptr != m_arrCom[i])
+		{
+			SaveWStringToFile(ToWString((COMPONENT_TYPE)i), _pFile);
+			m_arrCom[i]->SaveToScene(_pFile);
+		}
+	}
+	SaveWStringToFile(L"END", _pFile);
+}
+
+void CGameObject::LoadFromScene(FILE* _pFile)
+{
+	CEntity::LoadFromScene(_pFile);
+	/*m_bActive;
+	m_bDynamicShadow;
+	m_bFrustumCulling;*/
+	fread(&m_bActive, sizeof(BYTE), 3, _pFile);
+
+	// Component 불러오기
+	wstring strComponentName;
+
+	while (true)
+	{
+		LoadWStringFromFile(strComponentName, _pFile);
+		if (strComponentName == L"END")
+			break;
+
+		if (strComponentName == ToWString(COMPONENT_TYPE::TRANSFORM))
+		{
+
+		}
+	}
+}
+
+
+
+
+
+
+/*
+
 void CGameObject::SaveToFile(FILE* _pFile)
 {
-	CEntity::SaveToFile(_pFile);
+	CEntity::SaveToScene(_pFile);
 
 	fwrite(&m_iLayerIdx, sizeof(int), 1, _pFile);
 	fwrite(&m_bActive, sizeof(bool), 1, _pFile);
-	fwrite(&m_bDead, sizeof(bool), 1, _pFile);
+	fwrite(&m_bDead, sizeof(bool), 1, _pFile); // 할 필요 없음
 
 	bool IsEmpty = false;
 	for (int i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
-		
+
 
 		if (m_arrCom[i] != nullptr)
 		{
@@ -375,7 +429,7 @@ void CGameObject::SaveToFile(FILE* _pFile)
 
 	}
 
-	
+
 
 	int vecChildCnt = m_vecChild.size();
 	fwrite(&vecChildCnt, sizeof(int), 1, _pFile);
@@ -385,20 +439,23 @@ void CGameObject::SaveToFile(FILE* _pFile)
 	}
 
 	int vecScriptCnt = m_vecScript.size();
-	fwrite(&vecScriptCnt, sizeof(int), 1, _pFile); // 1. 개수 
+	fwrite(&vecScriptCnt, sizeof(int), 1, _pFile); // 1. 개수
 	for (int i = 0; i < m_vecScript.size(); ++i)
 	{
 		m_vecScript[i]->SaveToFile(_pFile);
 	}
 
 
-	
+
 
 }
 
+
+
+
 void CGameObject::LoadFromFile(FILE* _pFile)
 {
-	CEntity::LoadFromFile(_pFile);
+	CEntity::LoadFromScene(_pFile);
 
 	fread(&m_iLayerIdx, sizeof(int), 1, _pFile);
 	fread(&m_bActive, sizeof(bool), 1, _pFile);
@@ -433,7 +490,7 @@ void CGameObject::LoadFromFile(FILE* _pFile)
 				pCom->LoadFromFile(_pFile);
 			}
 
-				break;
+			break;
 			case COMPONENT_TYPE::COLLIDER3D:
 				break;
 			case COMPONENT_TYPE::ANIMATOR2D:
@@ -444,7 +501,7 @@ void CGameObject::LoadFromFile(FILE* _pFile)
 
 			}
 
-				break;
+			break;
 			case COMPONENT_TYPE::ANIMATOR3D:
 				break;
 			case COMPONENT_TYPE::BOUNDINGBOX:
@@ -457,7 +514,7 @@ void CGameObject::LoadFromFile(FILE* _pFile)
 
 				m_pRenderComponent = (CRenderComponent*)pCom;
 			}
-				break;
+			break;
 			case COMPONENT_TYPE::TILEMAP:
 				break;
 			case COMPONENT_TYPE::PARTICLESYSTEM:
@@ -489,11 +546,11 @@ void CGameObject::LoadFromFile(FILE* _pFile)
 	}
 
 	int vecScriptCnt = 0;
-	fread(&vecScriptCnt, sizeof(int), 1, _pFile); // 1. 개수 
+	fread(&vecScriptCnt, sizeof(int), 1, _pFile); // 1. 개수
 	for (int i = 0; i < vecScriptCnt; ++i)
 	{
 		wstring ScriptName = L"";
-		LoadWString(ScriptName, _pFile);
+		LoadWStringFromFile(ScriptName, _pFile);
 		CScript* ScriptObj = nullptr;
 
 		/*
@@ -503,21 +560,23 @@ void CGameObject::LoadFromFile(FILE* _pFile)
 			ScriptObj = new CCameraMoveScript;
 
 		*/
-		
-		if (ScriptObj != nullptr)
-		{
-			ScriptObj->LoadFromFile(_pFile);
-			CComponent* ScriptCom = (CComponent*)ScriptObj;
 
-			ScriptCom->m_pOwner = this;
-			m_vecScript.push_back(ScriptObj);
-		}
+/*
+
+if (ScriptObj != nullptr)
+{
+	ScriptObj->LoadFromFile(_pFile);
+	CComponent* ScriptCom = (CComponent*)ScriptObj;
+
+	ScriptCom->m_pOwner = this;
+	m_vecScript.push_back(ScriptObj);
+}
 
 	}
 
-
-	
-	
-
-
 }
+
+*/
+
+
+

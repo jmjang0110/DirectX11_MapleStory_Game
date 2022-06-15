@@ -19,13 +19,8 @@ public:
 	virtual void UpdateData() {}
 	virtual CEntity* Clone() = 0;
 
-	// ======== File ============
-public:
-	virtual void SaveToFile(FILE* _pFile);
-	// 이전에 이름을 읽었으면 false
-	virtual void LoadFromFile(FILE* _pFile , bool IsPrevRead = false);
-
-	// ======== File ============
+	virtual void SaveToScene(FILE* _pFile);
+	virtual void LoadFromScene(FILE* _pFile);
 
 public:
 	CEntity();
