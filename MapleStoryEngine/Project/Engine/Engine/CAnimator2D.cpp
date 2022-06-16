@@ -198,3 +198,47 @@ void CAnimator2D::UpdateData_DummyAnim()
 }
 
 
+
+void CAnimator2D::SaveToScene(FILE* _pFile)
+{
+	CComponent::SaveToScene(_pFile);
+
+	size_t iAnimCount = m_mapAnim.size();
+	fwrite(&iAnimCount, sizeof(size_t), 1, _pFile);
+
+	map<wstring, CAnimation2D*>::iterator iter = m_mapAnim.begin();
+	for (; iter != m_mapAnim.end(); ++iter)
+	{
+		iter->second->SaveToScene(_pFile);
+	}
+
+	wstring strCurAnimName;
+	if (nullptr != m_pCurAnim)
+		strCurAnimName = m_pCurAnim->GetName();
+
+	SaveWStringToFile(strCurAnimName, _pFile);
+	fwrite(&m_bRepeat, sizeof(bool), 1, _pFile);
+}
+
+void CAnimator2D::LoadFromScene(FILE* _pFile)
+{
+	CComponent::LoadFromScene(_pFile);
+
+	size_t iAnimCount = 0;
+	fread(&iAnimCount, sizeof(size_t), 1, _pFile);
+
+	for (size_t i = 0; i < iAnimCount; ++i)
+	{
+		CAnimation2D* pAnim = new CAnimation2D;
+		pAnim->LoadFromScene(_pFile);
+
+		m_mapAnim.insert(make_pair(pAnim->GetName(), pAnim));
+		pAnim->m_pOwner = this;
+	}
+
+	wstring strCurAnimName;
+	LoadWStringFromFile(strCurAnimName, _pFile);
+	m_pCurAnim = FindAnim(strCurAnimName);
+
+	fread(&m_bRepeat, sizeof(bool), 1, _pFile);
+}

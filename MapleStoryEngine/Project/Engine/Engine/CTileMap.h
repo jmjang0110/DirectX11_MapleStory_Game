@@ -72,6 +72,10 @@ public:
     virtual void render() override;
     virtual void UpdateData() override;
 
+
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
     CLONE(CTileMap)
 public:
     CTileMap();

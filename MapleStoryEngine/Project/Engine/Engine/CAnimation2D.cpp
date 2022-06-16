@@ -164,66 +164,27 @@ void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel,
 
 }
 
-void CAnimation2D::SaveToFile(FILE* _pFile)
+void CAnimation2D::SaveToScene(FILE* _pFile)
 {
 	CEntity::SaveToScene(_pFile);
 
-	// ============== m_vecFrm ===================
-	tAnim2DFrame frm;
-	int vecFrmCnt = m_vecFrm.size();
-	fwrite(&vecFrmCnt, sizeof(int), 1, _pFile);
-
-	for (int i = 0; i < m_vecFrm.size(); ++i)
-	{
-		frm = m_vecFrm[i];
-		fwrite(&frm.vLT, sizeof(Vec2), 1, _pFile);
-		fwrite(&frm.vSlice, sizeof(Vec2), 1, _pFile);
-		fwrite(&frm.vOffset, sizeof(Vec2), 1, _pFile);
-		fwrite(&frm.fDuration, sizeof(Vec2), 1, _pFile);
-	}
-
-	// Texture Key 값만 저장 
-	SaveWStringToFile(m_pAtlasTex->GetKey(), _pFile);
+	size_t i = m_vecFrm.size();
+	fwrite(&i, sizeof(size_t), 1, _pFile);
+	fwrite(m_vecFrm.data(), sizeof(tAnim2D), i, _pFile);
 	fwrite(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
 
-	fwrite(&m_iCurFrmIdx, sizeof(int), 1, _pFile);
-	fwrite(&m_fAccTime, sizeof(float), 1, _pFile);
-	fwrite(&m_bFinish, sizeof(bool), 1, _pFile);
-
-
-	fwrite(&m_iHorizontal_Flip, sizeof(int), 1, _pFile);
-	fwrite(&m_iVertical_Flip, sizeof(int), 1, _pFile);
-
+	SaveResPtr(m_pAtlasTex, _pFile);
 }
 
-void CAnimation2D::LoadFromFile(FILE* _pFile, bool IsPrevRead)
+void CAnimation2D::LoadFromScene(FILE* _pFile)
 {
 	CEntity::LoadFromScene(_pFile);
 
-	int vecFrmCnt = m_vecFrm.size();
-	fread(&vecFrmCnt, sizeof(int), 1, _pFile);
-	tAnim2DFrame frm;
-
-	for (int i = 0; i < vecFrmCnt; ++i)
-	{
-		fread(&frm.vLT, sizeof(Vec2), 1, _pFile);
-		fread(&frm.vSlice, sizeof(Vec2), 1, _pFile);
-		fread(&frm.vOffset, sizeof(Vec2), 1, _pFile);
-		fread(&frm.fDuration, sizeof(Vec2), 1, _pFile);
-		m_vecFrm.push_back(frm);
-
-	}
-	
-	wstring key;
-	LoadWStringFromFile(key, _pFile);
-	m_pAtlasTex = CResMgr::GetInst()->FindRes<CTexture>(key);
-
+	size_t i = 0;
+	fread(&i, sizeof(size_t), 1, _pFile);
+	m_vecFrm.resize(i);
+	fread(m_vecFrm.data(), sizeof(tAnim2D), i, _pFile);
 	fread(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
 
-	fread(&m_iCurFrmIdx, sizeof(int), 1, _pFile);
-	fread(&m_fAccTime, sizeof(float), 1, _pFile);
-	fread(&m_bFinish, sizeof(bool), 1, _pFile);
-
-	fread(&m_iHorizontal_Flip, sizeof(int), 1, _pFile);
-	fread(&m_iVertical_Flip, sizeof(int), 1, _pFile);
+	LoadResPtr(m_pAtlasTex, _pFile);
 }

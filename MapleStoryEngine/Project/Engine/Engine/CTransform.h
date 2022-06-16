@@ -58,6 +58,9 @@ public:
     virtual void active();
     virtual void deactive();
 
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
     CLONE(CTransform)
 
 

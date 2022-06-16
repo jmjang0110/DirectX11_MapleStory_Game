@@ -23,12 +23,15 @@ private:
     vector<CScript*>        m_vecScript;
 
     CComponent*             m_arrCom[(UINT)COMPONENT_TYPE::END];
-    CRenderComponent*       m_pRenderComponent;    
+    CRenderComponent*       m_pRenderComponent;
 
     CGameObject*            m_pParent;
-    int                     m_iLayerIdx; // 게임 오브젝트 소속 레이어 인덱스
-    bool                    m_bActive;
+    int                     m_iLayerIdx; // 게임 오브젝트 소속 레이어 인덱스   
     bool                    m_bDead;
+
+    bool                    m_bActive;
+    bool                    m_bDynamicShadow;   // 동적 그림자 생성 - 3D
+    bool                    m_bFrustumCulling;  // 절두체 컬링 사용 유무 - 3D
 
 public:
     void start();

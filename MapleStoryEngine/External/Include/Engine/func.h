@@ -71,3 +71,36 @@ void LoadWStringFromFile(wstring& _str, FILE* _pFile);
 
 
 
+
+#include "Ptr.h"
+#include "CResMgr.h"
+
+template<typename RES>
+void SaveResPtr(Ptr<RES> _ptr, FILE* _pFile)
+{
+	bool bNullPtr = nullptr == _ptr ? true : false;
+	fwrite(&bNullPtr, sizeof(bool), 1, _pFile);
+
+	if (!bNullPtr)
+	{
+		SaveWStringToFile(_ptr->GetKey(), _pFile);
+		SaveWStringToFile(_ptr->GetRelativePath(), _pFile);
+	}
+}
+
+template<typename RES>
+void LoadResPtr(Ptr<RES>& _ptr, FILE* _pFile)
+{
+	bool bNull = false;
+	fread(&bNull, sizeof(bool), 1, _pFile);
+
+	if (!bNull)
+	{
+		wstring strKey, strRelativePath;
+
+		LoadWStringFromFile(strKey, _pFile);
+		LoadWStringFromFile(strRelativePath, _pFile);
+
+		_ptr = CResMgr::GetInst()->Load<RES>(strKey, strRelativePath);
+	}
+}

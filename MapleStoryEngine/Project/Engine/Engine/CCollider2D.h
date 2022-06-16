@@ -72,7 +72,9 @@ public:
     // 이전 프레임에 충돌 중, 지금은 충돌 X 일때
     void OnCollisionExit(CCollider2D* _Other);
 
-
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
     CLONE(CCollider2D)
 public:
     CCollider2D();

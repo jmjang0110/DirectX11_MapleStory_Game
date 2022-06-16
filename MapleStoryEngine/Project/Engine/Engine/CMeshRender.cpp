@@ -43,3 +43,18 @@ void CMeshRender::render()
 		CAnimator2D::Clear();
 	}
 }
+
+void CMeshRender::SaveToScene(FILE* _pFile)
+{
+	CRenderComponent::SaveToScene(_pFile);
+
+}
+
+void CMeshRender::LoadFromScene(FILE* _pFile)
+{
+	CRenderComponent::LoadFromScene(_pFile);
+
+}
+
+
+

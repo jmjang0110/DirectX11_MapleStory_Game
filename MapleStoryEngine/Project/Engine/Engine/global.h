@@ -43,6 +43,6 @@ using std::make_pair;
 #include "define.h"
 #include "struct.h"
 #include "extern.h"
-#include "func.h"
 #include "singleton.h"
+#include "func.h"
 

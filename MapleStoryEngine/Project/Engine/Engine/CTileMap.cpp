@@ -178,3 +178,39 @@ void CTileMap::SetTileData(int _iTileIdx, int _iImgIdx, Vec2 _AllTileSize, Vec2 
 	m_bBufferUpdated = false;
 
 }
+
+
+
+
+void CTileMap::SaveToScene(FILE* _pFile)
+{
+	CRenderComponent::SaveToScene(_pFile);
+
+	SaveResPtr(m_pAtlasTex, _pFile);
+
+	fwrite(&m_vSlicePixel, sizeof(Vec2), 1, _pFile);
+	fwrite(&m_vSliceUV, sizeof(Vec2), 1, _pFile);
+	fwrite(&m_iRowCount, sizeof(UINT), 1, _pFile);
+	fwrite(&m_iColCount, sizeof(UINT), 1, _pFile);
+	fwrite(&m_iTileCountX, sizeof(UINT), 1, _pFile);
+	fwrite(&m_iTileCountY, sizeof(UINT), 1, _pFile);
+	fwrite(m_vecTileData.data(), sizeof(tTileData), m_vecTileData.size(), _pFile);
+}
+
+void CTileMap::LoadFromScene(FILE* _pFile)
+{
+	CRenderComponent::LoadFromScene(_pFile);
+
+	LoadResPtr(m_pAtlasTex, _pFile);
+
+	fread(&m_vSlicePixel, sizeof(Vec2), 1, _pFile);
+	fread(&m_vSliceUV, sizeof(Vec2), 1, _pFile);
+	fread(&m_iRowCount, sizeof(UINT), 1, _pFile);
+	fread(&m_iColCount, sizeof(UINT), 1, _pFile);
+	fread(&m_iTileCountX, sizeof(UINT), 1, _pFile);
+	fread(&m_iTileCountY, sizeof(UINT), 1, _pFile);
+
+	m_vecTileData.resize((size_t)(m_iTileCountX * m_iTileCountY));
+	fread(m_vecTileData.data(), sizeof(tTileData), (size_t)(m_iTileCountX * m_iTileCountY), _pFile);
+}
+

@@ -262,6 +262,7 @@ ScriptUI* InspectorUI::AddScriptUI()
 
 // ============= TOdo =====================================================
 //  AddComponent 버튼에서 Component 를  눌렸을 때 일어날 함수 
+// - 기본값을 미리 설정해놓는다. 
 
 void InspectorUI::AddComponent(DWORD_PTR _param)
 {
@@ -287,7 +288,7 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				{
 					m_pTargetObject->AddComponent(new CCamera);
 					m_pTargetObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
-					m_pTargetObject->Camera()->CheckLayerMaskAll();
+					m_pTargetObject->Camera()->CheckLayerMaskAll(); // iLayerMask 몇번째 레이어 그리는지 알려준다.
 
 
 				}
@@ -295,6 +296,9 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				case COMPONENT_TYPE::COLLIDER2D:
 				{
 					m_pTargetObject->AddComponent(new CCollider2D);
+					m_pTargetObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
+					m_pTargetObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+					m_pTargetObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
 				}
 				break;
 
@@ -306,19 +310,26 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 				case COMPONENT_TYPE::MESHRENDER:
 				{
-					m_pTargetObject->AddComponent(new CMeshRender);
-					m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-					m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+					if (nullptr == m_pTargetObject->GetRenderComponent())
+					{
+						m_pTargetObject->AddComponent(new CMeshRender);
+						m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+					}
+				
 				}
 				break;
 				case COMPONENT_TYPE::TILEMAP:
 				{
-					m_pTargetObject->AddComponent(new CTileMap);
+					if(nullptr == m_pTargetObject->GetRenderComponent())
+						m_pTargetObject->AddComponent(new CTileMap);
 				}
 				break;
 				case COMPONENT_TYPE::PARTICLESYSTEM:
 				{
-					m_pTargetObject->AddComponent(new CParticleSystem);
+					if (nullptr == m_pTargetObject->GetRenderComponent())
+						m_pTargetObject->AddComponent(new CParticleSystem);
 				}
 				break;
 

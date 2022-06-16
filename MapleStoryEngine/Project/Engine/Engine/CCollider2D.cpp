@@ -144,3 +144,23 @@ void CCollider2D::OnCollisionExit(CCollider2D* _Other)
 }
 
 
+
+void CCollider2D::SaveToScene(FILE* _pFile)
+{
+	CComponent::SaveToScene(_pFile);
+
+	fwrite(&m_eColliderType, sizeof(UINT), 1, _pFile);
+	fwrite(&m_vOffsetPos, sizeof(Vec2), 1, _pFile);
+	fwrite(&m_vOffsetScale, sizeof(Vec2), 1, _pFile);
+}
+
+void CCollider2D::LoadFromScene(FILE* _pFile)
+{
+	CComponent::LoadFromScene(_pFile);
+
+	fread(&m_eColliderType, sizeof(UINT), 1, _pFile);
+	fread(&m_vOffsetPos, sizeof(Vec2), 1, _pFile);
+	fread(&m_vOffsetScale, sizeof(Vec2), 1, _pFile);
+
+	SetCollider2DType(m_eColliderType);
+}

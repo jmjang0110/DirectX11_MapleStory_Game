@@ -71,6 +71,17 @@ CParticleSystem::~CParticleSystem()
 	SAFE_DELETE(m_DataBuffer);
 }
 
+void CParticleSystem::SetMaxParticleCount(UINT _iMax)
+{
+	if (m_iMaxCount < _iMax)
+	{
+		m_ParticleBuffer->Create(sizeof(tParticle), _iMax, SB_TYPE::READ_WRITE, false, nullptr);
+	}
+	m_iMaxCount = _iMax;
+}
+
+
+
 
 void CParticleSystem::finalupdate()
 {
@@ -111,3 +122,57 @@ void CParticleSystem::render()
 
 	m_ParticleBuffer->Clear();
 }
+
+
+
+void CParticleSystem::SaveToScene(FILE* _pFile)
+{
+	CRenderComponent::SaveToScene(_pFile);
+
+	//SaveResPtr<CComputeShader>(m_CS.Get(), _pFile);
+
+	fwrite(&m_iMaxCount, sizeof(UINT), 1, _pFile);
+	fwrite(&m_bPosInherit, sizeof(int), 1, _pFile);
+	fwrite(&m_iAliveCount, sizeof(int), 1, _pFile);
+	fwrite(&m_fMinLifeTime, sizeof(float), 1, _pFile);
+	fwrite(&m_fMaxLifeTime, sizeof(float), 1, _pFile);
+	fwrite(&m_fStartSpeed, sizeof(float), 1, _pFile);
+	fwrite(&m_fEndSpeed, sizeof(float), 1, _pFile);
+	fwrite(&m_vStartColor, sizeof(Vec4), 1, _pFile);
+	fwrite(&m_vEndColor, sizeof(Vec4), 1, _pFile);
+	fwrite(&m_vStartScale, sizeof(Vec3), 1, _pFile);
+	fwrite(&m_vEndScale, sizeof(Vec3), 1, _pFile);
+	fwrite(&m_fParticleCreateDistance, sizeof(float), 1, _pFile);
+	fwrite(&m_fParticleCreateTerm, sizeof(float), 1, _pFile);
+}
+
+void CParticleSystem::LoadFromScene(FILE* _pFile)
+{
+	CRenderComponent::LoadFromScene(_pFile);
+
+	Ptr<CComputeShader> cs;
+	//LoadResPtr<CComputeShader>(cs, _pFile);
+	m_CS = (CParticleUpdateShader*)cs.Get();
+
+	UINT iMaxCount = 0;
+	fread(&iMaxCount, sizeof(UINT), 1, _pFile);
+	SetMaxParticleCount(iMaxCount);
+
+	fread(&m_bPosInherit, sizeof(int), 1, _pFile);
+	fread(&m_iAliveCount, sizeof(int), 1, _pFile);
+	fread(&m_fMinLifeTime, sizeof(float), 1, _pFile);
+	fread(&m_fMaxLifeTime, sizeof(float), 1, _pFile);
+	fread(&m_fStartSpeed, sizeof(float), 1, _pFile);
+	fread(&m_fEndSpeed, sizeof(float), 1, _pFile);
+	fread(&m_vStartColor, sizeof(Vec4), 1, _pFile);
+	fread(&m_vEndColor, sizeof(Vec4), 1, _pFile);
+	fread(&m_vStartScale, sizeof(Vec3), 1, _pFile);
+	fread(&m_vEndScale, sizeof(Vec3), 1, _pFile);
+	fread(&m_fParticleCreateDistance, sizeof(float), 1, _pFile);
+	fread(&m_fParticleCreateTerm, sizeof(float), 1, _pFile);
+
+
+}
+
+
+

@@ -21,19 +21,23 @@ CGameObject::CGameObject()
 	, m_pParent(nullptr)
 	, m_pRenderComponent(nullptr)
 	, m_iLayerIdx(-1)
-	, m_bActive(true)
 	, m_bDead(false)
-{
+	, m_bActive(true)
+	, m_bDynamicShadow(false)
+	, m_bFrustumCulling(false)
+{ 
 }
 
 CGameObject::CGameObject(const CGameObject& _origin)
 	: CEntity(_origin)
-	, m_arrCom{}
+	,  m_arrCom{}
 	, m_pParent(nullptr)
 	, m_pRenderComponent(nullptr)
-	, m_iLayerIdx(_origin.m_iLayerIdx)
-	, m_bActive(true)
+	, m_iLayerIdx(-1)
 	, m_bDead(false)
+	, m_bActive(true)
+	, m_bDynamicShadow(false)
+	, m_bFrustumCulling(false)
 {
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
@@ -349,14 +353,17 @@ void CGameObject::Destroy()
 
 
 
+#include "CCamera.h"
+#include "CCollider2D.h"
+//#include "CCollider3D.h"
+#include "CAnimator2D.h"
+//#include "CAnimator3D.h"
+#include "CParticleSystem.h"
+#include "CTileMap.h"
 
 void CGameObject::SaveToScene(FILE* _pFile)
 {
 	CEntity::SaveToScene(_pFile);
-
-	/*m_bActive;
-	m_bDynamicShadow;
-	m_bFrustumCulling;*/
 	fwrite(&m_bActive, sizeof(BYTE), 3, _pFile);
 
 	// Component 저장
@@ -374,9 +381,6 @@ void CGameObject::SaveToScene(FILE* _pFile)
 void CGameObject::LoadFromScene(FILE* _pFile)
 {
 	CEntity::LoadFromScene(_pFile);
-	/*m_bActive;
-	m_bDynamicShadow;
-	m_bFrustumCulling;*/
 	fread(&m_bActive, sizeof(BYTE), 3, _pFile);
 
 	// Component 불러오기
@@ -390,12 +394,61 @@ void CGameObject::LoadFromScene(FILE* _pFile)
 
 		if (strComponentName == ToWString(COMPONENT_TYPE::TRANSFORM))
 		{
+			AddComponent(new CTransform);
+			Transform()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::CAMERA))
+		{
+			AddComponent(new CCamera);
+			Camera()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::COLLIDER2D))
+		{
+			AddComponent(new CCollider2D);
+			Collider2D()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::COLLIDER3D))
+		{
+
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::ANIMATOR2D))
+		{
+			AddComponent(new CAnimator2D);
+			Animator2D()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::ANIMATOR3D))
+		{
+
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::BOUNDINGBOX))
+		{
+
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::MESHRENDER))
+		{
+			AddComponent(new CMeshRender);
+			MeshRender()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::PARTICLESYSTEM))
+		{
+			AddComponent(new CParticleSystem);
+			ParticleSystem()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::TILEMAP))
+		{
+			AddComponent(new CTileMap);
+			TileMap()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::LANDSCAPE))
+		{
+
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::DECAL))
+		{
 
 		}
 	}
 }
-
-
 
 
 

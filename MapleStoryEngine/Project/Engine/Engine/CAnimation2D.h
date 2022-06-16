@@ -70,17 +70,13 @@ public:
 		Vec2 _vStep, float _fDuration, int _iFrameCount, int RowNum, int ColumnNum);
 
 
-	// ======== File ============
-public:
-	virtual void SaveToFile(FILE* _pFile);
-	virtual void LoadFromFile(FILE* _pFile, bool IsPrevRead = false);
-
-	// ======== File ============
 
 
 
 
 public:
+	virtual void SaveToScene(FILE* _pFile) override;
+	virtual void LoadFromScene(FILE* _pFile) override;
 	CLONE(CAnimation2D)
 
 public:

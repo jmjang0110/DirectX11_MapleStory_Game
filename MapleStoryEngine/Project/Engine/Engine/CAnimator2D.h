@@ -60,6 +60,8 @@ public:
 
 
 public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
     CLONE(CAnimator2D)
 
 public:

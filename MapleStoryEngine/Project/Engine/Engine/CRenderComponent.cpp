@@ -61,3 +61,24 @@ Ptr<CMaterial> CRenderComponent::GetDynamicMaterial()
 	m_pMtrl = m_pDynamicMtrl;
 	return m_pMtrl;
 }
+
+
+void CRenderComponent::SaveToScene(FILE* _pFile)
+{
+	CComponent::SaveToScene(_pFile);
+
+	SaveResPtr(m_pMesh, _pFile);
+	SaveResPtr(m_pMtrl, _pFile);
+}
+
+void CRenderComponent::LoadFromScene(FILE* _pFile)
+{
+	CComponent::LoadFromScene(_pFile);
+
+	LoadResPtr(m_pMesh, _pFile);
+
+	Ptr<CMaterial> pMtrl;
+	LoadResPtr(pMtrl, _pFile);
+	SetSharedMaterial(pMtrl);
+
+}

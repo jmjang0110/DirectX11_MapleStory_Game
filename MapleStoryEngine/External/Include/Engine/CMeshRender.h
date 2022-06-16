@@ -11,6 +11,10 @@ public:
     virtual void finalupdate() override;
     virtual void render() override;
 
+
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
     CLONE(CMeshRender)
 
 

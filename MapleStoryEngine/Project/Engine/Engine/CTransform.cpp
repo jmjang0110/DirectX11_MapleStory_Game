@@ -119,3 +119,27 @@ void CTransform::UpdateData()
 	pBuffer->UpdateData();
 }
 
+
+
+
+void CTransform::SaveToScene(FILE* _pFile)
+{
+	CComponent::SaveToScene(_pFile);
+
+	fwrite(&m_vRelativePos, sizeof(Vec3), 1, _pFile);
+	fwrite(&m_vRelativeScale, sizeof(Vec3), 1, _pFile);
+	fwrite(&m_vRelativeRot, sizeof(Vec3), 1, _pFile);
+	fwrite(&m_bIgnoreParentScale, sizeof(bool), 1, _pFile);
+}
+
+void CTransform::LoadFromScene(FILE* _pFile)
+{
+	CComponent::LoadFromScene(_pFile);
+
+	fread(&m_vRelativePos, sizeof(Vec3), 1, _pFile);
+	fread(&m_vRelativeScale, sizeof(Vec3), 1, _pFile);
+	fread(&m_vRelativeRot, sizeof(Vec3), 1, _pFile);
+	fread(&m_bIgnoreParentScale, sizeof(bool), 1, _pFile);
+}
+
+

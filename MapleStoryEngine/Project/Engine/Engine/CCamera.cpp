@@ -234,3 +234,36 @@ void CCamera::CheckLayerMask(const wstring& _strLayerName)
 
 	CheckLayerMask(pLayer->GetLayerIdx());	
 }
+
+
+void CCamera::SaveToScene(FILE* _pFile)
+{
+	CComponent::SaveToScene(_pFile);
+
+	fwrite(&m_eProjType, sizeof(UINT), 1, _pFile);
+
+	fwrite(&m_fWidth, sizeof(float), 1, _pFile);
+	fwrite(&m_fAspectRatio, sizeof(float), 1, _pFile);
+	fwrite(&m_fFOV, sizeof(float), 1, _pFile);
+	fwrite(&m_fFar, sizeof(float), 1, _pFile);
+
+	fwrite(&m_iLayerMask, sizeof(UINT), 1, _pFile);
+	fwrite(&m_iCamIdx, sizeof(int), 1, _pFile);
+}
+
+void CCamera::LoadFromScene(FILE* _pFile)
+{
+	CComponent::LoadFromScene(_pFile);
+
+	fread(&m_eProjType, sizeof(UINT), 1, _pFile);
+
+	fread(&m_fWidth, sizeof(float), 1, _pFile);
+	fread(&m_fAspectRatio, sizeof(float), 1, _pFile);
+	fread(&m_fFOV, sizeof(float), 1, _pFile);
+	fread(&m_fFar, sizeof(float), 1, _pFile);
+
+	fread(&m_iLayerMask, sizeof(UINT), 1, _pFile);
+	fread(&m_iCamIdx, sizeof(int), 1, _pFile);
+}
+
+
