@@ -110,6 +110,9 @@
     <ClCompile Include="CSceneSaveLoad.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="0616수업내용.cpp">
+      <Filter>Default\2022-06-16-수업내용</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -352,6 +355,9 @@
     </Filter>
     <Filter Include="ImGui\UI\04. MenuUI">
       <UniqueIdentifier>{6574f597-bc15-4354-b354-d2410556a578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\2022-06-16-수업내용">
+      <UniqueIdentifier>{53c8e7f5-1a4d-4a4a-9397-62fbf018c88b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

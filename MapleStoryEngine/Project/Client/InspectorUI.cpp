@@ -136,6 +136,7 @@ void InspectorUI::update()
 
 void InspectorUI::render_update()
 {
+	GameObjectTool_SubFunc();
 
 }
 

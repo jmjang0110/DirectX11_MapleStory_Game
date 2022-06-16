@@ -28,6 +28,7 @@ CParticleSystem::CParticleSystem()
 
 	m_CS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateShader").Get();
 	
+	// 여기서 할 필요가 없었따??? 
 	m_ParticleBuffer = new CStructuredBuffer();
 	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::READ_WRITE, false, nullptr);
 
