@@ -30,8 +30,10 @@ public:
 
 
 protected:
+    virtual int Save(const wstring& _strFilePath) { return S_OK; }
     virtual int Load(const wstring& _strFilePath) = 0;
     CLONE_DISABLE(CRes)
+
 
 private:
     void AddRef() { ++m_iRefCount; }

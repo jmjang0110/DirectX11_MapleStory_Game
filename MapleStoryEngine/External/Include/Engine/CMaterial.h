@@ -16,7 +16,8 @@ private:
     vector<tScalarParamInfo>    m_vecScalarParamInfo;
     vector<tTexParamInfo>       m_vecTexParamInfo;
 
-    CMaterial* m_pMasterMtrl;
+    // 복제본을 건낼때 자신이 원본이라는 것을 알림
+    CMaterial*                  m_pMasterMtrl;
 
 public:
     void SetShader(Ptr<CGraphicsShader> _pShader);
@@ -37,7 +38,8 @@ public:
     CMaterial* GetMasterMtrl() { return m_pMasterMtrl; }
 
 public:
-    virtual int Load(const wstring& _strFilePath) override { return S_OK; }
+    virtual int Save(const wstring& _strFilePath) override;
+    virtual int Load(const wstring& _strFilePath) override;
 
     CLONE(CMaterial);
 

@@ -46,7 +46,7 @@ void CTestScene::CreateTestScene()
 	CResMgr::GetInst()->Load<CTexture>(L"RedWheel", L"texture\\RedGearWheel.png");
 	CResMgr::GetInst()->Load<CTexture>(L"Back", L"Texture\\0_100.png");
 	CResMgr::GetInst()->Load<CTexture>(L"castle", L"Texture\\castle.png");
-	CResMgr::GetInst()->Load<CTexture>(L"character", L"Texture\\test5.png");
+	CResMgr::GetInst()->Load<CTexture>(L"character123456", L"Texture\\test6.png");
 
 
 

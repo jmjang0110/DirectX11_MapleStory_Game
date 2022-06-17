@@ -25,8 +25,9 @@ void CRenderMgr::update()
 
 void CRenderMgr::render()
 {
-	if (m_vecCam.empty())
-		return;
+	// Rendering 시작
+	CDevice::GetInst()->SetRenderTarget();
+	CDevice::GetInst()->ClearTarget();
 
 	// Global 상수 업데이트
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetCB(CB_TYPE::GLOBAL);
@@ -34,9 +35,8 @@ void CRenderMgr::render()
 	pGlobalCB->UpdateData();
 	pGlobalCB->UpdateData_CS();
 
-	// Rendering 시작
-	CDevice::GetInst()->SetRenderTarget();
-	CDevice::GetInst()->ClearTarget();
+	if (m_vecCam.empty())
+		return;
 
 	// 메인 카메라 시점으로 렌더링
 	CCamera* pMainCam = m_vecCam[0];

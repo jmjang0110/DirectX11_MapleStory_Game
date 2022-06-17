@@ -372,7 +372,7 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 	if (nullptr != m_pTargetObject)
 	{
-		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 50.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 
 		if (ImGui::Button("Add Component"))

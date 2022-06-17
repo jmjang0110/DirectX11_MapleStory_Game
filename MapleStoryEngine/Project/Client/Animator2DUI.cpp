@@ -627,6 +627,8 @@ void Animator2DUI::DrawSettingBtn()
 			frameInfo = m_NewAnim_vecFrm[m_ModifyFrameIdx];
 			frameInfo.vLT *= m_TexSize;
 			frameInfo.vSlice *= m_TexSize;
+			frameInfo.vOffset *= m_TexSize;
+
 		}
 			
 
@@ -750,6 +752,8 @@ void Animator2DUI::DrawSettingBtn()
 
 		frameInfo.vLT = frameInfo.vLT / m_TexSize;
 		frameInfo.vSlice = frameInfo.vSlice /m_TexSize;
+		frameInfo.vOffset = frameInfo.vOffset / m_TexSize;
+
 
 		m_NewAnim_vecFrm[m_ModifyFrameIdx] = frameInfo;
 	}
@@ -1033,6 +1037,7 @@ void Animator2DUI::DrawDecisionFrameBtn()
 
 		frameinfo.vLT = frameinfo.vLT / Vec2(m_TexSize.x, m_TexSize.y);
 		frameinfo.vSlice = frameinfo.vSlice / Vec2(m_TexSize.x, m_TexSize.y);
+		frameinfo.vOffset = frameinfo.vOffset / Vec2(m_TexSize.x, m_TexSize.y);
 
 		m_NewAnim_vecFrm.push_back(frameinfo);
 		m_FrmCnt += 1;
@@ -1052,6 +1057,8 @@ void Animator2DUI::DrawDecisionFrameBtn()
 			// UV -> Pixel
 			m_NewFrameInfo.vLT *= Vec2(m_TexSize.x, m_TexSize.y);
 			m_NewFrameInfo.vSlice *= Vec2(m_TexSize.x, m_TexSize.y);
+			m_NewFrameInfo.vOffset *= Vec2(m_TexSize.x, m_TexSize.y);
+
   
 			// Texture Size 를 넘어간다면 왼쪽 아래칸으로 
 			if (m_NewFrameInfo.vLT.x + (m_NewFrameInfo.vSlice.x * 2) > m_TexSize.x)

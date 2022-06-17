@@ -23,7 +23,7 @@ private:
 	map<wstring, CRes*>		m_Res[(UINT)RES_TYPE::END];
 
 public:
-	void init();
+	void init(); 
 
 private:
 	void CreateEngineMesh();

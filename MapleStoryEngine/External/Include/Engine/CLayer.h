@@ -33,12 +33,15 @@ public:
     vector<CGameObject*>& GetRootObjects() { return m_vecRoot; }
     vector<CGameObject*>& GetObjects() { return m_vecObj; }
 
-    CLONE(CLayer)
+    CLONE_DISABLE(CLayer)
 
 public:
     CLayer();
     ~CLayer();
 
+    friend class CSceneMgr;
     friend class CScene;
+    friend class CGameObject;
+    friend class CEventMgr;
 };
 

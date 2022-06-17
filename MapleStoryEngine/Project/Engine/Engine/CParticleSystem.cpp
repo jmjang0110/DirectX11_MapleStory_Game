@@ -124,12 +124,14 @@ void CParticleSystem::render()
 }
 
 
-
 void CParticleSystem::SaveToScene(FILE* _pFile)
 {
 	CRenderComponent::SaveToScene(_pFile);
 
-	//SaveResPtr<CComputeShader>(m_CS.Get(), _pFile);
+	wstring strKey;
+	if (nullptr != m_CS)
+		strKey = m_CS->GetKey();
+	SaveWStringToFile(strKey, _pFile);
 
 	fwrite(&m_iMaxCount, sizeof(UINT), 1, _pFile);
 	fwrite(&m_bPosInherit, sizeof(int), 1, _pFile);
@@ -150,9 +152,9 @@ void CParticleSystem::LoadFromScene(FILE* _pFile)
 {
 	CRenderComponent::LoadFromScene(_pFile);
 
-	Ptr<CComputeShader> cs;
-	//LoadResPtr<CComputeShader>(cs, _pFile);
-	m_CS = (CParticleUpdateShader*)cs.Get();
+	wstring strKey;
+	LoadWStringFromFile(strKey, _pFile);
+	m_CS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(strKey).Get();
 
 	UINT iMaxCount = 0;
 	fread(&iMaxCount, sizeof(UINT), 1, _pFile);
@@ -170,9 +172,4 @@ void CParticleSystem::LoadFromScene(FILE* _pFile)
 	fread(&m_vEndScale, sizeof(Vec3), 1, _pFile);
 	fread(&m_fParticleCreateDistance, sizeof(float), 1, _pFile);
 	fread(&m_fParticleCreateTerm, sizeof(float), 1, _pFile);
-
-
 }
-
-
-

@@ -205,3 +205,59 @@ void CMaterial::SetTexParam(const wstring& _strParamName, Ptr<CTexture> _pTex)
 	}
 }
 
+
+
+int CMaterial::Save(const wstring& _strFilePath)
+{
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
+	assert(pFile);
+
+	if (nullptr == pFile)
+		return E_FAIL;
+
+	fwrite(&m_Param, sizeof(tScalarParam), 1, pFile);
+
+	for (UINT i = 0; i < (UINT)TEX_PARAM::END; ++i)
+	{
+		SaveResPtr(m_arrTex[i], pFile);
+	}
+
+	SaveResPtr(m_pShader, pFile);
+
+	//CMaterial* m_pMasterMtrl;
+
+	fclose(pFile);
+
+	return S_OK;
+}
+
+int CMaterial::Load(const wstring& _strFilePath)
+{
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
+	assert(pFile);
+
+	if (nullptr == pFile)
+		return E_FAIL;
+
+	fread(&m_Param, sizeof(tScalarParam), 1, pFile);
+
+	for (UINT i = 0; i < (UINT)TEX_PARAM::END; ++i)
+	{
+		LoadResPtr(m_arrTex[i], pFile);
+	}
+
+	Ptr<CGraphicsShader> pShader;
+	LoadResPtr(pShader, pFile);
+	SetShader(pShader);
+
+
+
+
+	fclose(pFile);
+	return S_OK;
+}
+
