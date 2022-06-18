@@ -175,13 +175,10 @@ void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel,
 void CAnimation2D::SaveToScene(FILE* _pFile)
 {
 	CEntity::SaveToScene(_pFile);
-	
-	// 여기가 문제네 
+
 	size_t FrmCnt = m_vecFrm.size();
 	fwrite(&FrmCnt, sizeof(size_t), 1, _pFile);
 
-	/*for(int i = 0 ; i < FrmCnt; ++i)
-		fwrite(&m_vecFrm[i], sizeof(tAnim2DFrame), 1, _pFile);*/
 	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrame), FrmCnt, _pFile);
 	fwrite(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
 	SaveResPtr(m_pAtlasTex, _pFile);
@@ -192,16 +189,8 @@ void CAnimation2D::LoadFromScene(FILE* _pFile)
 	CEntity::LoadFromScene(_pFile);
 
 	size_t FrmCnt = 0;
-
-	// 여기가 문제임 
 	fread(&FrmCnt, sizeof(size_t), 1, _pFile);
 	m_vecFrm.resize(FrmCnt);
-	/*for (int i = 0; i < FrmCnt; ++i)
-	{
-		tAnim2DFrame tAnim;
-		fread(&tAnim, sizeof(tAnim2DFrame), 1, _pFile);
-		m_vecFrm.push_back(tAnim);
-	}*/
 
 	fread(m_vecFrm.data(), sizeof(tAnim2DFrame), FrmCnt, _pFile);
 	fread(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);

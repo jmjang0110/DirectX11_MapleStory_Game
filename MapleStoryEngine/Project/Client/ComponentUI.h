@@ -13,6 +13,10 @@ private:
 
     bool            m_bActive;
 
+    // ======= todo ======
+    bool m_bDel;
+
+
 public:
     void SetTargetObject(CGameObject* _pTarget) { m_pTargetObject = _pTarget; }
     CGameObject* GetTargetObject() { return m_pTargetObject; }

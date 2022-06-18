@@ -5,7 +5,7 @@
 #include "CTexture.h"
 
 class CAnimator2D;
-
+ 
 class CAnimation2D
 	: public CEntity
 {

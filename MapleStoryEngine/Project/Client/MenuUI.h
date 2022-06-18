@@ -22,6 +22,15 @@ public:
 private:
     void Task();
 
+
+    // ====== todo 
+    //  -SceneOutlinerTool 에서 Scene을 눌렀을 때 저장 해놓기 위해서
+public:
+    void SetSaveScene(bool _b) { m_bSceneSave = _b; }
+    void SetSceneLoad(bool _b) { m_bSceneLoad = _b; }
+
+    // ==========
+
 public:
     MenuUI();
     ~MenuUI();

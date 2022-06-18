@@ -155,8 +155,8 @@ void CTestScene::CreateTestScene()
 	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();
 
 
-	AddPlayer(pCurScene);
-	//Add_MapleStory_Player(pCurScene);
+	//AddPlayer(pCurScene);
+	Add_MapleStory_Player(pCurScene);
 
 	pObject = new CGameObject;
 	pObject->SetName(L"tile");

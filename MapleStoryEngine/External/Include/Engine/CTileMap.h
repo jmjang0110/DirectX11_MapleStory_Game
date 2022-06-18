@@ -30,6 +30,7 @@ private:
 public:
     // 0 : No 1 : Yes
     void SetShowGrid(int _grid) { m_iShowGrid = _grid; }
+    int GetShowGrid() { return m_iShowGrid; }
 
 
 public:

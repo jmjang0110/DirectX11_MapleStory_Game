@@ -49,6 +49,12 @@ public:
 private:
     OBJECT_TYPE m_RecentClickedType;
 
+private:
+    void NewObjectButton();
+    void NewSceneButton();
+    void NewLayerButton();
+
+
     // ======== Todo ==============
 
 public:

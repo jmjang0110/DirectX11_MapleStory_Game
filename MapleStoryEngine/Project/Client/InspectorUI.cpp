@@ -323,6 +323,13 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				{
 					if(nullptr == m_pTargetObject->GetRenderComponent())
 						m_pTargetObject->AddComponent(new CTileMap);
+					Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png");
+					m_pTargetObject->TileMap()->SetAtlasTex(pTileAtlas);
+					m_pTargetObject->TileMap()->SetTileSize(Vec2(30.f, 30.f));
+					m_pTargetObject->TileMap()->SetTileMapCount(12, 20);
+
+					m_pTargetObject->Transform()->SetRelativeScale(12 * 30.f, 20 * 30.f, 1.f);
+
 				}
 				break;
 				case COMPONENT_TYPE::PARTICLESYSTEM:
@@ -357,6 +364,10 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 
 
+}
+
+void InspectorUI::DeleteComponent(DWORD_PTR _param)
+{
 }
 
 

@@ -76,13 +76,11 @@ private:
     TileImgFile*                    m_pSelected_imgFile; // img File
     Tile*                           m_pSelected_Tile;
 
-    CGameObject*                    m_pTargetObject;
 
     int                             m_iMapCountX;    // ¸Ê Å©±â 
     int                             m_iMapCountY;
 
     bool                            m_bEditMode;
-    bool                            m_bShowGrid;
     bool                            m_bAutoSetNextTile;
 
     int                             m_bTilemapInnerClicked;
