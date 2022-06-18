@@ -236,6 +236,7 @@ void CCamera::CheckLayerMask(const wstring& _strLayerName)
 }
 
 
+
 void CCamera::SaveToScene(FILE* _pFile)
 {
 	CComponent::SaveToScene(_pFile);

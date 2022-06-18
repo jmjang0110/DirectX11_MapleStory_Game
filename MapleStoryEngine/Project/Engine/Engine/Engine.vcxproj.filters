@@ -125,7 +125,7 @@
       <Filter>Engine\05. Component\08~12. RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="CTileMap.h">
-      <Filter>Engine\05. Component\08~12. RenderComponent\09. TileMap</Filter>
+      <Filter>Engine\05. Component\08~12. RenderComponent\08. MeshRender\09. TileMap</Filter>
     </ClInclude>
     <ClInclude Include="CStructuredBuffer.h">
       <Filter>Engine\03. Manager\01. Device\StructuredBuffer</Filter>
@@ -253,7 +253,7 @@
       <Filter>Engine\05. Component\08~12. RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
-      <Filter>Engine\05. Component\08~12. RenderComponent\09. TileMap</Filter>
+      <Filter>Engine\05. Component\08~12. RenderComponent\08. MeshRender\09. TileMap</Filter>
     </ClCompile>
     <ClCompile Include="CStructuredBuffer.cpp">
       <Filter>Engine\03. Manager\01. Device\StructuredBuffer</Filter>
@@ -408,9 +408,6 @@
     <Filter Include="Engine\05. Component\08~12. RenderComponent\08. MeshRender">
       <UniqueIdentifier>{78ebec49-80a4-4763-b8a9-3ac508e84505}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent\09. TileMap">
-      <UniqueIdentifier>{f88f8cbf-6d37-4f2f-a3da-b4e8dea9fbf5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\05. Component\08~12. RenderComponent\10. ParticleSystem">
       <UniqueIdentifier>{eafe4c7e-57b3-4e3f-8e62-b45e534af7ec}</UniqueIdentifier>
     </Filter>
@@ -437,6 +434,9 @@
     </Filter>
     <Filter Include="Engine\08. SceneFile">
       <UniqueIdentifier>{c917b6c0-d82f-4abc-a6eb-53b735698bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\08~12. RenderComponent\08. MeshRender\09. TileMap">
+      <UniqueIdentifier>{f88f8cbf-6d37-4f2f-a3da-b4e8dea9fbf5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

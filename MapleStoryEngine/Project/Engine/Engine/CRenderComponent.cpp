@@ -80,5 +80,4 @@ void CRenderComponent::LoadFromScene(FILE* _pFile)
 	Ptr<CMaterial> pMtrl;
 	LoadResPtr(pMtrl, _pFile);
 	SetSharedMaterial(pMtrl);
-
 }

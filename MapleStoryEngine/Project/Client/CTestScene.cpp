@@ -32,6 +32,8 @@
 void CTestScene::CreateTestScene()
 {
 	CScene* pCurScene = new CScene;
+	CSceneMgr::GetInst()->ChangeScene(pCurScene);
+
 	pCurScene->SetName(L"firstScene");
 
 	pCurScene->SetLayerName(0, L"Tile");
@@ -153,8 +155,8 @@ void CTestScene::CreateTestScene()
 	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();
 
 
-	//AddPlayer(pCurScene);
-	Add_MapleStory_Player(pCurScene);
+	AddPlayer(pCurScene);
+	//Add_MapleStory_Player(pCurScene);
 
 	pObject = new CGameObject;
 	pObject->SetName(L"tile");
@@ -162,7 +164,6 @@ void CTestScene::CreateTestScene()
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, -1.5f));
 
 	pObject->AddComponent(new CTileMap);
-
 
 	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png");
 	pObject->TileMap()->SetAtlasTex(pTileAtlas);
@@ -174,7 +175,7 @@ void CTestScene::CreateTestScene()
 	pCurScene->AddObject(pObject, L"Tile");
 
 
-	CSceneMgr::GetInst()->ChangeScene(pCurScene);
+	
 
 
 	// 충돌 레이어 설정
@@ -238,7 +239,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	pObj->AddComponent(new CPlayerScript);
+	//pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

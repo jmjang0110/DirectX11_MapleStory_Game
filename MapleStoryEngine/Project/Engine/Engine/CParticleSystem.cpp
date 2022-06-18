@@ -30,7 +30,7 @@ CParticleSystem::CParticleSystem()
 	
 	// 여기서 할 필요가 없었따??? 
 	m_ParticleBuffer = new CStructuredBuffer();
-	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::READ_WRITE, false, nullptr);
+	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::READ_WRITE, true, nullptr);
 
 	m_DataBuffer = new CStructuredBuffer;
 	m_DataBuffer->Create(sizeof(tParticleData), 1, SB_TYPE::READ_WRITE, true, nullptr);
@@ -59,7 +59,7 @@ CParticleSystem::CParticleSystem(const CParticleSystem& _origin)
 	m_CS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateShader").Get();
 
 	m_ParticleBuffer = new CStructuredBuffer();
-	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::READ_WRITE, false, nullptr);
+	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::READ_WRITE, true, nullptr);
 
 	m_DataBuffer = new CStructuredBuffer;
 	m_DataBuffer->Create(sizeof(tParticleData), 1, SB_TYPE::READ_WRITE, true, nullptr);
@@ -75,7 +75,7 @@ void CParticleSystem::SetMaxParticleCount(UINT _iMax)
 {
 	if (m_iMaxCount < _iMax)
 	{
-		m_ParticleBuffer->Create(sizeof(tParticle), _iMax, SB_TYPE::READ_WRITE, false, nullptr);
+		m_ParticleBuffer->Create(sizeof(tParticle), _iMax, SB_TYPE::READ_WRITE, true, nullptr);
 	}
 	m_iMaxCount = _iMax;
 }

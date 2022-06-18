@@ -66,6 +66,7 @@ void CImGuiMgr::init(HWND _hwnd)
 
 void CImGuiMgr::progress()
 {
+
     // Start the Dear ImGui frame
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -86,6 +87,10 @@ void CImGuiMgr::progress()
         pair.second->render();
     }
 
+    bool bOpen = true;
+    ImGui::ShowDemoWindow(&bOpen);
+
+
     // Delegate 호출
     for (size_t i = 0; i < m_vecDelegate.size(); ++i)
     {
@@ -98,10 +103,7 @@ void CImGuiMgr::progress()
     }
 
 
-
-
-    bool bOpen = true;
-    ImGui::ShowDemoWindow(&bOpen);
+    //m_vecDelegate.clear();
 }
 
 void CImGuiMgr::render()
@@ -138,7 +140,8 @@ void CImGuiMgr::clear()
 
 void CImGuiMgr::CreateUI()
 {
-    CGameObject* pTargetObj = CSceneMgr::GetInst()->FindObjectByName(L"ParticleObject_01");
+    //CGameObject* pTargetObj = CSceneMgr::GetInst()->FindObjectByName(L"ParticleObject_01");
+    CGameObject*  pTargetObj = nullptr;
 
     // MenuBar 생성
     MenuUI* pMenuUI = new MenuUI;

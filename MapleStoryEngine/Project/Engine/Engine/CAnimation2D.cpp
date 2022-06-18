@@ -27,6 +27,10 @@ CAnimation2D::~CAnimation2D()
 
 void CAnimation2D::finalupdate()
 {
+	// Todo 
+	if (m_vecFrm.size() == 0)
+		return;
+	// ====
 
 	if (m_bFinish)
 		return;
@@ -50,6 +54,10 @@ void CAnimation2D::finalupdate()
 
 void CAnimation2D::UpdateData()
 {
+	// Todo 
+	if (m_vecFrm.size() == 0)
+		return;
+	// ====
 
 	static CConstBuffer* pBuffer = CDevice::GetInst()->GetCB(CB_TYPE::ANIM2D);
 
@@ -167,12 +175,15 @@ void CAnimation2D::Create(Ptr<CTexture> _Atlas, Vec2 _vBackgroundSizePixel,
 void CAnimation2D::SaveToScene(FILE* _pFile)
 {
 	CEntity::SaveToScene(_pFile);
+	
+	// 여기가 문제네 
+	size_t FrmCnt = m_vecFrm.size();
+	fwrite(&FrmCnt, sizeof(size_t), 1, _pFile);
 
-	size_t i = m_vecFrm.size();
-	fwrite(&i, sizeof(size_t), 1, _pFile);
-	fwrite(m_vecFrm.data(), sizeof(tAnim2D), i, _pFile);
+	/*for(int i = 0 ; i < FrmCnt; ++i)
+		fwrite(&m_vecFrm[i], sizeof(tAnim2DFrame), 1, _pFile);*/
+	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrame), FrmCnt, _pFile);
 	fwrite(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
-
 	SaveResPtr(m_pAtlasTex, _pFile);
 }
 
@@ -180,11 +191,19 @@ void CAnimation2D::LoadFromScene(FILE* _pFile)
 {
 	CEntity::LoadFromScene(_pFile);
 
-	size_t i = 0;
-	fread(&i, sizeof(size_t), 1, _pFile);
-	m_vecFrm.resize(i);
-	fread(m_vecFrm.data(), sizeof(tAnim2D), i, _pFile);
-	fread(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
+	size_t FrmCnt = 0;
 
+	// 여기가 문제임 
+	fread(&FrmCnt, sizeof(size_t), 1, _pFile);
+	m_vecFrm.resize(FrmCnt);
+	/*for (int i = 0; i < FrmCnt; ++i)
+	{
+		tAnim2DFrame tAnim;
+		fread(&tAnim, sizeof(tAnim2DFrame), 1, _pFile);
+		m_vecFrm.push_back(tAnim);
+	}*/
+
+	fread(m_vecFrm.data(), sizeof(tAnim2DFrame), FrmCnt, _pFile);
+	fread(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
 	LoadResPtr(m_pAtlasTex, _pFile);
 }

@@ -353,6 +353,7 @@ void CGameObject::Destroy()
 
 
 
+
 #include "CCamera.h"
 #include "CCollider2D.h"
 //#include "CCollider3D.h"
@@ -373,6 +374,7 @@ void CGameObject::SaveToScene(FILE* _pFile)
 		{
 			SaveWStringToFile(ToWString((COMPONENT_TYPE)i), _pFile);
 			m_arrCom[i]->SaveToScene(_pFile);
+
 		}
 	}
 	SaveWStringToFile(L"END", _pFile);
@@ -449,8 +451,6 @@ void CGameObject::LoadFromScene(FILE* _pFile)
 		}
 	}
 }
-
-
 
 
 /*

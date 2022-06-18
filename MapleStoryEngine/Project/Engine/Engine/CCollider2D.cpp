@@ -144,7 +144,6 @@ void CCollider2D::OnCollisionExit(CCollider2D* _Other)
 }
 
 
-
 void CCollider2D::SaveToScene(FILE* _pFile)
 {
 	CComponent::SaveToScene(_pFile);

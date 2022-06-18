@@ -198,7 +198,6 @@ void CAnimator2D::UpdateData_DummyAnim()
 }
 
 
-
 void CAnimator2D::SaveToScene(FILE* _pFile)
 {
 	CComponent::SaveToScene(_pFile);
@@ -206,17 +205,21 @@ void CAnimator2D::SaveToScene(FILE* _pFile)
 	size_t iAnimCount = m_mapAnim.size();
 	fwrite(&iAnimCount, sizeof(size_t), 1, _pFile);
 
+
+	//map<wstring, CAnimation2D*> m_mapAnim;
 	map<wstring, CAnimation2D*>::iterator iter = m_mapAnim.begin();
 	for (; iter != m_mapAnim.end(); ++iter)
 	{
 		iter->second->SaveToScene(_pFile);
 	}
 
+	//CAnimation2D*               m_pCurAnim;
 	wstring strCurAnimName;
 	if (nullptr != m_pCurAnim)
 		strCurAnimName = m_pCurAnim->GetName();
-
 	SaveWStringToFile(strCurAnimName, _pFile);
+
+	//bool                        m_bRepeat;
 	fwrite(&m_bRepeat, sizeof(bool), 1, _pFile);
 }
 

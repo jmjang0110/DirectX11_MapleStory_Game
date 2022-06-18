@@ -144,8 +144,7 @@ void InspectorUI::render_update()
 
 void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 {
-	if (nullptr == _pTarget)
-		return;
+
 
 	m_pTargetObject = _pTarget;
 
