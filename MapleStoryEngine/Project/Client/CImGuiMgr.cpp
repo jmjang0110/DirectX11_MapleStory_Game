@@ -97,10 +97,10 @@ void CImGuiMgr::progress()
         (m_vecDelegate[i].pInst->*m_vecDelegate[i].pFunc)(m_vecDelegate[i].dwParam);
     }
 
-    if (m_vecDelegate.size() > 0)
-    {
-        (m_vecDelegate[0].pInst->*m_vecDelegate[0].pFunc)(m_vecDelegate[0].dwParam);
-    }
+    //if (m_vecDelegate.size() > 0)
+    //{
+    //    (m_vecDelegate[0].pInst->*m_vecDelegate[0].pFunc)(m_vecDelegate[0].dwParam);
+    //}
 
 
     //m_vecDelegate.clear();

@@ -7,19 +7,23 @@ class ComponentUI :
     public UI
 {
 private:
-    CGameObject* m_pTargetObject;
-    COMPONENT_TYPE  m_eComType;
+    CGameObject*        m_pTargetObject;
+    COMPONENT_TYPE      m_eComType;
 
 
-    bool            m_bActive;
+    bool                m_bActive;
+    
 
-    // ======= todo ======
-    bool m_bDel;
-
+    // === Todo 
+    bool                m_bDel;
 
 public:
     void SetTargetObject(CGameObject* _pTarget) { m_pTargetObject = _pTarget; }
     CGameObject* GetTargetObject() { return m_pTargetObject; }
+
+    // ===== Todo 
+    COMPONENT_TYPE GetComponentType() { return m_eComType; }
+
 
 protected:
     bool IsComponentActive() { return m_bActive; }

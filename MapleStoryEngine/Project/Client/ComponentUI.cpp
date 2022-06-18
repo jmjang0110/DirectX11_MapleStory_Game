@@ -4,6 +4,8 @@
 #include <Engine/CGameObject.h>
 #include <Engine/CComponent.h>
 
+#include "CImGuiMgr.h"
+#include "InspectorUI.h"
 
 
 
@@ -13,6 +15,8 @@ ComponentUI::ComponentUI(const string& _strName, COMPONENT_TYPE _eComType)
 	, m_bActive(false)
 	, m_bDel(false)
 {
+
+
 }
 
 ComponentUI::~ComponentUI()
@@ -75,8 +79,14 @@ void ComponentUI::render_update()
 				if (ImGui::Button("Yes"))
 				{
 					m_bDel = false;
-					//m_pTargetObject->DeleteComponent(m_eComType);
 
+					// CImGuiMgr ¿¡ Delegate µî·Ï 
+					tUIDelegate tDeleteCom;
+					tDeleteCom.dwParam = (DWORD_PTR)m_eComType;
+					tDeleteCom.pFunc = (PARAM_1)&InspectorUI::DeleteComponent;
+					tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("Inspector");
+
+					CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
 					ImGui::CloseCurrentPopup();
 				}
 

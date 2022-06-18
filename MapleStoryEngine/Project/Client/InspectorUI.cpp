@@ -125,13 +125,13 @@ InspectorUI::~InspectorUI()
 
 void InspectorUI::update()
 {
-	if (KEY_TAP(KEY::I))
-	{
-		if (IsActive())
-			Deactivate();
-		else
-			Activate();
-	}
+	//if (KEY_TAP(KEY::I))
+	//{
+	//	if (IsActive())
+	//		Deactivate();
+	//	else
+	//		Activate();
+	//}
 }
 
 void InspectorUI::render_update()
@@ -350,7 +350,7 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 				}
 
-
+				// New Component 를 UI에도 활성화 
 				if (m_pTargetObject->GetComponent(ComType))
 				{
 					m_arrComUI[i]->Activate();
@@ -366,15 +366,30 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 }
 
-void InspectorUI::DeleteComponent(DWORD_PTR _param)
-{
-}
-
 
 
 // =======================================================					=======================================================
 // =======================================================		SUB Func	=======================================================
 // =======================================================					=======================================================
+
+
+// _param : COMPONENT_TYPE
+void InspectorUI::DeleteComponent(DWORD_PTR _param)
+{
+	COMPONENT_TYPE eComType = (COMPONENT_TYPE)_param;
+
+
+	// Target Object 에서 해당 Component 를 삭제 
+	m_pTargetObject->DeleteComponent(eComType);
+
+	// UI 갱신 
+	m_arrComUI[(UINT)eComType]->Deactivate();
+	m_arrComUI[(UINT)eComType]->SetTargetObject(nullptr);
+
+
+}
+
+
 
 
 void InspectorUI::GameObjectTool_SubFunc()
