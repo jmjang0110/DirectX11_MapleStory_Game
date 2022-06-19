@@ -33,6 +33,7 @@ public:
     int GetShowGrid() { return m_iShowGrid; }
 
 
+
 public:
     void SetAtlasTex(Ptr<CTexture> _pAtlasTex) 
     { 

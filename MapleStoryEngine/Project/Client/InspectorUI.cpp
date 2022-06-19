@@ -382,6 +382,8 @@ void InspectorUI::DeleteComponent(DWORD_PTR _param)
 	// Target Object 에서 해당 Component 를 삭제 
 	m_pTargetObject->DeleteComponent(eComType);
 
+	
+
 	// UI 갱신 
 	m_arrComUI[(UINT)eComType]->Deactivate();
 	m_arrComUI[(UINT)eComType]->SetTargetObject(nullptr);

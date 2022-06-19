@@ -75,7 +75,7 @@ void ComponentUI::render_update()
 			if (ImGui::BeginPopupModal("ReallyDelete?", &unused_open))
 			{
 
-				ImGui::TextColored(ImVec4(1.f,0.f,0.f,1.f),"\t\tWARNING!!\n\nAre You Really DELETE this Component ?? \n\n");
+				ImGui::TextColored(ImVec4(1.f,0.f,0.f,1.f),"WARNING\n\nAre You sure you want to delete this Component? \n\n");
 				if (ImGui::Button("Yes"))
 				{
 					m_bDel = false;

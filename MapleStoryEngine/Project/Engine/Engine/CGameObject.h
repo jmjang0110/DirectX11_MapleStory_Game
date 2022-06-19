@@ -65,6 +65,13 @@ public:
     CComponent* GetComponent(COMPONENT_TYPE _eType){ return m_arrCom[(UINT)_eType];  }
     CRenderComponent* GetRenderComponent() { return m_pRenderComponent; }
 
+
+    // ======= Todo 
+
+    void DeleteComponent(COMPONENT_TYPE _eType);
+
+    // ===========
+
     void Destroy();
 
     GET_COMPONENT(Transform, TRANSFORM)
