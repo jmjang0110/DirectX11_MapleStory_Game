@@ -36,20 +36,7 @@ void CSceneMgr::init()
 
 void CSceneMgr::progress()
 {
-	//if (KEY_TAP(KEY::T))
-	//{
-	//	CFileMgr::GetInst()->LoadFromFile<CScene>((DWORD_PTR)m_pCurScene);
-
-	//	//CSceneMgr::GetInst()->LoadFromFile();
-	//	//CSceneMgr::GetInst()->SaveToFile();
-
-	//}
-	//if (KEY_TAP(KEY::U))
-	//{
-
-	//	CFileMgr::GetInst()->SaveToFile<CScene>((DWORD_PTR)m_pCurScene);
-
-	//}
+	
 
 	SCENE_STATE eState = m_pCurScene->GetSceneState();
 
