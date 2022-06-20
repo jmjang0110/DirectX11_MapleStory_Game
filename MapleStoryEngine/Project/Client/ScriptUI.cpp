@@ -46,17 +46,31 @@ void ScriptUI::render_update()
 		switch (vecParam[i].eType)
 		{
 		case SCRIPTPARAM_TYPE::INT:
-			ParamUI::Param_Int(vecParam[i].strParamName, (int*)vecParam[i].pParam);
-			break;
+		{
+			int data = ParamUI::Param_Int(vecParam[i].strParamName, (const int*)vecParam[i].pParam);
+			*(int*)vecParam[i].pParam = data;
+		}
+
+		break;
 		case SCRIPTPARAM_TYPE::FLOAT:
-			ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam);
-			break;
+		{
+			float data = ParamUI::Param_Float(vecParam[i].strParamName, (const float*)vecParam[i].pParam);
+			*(float*)vecParam[i].pParam = data;
+		}
+
+		break;
 		case SCRIPTPARAM_TYPE::VEC2:
-			ParamUI::Param_Vec2(vecParam[i].strParamName, (Vec2*)vecParam[i].pParam);
-			break;
+		{
+			Vec2 data = ParamUI::Param_Vec2(vecParam[i].strParamName, (const Vec2*)vecParam[i].pParam);
+			*(Vec2*)vecParam[i].pParam = data;
+		}
+		break;
 		case SCRIPTPARAM_TYPE::VEC4:
-			ParamUI::Param_Vec4(vecParam[i].strParamName, (Vec4*)vecParam[i].pParam);
-			break;
+		{
+			Vec4 data = ParamUI::Param_Vec4(vecParam[i].strParamName, (const Vec4*)vecParam[i].pParam);
+			*(Vec4*)vecParam[i].pParam = data;
+		}
+		break;
 
 		case SCRIPTPARAM_TYPE::TEX:
 			break;

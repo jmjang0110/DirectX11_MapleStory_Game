@@ -14,6 +14,10 @@
 
 void CSceneSaveLoad::SaveScene(CScene* _pScene, const wstring& _strSceneFilePath)
 {
+    // 리소스 변경상태 저장
+    CResMgr::GetInst()->SaveChangedRes();
+
+
     FILE* pFile = nullptr;
     _wfopen_s(&pFile, _strSceneFilePath.c_str(), L"wb");
 

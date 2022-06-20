@@ -34,6 +34,9 @@ void CTestScene::CreateTestScene()
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
 
+//	return;
+
+
 	pCurScene->SetName(L"firstScene");
 
 	pCurScene->SetLayerName(0, L"Tile");
@@ -49,6 +52,9 @@ void CTestScene::CreateTestScene()
 	CResMgr::GetInst()->Load<CTexture>(L"Back", L"Texture\\0_100.png");
 	CResMgr::GetInst()->Load<CTexture>(L"castle", L"Texture\\castle.png");
 	CResMgr::GetInst()->Load<CTexture>(L"character123456", L"Texture\\test6.png");
+	CResMgr::GetInst()->Load<CTexture>(L"portal", L"Texture\\portal.png");
+
+
 
 
 

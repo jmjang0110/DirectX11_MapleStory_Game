@@ -14,12 +14,13 @@ private:
     UINT        m_iRefCount;
 
     bool        m_bEngineRes;   // 엔진 내부에서 사용하는 자원
-
+    bool        m_bChanged;     // 리소스 데이터 변경체크
 
 protected:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; }
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
     bool CheckFail(HRESULT _hr);
+    void Changed() { m_bChanged = true; }
 
 
 public:
@@ -27,10 +28,11 @@ public:
     const wstring& GetRelativePath() { return m_strRelativePath; }
     RES_TYPE GetResType() { return m_eResType; }
     bool IsEngineRes() { return m_bEngineRes; }
+    bool IsChanged() { return m_bChanged; }
 
 
 protected:
-    virtual int Save(const wstring& _strFilePath) { return S_OK; }
+    virtual int Save(const wstring& _strFilePath) { m_bChanged = false; return S_OK; }
     virtual int Load(const wstring& _strFilePath) = 0;
     CLONE_DISABLE(CRes)
 

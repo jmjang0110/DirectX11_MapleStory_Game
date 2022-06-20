@@ -24,6 +24,7 @@ private:
 
 public:
 	void init(); 
+	void SaveChangedRes();
 
 private:
 	void CreateEngineMesh();

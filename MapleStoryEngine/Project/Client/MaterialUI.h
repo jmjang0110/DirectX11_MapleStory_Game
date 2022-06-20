@@ -13,8 +13,7 @@ public:
 
 
     void ShaderSelected(DWORD_PTR _param);
-    void TextureSelected(DWORD_PTR _param);
-
+    void TextureSelected(DWORD_PTR _ptr);
 
 public:
     MaterialUI();

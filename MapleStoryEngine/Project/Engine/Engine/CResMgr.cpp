@@ -14,6 +14,22 @@ CResMgr::~CResMgr()
 	}
 }
 
+void CResMgr::SaveChangedRes()
+{
+	wstring strContent = CPathMgr::GetInst()->GetContentPath();
+
+	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i)
+	{
+		map<wstring, CRes*>::iterator iter = m_Res[i].begin();
+		for (; iter != m_Res[i].end(); ++iter)
+		{
+			if (iter->second->IsChanged())
+			{
+				iter->second->Save(strContent + iter->second->GetRelativePath());
+			}
+		}
+	}
+}
 
 Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _format, UINT _flag, bool _bEngineRes)
 {

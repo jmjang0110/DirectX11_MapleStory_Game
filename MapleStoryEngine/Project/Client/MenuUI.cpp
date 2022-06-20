@@ -10,6 +10,12 @@
 
 #include "CSceneSaveLoad.h"
 
+
+// ==== todo 
+#include "CImGuiMgr.h"
+#include "SceneOutlinerTool.h"
+// =========
+
 MenuUI::MenuUI()
     : UI("Menu")
 {
@@ -158,6 +164,17 @@ void MenuUI::Task()
         {
             CScene* pLoadScene = CSceneSaveLoad::LoadScene(szName);
             CSceneMgr::GetInst()->ChangeScene(pLoadScene);
+
+            // Todo ====== 
+            // SceneOutlinertool 을 바뀐 Scene 으로 변경 
+            // CImGuiMgr 에 Delegate 등록 
+            tUIDelegate tDeleteCom;
+            tDeleteCom.dwParam = (DWORD_PTR)nullptr;
+            tDeleteCom.pFunc = (PARAM_1)&SceneOutlinerTool::Reset;
+            tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("SceneOutlinerTool");
+
+            CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+            // ===========
         }
 
         m_bSceneLoad = false;

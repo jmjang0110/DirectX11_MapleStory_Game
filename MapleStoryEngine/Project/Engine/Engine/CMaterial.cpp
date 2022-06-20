@@ -5,6 +5,8 @@
 #include "CDevice.h"
 #include "CConstBuffer.h"
 
+#include "CSceneMgr.h"
+#include "CScene.h"
 
 CMaterial::CMaterial()
 	: CRes(RES_TYPE::MATERIAL)
@@ -100,6 +102,9 @@ void CMaterial::SetScalarParam(SCALAR_PARAM _eType, void* _pData)
 		m_Param.matArr[(UINT)_eType - (UINT)SCALAR_PARAM::MAT_0] = *((Matrix*)_pData);
 		break;
 	}
+
+	Changed();
+
 }
 
 void CMaterial::SetScalarParam(const wstring& _strParamName, void* _pData)
@@ -112,9 +117,12 @@ void CMaterial::SetScalarParam(const wstring& _strParamName, void* _pData)
 			break;
 		}
 	}
+
+	Changed();
+
 }
 
-void* CMaterial::GetScalarParam(SCALAR_PARAM _eType)
+const void* CMaterial::GetScalarParam(SCALAR_PARAM _eType)
 {
 	switch (_eType)
 	{
@@ -149,7 +157,10 @@ void* CMaterial::GetScalarParam(SCALAR_PARAM _eType)
 		return &m_Param.matArr[(UINT)_eType - (UINT)SCALAR_PARAM::MAT_0];
 		break;
 	}
+
+	return nullptr;
 }
+
 
 Ptr<CTexture> CMaterial::GetTexParam(TEX_PARAM _eType)
 {
@@ -191,6 +202,10 @@ void CMaterial::SetTexParam(TEX_PARAM _eType, Ptr<CTexture> _pTex)
 		m_arrTex[(UINT)_eType] = _pTex;
 		break;
 	}
+
+	Changed(); // CRes::Changed(); -> 리소스가  변경되었는지 
+
+
 }
 
 void CMaterial::SetTexParam(const wstring& _strParamName, Ptr<CTexture> _pTex)
@@ -203,12 +218,26 @@ void CMaterial::SetTexParam(const wstring& _strParamName, Ptr<CTexture> _pTex)
 			break;
 		}
 	}
+
+	Changed();
+
 }
 
 
 
 int CMaterial::Save(const wstring& _strFilePath)
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	assert(!((m_pMasterMtrl && pCurScene->GetSceneState() != SCENE_STATE::STOP)));
+
+	if (m_pMasterMtrl && pCurScene->GetSceneState() != SCENE_STATE::STOP)
+	{
+		return E_FAIL;
+	}
+
+	// 변경체크 해제
+	CRes::Save(_strFilePath);
+
 	FILE* pFile = nullptr;
 
 	_wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
@@ -226,8 +255,6 @@ int CMaterial::Save(const wstring& _strFilePath)
 
 	SaveResPtr(m_pShader, pFile);
 
-	//CMaterial* m_pMasterMtrl;
-
 	fclose(pFile);
 
 	return S_OK;
@@ -235,10 +262,18 @@ int CMaterial::Save(const wstring& _strFilePath)
 
 int CMaterial::Load(const wstring& _strFilePath)
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	assert(!((m_pMasterMtrl && pCurScene->GetSceneState() != SCENE_STATE::STOP)));
+
+	if (m_pMasterMtrl && pCurScene->GetSceneState() != SCENE_STATE::STOP)
+	{
+		return E_FAIL;
+	}
+
 	FILE* pFile = nullptr;
 
 	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
-	assert(pFile);
+	//assert(pFile);
 
 	if (nullptr == pFile)
 		return E_FAIL;
@@ -254,10 +289,9 @@ int CMaterial::Load(const wstring& _strFilePath)
 	LoadResPtr(pShader, pFile);
 	SetShader(pShader);
 
-
-
-
 	fclose(pFile);
+
 	return S_OK;
 }
+
 

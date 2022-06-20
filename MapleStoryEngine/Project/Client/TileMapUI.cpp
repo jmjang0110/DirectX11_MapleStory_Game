@@ -395,6 +395,8 @@ void TileMapUI::Reset()
 	TreeNode* node1 = PushimgFiletoTree(L"YellowToyCastle", m_TreeUI->GetDummyNode());
 	TreeNode* node2 = PushimgFiletoTree(L"WoodMarble", m_TreeUI->GetDummyNode());
 	TreeNode* node3 = PushimgFiletoTree(L"VicportTown", m_TreeUI->GetDummyNode());
+	TreeNode* node4 = PushimgFiletoTree(L"GrassySoil", m_TreeUI->GetDummyNode());
+
 
 	if (m_Selected_imgFIle_Name == "YellowToyCastle")
 		ResetimgFile(m_Selected_imgFIle_Name, node1);
@@ -402,6 +404,9 @@ void TileMapUI::Reset()
 		ResetimgFile(m_Selected_imgFIle_Name, node2);
 	else if (m_Selected_imgFIle_Name == "VicportTown")
 		ResetimgFile(m_Selected_imgFIle_Name, node3);
+	else if (m_Selected_imgFIle_Name == "GrassySoil")
+		ResetimgFile(m_Selected_imgFIle_Name, node4);
+
 
 
 }

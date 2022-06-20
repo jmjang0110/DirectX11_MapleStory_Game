@@ -29,7 +29,7 @@ public:
     void SetTexParam(TEX_PARAM _eType, Ptr<CTexture> _pTex);
     void SetTexParam(const wstring& _strParamName, Ptr<CTexture> _pTex);
 
-    void* GetScalarParam(SCALAR_PARAM _eType);
+    const void* GetScalarParam(SCALAR_PARAM _eType);
     Ptr<CTexture> GetTexParam(TEX_PARAM _eType);
 
     void UpdateData();

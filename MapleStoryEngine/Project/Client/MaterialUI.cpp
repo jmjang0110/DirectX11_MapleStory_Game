@@ -33,7 +33,6 @@ void MaterialUI::update()
 
 
 }
-
 void MaterialUI::render_update()
 {
 	ResInfoUI::render_update();
@@ -59,24 +58,7 @@ void MaterialUI::render_update()
 
 	ImGui::Text("Shader");
 	ImGui::SameLine(100);
-	if (ImGui::BeginCombo("##ShaderName", strShaderName.c_str(), 0))
-	{
-			// ListUI 활성화한다.
-			const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::GRAPHICS_SHADER);
-			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
-			pListUI->Clear();
-			pListUI->SetTitle("Shader List");
-
-			for (const auto& pair : mapRes)
-			{
-				pListUI->AddList(string(pair.first.begin(), pair.first.end()));
-			}
-
-			pListUI->Activate();
-			pListUI->SetDBCEvent(this, (DBCLKED)&MaterialUI::ShaderSelected);
-
-		ImGui::EndCombo();
-	}
+	ImGui::InputText("##ShaderName", (char*)strShaderName.c_str(), strShaderName.capacity(), ImGuiInputTextFlags_ReadOnly);
 
 	// Shader Parameter 확인
 	if (nullptr == pShader)
@@ -87,7 +69,7 @@ void MaterialUI::render_update()
 	{
 		string strDesc = string(vecScalarInfo[i].strDesc.begin(), vecScalarInfo[i].strDesc.end());
 
-		void* pData = pMtrl->GetScalarParam(vecScalarInfo[i].eScalarParam);
+		const void* pData = pMtrl->GetScalarParam(vecScalarInfo[i].eScalarParam);
 
 		switch (vecScalarInfo[i].eScalarParam)
 		{
@@ -95,30 +77,55 @@ void MaterialUI::render_update()
 		case SCALAR_PARAM::INT_1:
 		case SCALAR_PARAM::INT_2:
 		case SCALAR_PARAM::INT_3:
-			ParamUI::Param_Int(strDesc, (int*)pData);
-			break;
+		{
+			int data = ParamUI::Param_Int(strDesc, (const int*)pData);
+			if (*(const int*)pData != data)
+			{
+				pMtrl->SetScalarParam(vecScalarInfo[i].eScalarParam, &data);
+			}
+		}
+		break;
 		case SCALAR_PARAM::FLOAT_0:
 		case SCALAR_PARAM::FLOAT_1:
 		case SCALAR_PARAM::FLOAT_2:
 		case SCALAR_PARAM::FLOAT_3:
-			ParamUI::Param_Float(strDesc, (float*)pData);
-			break;
+		{
+			float data = ParamUI::Param_Float(strDesc, (const float*)pData);
+			if (*(const float*)pData != data)
+			{
+				pMtrl->SetScalarParam(vecScalarInfo[i].eScalarParam, &data);
+			}
+		}
+		break;
 		case SCALAR_PARAM::VEC2_0:
 		case SCALAR_PARAM::VEC2_1:
 		case SCALAR_PARAM::VEC2_2:
 		case SCALAR_PARAM::VEC2_3:
-			ParamUI::Param_Vec2(strDesc, (Vec2*)pData);
-			break;
+		{
+			Vec2 data = ParamUI::Param_Vec2(strDesc, (const Vec2*)pData);
+			if (*(const Vec2*)pData != data)
+			{
+				pMtrl->SetScalarParam(vecScalarInfo[i].eScalarParam, &data);
+			}
+		}
+
+		break;
 		case SCALAR_PARAM::VEC4_0:
 		case SCALAR_PARAM::VEC4_1:
 		case SCALAR_PARAM::VEC4_2:
 		case SCALAR_PARAM::VEC4_3:
-			ParamUI::Param_Vec4(strDesc, (Vec4*)pData);
-			break;
+		{
+			Vec4 data = ParamUI::Param_Vec4(strDesc, (const Vec4*)pData);
+			if (*(const Vec4*)pData != data)
+			{
+				pMtrl->SetScalarParam(vecScalarInfo[i].eScalarParam, &data);
+			}
+		}
+
+		break;
 		}
 	}
 
-	// ParamUI::Param_Tex =>> 이미지 띄운다. 
 	const vector<tTexParamInfo>& vecTexParamInfo = pShader->GetTexParamInfo();
 
 	for (size_t i = 0; i < vecTexParamInfo.size(); ++i)
@@ -140,32 +147,11 @@ void MaterialUI::render_update()
 			if (ParamUI::Param_Tex(strDesc, pMtrl->GetTexParam(vecTexParamInfo[i].eTexParam).Get()
 				, this, (DBCLKED)&MaterialUI::TextureSelected))
 			{
-				// 수정해야할 Tex Param 이 TEX_0 인지, TEX_1 인지.... 
-				m_eSelectedTexParam = vecTexParamInfo[i].eTexParam; 			
+				m_eSelectedTexParam = vecTexParamInfo[i].eTexParam;
 			}
 			break;
 		}
 	}
-
-	// Mtrl 의 Outpute Tex 변경 
-	ImGui::SameLine();
-	if (ImGui::Button("Select\n Tex"))
-	{
-		// ListUI 활성화한다.
-		const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::TEXTURE);
-		ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
-		pListUI->Clear();
-		pListUI->SetTitle("Texture List");
-
-		for (const auto& pair : mapRes)
-		{
-			pListUI->AddList(string(pair.first.begin(), pair.first.end()));
-		}
-
-		pListUI->Activate();
-		pListUI->SetDBCEvent(this, (DBCLKED)&TextureUI::TextureSelect_toMtrl);
-	}
-
 }
 
 // Delegate 용
@@ -202,5 +188,7 @@ void MaterialUI::TextureSelected(DWORD_PTR _ptr)
 	CMaterial* pMtrl = dynamic_cast<CMaterial*>(GetTargetRes());
 	assert(pMtrl);
 
-	pMtrl->SetTexParam(m_eSelectedTexParam, pSelectedTex);
+	// 변경점이 있을 때만 세팅
+	if (pMtrl->GetTexParam(m_eSelectedTexParam) != pSelectedTex)
+		pMtrl->SetTexParam(m_eSelectedTexParam, pSelectedTex);
 }
