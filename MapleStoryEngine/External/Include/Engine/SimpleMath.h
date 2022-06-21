@@ -232,6 +232,10 @@ namespace DirectX
         // 3D vector
         struct Vector3 : public XMFLOAT3
         {
+            // ==== Todo 
+            bool IsZero() { if (XMFLOAT3::x == 0.f && XMFLOAT3::y == 0.f && XMFLOAT3::z == 0.f) return true; else return false; }
+            // =========
+
             Vector3() noexcept : XMFLOAT3(0.f, 0.f, 0.f) {}
             XM_CONSTEXPR explicit Vector3(float x) : XMFLOAT3(x, x, x) {}
             XM_CONSTEXPR Vector3(float _x, float _y, float _z) : XMFLOAT3(_x, _y, _z) {}

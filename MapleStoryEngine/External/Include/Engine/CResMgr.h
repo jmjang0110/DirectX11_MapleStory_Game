@@ -10,6 +10,7 @@
 #include "CTexture.h"
 #include "CGraphicsShader.h"
 #include "CComputeShader.h"
+#include "CSceneFile.h"
 //#include "CSound.h"
 //#include "CMeshData.h"
 
@@ -74,9 +75,9 @@ inline RES_TYPE CResMgr::GetResType()
 		return RES_TYPE::MATERIAL;
 	else if (info.hash_code() == typeid(CTexture).hash_code())
 		return RES_TYPE::TEXTURE;
-	//else if (info.hash_code() == typeid(CMesh).hash_code())
-	//	return RES_TYPE::MESH;
-	
+	else if (info.hash_code() == typeid(CSceneFile).hash_code())
+		return RES_TYPE::SCENEFILE;
+
 
 	return RES_TYPE::END;
 }

@@ -108,7 +108,7 @@ void CTestScene::CreateTestScene()
 	//pObject->AddComponent(new CPlayerScript);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 500.f);
-	pObject->Transform()->SetRelativeScale(1600.f, 900.f, 1.f);
+	pObject->Transform()->SetRelativeScale(800.f, 450.f, 1.f);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PaperBurnMtrl"));
@@ -245,7 +245,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	//pObj->AddComponent(new CPlayerScript);
+	pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

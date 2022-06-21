@@ -130,3 +130,38 @@ CLayer* CScene::GetLayer(const wstring& _strLayerName)
 	return nullptr;
 }
 
+Ptr<CSceneFile> CScene::GetSceneFile()
+{
+	return CResMgr::GetInst()->FindRes<CSceneFile>(m_strResKey);
+}
+
+
+void CScene::SetSceneState(SCENE_STATE _eState)
+{
+	if (m_eSceneState == _eState)
+		return;
+
+	if (SCENE_STATE::STOP == m_eSceneState)
+	{
+		if (SCENE_STATE::PLAY == _eState)
+		{
+			m_eSceneState = _eState;
+			start();
+		}
+	}
+
+	else if (SCENE_STATE::PLAY == m_eSceneState)
+	{
+		if (SCENE_STATE::PAUSE == _eState)
+		{
+			m_eSceneState = _eState;
+		}
+		else if (SCENE_STATE::STOP == _eState)
+		{
+			m_eSceneState = _eState;
+			assert(CResMgr::GetInst()->FindRes<CSceneFile>(m_strResKey).Get());
+		}
+	}
+}
+
+

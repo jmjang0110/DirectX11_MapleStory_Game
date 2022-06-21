@@ -32,3 +32,16 @@ void CPathMgr::init()
 	// content 폴더 경로를 붙인다.
 	wcscat_s(m_strContentPath, L"\\bin\\content\\");
 }
+
+
+const wchar_t* CPathMgr::GetRelativePath(const wstring& _strFilePath)
+{
+	size_t iPos = _strFilePath.find(m_strContentPath, 0);
+	iPos += wcsnlen_s(m_strContentPath, 256);
+
+	wstring strRelativePath = _strFilePath.substr(iPos, _strFilePath.length());
+	wcscpy_s(m_strRelativePath, strRelativePath.data());
+
+	return m_strRelativePath;
+}
+
