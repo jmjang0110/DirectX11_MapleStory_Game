@@ -1,6 +1,8 @@
 #ifndef _VALUE
 #define _VALUE
 
+#include "struct.fx"
+
 cbuffer TRANSFORM : register(b0)
 {
     // 행 우선으로 읽기
@@ -70,12 +72,14 @@ cbuffer ANIM2D : register(b2)
 
 cbuffer GLOBAL : register(b3)
 {
-    float2  vResolution;
-    float2  vNoiseResolution;
-    float   fDT;
-    float   fAccTime;
-    float2  vPadding;
+    float2 vResolution;
+    float2 vNoiseResolution;
+    float fDT;
+    float fAccTime;
+    int iLight2DCount;
+    int iLight3DCount;
 }
+
 
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
@@ -91,6 +95,15 @@ Texture2DArray g_texarr_0 : register(t8);
 Texture2DArray g_texarr_1 : register(t9);
 
 Texture2D g_Atlas : register(t10);
+
+
+
+
+
+
+// Light2DBuffer, // Light3DBuffer
+StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t60);
+StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t61);
 
 
 // Global Noise Texture

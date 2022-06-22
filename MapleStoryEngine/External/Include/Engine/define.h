@@ -121,6 +121,9 @@ enum class COMPONENT_TYPE
 	ANIMATOR2D, // 2D Sprite Animation
 	ANIMATOR3D, // 3D Bone Skinning Animation
 
+	LIGHT2D,
+	LIGHT3D,
+
 	BOUNDINGBOX, // Picking, FrustumCulling
 
 	// renderer
@@ -227,3 +230,12 @@ enum class EVENT_TYPE
 
 	END,
 };
+
+
+enum class LIGHT_TYPE
+{
+	DIRECTIONAL,	// 태양
+	POINT,			// 전구, 횃불
+	SPOT,			// 손전등
+};
+

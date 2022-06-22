@@ -82,6 +82,26 @@ struct tParticleData
 	Vec3	vPadding;
 };
 
+// ========
+//	Light 
+// ========
+struct tLightColor
+{
+	Vec4 vDiff;	// Diffuse Light	³­¹Ý»ç±¤
+	Vec4 vSpec; // Specular Light	¹Ý»ç±¤
+	Vec4 vAmb;  // Ambient Light	È¯°æ±¤
+};
+
+struct tLightInfo
+{
+	tLightColor color;
+	Vec3		vLightDir;
+	int			iLightType;
+	Vec3		vWorldPos;
+	float		fAngle;
+	float		fRange;
+	Vec3		vPadding;
+};
 
 
 

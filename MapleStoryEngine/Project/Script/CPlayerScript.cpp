@@ -12,21 +12,16 @@ CPlayerScript::CPlayerScript()
 	, m_fBurnStrength(0.f)
 	, m_bBurn(false)
 	, m_fFricCoeff(100.f)
+	, m_eDir(PLAYER_DIRECTION::RIGHT)
+	, m_fMass(1.f)
+	, m_vAccel(Vec3(1.f, 1.f, 1.f))
+	, m_fMaxSpeed(100.f)
+	, m_eCurState(PLAYER_STATE::IDLE)
+	, m_ePrevState(PLAYER_STATE::IDLE)
+
 
 {
-
 	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
-
-
-	m_fMass = 1.f;
-	m_vAccel = Vec3(1.f, 1.f, 1.f);
-	m_fMaxSpeed = 100.f;
-	
-
-	m_eDir = PLAYER_DIRECTION::LEFT;
-
-
-
 }
 
 CPlayerScript::~CPlayerScript()
@@ -48,6 +43,8 @@ void CPlayerScript::update()
 	{
 		m_vForce += Vec3(-200.f, 0.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::LEFT;
+		m_eCurState = PLAYER_STATE::WALK;
+
 
 	}
 
@@ -55,12 +52,15 @@ void CPlayerScript::update()
 	{
 		m_vForce += Vec3(200.f, 0.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::RIGHT;
+		m_eCurState = PLAYER_STATE::WALK;
+
 	}
 
 	if (KEY_PRESSED(KEY::UP))
 	{
 		m_vForce += Vec3(0.f, 200.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::UP;
+		m_eCurState = PLAYER_STATE::WALK;
 
 	}
 
@@ -68,8 +68,18 @@ void CPlayerScript::update()
 	{
 		m_vForce += Vec3(0.f, -200.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::DOWN;
+		m_eCurState = PLAYER_STATE::WALK;
 
 	}
+
+
+	if (KEY_AWAY(KEY::LEFT) || KEY_AWAY(KEY::RIGHT) 
+		|| KEY_AWAY(KEY::UP) || KEY_AWAY(KEY::DOWN))
+	{
+		m_eCurState = PLAYER_STATE::IDLE;
+
+	}
+
 
 
 	if (KEY_TAP(KEY::LALT))
@@ -273,6 +283,10 @@ void CPlayerScript::Update_Animation()
 		break;
 	}
 
+}
+
+void CPlayerScript::Update_Gravity()
+{
 }
 
 

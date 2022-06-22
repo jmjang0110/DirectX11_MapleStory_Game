@@ -17,6 +17,7 @@ enum class PLAYER_STATE
     IDLE,
     WALK,
     ATTACK,
+    JUMP,
     ALERT,
     DEAD,
 };
@@ -55,8 +56,6 @@ private:
     float           m_fBurnStrength;
     bool            m_bBurn;
 
-private:
-
 
 private:
     Vec3            m_vForce;       // 크기 , 방향 
@@ -88,6 +87,8 @@ public:
     void Update_State();
     void Update_Move();
     void Update_Animation();
+    void Update_Gravity();
+
 
 
 

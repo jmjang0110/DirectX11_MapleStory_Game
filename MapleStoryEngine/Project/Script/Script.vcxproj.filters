@@ -25,6 +25,7 @@
     <ClInclude Include="CPlayerScript.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="CSceneSaveLoad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -43,5 +44,6 @@
     <ClCompile Include="CPlayerScript.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="CSceneSaveLoad.cpp" />
   </ItemGroup>
 </Project>

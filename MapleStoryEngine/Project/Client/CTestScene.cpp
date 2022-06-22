@@ -18,6 +18,10 @@
 #include <Engine/CMeshRender.h>
 #include <Engine/CTileMap.h>
 #include <Engine/CParticleSystem.h>
+#include <Engine/CLight2D.h>
+
+#include <Engine/CSceneFile.h>
+
 
 // PLayerSCript 가 Script 프로젝트로 바꿨는데
 // < ENgine> 에서 바꿨기 때문에 터진거지....;; 
@@ -31,10 +35,12 @@
 
 void CTestScene::CreateTestScene()
 {
+	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test.scene", L"scene\\Test.scene");
+
+
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
-
-//	return;
+	return;
 
 
 	pCurScene->SetName(L"firstScene");

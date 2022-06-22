@@ -68,10 +68,10 @@
       <Filter>Engine\05. Component</Filter>
     </ClInclude>
     <ClInclude Include="CMeshRender.h">
-      <Filter>Engine\05. Component\08~12. RenderComponent\08. MeshRender</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent\10. MeshRender</Filter>
     </ClInclude>
     <ClInclude Include="CScript.h">
-      <Filter>Engine\05. Component\13. Script</Filter>
+      <Filter>Engine\05. Component\15. Script</Filter>
     </ClInclude>
     <ClInclude Include="CSceneMgr.h">
       <Filter>Engine\03. Manager\07. SceneMgr</Filter>
@@ -122,10 +122,10 @@
       <Filter>Engine\05. Component\05. Animator2D\Animation2D</Filter>
     </ClInclude>
     <ClInclude Include="CRenderComponent.h">
-      <Filter>Engine\05. Component\08~12. RenderComponent</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent</Filter>
     </ClInclude>
     <ClInclude Include="CTileMap.h">
-      <Filter>Engine\05. Component\08~12. RenderComponent\08. MeshRender\09. TileMap</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent\11. TileMap</Filter>
     </ClInclude>
     <ClInclude Include="CStructuredBuffer.h">
       <Filter>Engine\03. Manager\01. Device\StructuredBuffer</Filter>
@@ -140,10 +140,13 @@
       <Filter>Engine\ShaderCode\ComputeShader\Particle</Filter>
     </ClInclude>
     <ClInclude Include="CParticleSystem.h">
-      <Filter>Engine\05. Component\08~12. RenderComponent\10. ParticleSystem</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent\12. ParticleSystem</Filter>
     </ClInclude>
     <ClInclude Include="CSceneFile.h">
       <Filter>Engine\08. SceneFile</Filter>
+    </ClInclude>
+    <ClInclude Include="CLight2D.h">
+      <Filter>Engine\05. Component\07. Light2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,10 +205,10 @@
       <Filter>Engine\05. Component</Filter>
     </ClCompile>
     <ClCompile Include="CMeshRender.cpp">
-      <Filter>Engine\05. Component\08~12. RenderComponent\08. MeshRender</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent\10. MeshRender</Filter>
     </ClCompile>
     <ClCompile Include="CScript.cpp">
-      <Filter>Engine\05. Component\13. Script</Filter>
+      <Filter>Engine\05. Component\15. Script</Filter>
     </ClCompile>
     <ClCompile Include="CSceneMgr.cpp">
       <Filter>Engine\03. Manager\07. SceneMgr</Filter>
@@ -250,10 +253,10 @@
       <Filter>Engine\05. Component\05. Animator2D\Animation2D</Filter>
     </ClCompile>
     <ClCompile Include="CRenderComponent.cpp">
-      <Filter>Engine\05. Component\08~12. RenderComponent</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent</Filter>
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
-      <Filter>Engine\05. Component\08~12. RenderComponent\08. MeshRender\09. TileMap</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent\11. TileMap</Filter>
     </ClCompile>
     <ClCompile Include="CStructuredBuffer.cpp">
       <Filter>Engine\03. Manager\01. Device\StructuredBuffer</Filter>
@@ -262,7 +265,7 @@
       <Filter>Engine\07. Resource\07. Shader\ComputeShader</Filter>
     </ClCompile>
     <ClCompile Include="CParticleSystem.cpp">
-      <Filter>Engine\05. Component\08~12. RenderComponent\10. ParticleSystem</Filter>
+      <Filter>Engine\05. Component\10~14. RenderComponent\12. ParticleSystem</Filter>
     </ClCompile>
     <ClCompile Include="CTestShader.cpp">
       <Filter>Engine\ShaderCode\ComputeShader\TestShader</Filter>
@@ -276,6 +279,9 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="CSceneFile.cpp">
       <Filter>Engine\08. SceneFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CLight2D.cpp">
+      <Filter>Engine\05. Component\07. Light2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -360,12 +366,6 @@
     <Filter Include="Engine\05. Component\06. Animator3D">
       <UniqueIdentifier>{c0f11b92-deea-441e-92ce-30ef380068f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Component\07. BoundingBox">
-      <UniqueIdentifier>{d527d62a-939d-42fa-92f5-f5221035cee2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\05. Component\13. Script">
-      <UniqueIdentifier>{ff03e518-d9da-478d-89f0-592827240b1e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\08. EventMgr">
       <UniqueIdentifier>{9eb39801-d890-4267-874b-0f039d783258}</UniqueIdentifier>
     </Filter>
@@ -402,21 +402,6 @@
     <Filter Include="Engine\05. Component\05. Animator2D\Animation2D">
       <UniqueIdentifier>{c017b514-3c36-4dea-9cae-c692ca17907a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent">
-      <UniqueIdentifier>{a8ed1b9c-0407-484f-8da3-a92245c371e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent\08. MeshRender">
-      <UniqueIdentifier>{78ebec49-80a4-4763-b8a9-3ac508e84505}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent\10. ParticleSystem">
-      <UniqueIdentifier>{eafe4c7e-57b3-4e3f-8e62-b45e534af7ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent\12. Decal">
-      <UniqueIdentifier>{05855d34-a528-4b6c-acee-fe4b10878a15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent\11. LandScape">
-      <UniqueIdentifier>{f858e8bb-cd93-42cf-b9db-ba767b724670}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\01. Device\StructuredBuffer">
       <UniqueIdentifier>{24e58c48-7a88-4d5c-89ec-9c8f7b0cdf64}</UniqueIdentifier>
     </Filter>
@@ -435,8 +420,35 @@
     <Filter Include="Engine\08. SceneFile">
       <UniqueIdentifier>{c917b6c0-d82f-4abc-a6eb-53b735698bba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Component\08~12. RenderComponent\08. MeshRender\09. TileMap">
+    <Filter Include="Engine\05. Component\09. BoundingBox">
+      <UniqueIdentifier>{d527d62a-939d-42fa-92f5-f5221035cee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\07. Light2D">
+      <UniqueIdentifier>{048ee76e-95ca-4aa9-836e-8b81ebb5747c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\08. Light3D">
+      <UniqueIdentifier>{aae841a2-e442-437c-822b-c01ecf604ed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent">
+      <UniqueIdentifier>{a8ed1b9c-0407-484f-8da3-a92245c371e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent\10. MeshRender">
+      <UniqueIdentifier>{78ebec49-80a4-4763-b8a9-3ac508e84505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent\11. TileMap">
       <UniqueIdentifier>{f88f8cbf-6d37-4f2f-a3da-b4e8dea9fbf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent\12. ParticleSystem">
+      <UniqueIdentifier>{eafe4c7e-57b3-4e3f-8e62-b45e534af7ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent\13. LandScape">
+      <UniqueIdentifier>{f858e8bb-cd93-42cf-b9db-ba767b724670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent\14. Decal">
+      <UniqueIdentifier>{05855d34-a528-4b6c-acee-fe4b10878a15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\15. Script">
+      <UniqueIdentifier>{ff03e518-d9da-478d-89f0-592827240b1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
