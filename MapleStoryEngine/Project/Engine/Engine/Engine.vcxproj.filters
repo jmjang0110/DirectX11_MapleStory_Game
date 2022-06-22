@@ -488,5 +488,8 @@
     <FxCompile Include="paperburn.fx">
       <Filter>Engine\ShaderCode\GraphicsShader</Filter>
     </FxCompile>
+    <FxCompile Include="std2d_light.fx">
+      <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

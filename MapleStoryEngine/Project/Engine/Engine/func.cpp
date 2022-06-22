@@ -1,9 +1,9 @@
 #include "pch.h"
 
-// COMPONENT_TYPE 
+// COMPONENT_TYPE
 const wchar_t* ToWString(COMPONENT_TYPE _type)
 {
-    static const wchar_t* szWString[(UINT)COMPONENT_TYPE::END] = 
+    static const wchar_t* szWString[(UINT)COMPONENT_TYPE::END] =
     {
         L"TRANSFORM",
         L"CAMERA",
@@ -11,6 +11,8 @@ const wchar_t* ToWString(COMPONENT_TYPE _type)
         L"COLLIDER3D",
         L"ANIMATOR2D",
         L"ANIMATOR3D",
+        L"LIGHT2D",
+        L"LIGHT3D",
         L"BOUNDINGBOX",
         L"MESHRENDER",
         L"TILEMAP",
@@ -32,6 +34,8 @@ const char* ToString(COMPONENT_TYPE _type)
         "COLLIDER3D",
         "ANIMATOR2D",
         "ANIMATOR3D",
+        "LIGHT2D",
+        "LIGHT3D",
         "BOUNDINGBOX",
         "MESHRENDER",
         "TILEMAP",

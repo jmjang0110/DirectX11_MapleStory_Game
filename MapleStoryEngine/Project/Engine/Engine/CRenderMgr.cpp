@@ -6,18 +6,23 @@
 
 #include "CCamera.h"
 #include "CResMgr.h"
+#include "CLight2D.h"
+
+#include "CStructuredBuffer.h"
 
 
 CRenderMgr::CRenderMgr()
 	: m_pEditorCam(nullptr)
-{	
+	, m_pLight2DBuffer(nullptr)
+{
+	m_pLight2DBuffer = new CStructuredBuffer;
+	m_pLight2DBuffer->Create(sizeof(tLightInfo), 2, SB_TYPE::READ_ONLY, true, nullptr);
 }
 
 CRenderMgr::~CRenderMgr()
 {
-
+	SAFE_DELETE(m_pLight2DBuffer);
 }
-
 void CRenderMgr::update()
 {
 
@@ -28,6 +33,10 @@ void CRenderMgr::render()
 	// Rendering 시작
 	CDevice::GetInst()->SetRenderTarget();
 	CDevice::GetInst()->ClearTarget();
+
+	// Light 업데이트
+	UpdateLight2D();
+
 
 	// Global 상수 업데이트
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetCB(CB_TYPE::GLOBAL);
@@ -128,3 +137,30 @@ void CRenderMgr::CopyTargetToPostProcess()
 
 	CONTEXT->CopyResource(pPostProcess->GetTex2D().Get(), pRenderTarget->GetTex2D().Get());
 }
+
+
+
+
+void CRenderMgr::UpdateLight2D()
+{
+	if (m_pLight2DBuffer->GetElementCount() < m_vecLight2D.size())
+	{
+		m_pLight2DBuffer->Create(sizeof(tLightInfo), m_vecLight2D.size(), SB_TYPE::READ_ONLY, true, nullptr);
+	}
+
+	static vector<tLightInfo> vecLight2DInfo;
+	vecLight2DInfo.clear();
+
+	for (size_t i = 0; i < m_vecLight2D.size(); ++i)
+	{
+		vecLight2DInfo.push_back(m_vecLight2D[i]->GetLightInfo());
+	}
+	m_pLight2DBuffer->SetData(vecLight2DInfo.data(), (UINT)vecLight2DInfo.size());
+	m_pLight2DBuffer->UpdateData(PIPELINE_STAGE::PS, 60);
+
+	g_global.Light2DCount = m_vecLight2D.size();
+
+	m_vecLight2D.clear();
+}
+
+

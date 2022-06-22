@@ -175,6 +175,27 @@ void CResMgr::CreateEngineShader()
 	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
 
 
+	// Std2D Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2d_light.fx", "VS_Std2D");
+	pShader->CreatePixelShader(L"shader\\std2d_light.fx", "PS_Std2D");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_MASKED);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	pShader->AddScalarParamInfo(L"Mask Limit", SCALAR_PARAM::FLOAT_0);
+	pShader->AddTexParamInfo(L"OutputTex 0", TEX_PARAM::TEX_0);
+	pShader->AddTexParamInfo(L"OutputTex 1", TEX_PARAM::TEX_1);
+	pShader->AddTexParamInfo(L"OutputTex 2", TEX_PARAM::TEX_2);
+
+	pShader->AddScalarParamInfo(L"TestParam", SCALAR_PARAM::INT_0);
+
+
+	AddRes<CGraphicsShader>(L"Std2DLightShader", pShader);
+
+
+
 	// Std2DAlphaBlend Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2DAlpha");
@@ -277,6 +298,16 @@ void CResMgr::CreateEngineMaterial()
 	AddRes<CMaterial>(L"Std2DMtrl", pMtrl);
 	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
 	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+
+
+	// Std2D_Light Mtrl »ý¼º
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DLightShader"));
+	AddRes<CMaterial>(L"Std2DLightMtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
+	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+
+
 
 	// Std2DAlphaBlend
 	pMtrl = new CMaterial;

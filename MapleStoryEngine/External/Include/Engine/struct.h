@@ -150,5 +150,6 @@ struct tGlobal
 	Vec2    vNoiseResolution; // NoiseTexture Resolution
 	float	fDT;
 	float	fAccTime;
-	Vec2    vPadding;
+	int		Light2DCount;
+	int     Light3DCount;
 };

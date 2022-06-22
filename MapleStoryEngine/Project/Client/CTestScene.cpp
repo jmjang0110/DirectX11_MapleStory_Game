@@ -35,12 +35,12 @@
 
 void CTestScene::CreateTestScene()
 {
-	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test.scene", L"scene\\Test.scene");
+	//CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test.scene", L"scene\\Test.scene");
 
 
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
-	return;
+	//return;
 
 
 	pCurScene->SetName(L"firstScene");
@@ -104,6 +104,22 @@ void CTestScene::CreateTestScene()
 
 	pCurScene->AddObject(pCamObj, L"Default");
 
+	// 광원 오브젝트 추가
+	CGameObject* pLight2D = new CGameObject;
+	pLight2D->SetName(L"Light Object");
+
+	pLight2D->AddComponent(new CTransform);
+	pLight2D->AddComponent(new CMeshRender);
+	pLight2D->AddComponent(new CLight2D);
+
+	pLight2D->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+
+	pLight2D->Light2D()->SetLightType(LIGHT_TYPE::POINT);
+	pLight2D->Light2D()->SetRange(300.f);
+	pLight2D->Light2D()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+
+	pCurScene->AddObject(pLight2D, L"Default");
+
 
 	// Plane Object
 	CGameObject* pObject = new CGameObject;
@@ -117,7 +133,7 @@ void CTestScene::CreateTestScene()
 	pObject->Transform()->SetRelativeScale(800.f, 450.f, 1.f);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PaperBurnMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DLightMtrl"));
 	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
 
 	pCurScene->AddObject(pObject, L"Default");
@@ -142,6 +158,10 @@ void CTestScene::CreateTestScene()
 	//pParticleObj->SetName(L"ParticleObject_02");
 	//pParticleObj->Transform()->SetRelativePos(-500.f, 0.f, 500.f);
 	//pCurScene->AddObject(pParticleObj, L"Default");
+
+
+
+
 
 
 

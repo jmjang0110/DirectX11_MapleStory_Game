@@ -36,8 +36,11 @@ void MeshRenderUI::render_update()
 	Ptr<CMesh> pMesh = pMeshRender->GetMesh();
 	Ptr<CMaterial> pMtrl = pMeshRender->GetMaterial();
 
-	string strMeshName = string(pMesh->GetKey().begin(), pMesh->GetKey().end());
-	string strMtrlName = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
+	string strMeshName, strMtrlName;
+	if (nullptr != pMesh)
+		strMeshName = string(pMesh->GetKey().begin(), pMesh->GetKey().end());
+	if (nullptr != pMtrl)
+		strMtrlName = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
 
 	ImGui::Text("Mesh");
 	ImGui::SameLine(86.f);
