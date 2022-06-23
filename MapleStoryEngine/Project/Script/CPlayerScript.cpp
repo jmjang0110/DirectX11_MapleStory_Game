@@ -4,6 +4,7 @@
 #include "CMissileScript.h"
 
 #include <Engine/CAnimator2D.h>
+#include <Engine/CLight2D.h>
 
 CPlayerScript::CPlayerScript()
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
@@ -15,7 +16,7 @@ CPlayerScript::CPlayerScript()
 	, m_eDir(PLAYER_DIRECTION::RIGHT)
 	, m_fMass(1.f)
 	, m_vAccel(Vec3(1.f, 1.f, 1.f))
-	, m_fMaxSpeed(100.f)
+	, m_fMaxSpeed(200.f)
 	, m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
 
@@ -36,12 +37,18 @@ void CPlayerScript::start()
 
 void CPlayerScript::update()
 {
+	static Vec3 PrevPos = Vec3(0.f, 0.f, 0.f);
+
+
+
+	
+
 	m_ePrevState = m_eCurState;
 
 
 	if (KEY_PRESSED(KEY::LEFT))
 	{
-		m_vForce += Vec3(-200.f, 0.f, 0.f);
+		m_vForce += Vec3(-400.f, 0.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::LEFT;
 		m_eCurState = PLAYER_STATE::WALK;
 
@@ -50,7 +57,7 @@ void CPlayerScript::update()
 
 	if (KEY_PRESSED(KEY::RIGHT))
 	{
-		m_vForce += Vec3(200.f, 0.f, 0.f);
+		m_vForce += Vec3(400.f, 0.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::RIGHT;
 		m_eCurState = PLAYER_STATE::WALK;
 
@@ -58,7 +65,7 @@ void CPlayerScript::update()
 
 	if (KEY_PRESSED(KEY::UP))
 	{
-		m_vForce += Vec3(0.f, 200.f, 0.f);
+		m_vForce += Vec3(0.f, 400.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::UP;
 		m_eCurState = PLAYER_STATE::WALK;
 
@@ -66,7 +73,7 @@ void CPlayerScript::update()
 
 	if (KEY_PRESSED(KEY::DOWN))
 	{
-		m_vForce += Vec3(0.f, -200.f, 0.f);
+		m_vForce += Vec3(0.f, -400.f, 0.f);
 		m_eDir = PLAYER_DIRECTION::DOWN;
 		m_eCurState = PLAYER_STATE::WALK;
 
@@ -185,7 +192,22 @@ void CPlayerScript::update()
 	Burnning();
 	*/
 
-	
+
+	// ===== Todo ========
+	// 이동 방향에 따라 CLight2D 의 Dir 을 바꾼다. 
+	vector<CGameObject*> vecChild = GetOwner()->GetChild();
+	for (int i = 0; i < vecChild.size(); ++i)
+	{
+		if (nullptr != vecChild[i]->GetComponent(COMPONENT_TYPE::LIGHT2D))
+		{
+			Vec3 vDir = GetOwner()->Transform()->GetRelativePos() - PrevPos;
+			if(vDir != Vec3(0.f, 0.f ,0.f))
+				vecChild[i]->Light2D()->SetLightDir(vDir);
+
+		}
+	}
+	PrevPos = GetOwner()->Transform()->GetRelativePos();
+
 }
 
 void CPlayerScript::lateupdate()

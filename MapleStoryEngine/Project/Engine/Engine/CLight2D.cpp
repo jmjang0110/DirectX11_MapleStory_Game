@@ -21,6 +21,7 @@ void CLight2D::update()
 void CLight2D::finalupdate()
 {
 	m_LightInfo.vWorldPos = Transform()->GetWorldPos();
+	//m_LightInfo.vLightDir = Transform()->GetWorldDir(DIR_TYPE::RIGHT);
 
 	m_iLightIdx = CRenderMgr::GetInst()->RegisterLight2D(this);
 }

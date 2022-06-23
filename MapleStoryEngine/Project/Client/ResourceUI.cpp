@@ -11,6 +11,7 @@
 #include <Engine/CScene.h>
 #include <Script/CSceneSaveLoad.h>
 
+#include "SceneOutlinerTool.h"
 
 
 ResourceUI::ResourceUI()
@@ -53,6 +54,11 @@ void ResourceUI::render_update()
 
 void ResourceUI::Reset()
 {
+	// ==== Todo ===== 
+	// 새로운 Resource 가 들어왔을 시 TreeUI 가 갱신되기 위해서 조금 수정함 
+	m_TreeUI->Clear();
+
+	// ===============
 	for (int i = 0; i < (int)RES_TYPE::END; ++i)
 	{
 		// TreeUI 가 DummyRoot 를 사용하기 때문에, 리소스 항목 노드들은 더미 자식으로 들어감
@@ -107,6 +113,17 @@ void ResourceUI::ItemDBClicked(DWORD_PTR _dwNode)
 
 	CScene* pNewScene = CSceneSaveLoad::LoadScene(strFilePath);
 	CSceneMgr::GetInst()->ChangeScene(pNewScene);
+
+	// ======= Todo ==========
+
+	// CImGuiMgr 에 Delegate 등록 
+	tUIDelegate tDeleteCom;
+	tDeleteCom.dwParam = (DWORD_PTR)nullptr;
+	tDeleteCom.pFunc = (PARAM_1)&SceneOutlinerTool::Reset;
+	tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("SceneOutlinerTool");
+
+	CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+	// =======================
 }
 
 

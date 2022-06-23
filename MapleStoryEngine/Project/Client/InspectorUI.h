@@ -43,7 +43,6 @@ public:
      CRes* GetTargetRes() { return m_pTargetRes; }
      void AddComponent(DWORD_PTR _param);
      void DeleteComponent(DWORD_PTR _param);
-
 private:
     void GameObjectTool_SubFunc();
 // ============================================

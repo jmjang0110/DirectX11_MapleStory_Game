@@ -35,12 +35,13 @@
 
 void CTestScene::CreateTestScene()
 {
-	//CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test.scene", L"scene\\Test.scene");
+	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test3.scene", L"scene\\Test3.scene");
+	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\SibalNoma.scene", L"scene\\SibalNoma.scene");
 
 
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
-	//return;
+	return;
 
 
 	pCurScene->SetName(L"firstScene");
@@ -104,25 +105,23 @@ void CTestScene::CreateTestScene()
 
 	pCurScene->AddObject(pCamObj, L"Default");
 
-	// 광원 오브젝트 추가
-	CGameObject* pLight2D = new CGameObject;
-	pLight2D->SetName(L"Light Object");
+	//// 광원 오브젝트 추가
+	//CGameObject* pLight2D = new CGameObject;
+	//pLight2D->SetName(L"Light Object");
 
-	pLight2D->AddComponent(new CTransform);
-	pLight2D->AddComponent(new CMeshRender);
-	pLight2D->AddComponent(new CLight2D);
+	//pLight2D->AddComponent(new CTransform);
+	//pLight2D->AddComponent(new CMeshRender);
+	//pLight2D->AddComponent(new CLight2D);
 
-	pLight2D->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+	//pLight2D->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 
-	pLight2D->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
-	pLight2D->Light2D()->SetRange(500.f);
-	pLight2D->Light2D()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
-	pLight2D->Light2D()->SetLightDir(Vec3(0.5f, 0.5f, 0.f));
-	pLight2D->Light2D()->SetAngle(30.f);
+	//pLight2D->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
+	//pLight2D->Light2D()->SetRange(500.f);
+	//pLight2D->Light2D()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+	//pLight2D->Light2D()->SetLightDir(Vec3(0.5f, 0.5f, 0.f));
+	//pLight2D->Light2D()->SetAngle(30.f);
 
-
-
-	pCurScene->AddObject(pLight2D, L"Default");
+	//pCurScene->AddObject(pLight2D, L"Default");
 
 
 	// Plane Object
@@ -134,11 +133,11 @@ void CTestScene::CreateTestScene()
 	//pObject->AddComponent(new CPlayerScript);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 300.f);
-	pObject->Transform()->SetRelativeScale(800.f, 500.f, 1.f);
+	pObject->Transform()->SetRelativeScale(1280, 720.f, 1.f);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DLightMtrl"));
-	pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
 
 	pCurScene->AddObject(pObject, L"Default");
 
@@ -159,7 +158,7 @@ void CTestScene::CreateTestScene()
 
 	float fLimit = 0.333f;
 	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
-	pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex_2", L"texture\\0_100.png"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex_2", L"texture\\0_100.png"));
 
 
 	pCurScene->AddObject(pObject, L"Default");
@@ -256,7 +255,8 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CAnimator2D);
-	pObject->AddComponent(new CMissileScript);
+	pObject->AddComponent(new CPlayerScript);
+
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 50.f);
 	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
@@ -279,6 +279,25 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 
 	pObject->Animator2D()->Play(L"WALK_DOWN", true);
 
+	// 광원 오브젝트 추가
+	CGameObject* pLight2D = new CGameObject;
+	pLight2D->SetName(L"Light Object");
+
+	pLight2D->AddComponent(new CTransform);
+	pLight2D->AddComponent(new CMeshRender);
+	pLight2D->AddComponent(new CLight2D);
+
+	pLight2D->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
+
+	pLight2D->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
+	pLight2D->Light2D()->SetRange(500.f);
+	pLight2D->Light2D()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+	pLight2D->Light2D()->SetLightDir(Vec3(0.5f, 0.5f, 0.f));
+	pLight2D->Light2D()->SetAngle(30.f);
+
+	//pCurScene->AddObject(pLight2D, L"Default");
+	pObject->AddChild(pLight2D);
+
 	_pCurScene->AddObject(pObject, L"Monster");
 }
 
@@ -297,7 +316,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	pObj->AddComponent(new CPlayerScript);
+	//pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

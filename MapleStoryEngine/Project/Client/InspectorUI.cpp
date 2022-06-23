@@ -25,6 +25,8 @@
 #include <Engine/CResMgr.h>
 #include <Engine/CKeyMgr.h>
 
+
+#include <Engine/CPrefab.h>
 // COMPONENT-TYPE
 #include <Engine/CTransform.h>
 #include <Engine/CCamera.h>
@@ -35,7 +37,7 @@
 #include <Engine/CParticleSystem.h>
 
 
-
+#include <ResourceUI.h>
 
 
 InspectorUI::InspectorUI()
@@ -397,9 +399,10 @@ void InspectorUI::DeleteComponent(DWORD_PTR _param)
 void InspectorUI::GameObjectTool_SubFunc()
 {
 
+	// Add Component Button 
 	if (nullptr != m_pTargetObject)
 	{
-		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 50.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 
 		if (ImGui::Button("Add Component"))
@@ -431,6 +434,29 @@ void InspectorUI::GameObjectTool_SubFunc()
 		ImGui::EndChild();
 
 	}
+
+	// Change To Prefab Button
+	if (nullptr != m_pTargetObject)
+	{
+
+		if (ImGui::Button("Change to Prefab"))
+		{
+			// Prefab 하려는 GameObject 가 이미 존재한다면 
+			if (nullptr != CResMgr::GetInst()->FindRes<CPrefab>(m_pTargetObject->GetName()))
+				return;
+			CResMgr::GetInst()->AddRes<CPrefab>(m_pTargetObject->GetName(), new CPrefab(m_pTargetObject));
+
+			// CImGuiMgr 에 Delegate 등록 
+			tUIDelegate tDeleteCom;
+			tDeleteCom.dwParam = (DWORD_PTR)nullptr;
+			tDeleteCom.pFunc = (PARAM_1)&ResourceUI::Reset;
+			tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("Resource");
+
+			CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+
+		}
+	}
+
 
 }
 
