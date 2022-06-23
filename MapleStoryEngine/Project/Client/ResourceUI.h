@@ -18,6 +18,9 @@ public:
 
 private:
     void ItemClicked(DWORD_PTR _dwNode);
+    void ItemDBClicked(DWORD_PTR _dwNode);
+
+
 
 public:
     ResourceUI();

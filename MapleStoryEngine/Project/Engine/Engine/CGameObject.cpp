@@ -10,8 +10,8 @@
 #include "CTransform.h"
 #include "CMeshRender.h"
 #include "CCollider2D.h"
+#include "CLight2D.h"
 #include "CRenderComponent.h"
-#include "CAnimator2D.h"
 
 
 #include "CScript.h"
@@ -184,7 +184,7 @@ void CGameObject::active()
 			m_arrCom[i]->active();
 	}
 
-	for (size_t i = 1; i < m_vecScript.size(); ++i)
+	for (size_t i = 0; i < m_vecScript.size(); ++i)
 	{
 		m_vecScript[i]->active();
 	}
@@ -206,7 +206,7 @@ void CGameObject::deactive()
 			m_arrCom[i]->deactive();
 	}
 
-	for (size_t i = 1; i < m_vecScript.size(); ++i)
+	for (size_t i = 0; i < m_vecScript.size(); ++i)
 	{
 		m_vecScript[i]->deactive();
 	}
@@ -281,6 +281,22 @@ bool CGameObject::IsAncestor(CGameObject* _pObj)
 	return false;
 }
 
+CGameObject* CGameObject::GetAncestor()
+{
+	CGameObject* pObj = this;
+
+	while (pObj)
+	{
+		if (nullptr == pObj->GetParent())
+			break;
+
+		if (nullptr != pObj->GetParent())
+			pObj = pObj->GetParent();
+	}
+
+	return pObj;
+
+}
 
 void CGameObject::AddChild(CGameObject* _pChild)
 {
@@ -361,6 +377,8 @@ void CGameObject::DeleteComponent(COMPONENT_TYPE _eType)
 	}
 
 }
+
+
 
 void CGameObject::Destroy()
 {	
@@ -446,6 +464,17 @@ void CGameObject::LoadFromScene(FILE* _pFile)
 		{
 
 		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::LIGHT2D))
+		{
+			AddComponent(new CLight2D);
+			Light2D()->LoadFromScene(_pFile);
+		}
+		else if (strComponentName == ToWString(COMPONENT_TYPE::LIGHT3D))
+		{
+
+		}
+
+
 		else if (strComponentName == ToWString(COMPONENT_TYPE::BOUNDINGBOX))
 		{
 

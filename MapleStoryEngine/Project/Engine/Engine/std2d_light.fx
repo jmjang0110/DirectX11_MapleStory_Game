@@ -72,33 +72,12 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         discard;
     }        
    
-    // ±¤¿ø Àû¿ë    
-    //iLight2DCount;
-    // Dir 0
-    // Point 1
-    // Spot 2
-    //g_Light2DBuffer[0].iLightType;
-    if(0 == g_Light2DBuffer[0].iLightType)
-    {
-        vOutColor *= g_Light2DBuffer[0].color.vDiff;
-    }
-    else if (1 == g_Light2DBuffer[0].iLightType)
-    {
-        // pixel worldpos <--> Light World Pos
-        float fDistance = distance(g_Light2DBuffer[0].vWorldPos.xy, _in.vWorldPos.xy);        
-        if (fDistance <= g_Light2DBuffer[0].fRange)
-        {
-            vOutColor *= g_Light2DBuffer[0].color.vDiff;
-        }
-        else
-        {
-            vOutColor *= 0.f;
-        }
-    }
-    else
-    {
-                
-    }
+    
+     // ±¤¿ø Àû¿ë    
+    float3 vLightColor = CalculateLight2D(_in.vWorldPos);
+    
+    vOutColor.rgb *= vLightColor.rgb;
+
     
     
     return vOutColor;

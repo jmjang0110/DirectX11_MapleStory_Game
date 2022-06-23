@@ -27,9 +27,14 @@ void CLight2D::finalupdate()
 
 void CLight2D::SaveToScene(FILE* _pFile)
 {
+	CComponent::SaveToScene(_pFile);
+
+	fwrite(&m_LightInfo, sizeof(tLightInfo), 1, _pFile);
 }
 
 void CLight2D::LoadFromScene(FILE* _pFile)
 {
-}
+	CComponent::LoadFromScene(_pFile);
 
+	fread(&m_LightInfo, sizeof(tLightInfo), 1, _pFile);
+}

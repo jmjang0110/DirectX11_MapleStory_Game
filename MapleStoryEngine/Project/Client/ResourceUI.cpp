@@ -7,6 +7,12 @@
 #include "InspectorUI.h"
 #include "TreeUI.h"
 
+#include <Engine/CSceneMgr.h>
+#include <Engine/CScene.h>
+#include <Script/CSceneSaveLoad.h>
+
+
+
 ResourceUI::ResourceUI()
 	: UI("Resource")
 {
@@ -20,6 +26,11 @@ ResourceUI::ResourceUI()
 
 	// Clicked Delegate 등록
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&ResourceUI::ItemClicked);
+
+
+	// DoubleClicked Deletage 등록
+	m_TreeUI->SetDoubleClickedDelegate(this, (CLICKED)&ResourceUI::ItemDBClicked);
+
 
 	Reset();
 }
@@ -72,4 +83,31 @@ void ResourceUI::ItemClicked(DWORD_PTR _dwNode)
 	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	pInspectorUI->SetTargetResource(pResource);
 }
+
+
+void ResourceUI::ItemDBClicked(DWORD_PTR _dwNode)
+{
+	TreeNode* pNode = (TreeNode*)_dwNode;
+
+	string strKey = pNode->GetName();
+	CRes* pResource = (CRes*)pNode->GetData();
+
+	// 프레임 노드가 눌렸다면 아무일도 없다.
+	if (nullptr == pResource || pNode->GetParent()->GetName() != "SCENEFILE")
+		return;
+
+	// Scene 로딩
+	// 현재 Scene 정지
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	pCurScene->SetSceneState(SCENE_STATE::STOP);
+
+	// 로딩할 Scene 파일의 경로 계산
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += pResource->GetRelativePath();
+
+	CScene* pNewScene = CSceneSaveLoad::LoadScene(strFilePath);
+	CSceneMgr::GetInst()->ChangeScene(pNewScene);
+}
+
+
 

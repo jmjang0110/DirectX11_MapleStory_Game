@@ -343,6 +343,7 @@ void CResMgr::CreateEngineMaterial()
 	AddRes<CMaterial>(L"ParticleRenderMtrl", pMtrl);
 	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
 	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	pMtrl->Load(strContent + pMtrl->GetRelativePath());
 
 	// PostProcess Mtrl
 	pMtrl = new CMaterial;

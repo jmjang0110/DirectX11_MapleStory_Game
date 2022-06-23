@@ -210,10 +210,12 @@ void CPlayerScript::Burnning()
 
 void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
-	if (_OtherObject->GetName() == L"Missile")
-	{
-		_OtherObject->Destroy();
-	}
+	int i = 0;
+
+	//if (_OtherObject->GetName() == L"Missile")
+	//{
+	//	_OtherObject->Destroy();
+	//}
 }
 
 

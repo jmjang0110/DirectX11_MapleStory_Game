@@ -57,6 +57,15 @@ void CCollisionMgr::CollisionBetweenLayer(const vector<CGameObject*>& _left, con
 			if (nullptr == pRightCol)
 				continue;
 
+			// ========== TdDo ==========
+			// 같은 레이어에 같은 오브젝트 즉 자기 자신 끼리는 충돌체크를 하지 않는다. 
+			if (pLeftCol->GetOwner()->GetName() == pRightCol->GetOwner()->GetName())
+				continue;
+
+			// 오브젝트랑 자신의 자식오브젝트 끼리는 충돌체크 하지 않는다. 
+			if (pLeftCol->GetOwner()->GetAncestor() == pRightCol->GetOwner()->GetAncestor())
+				continue;
+			// ==========================
 
 			// 두 충돌체가 이전에 충돌했었는지 확인
 			// 두 충돌체의 조합 아이디 생성

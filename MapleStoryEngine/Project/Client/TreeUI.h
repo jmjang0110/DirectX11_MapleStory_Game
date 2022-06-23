@@ -46,6 +46,7 @@ public:
 
     const string& GetName() { return m_strName; }
     DWORD_PTR GetData() { return m_dwData; }
+    TreeNode* GetParent() { return m_pParent; }
 
 
     // ========= Todo ============
@@ -133,6 +134,7 @@ public:
 
 private:
     void SetSelectedNode(TreeNode* _pNode);
+    void SetDBClickedNode(TreeNode* _pNode);
 
 
 public:

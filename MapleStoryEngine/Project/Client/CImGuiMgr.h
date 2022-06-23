@@ -28,6 +28,11 @@ private:
 	map<string, UI*>	m_mapUI;
 	vector<tUIDelegate>	m_vecDelegate;
 
+
+	HANDLE				m_hNotify; //Content 파일 아래 변경사항 있을 시 이 핸들을 통해 파악 가능
+
+
+
 public:
 	void init(HWND _hwnd);
 
@@ -37,6 +42,7 @@ public:
 
 private:
 	void CreateUI();
+	void ObserveContent();
 
 public:
 	UI* FindUI(const string& _strKey);

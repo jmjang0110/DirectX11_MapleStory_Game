@@ -62,6 +62,12 @@ void CImGuiMgr::init(HWND _hwnd)
 
     // 기본 UI 들 생성
     CreateUI();
+
+    // 알림설정  
+    wstring strPath = CPathMgr::GetInst()->GetContentPath();
+    m_hNotify = FindFirstChangeNotification(strPath.c_str(), FALSE, FILE_NOTIFY_CHANGE_FILE_NAME);
+
+
 }
 
 void CImGuiMgr::progress()
@@ -98,7 +104,29 @@ void CImGuiMgr::progress()
     }
 
     m_vecDelegate.clear();
+
+
+    // Content 변경 감지
+    ObserveContent();
+
+
+
 }
+
+
+
+void CImGuiMgr::ObserveContent()
+{
+    DWORD dwWaitStatus = WaitForSingleObject(m_hNotify, 0);
+
+    if (dwWaitStatus == WAIT_OBJECT_0)
+    {
+        int a = 0;
+    }
+}
+
+
+
 
 void CImGuiMgr::render()
 {

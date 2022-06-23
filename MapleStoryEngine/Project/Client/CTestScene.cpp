@@ -114,9 +114,13 @@ void CTestScene::CreateTestScene()
 
 	pLight2D->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 
-	pLight2D->Light2D()->SetLightType(LIGHT_TYPE::POINT);
-	pLight2D->Light2D()->SetRange(300.f);
+	pLight2D->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
+	pLight2D->Light2D()->SetRange(500.f);
 	pLight2D->Light2D()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
+	pLight2D->Light2D()->SetLightDir(Vec3(0.5f, 0.5f, 0.f));
+	pLight2D->Light2D()->SetAngle(30.f);
+
+
 
 	pCurScene->AddObject(pLight2D, L"Default");
 
@@ -129,16 +133,16 @@ void CTestScene::CreateTestScene()
 	pObject->AddComponent(new CMeshRender);
 	//pObject->AddComponent(new CPlayerScript);
 
-	pObject->Transform()->SetRelativePos(-400.f, 0.f, 300.f);
-	pObject->Transform()->SetRelativeScale(400.f, 225.f, 1.f);
+	pObject->Transform()->SetRelativePos(0.f, 0.f, 300.f);
+	pObject->Transform()->SetRelativeScale(800.f, 500.f, 1.f);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DLightMtrl"));
 	pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
 
 	pCurScene->AddObject(pObject, L"Default");
 
-	// Plane Object 2 
+	//// Plane Object 2 
 	pObject = new CGameObject;
 	pObject->SetName(L"Background_2");
 
@@ -147,7 +151,7 @@ void CTestScene::CreateTestScene()
 	//pObject->AddComponent(new CPlayerScript);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 300.f);
-	pObject->Transform()->SetRelativeScale(400.f, 225.f, 1.f);
+	pObject->Transform()->SetRelativeScale(800.f, 500.f, 1.f);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
@@ -209,7 +213,7 @@ void CTestScene::CreateTestScene()
 	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();
 
 
-	//AddPlayer(pCurScene);
+	AddPlayer(pCurScene);
 	Add_MapleStory_Player(pCurScene);
 
 	pObject = new CGameObject;
@@ -247,12 +251,12 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 
 	// Player Object
 	CGameObject* pObject = new CGameObject;
-	pObject->SetName(L"Player");
+	pObject->SetName(L"Monster");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CAnimator2D);
-	pObject->AddComponent(new CPlayerScript);
+	pObject->AddComponent(new CMissileScript);
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 50.f);
 	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
@@ -264,7 +268,7 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pAnimAtlas.Get());
 
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::CIRCLE);
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
 	pObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
 	pObject->Collider2D()->SetOffsetScale(Vec2(100.f, 100.f));
 
@@ -275,7 +279,7 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 
 	pObject->Animator2D()->Play(L"WALK_DOWN", true);
 
-	_pCurScene->AddObject(pObject, L"Player");
+	_pCurScene->AddObject(pObject, L"Monster");
 }
 
 
