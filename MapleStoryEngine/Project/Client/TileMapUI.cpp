@@ -54,13 +54,7 @@ TileMapUI::TileMapUI()
 	m_TreeUI->UseDragDropOuter(false);
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&TileMapUI::TileClicked);
 
-
-
-	
-
 	//AddChild(m_TreeUI);
-
-
 
 	Reset();
 
@@ -68,7 +62,13 @@ TileMapUI::TileMapUI()
 
 TileMapUI::~TileMapUI()
 {
-	Safe_Del_Vec(m_vimgNode);
+	//UI* DelTreeUI = (UI*)m_TreeUI;
+
+	Safe_Del_Vec(m_StoreimgFile);
+	Safe_Del_Vec(m_StorePackage);
+
+	SAFE_DELETE(m_TreeUI);
+
 }
 
 void TileMapUI::update()
@@ -391,6 +391,9 @@ void TileMapUI::EditorUpdate()
 void TileMapUI::Reset()
 {
 	m_TreeUI->Clear();
+	Safe_Del_Vec(m_StoreimgFile);
+	Safe_Del_Vec(m_StorePackage);
+
 	
 	TreeNode* node1 = PushimgFiletoTree(L"YellowToyCastle", m_TreeUI->GetDummyNode());
 	TreeNode* node2 = PushimgFiletoTree(L"WoodMarble", m_TreeUI->GetDummyNode());
@@ -407,8 +410,6 @@ void TileMapUI::Reset()
 	else if (m_Selected_imgFIle_Name == "GrassySoil")
 		ResetimgFile(m_Selected_imgFIle_Name, node4);
 
-
-
 }
 
 void TileMapUI::ResetimgFile(string _imgFileName, TreeNode* _imgFIleNode)
@@ -423,6 +424,8 @@ void TileMapUI::ResetimgFile(string _imgFileName, TreeNode* _imgFIleNode)
 	}
 
 	FillimgFIleinfo(_imgFIleNode, (TileImgFile*)_imgFIleNode->GetData());
+
+
 }
 
 
@@ -438,6 +441,9 @@ TreeNode* TileMapUI::PushimgFiletoTree(const wstring _FileName, TreeNode* _pDest
 		, string(_FileName.begin(), _FileName.end())
 		, (DWORD_PTR)pimgFile);
 	pNode->SetObjType(OBJECT_TYPE::DUMMY);
+
+
+	m_StoreimgFile.push_back(pimgFile);
 
 	return pNode;
 }
@@ -502,6 +508,9 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	TreeNode* PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
 
+	m_StorePackage.push_back(pPack);
+
+
 	// "enH0" - Tile Package
 	pPack = new TilePackage;
 	pPack->_parent = pimgFile;
@@ -509,6 +518,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 3;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	// "enH1" - Tile Package
 	pPack = new TilePackage;
@@ -517,6 +527,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 3;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	// "enV0" - Tile Package
 	pPack = new TilePackage;
@@ -525,6 +536,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 2;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	// "enV1" - Tile Package
 	pPack = new TilePackage;
@@ -533,6 +545,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 2;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	// "edU" - Tile Package
 	pPack = new TilePackage;
@@ -541,6 +554,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 4;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	// "edD" - Tile Package
 	pPack = new TilePackage;
@@ -549,6 +563,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 4;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 
 	// "sIL" - Tile Package
@@ -558,6 +573,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 2;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	// "sIR" - Tile Package
 	pPack = new TilePackage;
@@ -566,6 +582,7 @@ TreeNode* TileMapUI::FillimgFIleinfo(TreeNode* _pDestNode, TileImgFile* pimgFile
 	pPack->num = 2;
 	PackageNode = PushPackageFiletoTree(pPack, _pDestNode);
 	CreateNewTilesInfo(PackageNode, pPack, pimgFile);
+	m_StorePackage.push_back(pPack);
 
 	return nullptr;
 

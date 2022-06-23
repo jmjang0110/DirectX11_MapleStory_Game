@@ -64,7 +64,7 @@ void CTestScene::CreateTestScene()
 
 
 
-	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");
+	//Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");
 
 	// Texture Create го╠Б
 	Ptr<CTexture> pTestTex = CResMgr::GetInst()->CreateTexture(L"TestTexture", 1024, 1024
@@ -129,12 +129,34 @@ void CTestScene::CreateTestScene()
 	pObject->AddComponent(new CMeshRender);
 	//pObject->AddComponent(new CPlayerScript);
 
-	pObject->Transform()->SetRelativePos(0.f, 0.f, 500.f);
-	pObject->Transform()->SetRelativeScale(800.f, 450.f, 1.f);
+	pObject->Transform()->SetRelativePos(-400.f, 0.f, 300.f);
+	pObject->Transform()->SetRelativeScale(400.f, 225.f, 1.f);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DLightMtrl"));
-	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
+
+	pCurScene->AddObject(pObject, L"Default");
+
+	// Plane Object 2 
+	pObject = new CGameObject;
+	pObject->SetName(L"Background_2");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	//pObject->AddComponent(new CPlayerScript);
+
+	pObject->Transform()->SetRelativePos(0.f, 0.f, 300.f);
+	pObject->Transform()->SetRelativeScale(400.f, 225.f, 1.f);
+
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	//pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\0_100.png"));
+
+	float fLimit = 0.333f;
+	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex_2", L"texture\\0_100.png"));
+
 
 	pCurScene->AddObject(pObject, L"Default");
 
@@ -154,10 +176,10 @@ void CTestScene::CreateTestScene()
 	pCurScene->AddObject(pParticleObj, L"Default");
 
 
-	//pParticleObj = pParticleObj->Clone();
-	//pParticleObj->SetName(L"ParticleObject_02");
-	//pParticleObj->Transform()->SetRelativePos(-500.f, 0.f, 500.f);
-	//pCurScene->AddObject(pParticleObj, L"Default");
+	pParticleObj = pParticleObj->Clone();
+	pParticleObj->SetName(L"ParticleObject_02");
+	pParticleObj->Transform()->SetRelativePos(-500.f, 0.f, 500.f);
+	pCurScene->AddObject(pParticleObj, L"Default");
 
 
 

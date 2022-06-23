@@ -62,6 +62,13 @@ struct TileImgFile
     Ptr<CTexture>           pAtlasTex;      // 타일 이미지
     map<wstring, Tile*>     imgFile;
 
+
+public:
+    TileImgFile() {};
+    ~TileImgFile() {
+
+        Safe_Del_Map(imgFile);
+    }
 };
 
 
@@ -89,6 +96,15 @@ private:
     string                          m_Selected_imgFIle_Name;
     vector<TreeNode*>               m_vimgNode;
     bool                            m_bimgFIleChange;
+
+    // 저장된 TileImgFile , Package 목록들을 저장해놓는다. - 삭제할 떄 쓰기 위해서
+    // m_pTreeUI 를 지우면 TreeNode 들을 지우지만 Node 안에 있는 
+    // 데이터들은 지우지 않는다. 
+    // 그래서 내가 직접 데이터들을 저장해놓고 지울것이다. 
+    vector<TileImgFile*>            m_StoreimgFile;
+    vector<TilePackage*>            m_StorePackage;
+
+
 
 
 public:
