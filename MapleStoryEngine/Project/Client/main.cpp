@@ -118,12 +118,9 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.lpszClassName = L"WindowClass";
     wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
     
-    /*
-    ShowCursor(FALSE);
-        - 이거 하면 윈도우 상에서 내 커서가 안보인다. 
-        - 안보이게 한다음에 내가 임의로 Curor GameObject 를 만든다음에
-        - 그걸로 마우스 커서 역할을 하면 될까 ???? 
-    */
+    
+
+    
 
     return RegisterClassExW(&wcex);
 }

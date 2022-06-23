@@ -73,6 +73,7 @@ void CImGuiMgr::init(HWND _hwnd)
 void CImGuiMgr::progress()
 {
 
+
     // Start the Dear ImGui frame
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();

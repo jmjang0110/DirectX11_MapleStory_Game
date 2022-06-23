@@ -26,6 +26,9 @@
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="CSceneSaveLoad.h" />
+    <ClInclude Include="CCursorScript.h">
+      <Filter>Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -45,5 +48,8 @@
       <Filter>Script</Filter>
     </ClCompile>
     <ClCompile Include="CSceneSaveLoad.cpp" />
+    <ClCompile Include="CCursorScript.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

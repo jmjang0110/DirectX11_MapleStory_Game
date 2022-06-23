@@ -71,6 +71,11 @@ void CCore::Frame_Clear()
 
 void CCore::progress()
 {
+	//ShowCursor(FALSE);
+	/* - 이거 하면 윈도우 상에서 내 커서가 안보인다.
+	 - 안보이게 한다음에 내가 임의로 Curor GameObject 를 만든다음에
+	 - 그걸로 마우스 커서 역할을 하면 될까 ???? */
+
 	// 프레임 시작
 	Frame_Init();	
 

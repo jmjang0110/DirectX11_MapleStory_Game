@@ -29,6 +29,7 @@
 #include <Script/CPlayerScript.h>
 #include <Script/CCameraMoveScript.h>
 #include <Script/CMissileScript.h>
+#include <Script/CCursorScript.h>
 
 #include <Engine/CTestShader.h>
 
@@ -41,7 +42,7 @@ void CTestScene::CreateTestScene()
 
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
-	return;
+	//return;
 
 
 	pCurScene->SetName(L"firstScene");
@@ -214,6 +215,8 @@ void CTestScene::CreateTestScene()
 
 	AddPlayer(pCurScene);
 	Add_MapleStory_Player(pCurScene);
+	AddCursor(pCurScene);
+
 
 	pObject = new CGameObject;
 	pObject->SetName(L"tile");
@@ -299,6 +302,40 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->AddChild(pLight2D);
 
 	_pCurScene->AddObject(pObject, L"Monster");
+}
+
+void CTestScene::AddCursor(CScene* _pCurScene)
+{
+	Ptr<CTexture> pCursor = CResMgr::GetInst()->Load<CTexture>(L"Cursor.0", L"texture\\Cursor.0.png");
+
+	CGameObject* pObj = new CGameObject;
+	pObj->SetName(L"Cursor");
+
+
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new CMeshRender);
+	pObj->AddComponent(new CCollider2D);
+	pObj->AddComponent(new CCursorScript);
+	//pObj->AddComponent(new CAnimator2D);
+
+	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);
+	pObj->Transform()->SetRelativeScale(Vec3(24.f, 25.f, 1.f));
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
+	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	pObj->Collider2D()->SetOffsetScale(Vec2(24.f, 28.f));
+
+
+
+	float fLimit = 0.3333f;
+	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	pObj->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCursor.Get());
+
+	_pCurScene->AddObject(pObj, L"Default");
+
 }
 
 
