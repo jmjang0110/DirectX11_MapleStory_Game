@@ -435,7 +435,7 @@ TreeNode* TileMapUI::PushimgFiletoTree(const wstring _FileName, TreeNode* _pDest
 	TileImgFile* pimgFile = new TileImgFile;
 	pimgFile->Name = _FileName;
 	wstring TilemapRelativePath = L"texture//tilemap//" + pimgFile->Name + L"//";
-	pimgFile->pAtlasTex = CResMgr::GetInst()->Load<CTexture>(pimgFile->Name, TilemapRelativePath + pimgFile->Name + L"Tile.png");
+	pimgFile->pAtlasTex = CResMgr::GetInst()->Load<CTexture>(TilemapRelativePath + pimgFile->Name + L"Tile.png", TilemapRelativePath + pimgFile->Name + L"Tile.png");
 
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
 		, string(_FileName.begin(), _FileName.end())

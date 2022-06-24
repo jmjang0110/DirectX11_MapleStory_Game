@@ -135,9 +135,9 @@ void CResMgr::CreateEngineMesh()
 
 void CResMgr::CreateEngineTexture()
 {
-	Ptr<CTexture> pNoise01 = Load<CTexture>(L"noise_01", L"texture//noise//noise_01.png");
-	Ptr<CTexture> pNoise02 = Load<CTexture>(L"noise_02", L"texture//noise//noise_02.png");
-	Ptr<CTexture> pNoiseCloud = Load<CTexture>(L"noise_cloud", L"texture//noise//noise_cloud.jpg");
+	Ptr<CTexture> pNoise01 = Load<CTexture>(L"texture//noise//noise_01.png", L"texture//noise//noise_01.png", true);
+	Ptr<CTexture> pNoise02 = Load<CTexture>(L"texture//noise//noise_02.png", L"texture//noise//noise_02.png", true);
+	Ptr<CTexture> pNoiseCloud = Load<CTexture>(L"texture//noise//noise_cloud.jpg", L"texture//noise//noise_cloud.jpg", true);
 
 	pNoise01->UpdateData(PIPELINE_STAGE::ALL, 70);
 	pNoise01->UpdateData_CS(70, true);

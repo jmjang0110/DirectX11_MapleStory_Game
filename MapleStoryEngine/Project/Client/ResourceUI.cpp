@@ -42,6 +42,11 @@ ResourceUI::~ResourceUI()
 
 void ResourceUI::update()
 {
+	// 리소스 변경상태 저장
+	if (KEY_PRESSED(KEY::LCTRL) && KEY_PRESSED(KEY::S))
+	{
+		CResMgr::GetInst()->SaveChangedRes();
+	}
 
 
 	UI::update();
@@ -59,6 +64,10 @@ void ResourceUI::Reset()
 	m_TreeUI->Clear();
 
 	// ===============
+
+	// Content 폴더 및의 리소스 로딩
+	Reload();
+
 	for (int i = 0; i < (int)RES_TYPE::END; ++i)
 	{
 		// TreeUI 가 DummyRoot 를 사용하기 때문에, 리소스 항목 노드들은 더미 자식으로 들어감
@@ -127,4 +136,106 @@ void ResourceUI::ItemDBClicked(DWORD_PTR _dwNode)
 }
 
 
+void ResourceUI::Reload()
+{
+	// Content 폴더 밑으로 모든 파일의 상대경로를 알아낸다.
+	m_vecResPath.clear();
+	FindFileName(CPathMgr::GetInst()->GetContentPath());
+
+	// 키값 확인
+	for (size_t i = 0; i < m_vecResPath.size(); ++i)
+	{
+		// 1. 파일명을 통해서 리소스의 종류를 알아낸다.
+		RES_TYPE eType = GetResTypeFromExt(m_vecResPath[i]);
+
+		// 2. 상대경로를 키값으로 해서 리소스매니저에 로딩한다.
+		switch (eType)
+		{
+		case RES_TYPE::PREFAB:
+			CResMgr::GetInst()->Load<CPrefab>(m_vecResPath[i], m_vecResPath[i]);
+			break;
+		case RES_TYPE::MESHDATA:
+
+			break;
+		case RES_TYPE::MATERIAL:
+			CResMgr::GetInst()->Load<CMaterial>(m_vecResPath[i], m_vecResPath[i]);
+			break;
+		case RES_TYPE::MESH:
+
+			break;
+		case RES_TYPE::TEXTURE:
+			CResMgr::GetInst()->Load<CTexture>(m_vecResPath[i], m_vecResPath[i]);
+			break;
+		case RES_TYPE::SOUND:
+
+			break;
+		case RES_TYPE::SCENEFILE:
+			CResMgr::GetInst()->Load<CSceneFile>(m_vecResPath[i], m_vecResPath[i]);
+			break;
+		}
+	}
+
+	// 3. 로딩되어있는 리소스들의 실제 파일 존재 확인
+
+	// 4. 없으면 리소스매니저에서 메모리 해제
+
+}
+
+void ResourceUI::FindFileName(const wstring& _strFolderPath)
+{
+	wstring strContent = _strFolderPath + L"*.*";
+
+	WIN32_FIND_DATA FindFileData = {};
+
+	HANDLE hFind = nullptr;
+
+	hFind = FindFirstFile(strContent.c_str(), &FindFileData);
+
+	if (hFind == INVALID_HANDLE_VALUE)
+		return;
+
+	while (FindNextFile(hFind, &FindFileData))
+	{
+		if (FindFileData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
+		{
+			if (0 == wcscmp(FindFileData.cFileName, L".."))
+				continue;
+
+			FindFileName(_strFolderPath + FindFileData.cFileName + L"\\");
+			continue;
+		}
+
+		wstring strRelativePath = _strFolderPath + FindFileData.cFileName;
+		strRelativePath = CPathMgr::GetInst()->GetRelativePath(strRelativePath);
+
+		m_vecResPath.push_back(strRelativePath);
+	}
+
+	FindClose(hFind);
+}
+
+
+RES_TYPE ResourceUI::GetResTypeFromExt(const wstring& _strExt)
+{
+	wchar_t szExt[50] = {};
+	_wsplitpath_s(_strExt.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExt, 50);
+
+	wstring strExt = szExt;
+
+	if (L".mtrl" == strExt)
+		return RES_TYPE::MATERIAL;
+	else if (L".png" == strExt || L".jpeg" == strExt || L".bmp" == strExt
+		|| L".jpg" == strExt || L".tga" == strExt || L".dds" == strExt)
+		return RES_TYPE::TEXTURE;
+	else if (L".mp3" == strExt || L".wav" == strExt || L".ogg" == strExt)
+		return RES_TYPE::SOUND;
+	else if (L".pref" == strExt)
+		return RES_TYPE::PREFAB;
+	else if (L".mesh" == strExt)
+		return RES_TYPE::MESH;
+	else if (L".scene" == strExt)
+		return RES_TYPE::SCENEFILE;
+
+	return RES_TYPE::END;
+}
 

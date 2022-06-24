@@ -36,8 +36,8 @@
 
 void CTestScene::CreateTestScene()
 {
-	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test3.scene", L"scene\\Test3.scene");
-	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\SibalNoma.scene", L"scene\\SibalNoma.scene");
+	CResMgr::GetInst()->Load<CSceneFile>(L"scene//Test3.scene", L"scene//Test3.scene");
+	CResMgr::GetInst()->Load<CSceneFile>(L"scene//SibalNoma.scene", L"scene//SibalNoma.scene");
 
 
 	CScene* pCurScene = new CScene;
@@ -53,14 +53,14 @@ void CTestScene::CreateTestScene()
 	pCurScene->SetLayerName(3, L"Monster");
 
 	// Texture 한장 로딩해보기
-	CResMgr::GetInst()->Load<CTexture>(L"PlayerTexture", L"texture\\Player.bmp");
-	CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\MagicCircle.png");
-	CResMgr::GetInst()->Load<CTexture>(L"Tauromacis", L"texture\\Tauromacis.png");
-	CResMgr::GetInst()->Load<CTexture>(L"RedWheel", L"texture\\RedGearWheel.png");
-	CResMgr::GetInst()->Load<CTexture>(L"Back", L"Texture\\0_100.png");
-	CResMgr::GetInst()->Load<CTexture>(L"castle", L"Texture\\castle.png");
-	CResMgr::GetInst()->Load<CTexture>(L"character123456", L"Texture\\test6.png");
-	CResMgr::GetInst()->Load<CTexture>(L"portal", L"Texture\\portal.png");
+	CResMgr::GetInst()->Load<CTexture>(L"texture//Player.bmp", L"texture//Player.bmp");
+	CResMgr::GetInst()->Load<CTexture>(L"texture//MagicCircle.png", L"texture//MagicCircle.png");
+	CResMgr::GetInst()->Load<CTexture>(L"texture//Tauromacis.png", L"texture//Tauromacis.png");
+	CResMgr::GetInst()->Load<CTexture>(L"texture//RedGearWheel.png", L"texture//RedGearWheel.png");
+	CResMgr::GetInst()->Load<CTexture>(L"Texture//0_100.png", L"Texture//0_100.png");
+	CResMgr::GetInst()->Load<CTexture>(L"Texture//castle.png", L"Texture//castle.png");
+	CResMgr::GetInst()->Load<CTexture>(L"Texture//test6.png", L"Texture//test6.png");
+	CResMgr::GetInst()->Load<CTexture>(L"Texture//portal.png", L"Texture//portal.png");
 
 
 
@@ -138,7 +138,7 @@ void CTestScene::CreateTestScene()
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DLightMtrl"));
-	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\Background.png"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"texture//Background.png", L"texture//Background.png"));
 
 	pCurScene->AddObject(pObject, L"Default");
 
@@ -155,11 +155,11 @@ void CTestScene::CreateTestScene()
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-	//pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture\\0_100.png"));
+	//pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex", L"texture//0_100.png"));
 
 	float fLimit = 0.333f;
 	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
-	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"BackGroundTex_2", L"texture\\0_100.png"));
+	pObject->MeshRender()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->Load<CTexture>(L"texture//0_100.png", L"texture//0_100.png"));
 
 
 	pCurScene->AddObject(pObject, L"Default");
@@ -174,7 +174,7 @@ void CTestScene::CreateTestScene()
 
 	pParticleObj->Transform()->SetRelativePos(-200.f, 0.f, 500.f);
 
-	Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"Particle_01", L"texture\\particle\\AlphaCircle.png");
+	Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"texture//particle//AlphaCircle.png", L"texture//particle//AlphaCircle.png");
 	pParticleObj->ParticleSystem()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, pParticleTex);
 
 	pCurScene->AddObject(pParticleObj, L"Default");
@@ -225,7 +225,7 @@ void CTestScene::CreateTestScene()
 
 	pObject->AddComponent(new CTileMap);
 
-	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png");
+	Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png", L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png");
 	pObject->TileMap()->SetAtlasTex(pTileAtlas);
 	pObject->TileMap()->SetTileSize(Vec2(30.f, 30.f));
 	pObject->TileMap()->SetTileMapCount(12, 20);
@@ -249,7 +249,7 @@ void CTestScene::CreateTestScene()
 void CTestScene::AddPlayer(CScene* _pCurScene)
 {
 
-	Ptr<CTexture> pAnimAtlas = CResMgr::GetInst()->Load<CTexture>(L"PlayerAtlas", L"texture\\link_0.png");
+	Ptr<CTexture> pAnimAtlas = CResMgr::GetInst()->Load<CTexture>(L"texture//link_0.png", L"texture//link_0.png");
 
 	// Player Object
 	CGameObject* pObject = new CGameObject;
@@ -306,7 +306,7 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 
 void CTestScene::AddCursor(CScene* _pCurScene)
 {
-	Ptr<CTexture> pCursor = CResMgr::GetInst()->Load<CTexture>(L"Cursor.0", L"texture\\Cursor.0.png");
+	Ptr<CTexture> pCursor = CResMgr::GetInst()->Load<CTexture>(L"texture//Cursor.0.png", L"texture//Cursor.0.png");
 
 	CGameObject* pObj = new CGameObject;
 	pObj->SetName(L"Cursor");
@@ -343,7 +343,7 @@ void CTestScene::AddCursor(CScene* _pCurScene)
 
 void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 {
-	Ptr<CTexture> pBody = CResMgr::GetInst()->Load<CTexture>(L"walk1", L"texture\\walk1.png");
+	Ptr<CTexture> pBody = CResMgr::GetInst()->Load<CTexture>(L"texture//walk1.png", L"texture//walk1.png");
 
 	// Body
 	CGameObject* pObj = new CGameObject;
@@ -377,7 +377,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 
 
 	pObj->Animator2D()->Play(L"WALK1", true);
-	Ptr<CTexture> pHead = CResMgr::GetInst()->Load<CTexture>(L"frontHead", L"texture\\frontHead.png");
+	Ptr<CTexture> pHead = CResMgr::GetInst()->Load<CTexture>(L"texture//frontHead.png", L"texture//frontHead.png");
 
 	// Head
 	CGameObject* pObjChild = new CGameObject;
@@ -411,7 +411,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 
 
 	// Eye 
-	Ptr<CTexture> pEye = CResMgr::GetInst()->Load<CTexture>(L"FaceBlink", L"texture\\face_blink.png");
+	Ptr<CTexture> pEye = CResMgr::GetInst()->Load<CTexture>(L"texture//face_blink.png", L"texture//face_blink.png");
 
 
 	CGameObject* pObjEye = new CGameObject;
