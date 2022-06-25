@@ -120,6 +120,10 @@ void CImGuiMgr::ObserveContent()
 {
     DWORD dwWaitStatus = WaitForSingleObject(m_hNotify, 0);
 
+    /*
+    Created Renamed deleted int the directory 
+    - Refresh this directory an restart the notification
+    */
     if (dwWaitStatus == WAIT_OBJECT_0)
     {
         int a = 0;

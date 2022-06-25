@@ -28,6 +28,7 @@ void CCursorScript::update()
 
 
 	Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
+	Vec3 vMouseScale = GetOwner()->Transform()->GetRelativeScale();
 
 	// find Camera Obj !!  
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
@@ -58,7 +59,7 @@ void CCursorScript::update()
 	// 실제 월드상에서의 좌표값 
 	Vec2 vRealPos = vDx11Pos + vCameraPos;
 
-	GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x, vRealPos.y, 0.f));
+	GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x + (vMouseScale.x / 2.f), vRealPos.y - (vMouseScale.y / 2.f), 0.f));
 
 
 
