@@ -93,6 +93,7 @@ private:
     Vec2                            m_vTileSize;
 
 
+    // Button 
     bool                            m_bEditMode;
     bool                            m_bAutoSetNextTile;
     bool                            m_bUseMapleStory_ImgFile;
@@ -103,7 +104,9 @@ private:
 private:
     // 일반 Img 
     TileImgFile                     m_ImgFile; // 메이플 스토리 imgFile 을 쓰지 않을 때 쓰는 img 
+    TilePackage*                    m_tilePackage;
     Tile*                           m_tile;
+    bool                            m_bUseThisTile;
 
     int                             m_iRow;
     int                             m_iCol;

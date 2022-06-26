@@ -57,6 +57,15 @@ TileMapUI::TileMapUI()
 	//AddChild(m_TreeUI);
 
 	m_tile = new Tile;
+	m_tile->iRow = 1;
+	m_tile->iCol = 1;
+
+	m_tilePackage = new TilePackage;
+	
+	m_tile->_parent = m_tilePackage;
+	m_tilePackage->_parent = &m_ImgFile;
+
+
 	m_ImgFile.imgFile.insert(make_pair(L"Tile", m_tile));
 
 
@@ -73,6 +82,8 @@ TileMapUI::~TileMapUI()
 	Safe_Del_Vec(m_StorePackage);
 
 	SAFE_DELETE(m_TreeUI);
+	SAFE_DELETE(m_tilePackage);
+
 	//SAFE_DELETE(m_tile);
 
 
@@ -167,19 +178,35 @@ void TileMapUI::render_update()
 	// Slice pixel Size 
 	ImGui::PushItemWidth(200);
 	//Vec2 SlicePixel = pTargetObj->TileMap()->GetTileSize();
-	float pxSlice[2] = { m_vTileSize.x, m_vTileSize.y};
+	static float pxSlice[2] = { m_vTileSize.x, m_vTileSize.y};
 
 	ImGui::Text("Size %dx%d px", (UINT)pTileMap->GetTileSize().x, (UINT)pTileMap->GetTileSize().y);
 	ImGui::SameLine(100);
 	ImGui::InputFloat2("##TilepxSize", &pxSlice[0]);
-	m_vTileSize.x = pxSlice[0];
-	m_vTileSize.y = pxSlice[1];
+	
 	ImGui::PopItemWidth();
 	
 	
 
 	if (ImGui::Button("Setting"))
 	{
+		m_tile->vTilesInfo.clear();
+		m_tile->iCol = 0;
+		m_tile->iRow = 0;
+		m_tile->iImgIdxNum = 0;
+
+		m_ImgFile.pAtlasTex = nullptr;
+
+		m_bUseThisTile = false;
+
+		m_vTileSize.x = pxSlice[0];
+		m_vTileSize.y = pxSlice[1];
+
+
+		m_pSelected_Tile = nullptr;
+		m_pSelected_imgFile = nullptr;
+		m_Selected_imgFIle_Name = "";
+
 		pTileMap->ClearTileData();
 		pTileMap->SetTileMapCount(m_iMapCountX, m_iMapCountY);
 		// 타일 개수 / 사이즈 만큼 타일맵 크기를 늘려야한다. 
@@ -242,6 +269,8 @@ void TileMapUI::render_update()
 		int MaxCol = SelectedTile_Atlas->Width() / m_vTileSize.x;  // 열 
 
 		ImVec2 size(m_vTileSize.y * m_pSelected_Tile->iCol, m_vTileSize.x * m_pSelected_Tile->iRow);
+
+		if (size.x >= 1.f && size.y >= 1.f)
 		ImGui::InvisibleButton("##empty", size);
 		const ImVec2 p0 = ImGui::GetItemRectMin();
 		const ImVec2 p1 = ImGui::GetItemRectMax();
@@ -329,7 +358,7 @@ void TileMapUI::EditorUpdate()
 				if (-1 != tileData.iImgIdx)
 					bTileSet = false;
 
-				// 타일 세팅 ! ======================
+				// 타일 세팅 ! ====================== - Maple Img 전용 
 				if (m_pSelected_Tile && bTileSet)
 				{
 					
@@ -345,8 +374,6 @@ void TileMapUI::EditorUpdate()
 
 							}
 						}
-
-						
 				}
 				// ======================
 			}
@@ -835,6 +862,9 @@ void TileMapUI::SelectAtlasTexture()
 				m_ImgFile.pAtlasTex = CResMgr::GetInst()->FindRes<CTexture>(TexKey);
 				m_ImgFile.Name = TexKey;
 
+				if (m_tile)
+					m_tile->vTilesInfo.clear();
+
 
 			}
 
@@ -867,7 +897,7 @@ void TileMapUI::SelectTile()
 	ImVec2 Texsize = ImVec2(width * ratio, height * ratio);
 	ImColor lineColor = ImColor(0.4f, 0.4f, 0.4f, 1.f);
 
-
+	if (Texsize.x >= 1.f && Texsize.y >= 1.f)
 	ImGui::InvisibleButton("##empty", Texsize);
 
 	const ImVec2 p0 = ImGui::GetItemRectMin();
@@ -882,26 +912,26 @@ void TileMapUI::SelectTile()
 	ImVec2 uv1 = ImVec2(1.f, 1.f);
 	draw_list->AddImage(m_ImgFile.pAtlasTex->GetSRV().Get(), p0, p1, uv0, uv1);
 
-	int ImgIdx_Col = height / m_vTileSize.y; // 행 
-	int ImgIdx_Row = width / m_vTileSize.x; // 열 
+	// 이미지의 행열 총 개수 
+	int ImgIdx_Row = height / m_vTileSize.y; // 행 
+	int ImgIdx_Col = width / m_vTileSize.x; // 열 
 	ImVec2 Tilesize = m_vTileSize * ratio;
 
 	// draw Column line 
 	for (int i = 0; i < ImgIdx_Col; ++i)
 	{
-		draw_list->AddLine(ImVec2(pos.x, pos.y + Tilesize.y * (i + 1))
-			, ImVec2(pos.x + Texsize.x * (i + 1), pos.y + Tilesize.y * (i + 1))
+		draw_list->AddLine(ImVec2(pos.x + Tilesize.x * (i + 1), pos.y)
+			, ImVec2(pos.x + Tilesize.x * (i + 1), pos.y + Texsize.y * (i + 1))
 			, lineColor);
 	}
 
 	// draw Row line 
 	for (int i = 0; i < ImgIdx_Row; ++i)
 	{
-		draw_list->AddLine(ImVec2(pos.x + Tilesize.x * (i + 1), pos.y )
-			, ImVec2(pos.x + Tilesize.x * (i + 1), pos.y + Texsize.y * (i + 1))
+	
+		draw_list->AddLine(ImVec2(pos.x, pos.y + Tilesize.y * (i + 1))
+			, ImVec2(pos.x + Texsize.x * (i + 1), pos.y + Tilesize.y * (i + 1))
 			, lineColor);
-
-		
 	}
 
 	ImGui::PopClipRect();
@@ -913,10 +943,10 @@ void TileMapUI::SelectTile()
 		float PIxelPos_x = io.MousePos.x - pos.x;
 		float PixelPos_y = io.MousePos.y - pos.y; // io.MousePos.y;
 
-		m_iRow =	PIxelPos_x / Tilesize.x; // 열 
-		m_iCol =    PixelPos_y / Tilesize.y; // 행
+		m_iRow =	PixelPos_y / Tilesize.y; // 행 
+		m_iCol =	PIxelPos_x / Tilesize.x; // 열
 
-		ImVec2 LT = ImVec2(pos.x + m_iRow * Tilesize.x, pos.y + m_iCol * Tilesize.y);
+		ImVec2 LT = ImVec2(pos.x + m_iCol * Tilesize.x, pos.y + m_iRow * Tilesize.y);
 		ImVec2 RB = ImVec2(LT.x + Tilesize.x, LT.y + Tilesize.y);
 
 		ImColor Color = ImColor(0.2f, 1.f, 1.f, 1.f);
@@ -929,19 +959,100 @@ void TileMapUI::SelectTile()
 
 	if (ImGui::IsItemClicked())
 	{
-		TileInfo NewTile(m_iCol * (ImgIdx_Row) + m_iRow);
+		if (m_bUseThisTile)
+		{
+			m_bUseThisTile = false;
+			m_pSelected_Tile = nullptr;
+
+		}
+
+		TileInfo NewTile(m_iRow * (ImgIdx_Col) + m_iCol);
 		if (m_tile)
+		{
 			m_tile->vTilesInfo.push_back(NewTile);
+			m_tile->iImgIdxNum += 1;
+		}
 	}
 
-	
-	
+	// draw selected tile - Rect line in img
+	if (nullptr != m_tile)
+	{
+		for (int i = 0; i < m_tile->vTilesInfo.size(); ++i)
+		{
+			int row = m_tile->vTilesInfo[i].iImgIdx / ImgIdx_Col;
+			int col = m_tile->vTilesInfo[i].iImgIdx % ImgIdx_Col;
 
-	// Draw Tile Image 
+			ImVec2 LT = ImVec2(pos.x + col * Tilesize.x, pos.y + row * Tilesize.y);
+			ImVec2 RB = ImVec2(LT.x + Tilesize.x, LT.y + Tilesize.y);
+
+			ImColor Color = ImColor(0.f, 1.f, 0.1f, 1.f);
+			draw_list->AddRect(LT, RB, Color, 0.5f, 1.f);
+
+		}
+
+	}
 	ImGui::SameLine();
-	ImGui::BeginChild("Selected Tile", ImVec2(300.f, 200.f), true, ImGuiWindowFlags_HorizontalScrollbar);
-	ImGui::Text("tex size : (%.2f, %.2f)", width, Texsize.y);
 
+	ImGui::BeginChild("Button", ImVec2(300.f, 100.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+
+	if (m_tile)
+	{
+		ImGui::PushItemWidth(100.f);
+
+		ImGui::InputInt("Row", &m_tile->iRow);
+		ImGui::SameLine();
+		ImGui::InputInt("Col", &m_tile->iCol);
+
+		ImGui::PopItemWidth();
+
+	}
+	
+	ImGui::TextColored(ImVec4(0.2f, 1.f, 1.f, 1.f), "Num = %d", m_tile->iImgIdxNum);
+	ImGui::Checkbox("Use This Tile", &m_bUseThisTile);
+	if (m_bUseThisTile)
+	{
+		
+		if (m_tile->iImgIdxNum > 0 && m_tile->iCol * m_tile->iRow == m_tile->iImgIdxNum)
+		{
+			m_pSelected_Tile = nullptr;
+			m_pSelected_imgFile = &m_ImgFile;
+
+			GetTargetObject()->TileMap()->SetAtlasTex(m_ImgFile.pAtlasTex);
+			m_pSelected_Tile = m_tile;
+
+		}
+		// 잘못 입력 
+		else
+		{
+			m_bUseThisTile = false;
+			m_pSelected_Tile = nullptr;
+		}
+			
+	
+	}
+
+
+	ImGui::EndChild();
+	
+	ImGui::SameLine();
+	if (ImGui::Button("clear"))
+	{
+		if (m_tile)
+		{
+			m_tile->vTilesInfo.clear();
+			m_tile->iImgIdxNum = 0;
+			m_tile->iRow = 0;
+			m_tile->iCol = 0;
+			m_pSelected_Tile = nullptr;
+			m_bUseThisTile = false;
+
+
+		}
+
+	}
+	ImGui::SameLine();
+	// Draw Tile Image 
+	ImGui::BeginChild("Selected Tile", ImVec2(300.f, 300.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 		if (nullptr != m_ImgFile.pAtlasTex && (m_vTileSize.x >= 0.f && m_vTileSize.y >= 0.f)
 			&& m_tile && m_tile->vTilesInfo.size() > 0) 
@@ -960,6 +1071,7 @@ void TileMapUI::SelectTile()
 		
 		
 				ImVec2 size(m_vTileSize);
+				if(size.x >= 1.f && size.y >= 1.f)
 				ImGui::InvisibleButton("##empty", size);
 				const ImVec2 p0 = ImGui::GetItemRectMin();
 				const ImVec2 p1 = ImGui::GetItemRectMax();
@@ -979,9 +1091,8 @@ void TileMapUI::SelectTile()
 
 				draw_list->AddImage(_texid, p0, p1, uv0, uv1);
 
-				if (i == 0)
-					ImGui::SameLine();
-				else if(i % 5 != 0)
+				
+				 if((i + 1) % 4 != 0)
 					ImGui::SameLine();
 				ImGui::PopClipRect();
 
@@ -995,12 +1106,7 @@ void TileMapUI::SelectTile()
 
 		ImGui::Text("tex size : (%.2f, %.2f)", width, Texsize.y);
 
-		if (ImGui::Button("clear"))
-		{
-			if (m_tile)
-				m_tile->vTilesInfo.clear();
-
-		}
+	
 	
 
 
