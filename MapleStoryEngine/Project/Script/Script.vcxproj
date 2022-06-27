@@ -174,8 +174,10 @@ call CodeGen.exe</Command>
   <ItemGroup>
     <ClInclude Include="CCameraMoveScript.h" />
     <ClInclude Include="CCursorScript.h" />
+    <ClInclude Include="CGravityScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CPlayerScript.h" />
+    <ClInclude Include="CRigidBodyScript.h" />
     <ClInclude Include="CSceneSaveLoad.h" />
     <ClInclude Include="CScriptMgr.h" />
     <ClInclude Include="framework.h" />
@@ -184,8 +186,10 @@ call CodeGen.exe</Command>
   <ItemGroup>
     <ClCompile Include="CCameraMoveScript.cpp" />
     <ClCompile Include="CCursorScript.cpp" />
+    <ClCompile Include="CGravityScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
+    <ClCompile Include="CRigidBodyScript.cpp" />
     <ClCompile Include="CSceneSaveLoad.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
     <ClCompile Include="pch.cpp">

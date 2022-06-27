@@ -1,4 +1,6 @@
 CCameraMoveScript
 CCursorScript
+CGravityScript
 CMissileScript
 CPlayerScript
+CRigidBodyScript

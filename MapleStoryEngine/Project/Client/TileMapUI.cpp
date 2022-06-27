@@ -268,6 +268,12 @@ void TileMapUI::render_update()
 		int MaxRow = SelectedTile_Atlas->Height() / m_vTileSize.y;  // 행
 		int MaxCol = SelectedTile_Atlas->Width() / m_vTileSize.x;  // 열 
 
+
+		if (SelectedTile_Atlas->Width() < m_vTileSize.x)
+			MaxCol = 1;
+		if (SelectedTile_Atlas->Height() < m_vTileSize.y)
+			MaxRow = 1;
+
 		ImVec2 size(m_vTileSize.y * m_pSelected_Tile->iCol, m_vTileSize.x * m_pSelected_Tile->iRow);
 
 		if (size.x >= 1.f && size.y >= 1.f)
@@ -915,6 +921,13 @@ void TileMapUI::SelectTile()
 	// 이미지의 행열 총 개수 
 	int ImgIdx_Row = height / m_vTileSize.y; // 행 
 	int ImgIdx_Col = width / m_vTileSize.x; // 열 
+
+	if (width < m_vTileSize.x)
+		ImgIdx_Col = 1;
+	if (height < m_vTileSize.y)
+		ImgIdx_Row = 1;
+
+
 	ImVec2 Tilesize = m_vTileSize * ratio;
 
 	// draw Column line 
@@ -1063,6 +1076,13 @@ void TileMapUI::SelectTile()
 			int MaxRow = SelectedTile_Atlas->Height() / m_vTileSize.y;  // 행
 			int MaxCol = SelectedTile_Atlas->Width() / m_vTileSize.x;  // 열 
 
+			if (width < m_vTileSize.x)
+				MaxCol = 1;
+			if (height < m_vTileSize.y)
+				MaxRow = 1;
+
+
+
 			//ImVec2 size(m_vTileSize.y * m_pSelected_Tile->iCol, m_vTileSize.x * m_pSelected_Tile->iRow);
 	
 			for (int i = 0; i < m_tile->vTilesInfo.size(); ++i)
@@ -1106,48 +1126,45 @@ void TileMapUI::SelectTile()
 
 		ImGui::Text("tex size : (%.2f, %.2f)", width, Texsize.y);
 
-	
-	
 
-
-	// 
-	// 
+	
+		/*
+			// 버튼 형식 타일맵 고르기 
 	// image index 행열 개수 
-
-
 	// 내가 생각한대로 되긴 하지만 프레임이 너무 떨어진다.... 
-	//for (int i = 0; i < ImgIdx_Col; ++i)
-	//{
-	//	for (int k = 0; k < ImgIdx_Row; ++k)
-	//	{
-	//		int imgIdx = i * ImgIdx_Col + k;
-	//		ImGui::PushID(imgIdx);
+		for (int i = 0; i < ImgIdx_Col; ++i)
+	{
+		for (int k = 0; k < ImgIdx_Row; ++k)
+		{
+			int imgIdx = i * ImgIdx_Col + k;
+			ImGui::PushID(imgIdx);
 
-	//		ImVec2 Tilesize = m_vTileSize;												// Size of the image we want to make visible
-	//		ImVec2 uv0 = ImVec2((Tilesize.y * k) / width, (Tilesize.x * i) / height);	// UV coordinates for lower-left
-	//		ImVec2 uv1 = uv0;
-	//		uv1.x += Tilesize.x / width;
-	//		uv1.y += Tilesize.x / height;
+			ImVec2 Tilesize = m_vTileSize;												// Size of the image we want to make visible
+			ImVec2 uv0 = ImVec2((Tilesize.y * k) / width, (Tilesize.x * i) / height);	// UV coordinates for lower-left
+			ImVec2 uv1 = uv0;
+			uv1.x += Tilesize.x / width;
+			uv1.y += Tilesize.x / height;
 
-	//		ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);         // Black background
-	//		ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);       // No tint
-	//		
-	//		Tilesize.x *= ratio;
-	//		Tilesize.y *= ratio;
-	//		ImGui::ImageButton(m_ImgFile.pAtlasTex->GetSRV().Get(), Tilesize, uv0, uv1, 1.f, bg_col, tint_col);
-	//	
-	//		// 시작점이 7.f 이네 
-	//		const float startOffsetDefault = 8.f;
+			ImVec4 bg_col = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);         // Black background
+			ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);       // No tint
+			
+			Tilesize.x *= ratio;
+			Tilesize.y *= ratio;
+			ImGui::ImageButton(m_ImgFile.pAtlasTex->GetSRV().Get(), Tilesize, uv0, uv1, 1.f, bg_col, tint_col);
+		
+			// 시작점이 7.f 이네 
+			const float startOffsetDefault = 8.f;
 
-	//		 if (k != ImgIdx_Row - 1)
-	//			ImGui::SameLine(startOffsetDefault + (Tilesize.x  + 3.f) * (k + 1));
+			 if (k != ImgIdx_Row - 1)
+				ImGui::SameLine(startOffsetDefault + (Tilesize.x  + 3.f) * (k + 1));
 
-	//		ImGui::PopID();
-	//	}
-	//}
+			ImGui::PopID();
+		}
+	}
 
-
-
+		
+		*/
+	
 	ImGui::End();
 }
 

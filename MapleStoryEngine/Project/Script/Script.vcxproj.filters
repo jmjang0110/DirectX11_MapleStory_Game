@@ -7,6 +7,24 @@
     <Filter Include="Script">
       <UniqueIdentifier>{cce46bde-f316-4bc1-b36a-2c6805b1f2e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\02. UI">
+      <UniqueIdentifier>{fc9f9799-2a54-4fd6-8369-148af1c8926d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Camera">
+      <UniqueIdentifier>{fc87b424-a756-4f25-aa92-1b8b7e3fe108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Cursor">
+      <UniqueIdentifier>{7a80adb0-028b-48d4-8d0b-57a745a17909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\01. Physics">
+      <UniqueIdentifier>{aecf24a1-a3a1-40f6-8c30-f51d868ddb7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\01. Physics\Gravity">
+      <UniqueIdentifier>{98d1ff0c-8a00-4a82-9198-cf3991f9b615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\01. Physics\RigidBody">
+      <UniqueIdentifier>{c8f12fca-2f06-47e6-bd07-23856914e664}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -16,9 +34,6 @@
       <Filter>Default</Filter>
     </ClInclude>
     <ClInclude Include="CScriptMgr.h" />
-    <ClInclude Include="CCameraMoveScript.h">
-      <Filter>Script</Filter>
-    </ClInclude>
     <ClInclude Include="CMissileScript.h">
       <Filter>Script</Filter>
     </ClInclude>
@@ -26,8 +41,17 @@
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="CSceneSaveLoad.h" />
+    <ClInclude Include="CRigidBodyScript.h">
+      <Filter>Script\01. Physics\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="CGravityScript.h">
+      <Filter>Script\01. Physics\Gravity</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraMoveScript.h">
+      <Filter>Script\02. UI\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="CCursorScript.h">
-      <Filter>Script</Filter>
+      <Filter>Script\02. UI\Cursor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,9 +62,6 @@
       <Filter>Default</Filter>
     </ClCompile>
     <ClCompile Include="CScriptMgr.cpp" />
-    <ClCompile Include="CCameraMoveScript.cpp">
-      <Filter>Script</Filter>
-    </ClCompile>
     <ClCompile Include="CMissileScript.cpp">
       <Filter>Script</Filter>
     </ClCompile>
@@ -48,8 +69,17 @@
       <Filter>Script</Filter>
     </ClCompile>
     <ClCompile Include="CSceneSaveLoad.cpp" />
+    <ClCompile Include="CRigidBodyScript.cpp">
+      <Filter>Script\01. Physics\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="CGravityScript.cpp">
+      <Filter>Script\01. Physics\Gravity</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraMoveScript.cpp">
+      <Filter>Script\02. UI\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="CCursorScript.cpp">
-      <Filter>Script</Filter>
+      <Filter>Script\02. UI\Cursor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -30,6 +30,8 @@
 #include <Script/CCameraMoveScript.h>
 #include <Script/CMissileScript.h>
 #include <Script/CCursorScript.h>
+#include <Script/CRigidBodyScript.h>
+#include <Script/CGravityScript.h>
 
 #include <Engine/CTestShader.h>
 
@@ -62,6 +64,7 @@ void CTestScene::CreateTestScene()
 	CResMgr::GetInst()->Load<CTexture>(L"Texture//test6.png", L"Texture//test6.png");
 	CResMgr::GetInst()->Load<CTexture>(L"Texture//portal.png", L"Texture//portal.png");
 
+	CResMgr::GetInst()->Load<CTexture>(L"Texture//back.0.png", L"Texture//back.0.png");
 
 
 
@@ -259,6 +262,7 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CAnimator2D);
 	pObject->AddComponent(new CPlayerScript);
+	pObject->AddComponent(new CRigidBodyScript);
 
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 50.f);
@@ -353,7 +357,9 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CCollider2D);
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
-	//pObj->AddComponent(new CPlayerScript);
+	
+	/*pObj->AddComponent(new CRigidBodyScript);
+	pObj->AddComponent(new CPlayerScript);*/
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

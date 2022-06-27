@@ -11,6 +11,8 @@ CMissileScript::CMissileScript()
 	, m_fSpeed(0.f)
 	, m_fAccTime(0.f)
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
 }
 
 CMissileScript::~CMissileScript()

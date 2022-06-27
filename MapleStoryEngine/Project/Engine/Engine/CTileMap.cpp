@@ -110,6 +110,11 @@ void CTileMap::SetTileData(int _iTileIdx, int _iImgIdx)
 	m_iColCount = (UINT)m_pAtlasTex->Width() / (UINT)m_vSlicePixel.x;
 	m_iRowCount = (UINT)m_pAtlasTex->Height() / (UINT)m_vSlicePixel.y;
 
+	if (m_iColCount <= 0)
+		m_iColCount = 1;
+	if (m_iRowCount <= 0)
+		m_iRowCount = 1;
+
 	int iRow = m_vecTileData[_iTileIdx].iImgIdx / m_iColCount;
 	int iCol = m_vecTileData[_iTileIdx].iImgIdx % m_iColCount;
 
