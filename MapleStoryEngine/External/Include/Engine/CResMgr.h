@@ -90,13 +90,6 @@ inline RES_TYPE CResMgr::GetResType()
 template<typename type>
 Ptr<type> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath, bool _bEngineRes)
 {
-	if (_strKey == L"Texture//back.0.png" ||
-		_strKey == L"texture//BackGround.png" ||
-		_strKey == L"texture//Cursor.0.png" ||
-		_strKey == L"texture//particle//AlphaCircle.png")
-		int i = 0;
-
-
 	RES_TYPE eType = GetResType<type>();
 
 	CRes* pRes = FindRes<type>(_strKey).Get();

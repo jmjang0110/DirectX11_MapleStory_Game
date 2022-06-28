@@ -44,7 +44,7 @@ void CTestScene::CreateTestScene()
 
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
-	return;
+	//return;
 
 
 	pCurScene->SetName(L"firstScene");
@@ -269,7 +269,7 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
 
 	float fLimit = 0.3333f;
 	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
@@ -366,7 +366,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
 
 	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
 	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
@@ -403,7 +403,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObjChild->Collider2D()->SetOffsetScale(Vec2(35.f, 35.f));
 
 	pObjChild->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObjChild->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObjChild->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
 
 	pObjChild->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
 	pObjChild->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pHead.Get());
@@ -432,7 +432,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObjEye->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
 
 	pObjEye->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObjEye->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObjEye->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
 
 	pObjEye->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
 	pObjEye->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pEye.Get());

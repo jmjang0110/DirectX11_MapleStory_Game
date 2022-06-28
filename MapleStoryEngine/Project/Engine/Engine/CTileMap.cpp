@@ -19,7 +19,7 @@ CTileMap::CTileMap()
 {
 	// 메쉬, 재질
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TileMapMtrl"));
+	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\TileMapMtrl.mtrl"));
 
 	m_vecTileData.resize((size_t)(m_iTileCountX * m_iTileCountY));
 

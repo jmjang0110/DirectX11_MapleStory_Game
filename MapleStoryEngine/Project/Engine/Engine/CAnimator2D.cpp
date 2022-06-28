@@ -64,7 +64,7 @@ void CAnimator2D::UpdateData()
 {
 	if (nullptr == m_pCurAnim)
 	{
-		UpdateData_DummyAnim(); // Anim 이 없을 때 없다는 것을 보이기 위한 Dummy 애니메이션 
+		//UpdateData_DummyAnim(); // Anim 이 없을 때 없다는 것을 보이기 위한 Dummy 애니메이션 
 		return;
 	}
 

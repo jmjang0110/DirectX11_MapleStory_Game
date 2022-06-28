@@ -175,7 +175,7 @@ void CResMgr::CreateEngineShader()
 	AddRes<CGraphicsShader>(L"Std2DShader", pShader, true);
 
 
-	// Std2D Shader
+	// Std2D Light Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\std2d_light.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"shader\\std2d_light.fx", "PS_Std2D");
@@ -194,6 +194,17 @@ void CResMgr::CreateEngineShader()
 
 	AddRes<CGraphicsShader>(L"Std2DLightShader", pShader, true);
 
+
+	// Std2D - Empty Sahder - For Rendering Nothing 
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Empty2D");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Empty2D");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_MASKED);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	AddRes<CGraphicsShader>(L"Std2DRenderEmptyShader", pShader, true);
 
 
 	// Std2DAlphaBlend Shader
@@ -313,6 +324,15 @@ void CResMgr::CreateEngineMaterial()
 		pMtrl->Save(strContent + pMtrl->GetKey());
 	}
 
+	// Std2D_Empty Mtrl »ý¼º
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DRenderEmptyShader"));
+	AddRes<CMaterial>(L"material\\Std2DEmptyMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 
 	// Std2DAlphaBlend

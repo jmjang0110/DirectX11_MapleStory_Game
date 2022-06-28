@@ -296,6 +296,17 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				break;
 				case COMPONENT_TYPE::COLLIDER2D:
 				{
+					if (nullptr == m_pTargetObject->GetRenderComponent())
+					{
+						m_pTargetObject->AddComponent(new CMeshRender);
+						m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DEmptyMtrl.mtrl"));
+
+						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->Activate();
+						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetTargetObject(m_pTargetObject);
+
+					}
+
 					m_pTargetObject->AddComponent(new CCollider2D);
 					m_pTargetObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
 					m_pTargetObject->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
@@ -305,6 +316,17 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 				case COMPONENT_TYPE::ANIMATOR2D:
 				{
+					if (nullptr == m_pTargetObject->GetRenderComponent())
+					{
+						m_pTargetObject->AddComponent(new CMeshRender);
+						m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
+
+						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->Activate();
+						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetTargetObject(m_pTargetObject);
+
+					}
+
 					m_pTargetObject->AddComponent(new CAnimator2D);
 				}
 				break;
@@ -315,7 +337,7 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 					{
 						m_pTargetObject->AddComponent(new CMeshRender);
 						m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
 
 					}
 				
@@ -323,9 +345,11 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				break;
 				case COMPONENT_TYPE::TILEMAP:
 				{
-					if(nullptr == m_pTargetObject->GetRenderComponent())
-						m_pTargetObject->AddComponent(new CTileMap);
-					Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"yellowToyCastleTile", L"texture//tilemap//YellowToyCastle//YellowToyCastleTile.png");
+					if (nullptr != m_pTargetObject->GetRenderComponent())
+						break;
+
+					m_pTargetObject->AddComponent(new CTileMap);
+					Ptr<CTexture> pTileAtlas = CResMgr::GetInst()->Load<CTexture>(L"texture\\tilemap\\YellowToyCastle\\YellowToyCastleTile.png", L"texture\\tilemap\\YellowToyCastle\\YellowToyCastleTile.png");
 					m_pTargetObject->TileMap()->SetAtlasTex(pTileAtlas);
 					m_pTargetObject->TileMap()->SetTileSize(Vec2(30.f, 30.f));
 					m_pTargetObject->TileMap()->SetTileMapCount(12, 20);
@@ -398,11 +422,11 @@ void InspectorUI::DeleteComponent(DWORD_PTR _param)
 
 void InspectorUI::GameObjectTool_SubFunc()
 {
+	ImGui::BeginChild("GameObject tool", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	// Add Component Button 
 	if (nullptr != m_pTargetObject)
 	{
-		ImGui::BeginChild("AddComponentToTargetObject", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 
 		if (ImGui::Button("Add Component"))
@@ -431,15 +455,14 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 		}
 
-		ImGui::EndChild();
-
+	
 	}
 
 	// Change To Prefab Button
 	if (nullptr != m_pTargetObject)
 	{
 
-		if (ImGui::Button("Change to Prefab"))
+		if (ImGui::Button("Register Prefab"))
 		{
 			// Prefab 하려는 GameObject 가 이미 존재한다면 
 			if (nullptr != CResMgr::GetInst()->FindRes<CPrefab>(m_pTargetObject->GetName()))
@@ -457,6 +480,7 @@ void InspectorUI::GameObjectTool_SubFunc()
 		}
 	}
 
+	ImGui::EndChild();
 
 }
 

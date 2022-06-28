@@ -20,7 +20,7 @@ CCollider2D::CCollider2D()
 	SetCollider2DType(m_eColliderType);	
 
 	// Collider2D 전용 재질 참조	
-	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Collider2DMtrl");
+	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Collider2DMtrl.mtrl");
 }
 
 CCollider2D::CCollider2D(const CCollider2D& _Origin)
@@ -34,7 +34,7 @@ CCollider2D::CCollider2D(const CCollider2D& _Origin)
 	SetCollider2DType(m_eColliderType);
 
 	// Collider2D 전용 재질 참조	
-	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Collider2DMtrl");
+	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Collider2DMtrl.mtrl");
 }
 
 CCollider2D::~CCollider2D()

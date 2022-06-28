@@ -210,19 +210,6 @@ float4 PS_Std2DAlpha(VTX_OUT _in) : SV_Target
 
 
 
-// ================
-// 
-// ================
-
-
-
-
-
-
-
-
-
-
 
 // ==================
 // Collider2D Shader
@@ -254,6 +241,36 @@ float4 PS_Collider2D(VTX_OUT _in) : SV_Target
         
     return vOutColor;
 }
+
+
+
+
+// ================
+// Empty2D Shader
+// - for Render Nothing
+// ================
+
+VTX_OUT VS_Empty2D(VTX_IN _in)
+{
+    VTX_OUT output = (VTX_OUT) 0.f;
+    
+    return output;
+}
+
+
+float4 PS_Empty2D(VTX_OUT _in) : SV_Target
+{
+    float4 vOutColor = (float4) 0.f;
+    
+    discard;
+        
+    return vOutColor;
+}
+
+
+
+
+
 
 
 
