@@ -31,7 +31,7 @@ void CResMgr::CreateEngineMesh()
 
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-	AddRes<CMesh>(L"PointMesh", pMesh);
+	AddRes<CMesh>(L"PointMesh", pMesh, true);
 	vecVtx.clear();
 	vecIdx.clear();
 
@@ -67,14 +67,14 @@ void CResMgr::CreateEngineMesh()
 	
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-	AddRes<CMesh>(L"RectMesh", pMesh);
+	AddRes<CMesh>(L"RectMesh", pMesh, true);
 	vecIdx.clear();
 
 	vecIdx.push_back(0); vecIdx.push_back(1); vecIdx.push_back(2); vecIdx.push_back(3); vecIdx.push_back(0);
 
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-	AddRes<CMesh>(L"RectMesh_LineStrip", pMesh);
+	AddRes<CMesh>(L"RectMesh_LineStrip", pMesh, true);
 	vecVtx.clear(); vecIdx.clear();
 
 	// ==========
@@ -107,7 +107,7 @@ void CResMgr::CreateEngineMesh()
 
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-	AddRes<CMesh>(L"CircleMesh", pMesh);
+	AddRes<CMesh>(L"CircleMesh", pMesh, true);
 	vecIdx.clear();
 
 	// CicleMesh_LineStrip
@@ -118,7 +118,7 @@ void CResMgr::CreateEngineMesh()
 
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), (UINT)vecVtx.size(), vecIdx.data(), (UINT)vecIdx.size());
-	AddRes<CMesh>(L"CircleMesh_LineStrip", pMesh);
+	AddRes<CMesh>(L"CircleMesh_LineStrip", pMesh, true);
 	vecVtx.clear(); vecIdx.clear();
 
 
@@ -135,9 +135,9 @@ void CResMgr::CreateEngineMesh()
 
 void CResMgr::CreateEngineTexture()
 {
-	Ptr<CTexture> pNoise01 = Load<CTexture>(L"texture//noise//noise_01.png", L"texture//noise//noise_01.png", true);
-	Ptr<CTexture> pNoise02 = Load<CTexture>(L"texture//noise//noise_02.png", L"texture//noise//noise_02.png", true);
-	Ptr<CTexture> pNoiseCloud = Load<CTexture>(L"texture//noise//noise_cloud.jpg", L"texture//noise//noise_cloud.jpg", true);
+	Ptr<CTexture> pNoise01 = Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png", true);
+	Ptr<CTexture> pNoise02 = Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png", true);
+	Ptr<CTexture> pNoiseCloud = Load<CTexture>(L"texture\\noise\\noise_cloud.jpg", L"texture\\noise\\noise_cloud.jpg", true);
 
 	pNoise01->UpdateData(PIPELINE_STAGE::ALL, 70);
 	pNoise01->UpdateData_CS(70, true);
@@ -172,7 +172,7 @@ void CResMgr::CreateEngineShader()
 	//pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_1);
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 
-	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
+	AddRes<CGraphicsShader>(L"Std2DShader", pShader, true);
 
 
 	// Std2D Shader
@@ -192,7 +192,7 @@ void CResMgr::CreateEngineShader()
 	pShader->AddScalarParamInfo(L"TestParam", SCALAR_PARAM::INT_0);
 
 
-	AddRes<CGraphicsShader>(L"Std2DLightShader", pShader);
+	AddRes<CGraphicsShader>(L"Std2DLightShader", pShader, true);
 
 
 
@@ -208,7 +208,7 @@ void CResMgr::CreateEngineShader()
 		
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 
-	AddRes<CGraphicsShader>(L"Std2DAlphaBlendShader", pShader);
+	AddRes<CGraphicsShader>(L"Std2DAlphaBlendShader", pShader, true);
 
 
 	// PaperBurn Shader
@@ -223,7 +223,7 @@ void CResMgr::CreateEngineShader()
 	pShader->AddScalarParamInfo(L"Burn Strength", SCALAR_PARAM::FLOAT_0);
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 
-	AddRes<CGraphicsShader>(L"PaperBurnShader", pShader);
+	AddRes<CGraphicsShader>(L"PaperBurnShader", pShader, true);
 
 
 	// TileMap Shader
@@ -237,7 +237,7 @@ void CResMgr::CreateEngineShader()
 
 	pShader->AddTexParamInfo(L"TileMapAtlas", TEX_PARAM::TEX_0);
 
-	AddRes<CGraphicsShader>(L"TileMapShader", pShader);
+	AddRes<CGraphicsShader>(L"TileMapShader", pShader, true);
 
 
 	// Collider2D Shader
@@ -252,7 +252,7 @@ void CResMgr::CreateEngineShader()
 
 	//pShader->AddScalarParamInfo(L"IsCollision", SCALAR_PARAM::INT_0);
 
-	AddRes<CGraphicsShader>(L"Collider2DShader", pShader);
+	AddRes<CGraphicsShader>(L"Collider2DShader", pShader, true);
 
 
 	// Particle Render Shader
@@ -268,7 +268,7 @@ void CResMgr::CreateEngineShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
-	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
+	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader, true);
 
 	// PostProcess Shader
 	pShader = new CGraphicsShader;
@@ -282,7 +282,7 @@ void CResMgr::CreateEngineShader()
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 
-	AddRes<CGraphicsShader>(L"PostProcessShader", pShader);
+	AddRes<CGraphicsShader>(L"PostProcessShader", pShader, true);
 }
 
 void CResMgr::CreateEngineMaterial()
@@ -295,63 +295,85 @@ void CResMgr::CreateEngineMaterial()
 	// Std2DMtrl 持失
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
-	AddRes<CMaterial>(L"Std2DMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\Std2DMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 
 	// Std2D_Light Mtrl 持失
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DLightShader"));
-	AddRes<CMaterial>(L"Std2DLightMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\Std2DLightMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 
 
 	// Std2DAlphaBlend
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
-	AddRes<CMaterial>(L"Std2DAlphaBlendMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
-
+	AddRes<CMaterial>(L"material\\Std2DAlphaBlendMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 	// PaperBurnMtrl	
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PaperBurnShader"));
-	AddRes<CMaterial>(L"PaperBurnMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\PaperBurnMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 	// TileMapMtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
-	AddRes<CMaterial>(L"TileMapMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\TileMapMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 	// Collider2DMtrl 
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Collider2DShader"));
-	AddRes<CMaterial>(L"Collider2DMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\Collider2DMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 	// Particle Render Mtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
-	AddRes<CMaterial>(L"ParticleRenderMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\ParticleRenderMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 
 	// PostProcess Mtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
 	pMtrl->SetTexParam(TEX_PARAM::TEX_0, FindRes<CTexture>(L"PostProcessTex"));
-	AddRes<CMaterial>(L"PostProcessMtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(strMtrlFoler + pMtrl->GetKey() + L".mtrl");
-	pMtrl->Load(strContent + pMtrl->GetRelativePath());
+	AddRes<CMaterial>(L"material\\PostProcessMtrl.mtrl", pMtrl);
+	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
+	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
+	{
+		pMtrl->Save(strContent + pMtrl->GetKey());
+	}
 }
 
 
@@ -365,12 +387,12 @@ void CResMgr::CreateEngineComputeShader()
 	// TestShader
 	pCS = new CTestShader;
 	pCS->CreateComputeShader(L"Shader\\testcs.fx", "CS_Test");
-	AddRes<CComputeShader>(L"TestCS", pCS);
+	AddRes<CComputeShader>(L"TestCS", pCS, true);
 
 	// Particle Update Shader
 	pCS = new CParticleUpdateShader;
 	pCS->CreateComputeShader(L"Shader\\particle.fx", "CS_Particle");
-	AddRes<CComputeShader>(L"ParticleUpdateShader", pCS);
+	AddRes<CComputeShader>(L"ParticleUpdateShader", pCS, true);
 }
 
 

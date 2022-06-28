@@ -26,6 +26,7 @@ protected:
 public:
     const wstring& GetKey() { return m_strKey; }
     const wstring& GetRelativePath() { return m_strRelativePath; }
+    UINT GetRefCount() { return m_iRefCount; }
     RES_TYPE GetResType() { return m_eResType; }
     bool IsEngineRes() { return m_bEngineRes; }
     bool IsChanged() { return m_bChanged; }

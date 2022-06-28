@@ -2,6 +2,7 @@
 #include "ResourceUI.h"
 
 #include <Engine/CResMgr.h>
+#include <Engine/CEventMgr.h>
 
 #include "CImGuiMgr.h"
 #include "InspectorUI.h"
@@ -12,7 +13,7 @@
 #include <Script/CSceneSaveLoad.h>
 
 #include "SceneOutlinerTool.h"
-
+#include <experimental/filesystem>
 
 ResourceUI::ResourceUI()
 	: UI("Resource")
@@ -43,18 +44,20 @@ ResourceUI::~ResourceUI()
 void ResourceUI::update()
 {
 	// 리소스 변경상태 저장
-	if (KEY_PRESSED(KEY::LCTRL) && KEY_PRESSED(KEY::S))
+	if (KEY_PRESSED(KEY::LCTRL) && KEY_TAP(KEY::S))
 	{
 		CResMgr::GetInst()->SaveChangedRes();
 	}
-
 
 	UI::update();
 }
 
 void ResourceUI::render_update()
 {
-
+	if (CEventMgr::GetInst()->HasOccurObjEvent())
+	{
+		Renew();
+	}
 }
 
 void ResourceUI::Reset()
@@ -62,25 +65,14 @@ void ResourceUI::Reset()
 	// ==== Todo ===== 
 	// 새로운 Resource 가 들어왔을 시 TreeUI 가 갱신되기 위해서 조금 수정함 
 	m_TreeUI->Clear();
-
 	// ===============
+	
+
 
 	// Content 폴더 및의 리소스 로딩
 	Reload();
+	Renew();
 
-	for (int i = 0; i < (int)RES_TYPE::END; ++i)
-	{
-		// TreeUI 가 DummyRoot 를 사용하기 때문에, 리소스 항목 노드들은 더미 자식으로 들어감
-		TreeNode* pResNode = m_TreeUI->AddTreeNode(nullptr, ToString((RES_TYPE)i));
-
-		const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList((RES_TYPE)i);
-
-		for (const auto& pair : mapRes)
-		{
-			// 각 리소스 노드들은 해당 리소스 항목 자식으로 들어감
-			m_TreeUI->AddTreeNode(pResNode, string(pair.first.begin(), pair.first.end()), (DWORD_PTR)pair.second);
-		}
-	}
 }
 
 void ResourceUI::ItemClicked(DWORD_PTR _dwNode)
@@ -136,6 +128,7 @@ void ResourceUI::ItemDBClicked(DWORD_PTR _dwNode)
 }
 
 
+
 void ResourceUI::Reload()
 {
 	// Content 폴더 밑으로 모든 파일의 상대경로를 알아낸다.
@@ -176,9 +169,61 @@ void ResourceUI::Reload()
 	}
 
 	// 3. 로딩되어있는 리소스들의 실제 파일 존재 확인
+	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i)
+	{
+		wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 
-	// 4. 없으면 리소스매니저에서 메모리 해제
+		const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList((RES_TYPE)i);
+		for (const auto& pair : mapRes)
+		{
+			if (pair.second->IsEngineRes())
+				continue;
 
+			// File Exist 체크
+			if (!filesystem::exists(strContentPath + pair.second->GetRelativePath()))
+			{
+				// 4. 없으면 리소스매니저에서 메모리 해제
+				MessageBox(nullptr, L"원본파일 삭제 됨", L"파일변경 감지", MB_OK);
+
+				if (0 == pair.second->GetRefCount())
+				{
+					// 삭제
+					tEventInfo info;
+					info.eType = EVENT_TYPE::DELETE_RES;
+					info.lParam = (DWORD_PTR)pair.second;
+					CEventMgr::GetInst()->AddEvent(info);
+
+					MessageBox(nullptr, L"리소스 메모리 해제", L"파일변경 감지", MB_OK);
+				}
+
+				else
+				{
+					MessageBox(nullptr, L"사용 중인 리소스\n 메모리 해제 실패", L"파일변경 감지", MB_OK);
+				}
+			}
+		}
+	}
+}
+
+
+void ResourceUI::Renew()
+{
+	m_TreeUI->Clear();
+
+	// 리소스를 Tree 에 표시
+	for (int i = 0; i < (int)RES_TYPE::END; ++i)
+	{
+		// TreeUI 가 DummyRoot 를 사용하기 때문에, 리소스 항목 노드들은 더미 자식으로 들어감
+		TreeNode* pResNode = m_TreeUI->AddTreeNode(nullptr, ToString((RES_TYPE)i));
+
+		const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList((RES_TYPE)i);
+
+		for (const auto& pair : mapRes)
+		{
+			// 각 리소스 노드들은 해당 리소스 항목 자식으로 들어감
+			m_TreeUI->AddTreeNode(pResNode, string(pair.first.begin(), pair.first.end()), (DWORD_PTR)pair.second);
+		}
+	}
 }
 
 void ResourceUI::FindFileName(const wstring& _strFolderPath)

@@ -165,6 +165,18 @@ void CEventMgr::update()
 		}
 		break;
 
+		case EVENT_TYPE::DELETE_RES:
+		{
+			// lParam : Res Adress
+			CRes* pRes = (CRes*)m_vecEvent[i].lParam;
+
+			CResMgr::GetInst()->DeleteRes(pRes->GetKey());
+
+			m_bObjEvn = true;
+		}
+		break;
+
+
 		}
 
 

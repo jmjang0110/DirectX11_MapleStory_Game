@@ -62,3 +62,21 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, ComPtr<ID3D11Textur
 
 	return pTexture;
 }
+
+
+void CResMgr::DeleteRes(const wstring& _strKey)
+{
+	map<wstring, CRes*>::iterator iter;
+	for (UINT i = 0; i < (UINT)RES_TYPE::END; ++i)
+	{
+		iter = m_Res[i].find(_strKey);
+		if (iter != m_Res[i].end())
+		{
+			SAFE_DELETE(iter->second);
+			m_Res[i].erase(iter);
+			return;
+		}
+	}
+
+	assert(nullptr);
+}

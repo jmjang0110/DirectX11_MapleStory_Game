@@ -41,25 +41,13 @@ void CPlayerScript::start()
 
 void CPlayerScript::update()
 {
-	static Vec3 PrevPos = Vec3(0.f, 0.f, 0.f);
+	
 	Update_Move();
 	Update_Gravity();
 
 	Update_State();
 	//Update_Animation();
-	// 이동 방향에 따라 CLight2D 의 Dir 을 바꾼다. 
-	vector<CGameObject*> vecChild = GetOwner()->GetChild();
-	for (int i = 0; i < vecChild.size(); ++i)
-	{
-		if (nullptr != vecChild[i]->GetComponent(COMPONENT_TYPE::LIGHT2D))
-		{
-			Vec3 vDir = GetOwner()->Transform()->GetRelativePos() - PrevPos;
-			if (vDir != Vec3(0.f, 0.f, 0.f))
-				vecChild[i]->Light2D()->SetLightDir(vDir);
-
-		}
-	}
-	PrevPos = GetOwner()->Transform()->GetRelativePos();
+	
 	m_ePrevState = m_eCurState;
 }
 

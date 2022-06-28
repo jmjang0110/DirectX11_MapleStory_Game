@@ -19,6 +19,7 @@ public:
     void Reset();
 private:
     void Reload();
+    void Renew();
     void FindFileName(const wstring& _strFolderPath);
 
     void ItemClicked(DWORD_PTR _dwNode);

@@ -56,6 +56,11 @@ public:
 
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _pTex2D, bool _bEngineRes = false);
 
+private:
+	void DeleteRes(const wstring& _strKey);
+
+
+	friend class CEventMgr;
 };
 
 template<typename type>

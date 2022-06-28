@@ -63,9 +63,11 @@ void CImGuiMgr::init(HWND _hwnd)
     // 기본 UI 들 생성
     CreateUI();
 
+
     // 알림설정  
     wstring strPath = CPathMgr::GetInst()->GetContentPath();
-    m_hNotify = FindFirstChangeNotification(strPath.c_str(), FALSE, FILE_NOTIFY_CHANGE_FILE_NAME);
+    m_hNotify = FindFirstChangeNotification(strPath.c_str(), TRUE,
+        FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME | FILE_ACTION_ADDED | FILE_ACTION_REMOVED);
 
 
 }
@@ -113,23 +115,6 @@ void CImGuiMgr::progress()
 
 
 }
-
-
-
-void CImGuiMgr::ObserveContent()
-{
-    DWORD dwWaitStatus = WaitForSingleObject(m_hNotify, 0);
-
-    /*
-    Created Renamed deleted int the directory 
-    - Refresh this directory an restart the notification
-    */
-    if (dwWaitStatus == WAIT_OBJECT_0)
-    {
-        int a = 0;
-    }
-}
-
 
 
 
@@ -214,4 +199,18 @@ UI* CImGuiMgr::FindUI(const string& _strKey)
     return iter->second;
 }
 
+
+void CImGuiMgr::ObserveContent()
+{
+    DWORD dwWaitStatus = WaitForSingleObject(m_hNotify, 0);
+
+    if (dwWaitStatus == WAIT_OBJECT_0)
+    {
+        ResourceUI* pResUI = (ResourceUI*)FindUI("Resource");
+        pResUI->Reset();
+
+        wstring strPath = CPathMgr::GetInst()->GetContentPath();
+        FindNextChangeNotification(m_hNotify);
+    }
+}
 

@@ -23,6 +23,11 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 	m_SB = nullptr;
 	m_SRV = nullptr;
 
+	m_UAV = nullptr;
+	m_SB_Write = nullptr;
+	m_SB_Read = nullptr;
+
+
 
 	m_iElementSize = _iElementSize;
 	m_iElementCount = _iElementCount;
