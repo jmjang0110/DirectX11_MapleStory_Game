@@ -28,7 +28,7 @@ SceneOutlinerTool::SceneOutlinerTool()
 	, m_pSelectedScene(nullptr)
 	, m_pSelectedLayer(nullptr)
 	, m_pSelectedGameObject(nullptr)
-	, m_RecentClickedType(OBJECT_TYPE::NONE)
+	, m_RecentClickedType(ENGINE_TYPE::NONE)
 {
 	m_TreeUI = new TreeUI(true);
 	m_TreeUI->SetTitle("SceneOutlinerTool");
@@ -42,9 +42,7 @@ SceneOutlinerTool::SceneOutlinerTool()
 
 	// Clicked Delegate 등록
 	m_TreeUI->SetClickedDelegate(this, (CLICKED)&SceneOutlinerTool::ObjectClicked);
-
 	m_TreeUI->SetDragAndDropDelegate(this, (DRAG_DROP)&SceneOutlinerTool::DragAndDropDelegate);
-
 	// Delete Pressed 등록 
 	m_TreeUI->SetKeyBinding(KEY::DEL, this, (CLICKED)&SceneOutlinerTool::PressDelete);
 
@@ -122,16 +120,14 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 	TreeNode* pNode = (TreeNode*)_dw;
 
 	string strKey = pNode->GetName();
-	OBJECT_TYPE _ObjType = pNode->GetObjType();
+	ENGINE_TYPE _ObjType = pNode->GetObjType();
 	DWORD_PTR data = pNode->GetData();
 	m_RecentClickedType = _ObjType;
 
 
 	switch (_ObjType)
 	{
-	case OBJECT_TYPE::NONE:
-		break;
-	case OBJECT_TYPE::SCENE:
+	case ENGINE_TYPE::SCENE:
 	{
 		m_pSelectedScene = (CScene*)data;
 		m_pSelectedGameObject = nullptr;
@@ -139,10 +135,9 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 
 		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 		pInspectorUI->SetTargetObject(nullptr);
-
 	}
 		break;
-	case OBJECT_TYPE::LAYER:
+	case ENGINE_TYPE::LAYER:
 	{
 		m_pSelectedLayer = (CLayer*)data;
 		m_pSelectedGameObject = nullptr;
@@ -151,16 +146,16 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 		pInspectorUI->SetTargetObject(nullptr);
 	}
 		break;
-	case OBJECT_TYPE::GAME_OBJECT:
+	case ENGINE_TYPE::GAME_OBJECT:
 	{
 		CGameObject* pObject = (CGameObject*)data;
 		m_pSelectedGameObject = pObject;
 
-		// InspectorUI TargetObject setting 
 		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 		pInspectorUI->SetTargetObject(pObject);
 	}
 		break;
+
 	default:
 		break;
 	}
@@ -174,7 +169,7 @@ TreeNode* SceneOutlinerTool::PushSceneToTree(CScene* _pScene, TreeNode* _pDestNo
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
 		, "Scene - " + string(_pScene->GetName().begin(), _pScene->GetName().end())
 		, (DWORD_PTR)_pScene);
-	pNode->SetObjType(OBJECT_TYPE::SCENE);
+	pNode->SetObjType(ENGINE_TYPE::SCENE);
 
 
 	return pNode;
@@ -183,11 +178,12 @@ TreeNode* SceneOutlinerTool::PushSceneToTree(CScene* _pScene, TreeNode* _pDestNo
 
 TreeNode* SceneOutlinerTool::PushLayerToTree(CLayer* _pLayer, TreeNode* _pDestNode)
 {
+	int layerIdx = _pLayer->GetLayerIdx();
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
-		, "Layer - " + string(_pLayer->GetName().begin(), _pLayer->GetName().end())
+		, std::to_string(layerIdx) + "Layer - " + string(_pLayer->GetName().begin(), _pLayer->GetName().end())
 		, (DWORD_PTR)_pLayer);
 
-	pNode->SetObjType(OBJECT_TYPE::LAYER);
+	pNode->SetObjType(ENGINE_TYPE::LAYER);
 	return pNode;
 
 }
@@ -197,7 +193,7 @@ void SceneOutlinerTool::PushGameObjectToTree(CGameObject* _pObject, TreeNode* _p
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
 		, string(_pObject->GetName().begin(), _pObject->GetName().end())
 		, (DWORD_PTR)_pObject);
-	pNode->SetObjType(OBJECT_TYPE::GAME_OBJECT);
+	pNode->SetObjType(ENGINE_TYPE::GAME_OBJECT);
 
 
 	const vector<CGameObject*>& vecChild = _pObject->GetChild();
@@ -230,33 +226,68 @@ void SceneOutlinerTool::PressDelete(DWORD_PTR _dw)
 
 void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop)
 {
-	CGameObject* pChildObject = (CGameObject*)_dwDrag;
-	CGameObject* pDropTargetObject = (CGameObject*)_dwDrop;
+	if (_dwDrag == (DWORD_PTR)nullptr || _dwDrop == (DWORD_PTR)nullptr)
+		return;
 
-
-	// 드롭 목적지가 제대로 들어 온 경우
-	if (nullptr != pDropTargetObject)
+	// GameObject -> GameObject 
+	if (ENGINE_TYPE::GAME_OBJECT == m_TreeUI->GetDragNode()->GetObjType()
+		&& ENGINE_TYPE::GAME_OBJECT == m_TreeUI->GetDropNode()->GetObjType())
 	{
-		if (pChildObject == pDropTargetObject
-			|| pDropTargetObject->IsAncestor(pChildObject))
+
+		CGameObject* pChildObject = (CGameObject*)_dwDrag;
+		CGameObject* pDropTargetObject = (CGameObject*)_dwDrop;
+
+		// 드롭 목적지가 제대로 들어 온 경우
+		if (nullptr != pDropTargetObject)
 		{
-			return;
+			if (pChildObject == pDropTargetObject
+				|| pDropTargetObject->IsAncestor(pChildObject))
+			{
+				return;
+			}
+
+			CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
 		}
 
-		CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
-	}
-
-	// 자식 오브젝트의 목적지가 nullptr 인 경우
-	else
-	{
-		// 이미 최상위 부모 오브젝트는 이벤트 처리가 필요없다.
-		if (nullptr == pChildObject->GetParent())
+		// 자식 오브젝트의 목적지가 nullptr 인 경우
+		else
 		{
-			return;
+			// 이미 최상위 부모 오브젝트는 이벤트 처리가 필요없다.
+			if (nullptr == pChildObject->GetParent())
+			{
+				return;
+			}
+
+			CSceneMgr::GetInst()->DisconnectParent(pChildObject);
 		}
 
-		CSceneMgr::GetInst()->DisconnectParent(pChildObject);
 	}
+
+	// GameObject -> Layer 
+	if (ENGINE_TYPE::GAME_OBJECT == m_TreeUI->GetDragNode()->GetObjType()
+		&& ENGINE_TYPE::LAYER == m_TreeUI->GetDropNode()->GetObjType())
+	{
+
+		CGameObject* pObject = (CGameObject*)_dwDrag;
+		CLayer* pDropTargetLayer = (CLayer*)_dwDrop;
+
+		// 드롭 목적지가 제대로 들어 온 경우
+		if (nullptr != pDropTargetLayer)
+		{
+			// 최상위 오브젝트로 있는 오브젝트만 받는다. 
+			if(pObject != pObject->GetAncestor())
+				return;
+
+			// 현재 레이어의 m_vecRoot 에서 지운다. 
+			CSceneMgr::GetInst()->DeRegisterObjInLayer(pObject, pObject->GetLayerIndex());
+			// 새로운 레이어에 등록한다.
+			CSceneMgr::GetInst()->SpawnObject(pObject, pDropTargetLayer->GetLayerIdx());
+
+		}
+
+	}
+
+	
 }
 
 // ====== Todo 
@@ -264,7 +295,7 @@ void SceneOutlinerTool::NewObjectButton()
 {
 	// Layer 를 고른 후 GameObject 생성 가능 
 	// Create New GameObject
-	if (OBJECT_TYPE::LAYER == m_RecentClickedType || OBJECT_TYPE::GAME_OBJECT == m_RecentClickedType)
+	if (ENGINE_TYPE::LAYER == m_RecentClickedType || ENGINE_TYPE::GAME_OBJECT == m_RecentClickedType)
 	{
 		if (ImGui::Button("New GameObject", ImVec2(120, 0)))
 			ImGui::OpenPopup("Create New Obj");
@@ -343,7 +374,7 @@ void SceneOutlinerTool::NewSceneButton()
 
 	// 현재 보여지는 SCene 을 저장한 후에 
 	// 새로운 SCene 을 생성한다. 
-	if (OBJECT_TYPE::NONE == m_RecentClickedType || OBJECT_TYPE::SCENE == m_RecentClickedType)
+	if (ENGINE_TYPE::NONE == m_RecentClickedType || ENGINE_TYPE::SCENE == m_RecentClickedType)
 	{
 		if (ImGui::Button("New Scene", ImVec2(120, 0)))
 		{
@@ -404,7 +435,7 @@ void SceneOutlinerTool::NewSceneButton()
 
 void SceneOutlinerTool::NewLayerButton()
 {
-	if (OBJECT_TYPE::NONE == m_RecentClickedType || OBJECT_TYPE::SCENE == m_RecentClickedType)
+	if (ENGINE_TYPE::NONE == m_RecentClickedType || ENGINE_TYPE::SCENE == m_RecentClickedType)
 	{
 		if (ImGui::Button("New Layer", ImVec2(120, 0)))
 			ImGui::OpenPopup("Create New Layer");

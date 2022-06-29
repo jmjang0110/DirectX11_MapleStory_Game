@@ -80,3 +80,5 @@ void CResMgr::DeleteRes(const wstring& _strKey)
 
 	assert(nullptr);
 }
+
+

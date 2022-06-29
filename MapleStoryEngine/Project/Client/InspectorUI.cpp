@@ -16,6 +16,7 @@
 #include "Collider2DUI.h"
 #include "ListUI.h"
 #include "TileMapUI.h"
+#include "PrefabUI.h"
 
 #include "CImGuiMgr.h"
 
@@ -25,7 +26,7 @@
 #include <Engine/CResMgr.h>
 #include <Engine/CKeyMgr.h>
 
-
+#include <Engine/CRes.h>
 #include <Engine/CPrefab.h>
 // COMPONENT-TYPE
 #include <Engine/CTransform.h>
@@ -115,6 +116,10 @@ InspectorUI::InspectorUI()
 	AddChild(pResInfoUI);
 	m_arrResUI[(UINT)RES_TYPE::COMPUTE_SHADER] = pResInfoUI;
 
+	// PrefabUI
+	pResInfoUI = new PrefabUI;
+	AddChild(pResInfoUI);
+	m_arrResUI[(UINT)RES_TYPE::PREFAB] = pResInfoUI;
 
 
 }
@@ -301,6 +306,8 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 						m_pTargetObject->AddComponent(new CMeshRender);
 						m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DEmptyMtrl.mtrl"));
+						float fLimit = 0.3333f;
+						m_pTargetObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
 
 						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->Activate();
 						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetTargetObject(m_pTargetObject);
@@ -321,6 +328,8 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 						m_pTargetObject->AddComponent(new CMeshRender);
 						m_pTargetObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
+						float fLimit = 0.3333f;
+						m_pTargetObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
 
 						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->Activate();
 						m_arrComUI[(UINT)COMPONENT_TYPE::MESHRENDER]->SetTargetObject(m_pTargetObject);
@@ -340,7 +349,7 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 						m_pTargetObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DMtrl.mtrl"));
 
 					}
-				
+
 				}
 				break;
 				case COMPONENT_TYPE::TILEMAP:
@@ -403,18 +412,12 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 void InspectorUI::DeleteComponent(DWORD_PTR _param)
 {
 	COMPONENT_TYPE eComType = (COMPONENT_TYPE)_param;
-
-
 	// Target Object 에서 해당 Component 를 삭제 
 	m_pTargetObject->DeleteComponent(eComType);
-
-	
 
 	// UI 갱신 
 	m_arrComUI[(UINT)eComType]->Deactivate();
 	m_arrComUI[(UINT)eComType]->SetTargetObject(nullptr);
-
-
 }
 
 
@@ -427,14 +430,9 @@ void InspectorUI::GameObjectTool_SubFunc()
 	// Add Component Button 
 	if (nullptr != m_pTargetObject)
 	{
-
-
 		if (ImGui::Button("Add Component"))
 		{
-
 			// ListUI 활성화한다.
-			//const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::COMPONENT);
-
 			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
 			pListUI->Clear();
 			pListUI->SetTitle("Component List");
@@ -444,40 +442,108 @@ void InspectorUI::GameObjectTool_SubFunc()
 				if (nullptr == m_pTargetObject->GetComponent((COMPONENT_TYPE)i))
 				{
 					pListUI->AddList(ToString((COMPONENT_TYPE)i));
-
 				}
-
 			}
-
 			pListUI->Activate();
 			// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
 			pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddComponent);
-
 		}
-
-	
 	}
 
 	// Change To Prefab Button
 	if (nullptr != m_pTargetObject)
 	{
-
 		if (ImGui::Button("Register Prefab"))
 		{
 			// Prefab 하려는 GameObject 가 이미 존재한다면 
 			if (nullptr != CResMgr::GetInst()->FindRes<CPrefab>(m_pTargetObject->GetName()))
 				return;
-			CResMgr::GetInst()->AddRes<CPrefab>(m_pTargetObject->GetName(), new CPrefab(m_pTargetObject));
 
+			// RelativePath 저장은 CPRefab Save 에서 해주고 있음 
+			wstring strContent = CPathMgr::GetInst()->GetContentPath();
+			wstring wstrResKey = L"prefab\\" + m_pTargetObject->GetName() + L".prefab";
+
+			CGameObject* pProtoObj = m_pTargetObject->Clone();
+			CPrefab* pPref = new CPrefab(pProtoObj);
+
+			if (nullptr == CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey))
+			{
+				CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
+				pPref->Save(strContent + wstrResKey);
+
+			}
+			else
+			{
+			    RES_TYPE pResType= CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey)->GetResType();
+				if (RES_TYPE::PREFAB == pResType)
+				{
+					CResMgr::GetInst()->DeletePrefabRes<CPrefab>(wstrResKey);
+					CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
+					pPref->Save(strContent + wstrResKey);
+
+				}
+
+			}
+			
+		
 			// CImGuiMgr 에 Delegate 등록 
-			tUIDelegate tDeleteCom;
-			tDeleteCom.dwParam = (DWORD_PTR)nullptr;
-			tDeleteCom.pFunc = (PARAM_1)&ResourceUI::Reset;
-			tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("Resource");
+			tUIDelegate tInfo;
+			tInfo.dwParam = (DWORD_PTR)nullptr;
+			tInfo.pFunc = (PARAM_1)&ResourceUI::Reset;
+			tInfo.pInst = CImGuiMgr::GetInst()->FindUI("Resource");
 
-			CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+			CImGuiMgr::GetInst()->AddDelegate(tInfo);
+		}
+	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	ImGui::BeginChild("GameObject Delete tool", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+
+	// Delete Object Button
+	static bool bDelete = false;
+	if (nullptr != m_pTargetObject)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
+		if (ImGui::Button("Delete This Object"))
+			bDelete = true;
+
+		if (bDelete)
+		{
+			ImGui::OpenPopup("Are You Sure?");
+			bool unused_open = true;
+			if (ImGui::BeginPopupModal("Are You Sure?", &unused_open))
+			{
+
+				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "WARNING\n\nAre You sure you want to delete this Object? \n\n");
+				if (ImGui::Button("Yes"))
+				{
+					bDelete = false;
+					CSceneMgr::GetInst()->DestroyObject(m_pTargetObject); // 다음프레임에 삭제됨 
+					// CImGuiMgr 에 Delegate 등록 
+					tUIDelegate tInfo;
+					tInfo.dwParam = (DWORD_PTR)nullptr;
+					tInfo.pFunc = (PARAM_1)&InspectorUI::SetTargetObject;
+					tInfo.pInst = CImGuiMgr::GetInst()->FindUI("Inspector");
+
+					CImGuiMgr::GetInst()->AddDelegate(tInfo);
+
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("No"))
+				{
+					bDelete = false;
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 
 		}
+
+		ImGui::PopStyleColor(1);
+
 	}
 
 	ImGui::EndChild();

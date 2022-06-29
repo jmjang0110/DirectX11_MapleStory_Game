@@ -47,7 +47,7 @@ public:
 
     // ======== Todo ==============
 private:
-    OBJECT_TYPE m_RecentClickedType;
+    ENGINE_TYPE m_RecentClickedType;
 
 private:
     void NewObjectButton();

@@ -90,6 +90,29 @@ void CSceneMgr::SpawnObject(CGameObject* _pSpawnObject, UINT _iLayerIdx)
 	CEventMgr::GetInst()->AddEvent(info);
 }
 
+// ====== Todo - Delete Obj ======
+void CSceneMgr::DestroyObject(CGameObject* _pDestroyObject)
+{
+	tEventInfo info = {};
+	info.eType = EVENT_TYPE::DELETE_OBJ;
+	info.lParam = (DWORD_PTR)_pDestroyObject;
+	
+	CEventMgr::GetInst()->AddEvent(info);
+
+}
+void CSceneMgr::DeRegisterObjInLayer(CGameObject* _pDeObj, int _LayerIdx)
+{
+	tEventInfo info = {};
+	info.eType = EVENT_TYPE::DEREGISTER_OBJ_IN_LAYER;
+	info.lParam = (DWORD_PTR)_pDeObj;
+	info.wParam = (DWORD_PTR)_LayerIdx;
+
+	CEventMgr::GetInst()->AddEvent(info);
+
+}
+// ====== ====== ====== ====== ======
+
+
 void CSceneMgr::AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject)
 {
 	tEventInfo info = {};

@@ -49,18 +49,22 @@ void CCursorScript::update()
 		}
 	}
 
-	const Vec3 vCameraPos = pCameraObj->Transform()->GetRelativePos();
-	float fWidth = pCameraObj->Camera()->GetWidth();
-	float fHeight = fWidth / pCameraObj->Camera()->GetAspectRatio();
+	if (nullptr != pCameraObj)
+	{
+		const Vec3 vCameraPos = pCameraObj->Transform()->GetRelativePos();
+		float fWidth = pCameraObj->Camera()->GetWidth();
+		float fHeight = fWidth / pCameraObj->Camera()->GetAspectRatio();
 
-	// 현재 window 화면창에서 정중앙을 (0.f ,0.f) 한 것을 기준으로 한 좌표값 
-	Vec2 vDx11Pos = Vec2(vMousePos.x - (fWidth / 2.f), (fHeight / 2.f) - vMousePos.y);
+		// 현재 window 화면창에서 정중앙을 (0.f ,0.f) 한 것을 기준으로 한 좌표값 
+		Vec2 vDx11Pos = Vec2(vMousePos.x - (fWidth / 2.f), (fHeight / 2.f) - vMousePos.y);
 
-	// 실제 월드상에서의 좌표값 
-	Vec2 vRealPos = vDx11Pos + vCameraPos;
+		// 실제 월드상에서의 좌표값 
+		Vec2 vRealPos = vDx11Pos + vCameraPos;
 
-	GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x + (vMouseScale.x / 2.f), vRealPos.y - (vMouseScale.y / 2.f), 0.f));
+		GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x + (vMouseScale.x / 2.f), vRealPos.y - (vMouseScale.y / 2.f), 0.f));
 
+
+	}
 
 
 }

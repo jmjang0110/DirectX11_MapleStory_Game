@@ -107,6 +107,9 @@
     <ClCompile Include="MenuUI.cpp">
       <Filter>ImGui\UI\04. MenuUI</Filter>
     </ClCompile>
+    <ClCompile Include="PrefabUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\PrefabUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -229,6 +232,9 @@
     <ClInclude Include="MenuUI.h">
       <Filter>ImGui\UI\04. MenuUI</Filter>
     </ClInclude>
+    <ClInclude Include="PrefabUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\PrefabUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="39Engine.ico">
@@ -349,6 +355,9 @@
     </Filter>
     <Filter Include="Default\2022-06-16-수업내용">
       <UniqueIdentifier>{53c8e7f5-1a4d-4a4a-9397-62fbf018c88b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\PrefabUI">
+      <UniqueIdentifier>{7d18b6c2-18d2-4728-8815-3f2c985a0b5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

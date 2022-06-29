@@ -21,6 +21,10 @@ public:
 
 	void SpawnObject(CGameObject* _pSpawnObject, Vec3 _vWorldPos, wstring _strName, UINT _iLayerIdx);
 	void SpawnObject(CGameObject* _pSpawnObject, UINT _iLayerIdx);
+	// ===== Todo =====
+	void DestroyObject(CGameObject* _pDestroyObject);
+	void DeRegisterObjInLayer(CGameObject* _pDeObj, int _LayerIdx);
+	//===== ===== =====
 	void AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject);	
 	void DisconnectParent(CGameObject* _pObject);
 	void ClearLayer();

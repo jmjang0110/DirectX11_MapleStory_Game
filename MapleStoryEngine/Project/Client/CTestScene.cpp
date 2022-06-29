@@ -38,8 +38,8 @@
 
 void CTestScene::CreateTestScene()
 {
-	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test3.scene", L"scene\\Test3.scene");
-	CResMgr::GetInst()->Load<CSceneFile>(L"scene\\SibalNoma.scene", L"scene\\SibalNoma.scene");
+	//CResMgr::GetInst()->Load<CSceneFile>(L"scene\\Test3.scene", L"scene\\Test3.scene");
+	//CResMgr::GetInst()->Load<CSceneFile>(L"scene\\SibalNoma.scene", L"scene\\SibalNoma.scene");
 
 
 	CScene* pCurScene = new CScene;

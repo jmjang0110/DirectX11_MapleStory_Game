@@ -6,13 +6,14 @@
 
 class TreeUI;
 
-enum class OBJECT_TYPE
+enum class ENGINE_TYPE
 {
     NONE,
     DUMMY,
     SCENE,
     LAYER,
     GAME_OBJECT,
+    COMPONENT,
     END,
 
 };
@@ -51,10 +52,10 @@ public:
 
     // ========= Todo ============
 private:
-    OBJECT_TYPE m_StoreObjType;
+    ENGINE_TYPE m_StoreObjType;
 public:
-    void SetObjType(OBJECT_TYPE _Type) { m_StoreObjType = _Type; }
-    OBJECT_TYPE GetObjType() { return m_StoreObjType; }
+    void SetObjType(ENGINE_TYPE _Type) { m_StoreObjType = _Type; }
+    ENGINE_TYPE GetObjType() { return m_StoreObjType; }
     // ===========================
 
 public:
@@ -135,6 +136,11 @@ public:
 private:
     void SetSelectedNode(TreeNode* _pNode);
     void SetDBClickedNode(TreeNode* _pNode);
+
+public:
+    TreeNode* GetDragNode() { return m_pDragNode; }
+    TreeNode* GetDropNode() { return m_pDropNode; }
+
 
 
 public:

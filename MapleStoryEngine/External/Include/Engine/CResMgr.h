@@ -59,6 +59,13 @@ public:
 private:
 	void DeleteRes(const wstring& _strKey);
 
+	// Todo ========
+public:
+	template<typename type>
+	void DeletePrefabRes(const wstring& _strKey);
+
+	// =============
+
 
 	friend class CEventMgr;
 };
@@ -142,3 +149,15 @@ void CResMgr::AddRes(const wstring& _strKey, type* _pRes, bool _bEngineRes)
 
 	m_Res[(UINT)eType].insert(make_pair(_strKey, _pRes));
 }
+
+// =========== Todo ==================
+template<typename type>
+inline void CResMgr::DeletePrefabRes(const wstring& _strKey)
+{
+	RES_TYPE ResType = FindRes<CPrefab>(_strKey)->GetResType();
+	assert(RES_TYPE::PREFAB == ResType);
+
+
+	DeleteRes(_strKey);
+}
+

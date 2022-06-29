@@ -313,7 +313,6 @@ void CResMgr::CreateEngineMaterial()
 		pMtrl->Save(strContent + pMtrl->GetKey());
 	}
 
-
 	// Std2D_Light Mtrl »ý¼º
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DLightShader"));

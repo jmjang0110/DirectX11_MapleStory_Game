@@ -25,3 +25,30 @@ CGameObject* CPrefab::Instantiate()
 {
     return m_pProtoObj->Clone();
 }
+
+int CPrefab::Save(const wstring& _strFilePath)
+{
+    assert(m_pProtoObj);
+
+    CRes::Save(_strFilePath);
+    CRes::SetRelativePath(CRes::GetKey());
+
+    wstring strContent = CPathMgr::GetInst()->GetContentPath();
+
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
+
+    if (nullptr == pFile)
+        return E_FAIL;
+
+    
+    m_pProtoObj->SaveToScene(pFile);
+
+    fclose(pFile);
+}
+
+int CPrefab::Load(const wstring& _strFilePath)
+{
+    return 0;
+
+}

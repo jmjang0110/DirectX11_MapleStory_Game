@@ -541,7 +541,7 @@ TreeNode* TileMapUI::PushimgFiletoTree(const wstring _FileName, TreeNode* _pDest
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
 		, string(_FileName.begin(), _FileName.end())
 		, (DWORD_PTR)pimgFile);
-	pNode->SetObjType(OBJECT_TYPE::DUMMY);
+	pNode->SetObjType(ENGINE_TYPE::DUMMY);
 
 
 	m_StoreimgFile.push_back(pimgFile);
@@ -564,7 +564,7 @@ TreeNode* TileMapUI::PushTiletoTree(Tile* _pTile, TreeNode* _pDestNode)
 	TreeNode* pNode = m_TreeUI->AddTreeNode(_pDestNode
 		, string(_pTile->Name.begin(), _pTile->Name.end())
 		, (DWORD_PTR)_pTile);
-	pNode->SetObjType(OBJECT_TYPE::END);
+	pNode->SetObjType(ENGINE_TYPE::END);
 
 	return pNode;
 
@@ -575,7 +575,7 @@ TreeNode* TileMapUI::PushTiletoTree(Tile* _pTile, TreeNode* _pDestNode)
 void TileMapUI::TileClicked(DWORD_PTR _dw)
 {
 	TreeNode* pNode = (TreeNode*)_dw;
-	if (OBJECT_TYPE::DUMMY == pNode->GetObjType()) // 더미노드 라고 정함 - img
+	if (ENGINE_TYPE::DUMMY == pNode->GetObjType()) // 더미노드 라고 정함 - img
 	{
 		m_Selected_imgFIle_Name = pNode->GetName();
 		m_pSelected_Tile = nullptr;
@@ -584,7 +584,7 @@ void TileMapUI::TileClicked(DWORD_PTR _dw)
 
 		return;
 	}
-	else if (OBJECT_TYPE::NONE == pNode->GetObjType()) // - package 
+	else if (ENGINE_TYPE::NONE == pNode->GetObjType()) // - package 
 		return;
 
 	DWORD_PTR data = pNode->GetData();

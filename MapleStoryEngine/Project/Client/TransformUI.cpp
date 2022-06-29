@@ -34,6 +34,9 @@ void TransformUI::render_update()
 	ComponentUI::render_update();
 
 	CGameObject* pTargetObject = GetTargetObject();
+	if (nullptr == pTargetObject)
+		return;
+
 	CTransform* pTrans = pTargetObject->Transform();
 	Vec3 vPos = pTrans->GetRelativePos();
 	Vec3 vScale = pTrans->GetRelativeScale();

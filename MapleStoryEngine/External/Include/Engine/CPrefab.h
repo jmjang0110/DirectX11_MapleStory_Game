@@ -13,10 +13,10 @@ private:
 public:
     CGameObject* Instantiate();
 
-    virtual int Load(const wstring& _strFilePath)
-    {
-        return S_OK;
-    }
+
+public:
+    virtual int Save(const wstring& _strFilePath) override;
+    virtual int Load(const wstring& _strFilePath) override;
 
 public:
     CPrefab();

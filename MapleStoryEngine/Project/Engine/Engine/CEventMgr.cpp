@@ -176,6 +176,19 @@ void CEventMgr::update()
 		}
 		break;
 
+		// ====== Todo =============
+		case EVENT_TYPE::DEREGISTER_OBJ_IN_LAYER:
+		{
+			// lParam : Obj Adress, WParam : Layer Index
+			CGameObject* pObject = (CGameObject*)m_vecEvent[i].lParam;
+			int iLayerIdx = (int)m_vecEvent[i].wParam;
+
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->GetLayer(iLayerIdx)->DeregisterObject(pObject);
+		}
+		break;
+		// =========================
+
 
 		}
 

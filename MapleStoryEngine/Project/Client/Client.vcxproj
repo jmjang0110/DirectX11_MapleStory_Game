@@ -184,6 +184,7 @@
     <ClInclude Include="ParamUI.h" />
     <ClInclude Include="ParticleSystemUI.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PrefabUI.h" />
     <ClInclude Include="ResInfoUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceUI.h" />
@@ -229,6 +230,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PrefabUI.cpp" />
     <ClCompile Include="ResInfoUI.cpp" />
     <ClCompile Include="ResourceUI.cpp" />
     <ClCompile Include="SceneOutliner.cpp" />
