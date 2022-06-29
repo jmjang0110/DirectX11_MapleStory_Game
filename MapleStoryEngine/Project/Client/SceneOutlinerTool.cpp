@@ -22,6 +22,13 @@
 #include <Engine/CCamera.h>
 
 
+#include "CImGuiMgr.h"
+#include "ListUI.h"
+#include "PrefabUI.h"
+
+#include <Script/CSceneSaveLoad.h>
+
+
 
 SceneOutlinerTool::SceneOutlinerTool()
 	: UI("SceneOutlinerTool")
@@ -330,6 +337,26 @@ void SceneOutlinerTool::NewObjectButton()
 				ImGui::TextColored(ImVec4(1.f, 0.0f, 0.0f, 1.f), "YOU MUST SELECT LAYER!");
 
 
+			ImGui::Text("Show Prefab List");
+			ImGui::SameLine();
+			if (ImGui::Button("##PrefabListbtn", Vec2(15, 15)))
+			{
+				// ListUI 활성화한다.
+				const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::PREFAB);
+				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+				pListUI->Clear();
+				pListUI->SetTitle("Prefab List");
+
+				for (const auto& pair : mapRes)
+				{
+					pListUI->AddList(string(pair.first.begin(), pair.first.end()));
+				}
+
+				pListUI->Activate();
+				pListUI->SetDBCEvent(this, (DBCLKED)&::SceneOutlinerTool::PrefabSelect);
+			}
+
+
 
 			static char buf[512];
 			ImGui::InputText("SetName", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
@@ -493,6 +520,38 @@ void SceneOutlinerTool::NewLayerButton()
 
 
 	}
+}
+
+
+
+
+void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
+{
+	string strSelectedName = (char*)_param;
+	wstring strPrefabKey = wstring(strSelectedName.begin(), strSelectedName.end());
+	wstring strContent = CPathMgr::GetInst()->GetContentPath();
+	wstring FullPath = strContent + strPrefabKey;
+
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, FullPath.c_str(), L"rb");
+	assert(pFile);
+
+	CPrefab* pPrefab =  CSceneSaveLoad::LoadPrefab(pFile);
+	fclose(pFile);
+
+	assert(pPrefab);
+
+	if (m_pSelectedScene && m_pSelectedLayer)
+	{
+		// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
+		CGameObject* NewObj = pPrefab->Instantiate();
+		m_pSelectedScene->AddObject(NewObj, m_pSelectedLayer->GetName());
+
+		// TReeUI 에 추가하기 위해서 Reset() 
+		Reset();
+	}
+
 }
 
 

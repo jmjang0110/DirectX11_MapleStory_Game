@@ -39,6 +39,18 @@ CTileMap::CTileMap(const CTileMap& _origin)
 	, m_bBufferUpdated(false)
 {
 	m_pBuffer = new CStructuredBuffer;
+	m_pBuffer->Create(sizeof(tTileData), m_iTileCountX * m_iTileCountY, SB_TYPE::READ_WRITE, true, nullptr);
+
+
+	// 메쉬, 재질
+	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\TileMapMtrl.mtrl"));
+
+	m_vecTileData.resize((size_t)(m_iTileCountX * m_iTileCountY));
+
+	if (nullptr != _origin.m_pAtlasTex)
+		SetAtlasTex(_origin.m_pAtlasTex);
+
 }
 
 CTileMap::~CTileMap()

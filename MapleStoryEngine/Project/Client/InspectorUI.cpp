@@ -40,6 +40,7 @@
 
 #include <ResourceUI.h>
 
+#include <Script/CSceneSaveLoad.h>
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
@@ -461,31 +462,45 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 			// RelativePath 저장은 CPRefab Save 에서 해주고 있음 
 			wstring strContent = CPathMgr::GetInst()->GetContentPath();
-			wstring wstrResKey = L"prefab\\" + m_pTargetObject->GetName() + L".prefab";
+			wstring wstrResKey = L"prefab\\" + m_pTargetObject->GetName() + L".pref";
+			wstring FullPath = strContent + wstrResKey;
 
 			CGameObject* pProtoObj = m_pTargetObject->Clone();
 			CPrefab* pPref = new CPrefab(pProtoObj);
+			pPref->Save(wstrResKey); 
 
 			if (nullptr == CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey))
 			{
 				CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
-				pPref->Save(strContent + wstrResKey);
+
+				FILE* pFile = nullptr;
+				_wfopen_s(&pFile, FullPath.c_str(), L"wb");
+
+				CSceneSaveLoad::SavePrefab(pProtoObj, pPref, pFile);
+
+				fclose(pFile);
 
 			}
 			else
 			{
-			    RES_TYPE pResType= CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey)->GetResType();
+				RES_TYPE pResType = CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey)->GetResType();
 				if (RES_TYPE::PREFAB == pResType)
 				{
 					CResMgr::GetInst()->DeletePrefabRes<CPrefab>(wstrResKey);
 					CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
-					pPref->Save(strContent + wstrResKey);
+
+					FILE* pFile = nullptr;
+					_wfopen_s(&pFile, FullPath.c_str(), L"wb");
+
+					CSceneSaveLoad::SavePrefab(pProtoObj, pPref, pFile);
+
+					fclose(pFile);
 
 				}
 
 			}
-			
-		
+
+
 			// CImGuiMgr 에 Delegate 등록 
 			tUIDelegate tInfo;
 			tInfo.dwParam = (DWORD_PTR)nullptr;

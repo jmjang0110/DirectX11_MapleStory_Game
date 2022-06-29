@@ -35,6 +35,7 @@ private:
 	void CreateEngineMaterial();
 	void MakeInputLayoutInfo();
 
+
 public:
 	template<typename type>
 	RES_TYPE GetResType();
@@ -62,7 +63,7 @@ private:
 	// Todo ========
 public:
 	template<typename type>
-	void DeletePrefabRes(const wstring& _strKey, type* _pPrefabRes); 
+	void DeletePrefabRes(const wstring& _strKey); 
 	template<typename type>
 	void UpdatePrefabRes(const wstring& _strKey, type* _pPrefabRes, CGameObject* _pProtoObj);
 
@@ -154,11 +155,9 @@ void CResMgr::AddRes(const wstring& _strKey, type* _pRes, bool _bEngineRes)
 
 // =========== Todo ==================
 template<typename type>
-inline void CResMgr::DeletePrefabRes(const wstring& _strKey, type* _pPrefabRes)
+inline void CResMgr::DeletePrefabRes(const wstring& _strKey)
 {
-	const type_info& info = typeid(type);
-	assert(info.hash_code() == typeid(CPrefab).hash_code());
-
+	assert(RES_TYPE::PREFAB == FindRes<CPrefab>(_strKey)->GetResType());
 	DeleteRes(_strKey);
 }
 

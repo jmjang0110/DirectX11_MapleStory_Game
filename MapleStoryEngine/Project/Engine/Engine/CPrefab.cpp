@@ -3,16 +3,22 @@
 
 #include "CGameObject.h"
 
+#include "CSceneMgr.h"
+
+
+
 CPrefab::CPrefab()
     : CRes(RES_TYPE::PREFAB)
     , m_pProtoObj(nullptr)
 {
+
 }
 
 CPrefab::CPrefab(CGameObject* _pProtoObj)
     : CRes(RES_TYPE::PREFAB)
     , m_pProtoObj(_pProtoObj)
 {
+
 }
 
 
@@ -28,27 +34,15 @@ CGameObject* CPrefab::Instantiate()
 
 int CPrefab::Save(const wstring& _strFilePath)
 {
-    assert(m_pProtoObj);
-
-    CRes::Save(_strFilePath);
-    CRes::SetRelativePath(CRes::GetKey());
-
-    wstring strContent = CPathMgr::GetInst()->GetContentPath();
-
-    FILE* pFile = nullptr;
-    _wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
-
-    if (nullptr == pFile)
-        return E_FAIL;
-
-    
-    m_pProtoObj->SaveToScene(pFile);
-
-    fclose(pFile);
+    CRes::SetKey(_strFilePath);
+    CRes::SetRelativePath(_strFilePath);
+    return S_OK;
 }
 
 int CPrefab::Load(const wstring& _strFilePath)
 {
-    return 0;
+    CRes::SetKey(_strFilePath);
+    CRes::SetRelativePath(_strFilePath);
 
+	return S_OK;
 }

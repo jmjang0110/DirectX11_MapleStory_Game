@@ -58,6 +58,11 @@ public:
 
     virtual CScript* Clone() = 0;
     
+    // == Todo == 
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
+    // == == == == 
 
 
 public:

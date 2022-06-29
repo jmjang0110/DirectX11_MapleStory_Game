@@ -134,12 +134,15 @@ void TileMapUI::render_update()
 		}
 		else
 		{
+			if (m_vTileSize.x != 30.f && m_vTileSize.y != 30.f)
+			{
+				pTileMap->SetTileMapCount(m_iMapCountX, m_iMapCountY);
+				m_vTileSize = Vec2(30.f, 30.f);
+				pTargetObj->TileMap()->SetTileSize(m_vTileSize);
+				// 타일 개수 / 사이즈 만큼 타일맵 크기를 늘려야한다. 
+				pTargetObj->Transform()->SetRelativeScale(Vec3(m_iMapCountX * m_vTileSize.x, m_iMapCountY * m_vTileSize.y, 1.f));
 
-			pTileMap->SetTileMapCount(m_iMapCountX, m_iMapCountY);
-			m_vTileSize = Vec2(30.f, 30.f);
-			pTargetObj->TileMap()->SetTileSize(m_vTileSize);
-			// 타일 개수 / 사이즈 만큼 타일맵 크기를 늘려야한다. 
-			pTargetObj->Transform()->SetRelativeScale(Vec3(m_iMapCountX * m_vTileSize.x, m_iMapCountY * m_vTileSize.y, 1.f));
+			}
 		}
 	}
 	if (m_bUseMapleStory_ImgFile)

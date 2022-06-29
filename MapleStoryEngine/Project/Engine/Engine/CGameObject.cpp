@@ -16,6 +16,7 @@
 
 #include "CScript.h"
 
+
 CGameObject::CGameObject()
 	: m_arrCom{}
 	, m_pParent(nullptr)
@@ -47,9 +48,9 @@ CGameObject::CGameObject(const CGameObject& _origin)
 		}		
 	}
 
-	for (size_t i = 0; i < m_vecScript.size(); ++i)
+	for (size_t i = 0; i < _origin.m_vecScript.size(); ++i)
 	{
-		AddComponent(m_vecScript[i]->Clone());
+		AddComponent(_origin.m_vecScript[i]->Clone());
 	}
 
 	for (size_t i = 0; i < _origin.m_vecChild.size(); ++i)
@@ -419,7 +420,11 @@ void CGameObject::SaveToScene(FILE* _pFile)
 
 		}
 	}
+
 	SaveWStringToFile(L"END", _pFile);
+
+
+
 }
 
 void CGameObject::LoadFromScene(FILE* _pFile)
@@ -503,6 +508,7 @@ void CGameObject::LoadFromScene(FILE* _pFile)
 
 		}
 	}
+
 }
 
 

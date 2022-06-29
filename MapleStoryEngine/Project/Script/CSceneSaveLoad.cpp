@@ -5,6 +5,7 @@
 #include <Engine/CScene.h>
 #include <Engine/CLayer.h>
 #include <Engine/CGameObject.h>
+#include <Engine/CPrefab.h>
 
 #include "CScriptMgr.h"
 
@@ -82,6 +83,18 @@ void CSceneSaveLoad::SaveGameObject(CGameObject* _pObj, FILE* _pFile)
     }
 }
 
+// Todo =====
+void CSceneSaveLoad::SavePrefab(CGameObject* _pProtoObj, CPrefab* _pPrefab, FILE* _pFile)
+{
+    wstring wstrResKey = L"prefab\\" + _pProtoObj->GetName() + L".pref";
+    // Prefab 의 Key 를 저장 = RelativePath 
+ 
+    SaveWStringToFile(wstrResKey, _pFile);
+    // Proto Object 저장 
+    SaveGameObject(_pProtoObj, _pFile);
+
+}
+// ===========-
 CScene* CSceneSaveLoad::LoadScene(const wstring& _strSceneFilePath)
 {
     // 최종 경로에서 상대경로만 추출
@@ -159,6 +172,24 @@ CGameObject* CSceneSaveLoad::LoadGameObject(FILE* _pFile)
 
     return pLoadObj;
 }
+
+// Todo ========
+CPrefab* CSceneSaveLoad::LoadPrefab(FILE* _pFile)
+{
+    CPrefab* pLoadPrefab = nullptr;
+    CGameObject* pLoadObj = new CGameObject;
+    wstring PrefabKey = L"";
+
+    LoadWStringFromFile(PrefabKey, _pFile);
+   
+    pLoadObj = LoadGameObject(_pFile);
+    pLoadPrefab = new CPrefab(pLoadObj);
+    pLoadPrefab->Load(PrefabKey);             // Key , RelativePath 저장 
+ 
+
+    return pLoadPrefab;
+}
+// ================
 
 
 
