@@ -11,8 +11,15 @@ CGravityScript::CGravityScript()
 
 }
 
+CGravityScript::CGravityScript(const CGravityScript& _origin)
+	: CScript((int)SCRIPT_TYPE::GRAVITYSCRIPT)
+{
+
+}
+
 CGravityScript::~CGravityScript()
 {
+
 }
 
 

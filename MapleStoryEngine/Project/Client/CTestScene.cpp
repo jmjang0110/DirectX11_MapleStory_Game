@@ -32,6 +32,8 @@
 #include <Script/CCursorScript.h>
 #include <Script/CRigidBodyScript.h>
 #include <Script/CGravityScript.h>
+#include <Script/CGroundScript.h>
+
 
 #include <Engine/CTestShader.h>
 
@@ -219,6 +221,7 @@ void CTestScene::CreateTestScene()
 	AddPlayer(pCurScene);
 	Add_MapleStory_Player(pCurScene);
 	AddCursor(pCurScene);
+	AddGround(pCurScene);
 
 
 	pObject = new CGameObject;
@@ -261,8 +264,8 @@ void CTestScene::AddPlayer(CScene* _pCurScene)
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CAnimator2D);
-	pObject->AddComponent(new CPlayerScript);
-	pObject->AddComponent(new CRigidBodyScript);
+	//pObject->AddComponent(new CPlayerScript);
+	//pObject->AddComponent(new CRigidBodyScript);
 
 
 	pObject->Transform()->SetRelativePos(0.f, 0.f, 50.f);
@@ -342,6 +345,38 @@ void CTestScene::AddCursor(CScene* _pCurScene)
 
 }
 
+void CTestScene::AddGround(CScene* _pCurScene)
+{
+
+	CGameObject* pObj = new CGameObject;
+	pObj->SetName(L"Ground");
+
+
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new CMeshRender);
+	pObj->AddComponent(new CCollider2D);
+	pObj->AddComponent(new CGroundScript);
+	//pObj->AddComponent(new CAnimator2D);
+
+	pObj->Transform()->SetRelativePos(0.f, -200.f, 50.f);
+	pObj->Transform()->SetRelativeScale(Vec3(300.f, 100.f, 1.f));
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\Std2DEmptyMtrl.mtrl"));
+
+	pObj->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
+	pObj->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
+	pObj->Collider2D()->SetOffsetScale(Vec2(300.f, 100.f));
+
+
+
+	float fLimit = 0.3333f;
+	pObj->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::FLOAT_0, &fLimit);
+	
+	_pCurScene->AddObject(pObj, L"Monster");
+
+}
+
 
 
 
@@ -358,8 +393,8 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
 	
-	/*pObj->AddComponent(new CRigidBodyScript);
-	pObj->AddComponent(new CPlayerScript);*/
+	pObj->AddComponent(new CRigidBodyScript);
+	pObj->AddComponent(new CPlayerScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);
@@ -397,7 +432,7 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObjChild->Transform()->SetRelativePos(0.f, 32.f, 0.f);
 	pObjChild->Transform()->SetIgnoreParentScale(true);
 	pObjChild->Transform()->SetRelativeScale(Vec3(300.f, 300.f, 1.f));
-
+	
 	pObjChild->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::BOX);
 	pObjChild->Collider2D()->SetOffsetPos(Vec2(0.f, 0.f));
 	pObjChild->Collider2D()->SetOffsetScale(Vec2(35.f, 35.f));

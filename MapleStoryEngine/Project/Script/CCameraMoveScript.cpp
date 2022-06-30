@@ -15,6 +15,11 @@ CCameraMoveScript::CCameraMoveScript()
 
 }
 
+CCameraMoveScript::CCameraMoveScript(const CCameraMoveScript& _origin)
+	: CScript((int)SCRIPT_TYPE::CAMERAMOVESCRIPT)
+{
+}
+
 CCameraMoveScript::~CCameraMoveScript()
 {
 }

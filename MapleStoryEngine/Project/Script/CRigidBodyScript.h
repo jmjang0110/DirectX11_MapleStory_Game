@@ -55,6 +55,7 @@ public:
 
 public:
     CRigidBodyScript();
+    CRigidBodyScript(const CRigidBodyScript& _origin);
     ~CRigidBodyScript();
 
 

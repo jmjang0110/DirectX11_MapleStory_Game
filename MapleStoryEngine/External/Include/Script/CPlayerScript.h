@@ -51,9 +51,17 @@ private:
     Ptr<CPrefab>    m_pMissilePrefab;
     float           m_fSpeed;
 
-
     float           m_fBurnStrength;
     bool            m_bBurn;
+
+
+private:
+    bool        m_bOnGround;
+
+public:
+    void SetOnGround(bool _b) { m_bOnGround = _b; }
+    bool GetOnGround() { return m_bOnGround; }
+
 
 public:
     virtual void start();
@@ -83,6 +91,7 @@ public:
 
 public:
     CPlayerScript();
+    CPlayerScript(const CPlayerScript& _origin);
     ~CPlayerScript();
 
 };

@@ -58,8 +58,6 @@ void CCore::Frame_Init()
 
 	CTimeMgr::GetInst()->update();
 	CKeyMgr::GetInst()->update();
-	// Collision Check
-	CCollisionMgr::GetInst()->update();
 
 	CRenderMgr::GetInst()->ClearCamera();
 }
@@ -81,7 +79,7 @@ void CCore::progress()
 
 	// Scene Update
 	CSceneMgr::GetInst()->progress();
-	
+
 
 	// Render	
 	CRenderMgr::GetInst()->render();

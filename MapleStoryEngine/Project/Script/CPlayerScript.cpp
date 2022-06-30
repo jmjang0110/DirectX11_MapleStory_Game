@@ -21,12 +21,18 @@ CPlayerScript::CPlayerScript()
 	, m_eDir(PLAYER_DIRECTION::RIGHT)
 	, m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
+	, m_bOnGround(false)
 
 {
 	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
 	SetName(CScriptMgr::GetScriptName(this));
 
 
+}
+
+CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
+	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
+{
 }
 
 CPlayerScript::~CPlayerScript()
@@ -252,10 +258,6 @@ void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
 	int i = 0;
 
-	//if (_OtherObject->GetName() == L"Missile")
-	//{
-	//	_OtherObject->Destroy();
-	//}
 }
 
 
@@ -323,9 +325,14 @@ void CPlayerScript::Update_Move()
 		}
 		if (KEY_TAP(KEY::DOWN))
 		{
-			m_eDir = PLAYER_DIRECTION::DOWN;
-			pRigid->AddVelocity(Vec3(0.f, -100.f, 0.f));
+			if (false == m_bOnGround) // 땅위에 있는 상태에서는 더이상 내려가지 못하게 막는다. 
+			{
+				m_eDir = PLAYER_DIRECTION::DOWN;
+				pRigid->AddVelocity(Vec3(0.f, -100.f, 0.f));
 
+			}
+			
+			
 		}
 
 
@@ -347,7 +354,9 @@ void CPlayerScript::Update_Move()
 
 		if (KEY_PRESSED(KEY::DOWN))
 		{
-			pRigid->AddForce(Vec3(0.f, -200.f, 0.f));
+			
+				pRigid->AddForce(Vec3(0.f, -200.f, 0.f));
+		
 		}
 
 

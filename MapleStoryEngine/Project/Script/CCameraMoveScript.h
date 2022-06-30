@@ -21,6 +21,7 @@ public:
     CLONE(CCameraMoveScript)
 public:
     CCameraMoveScript();
+    CCameraMoveScript(const CCameraMoveScript& _origin);
     ~CCameraMoveScript();
 };
 

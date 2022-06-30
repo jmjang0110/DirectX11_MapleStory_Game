@@ -14,6 +14,11 @@ CCursorScript::CCursorScript()
 {
 }
 
+CCursorScript::CCursorScript(const CCursorScript& _origin)
+	: CScript((int)SCRIPT_TYPE::CURSORSCRIPT)
+{
+}
+
 CCursorScript::~CCursorScript()
 {
 }

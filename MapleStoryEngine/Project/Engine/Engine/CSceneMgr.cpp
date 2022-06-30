@@ -46,6 +46,7 @@ void CSceneMgr::progress()
 		m_pCurScene->lateupdate();
 	}
 	
+
 	m_pCurScene->finalupdate();
 
 	// Collision Check
@@ -53,6 +54,9 @@ void CSceneMgr::progress()
 	{
 		CCollisionMgr::GetInst()->update();
 	}
+
+
+
 }
 
 void CSceneMgr::ChangeScene(CScene* _pNextScene)

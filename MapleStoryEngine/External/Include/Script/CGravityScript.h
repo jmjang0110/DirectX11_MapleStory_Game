@@ -16,7 +16,11 @@ class CGravityScript :
 {
 private:
 
+    bool        m_bGround;
 
+
+public:
+    void SetGround(bool _b) { m_bGround = _b; }
 
 
 public:
@@ -38,6 +42,7 @@ public:
 
 public:
     CGravityScript();
+    CGravityScript(const CGravityScript& _origin);
     ~CGravityScript();
 
 };

@@ -17,6 +17,11 @@ CRigidBodyScript::CRigidBodyScript()
 
 }
 
+CRigidBodyScript::CRigidBodyScript(const CRigidBodyScript& _origin)
+	: CScript((int)SCRIPT_TYPE::RIGIDBODYSCRIPT)
+{
+}
+
 CRigidBodyScript::~CRigidBodyScript()
 {
 
@@ -28,11 +33,6 @@ void CRigidBodyScript::start()
 }
 
 void CRigidBodyScript::update()
-{
-
-}
-
-void CRigidBodyScript::lateupdate()
 {
 	if (0.f != m_vForce.Length())
 	{
@@ -77,6 +77,11 @@ void CRigidBodyScript::lateupdate()
 
 
 	m_vForce = Vec3(0.f, 0.f, 0.f);						// »˚ √ ±‚»≠ 
+}
+
+void CRigidBodyScript::lateupdate()
+{
+	
 
 }
 

@@ -535,8 +535,8 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, FullPath.c_str(), L"rb");
-	assert(pFile);
 
+	assert(pFile);
 	CPrefab* pPrefab =  CSceneSaveLoad::LoadPrefab(pFile);
 	fclose(pFile);
 

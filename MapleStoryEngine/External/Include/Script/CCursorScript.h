@@ -15,7 +15,8 @@ public:
 
     CLONE(CCursorScript);
 public:
-    CCursorScript();
+    CCursorScript();   
+    CCursorScript(const CCursorScript& _origin);
     ~CCursorScript();
 
 };
