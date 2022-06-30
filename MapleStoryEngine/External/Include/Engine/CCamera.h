@@ -20,6 +20,8 @@ private:
     vector<CGameObject*>    m_vecTranslucent;       // 반투명 물체
     vector<CGameObject*>    m_vecPostProcess;       // 후 처리 물체
 
+
+protected:
     Matrix                  m_matView;
     Matrix                  m_matProj;
 

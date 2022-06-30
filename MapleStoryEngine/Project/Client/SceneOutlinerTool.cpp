@@ -118,7 +118,9 @@ void SceneOutlinerTool::Reset()
 			PushGameObjectToTree(vecRoots[i], pLayerNode);
 		}
 	}
-
+	// InspectorUI 
+	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+	pInspectorUI->SetTargetObject(nullptr);
 
 }
 

@@ -29,6 +29,8 @@ private:
 
 protected:
     virtual int Load(const wstring& _strFilePath);
+    virtual int Save(const wstring& _strFilePath);
+
     void Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _format, UINT _flag);
     void Create(ComPtr<ID3D11Texture2D> _pTex2D);
 

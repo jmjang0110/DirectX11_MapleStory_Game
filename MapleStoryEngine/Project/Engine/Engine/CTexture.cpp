@@ -57,6 +57,15 @@ int CTexture::Load(const wstring& _strFilePath)
     return S_OK;
 }
 
+int CTexture::Save(const wstring& _strFilePath)
+{
+    CaptureTexture(DEVICE, CONTEXT, m_pTex2D.Get(), m_Image);
+    //SaveToWICFile(m_Image, WIC_FLAGS_FORCE_RGB, nullptr, _strFilePath.c_str());
+
+    CRes::Save(_strFilePath);
+    return S_OK;
+}
+
 void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _format, UINT _flag)
 {
     // Texture ¸¸µé±â    

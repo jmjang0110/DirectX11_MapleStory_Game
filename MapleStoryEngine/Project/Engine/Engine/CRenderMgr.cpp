@@ -9,6 +9,8 @@
 #include "CLight2D.h"
 
 #include "CStructuredBuffer.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
 
 
 CRenderMgr::CRenderMgr()
@@ -37,13 +39,27 @@ void CRenderMgr::render()
 	// Light 업데이트
 	UpdateLight2D();
 
-
 	// Global 상수 업데이트
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetCB(CB_TYPE::GLOBAL);
 	pGlobalCB->SetData(&g_global, sizeof(tGlobal));
 	pGlobalCB->UpdateData();
 	pGlobalCB->UpdateData_CS();
 
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+	if (pCurScene->GetSceneState() == SCENE_STATE::PLAY)
+	{
+		render_play();
+	}
+
+	else
+	{
+		render_editor();
+	}
+}
+
+void CRenderMgr::render_play()
+{
 	if (m_vecCam.empty())
 		return;
 
@@ -88,8 +104,34 @@ void CRenderMgr::render()
 
 		// Alpha 물체 렌더링
 		m_vecCam[i]->render_translucent();
-	}	
+	}
 }
+
+void CRenderMgr::render_editor()
+{
+	if (nullptr == m_pEditorCam)
+		return;
+
+	// 에디터 카메라 시점으로 렌더링
+	// Camera 가 찍는 Layer 의 오브젝트들을 Shader Domain 에 따라 분류해둠
+	m_pEditorCam->SortGameObject();
+
+	g_transform.matView = m_pEditorCam->GetViewMat();
+	g_transform.matProj = m_pEditorCam->GetProjMat();
+
+	// Foward 물체 렌더링
+	m_pEditorCam->render_forward();
+
+	// Masked 물체 렌더링
+	m_pEditorCam->render_masked();
+
+	// Alpha 물체 렌더링
+	m_pEditorCam->render_translucent();
+
+	// PostProcess 물체 렌더링
+	m_pEditorCam->render_postprocess();
+}
+
 
 void CRenderMgr::RegisterCamera(CCamera* _pCam)
 {
@@ -162,5 +204,7 @@ void CRenderMgr::UpdateLight2D()
 
 	m_vecLight2D.clear();
 }
+
+
 
 

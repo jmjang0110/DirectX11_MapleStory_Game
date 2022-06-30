@@ -37,6 +37,9 @@
 
 #include <Engine/CTestShader.h>
 
+#include <Script/CSceneSaveLoad.h>
+
+
 
 void CTestScene::CreateTestScene()
 {
@@ -198,7 +201,7 @@ void CTestScene::CreateTestScene()
 
 
 	// PostProcess Object
-	CGameObject* pPostProcess = new CGameObject;
+	/*CGameObject* pPostProcess = new CGameObject;
 	pPostProcess->SetName(L"PostProcessObject");
 
 	pPostProcess->AddComponent(new CTransform);
@@ -215,7 +218,7 @@ void CTestScene::CreateTestScene()
 
 
 	((CCameraMoveScript*)pCamObj->GetScript(0))->SetFilter(pPostProcess);
-	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();
+	CCameraMoveScript* pCamMoveScript = pCamObj->GetScript<CCameraMoveScript>();*/
 
 
 	AddPlayer(pCurScene);
@@ -243,9 +246,12 @@ void CTestScene::CreateTestScene()
 
 	
 
-
 	// 충돌 레이어 설정
 	CCollisionMgr::GetInst()->CollisionCheck(L"Player", L"Monster");
+
+	pCurScene->SetResKey(L"scene\\TestScene.scene");
+	wstring strSceneFilePath = CPathMgr::GetInst()->GetContentPath();
+	CSceneSaveLoad::SaveScene(pCurScene, strSceneFilePath + L"scene\\TestScene.scene");
 
 	pCurScene->start();
 	pCurScene->SetSceneState(SCENE_STATE::PLAY);

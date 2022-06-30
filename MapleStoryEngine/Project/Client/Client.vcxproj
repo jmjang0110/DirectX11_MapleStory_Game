@@ -158,11 +158,15 @@
   <ItemGroup>
     <ClInclude Include="Animator2DUI.h" />
     <ClInclude Include="CameraUI.h" />
+    <ClInclude Include="CCameraEx.h" />
+    <ClInclude Include="CEditorCamScript.h" />
+    <ClInclude Include="CGameObjectEx.h" />
     <ClInclude Include="CImGuiMgr.h" />
     <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComponentUI.h" />
     <ClInclude Include="ComputeShaderUI.h" />
     <ClInclude Include="CTestScene.h" />
+    <ClInclude Include="CToolObjMgr.h" />
     <ClInclude Include="GraphicsShaderUI.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -201,11 +205,15 @@
   <ItemGroup>
     <ClCompile Include="Animator2DUI.cpp" />
     <ClCompile Include="CameraUI.cpp" />
+    <ClCompile Include="CCameraEx.cpp" />
+    <ClCompile Include="CEditorCamScript.cpp" />
+    <ClCompile Include="CGameObjectEx.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
     <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
     <ClCompile Include="ComputeShaderUI.cpp" />
     <ClCompile Include="CTestScene.cpp" />
+    <ClCompile Include="CToolObjMgr.cpp" />
     <ClCompile Include="GraphicsShaderUI.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

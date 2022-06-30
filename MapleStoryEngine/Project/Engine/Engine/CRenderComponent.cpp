@@ -2,6 +2,10 @@
 #include "CRenderComponent.h"
 #include "CResMgr.h"
 
+#include "CSceneMgr.h"
+#include "CSCene.h"
+
+
 
 CRenderComponent::CRenderComponent(COMPONENT_TYPE _type)
 	: CComponent(_type)
@@ -46,6 +50,11 @@ Ptr<CMaterial> CRenderComponent::GetSharedMaterial()
 
 Ptr<CMaterial> CRenderComponent::GetDynamicMaterial()
 {
+	// Play 모드에서만 동작가능
+	if (CSceneMgr::GetInst()->GetCurScene()->GetSceneState() != SCENE_STATE::PLAY)
+		return nullptr;
+
+
 	if (nullptr != m_pDynamicMtrl && m_pDynamicMtrl->GetMasterMtrl() != m_pSharedMtrl)
 	{
 		CMaterial* pMtrl = m_pDynamicMtrl.Get();

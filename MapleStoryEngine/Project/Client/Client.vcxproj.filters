@@ -110,6 +110,18 @@
     <ClCompile Include="PrefabUI.cpp">
       <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\PrefabUI</Filter>
     </ClCompile>
+    <ClCompile Include="CEditorCamScript.cpp">
+      <Filter>EditorObject\EditorScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraEx.cpp">
+      <Filter>EditorObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameObjectEx.cpp">
+      <Filter>EditorObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CToolObjMgr.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -235,6 +247,18 @@
     <ClInclude Include="PrefabUI.h">
       <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\PrefabUI</Filter>
     </ClInclude>
+    <ClInclude Include="CEditorCamScript.h">
+      <Filter>EditorObject\EditorScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraEx.h">
+      <Filter>EditorObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameObjectEx.h">
+      <Filter>EditorObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CToolObjMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="39Engine.ico">
@@ -358,6 +382,12 @@
     </Filter>
     <Filter Include="ImGui\UI\01. InspectorUI\ResInfoUI\PrefabUI">
       <UniqueIdentifier>{7d18b6c2-18d2-4728-8815-3f2c985a0b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorObject">
+      <UniqueIdentifier>{1cf08e63-9211-4bda-b3ad-6706fe3744d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EditorObject\EditorScript">
+      <UniqueIdentifier>{8f352e6e-4c9b-4cbf-96eb-cf97c55615f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

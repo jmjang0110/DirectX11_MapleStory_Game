@@ -8,6 +8,8 @@
 #include <Engine/CCore.h>
 #include <Engine/CDevice.h>
 
+
+#include "CToolObjMgr.h"
 #include "CImGuiMgr.h"
 #include "ImGui/imgui_impl_win32.h"
 #include "CTestScene.h"
@@ -54,6 +56,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     CTestScene::CreateTestScene();
     CCore::GetInst()->progress();
 
+    // Editor Object
+    CToolObjMgr::GetInst()->init();
+
+
 
     // ImGui 초기화
     CImGuiMgr::GetInst()->init(g_hWnd);
@@ -83,6 +89,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             // Engine Update
             CCore::GetInst()->progress();
+
+
+            // ToolObject 
+            CToolObjMgr::GetInst()->progress();
+
 
             // ImGui Update, render
             CImGuiMgr::GetInst()->progress();

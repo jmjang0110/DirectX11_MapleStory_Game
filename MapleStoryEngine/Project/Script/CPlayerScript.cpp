@@ -354,8 +354,10 @@ void CPlayerScript::Update_Move()
 
 		if (KEY_PRESSED(KEY::DOWN))
 		{
-			
+			if (false == m_bOnGround) 
+			{
 				pRigid->AddForce(Vec3(0.f, -200.f, 0.f));
+			}
 		
 		}
 

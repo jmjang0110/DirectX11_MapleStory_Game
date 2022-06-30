@@ -51,16 +51,16 @@ CCamera::~CCamera()
 
 void CCamera::finalupdate()
 {
-	if (KEY_PRESSED(KEY::NUM1))
-	{
+	//if (KEY_PRESSED(KEY::NUM1))
+	//{
 		//m_fWidth += DT * 500.f;
 		//m_fFOV += DT * (XM_PI / 10.f);
-	}
-	else if (KEY_PRESSED(KEY::NUM2))
-	{
+	//}
+	//else if (KEY_PRESSED(KEY::NUM2))
+	//{
 		//m_fWidth -= DT * 500.f;
 		//m_fFOV -= DT * (XM_PI / 10.f);
-	}
+	//}
 
 	// View 행렬 계산
 	Vec3 vCamPos = Transform()->GetRelativePos();	
