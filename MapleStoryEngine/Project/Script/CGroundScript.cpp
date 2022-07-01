@@ -3,6 +3,7 @@
 
 #include "CPlayerScript.h"
 #include "CRigidBodyScript.h"
+#include "CGravityScript.h"
 
 #include <Engine/CCollider2D.h>
 
@@ -48,16 +49,17 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 	if (nullptr != playerScript)
 	{
 		
-		Vec3 vObjPos = _OtherObject->Transform()->GetRelativePos();
+		Vec3 vObjPos = _OtherObject->Collider2D()->GetWorldPos();
 		Vec2 vOvjScale = _OtherObject->Collider2D()->GetOffsetScale();
 
-		Vec3 vGroundPos = Transform()->GetRelativePos();
+		Vec3 vGroundPos = Collider2D()->GetWorldPos();
 		Vec2 vGroundScale = Collider2D()->GetOffsetScale();
 
 		// °ãÄ£ ±æÀÌ 
 		float fLen = abs(vObjPos.y - vGroundPos.y);
 		float fValue = (vOvjScale.y / 2.f + vGroundScale.y / 2.f) - fLen;
 
+		vObjPos = _OtherObject->Transform()->GetRelativePos();
 		vObjPos.y += fValue;
 		_OtherObject->Transform()->SetRelativePos(vObjPos);
 		playerScript->SetOnGround(true);
@@ -66,7 +68,7 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 		{
 			Vec3 vForce = rigidBodyScript->GetForce();
 			vForce.y = 0.f;
-			Vec3 vVelocity = rigidBodyScript->GetVeclocity();
+			Vec3 vVelocity = rigidBodyScript->GetVelocity();
 			vVelocity.y = 0.f;
 
 			rigidBodyScript->SetForce(vForce);
@@ -84,26 +86,31 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 {
 	// Player <-> Ground  Collide Check
 	CPlayerScript* playerScript = (CPlayerScript*)_OtherObject->GetScriptByName(L"CPlayerScript");
+	CGravityScript* GravityScript = (CGravityScript*)_OtherObject->GetScriptByName(L"CGravityScript");
 
 	if (nullptr != playerScript)
 	{
 
-		Vec3 vObjPos = _OtherObject->Transform()->GetRelativePos();
+
+		Vec3 vObjPos = _OtherObject->Collider2D()->GetWorldPos();
 		Vec2 vOvjScale = _OtherObject->Collider2D()->GetOffsetScale();
 
-		Vec3 vGroundPos = Transform()->GetRelativePos();
+		Vec3 vGroundPos = Collider2D()->GetWorldPos();
 		Vec2 vGroundScale = Collider2D()->GetOffsetScale();
 
 		// °ãÄ£ ±æÀÌ 
 		float fLen = abs(vObjPos.y - vGroundPos.y);
 		float fValue = (vOvjScale.y / 2.f + vGroundScale.y / 2.f) - fLen;
 
+		vObjPos = _OtherObject->Transform()->GetRelativePos();
 		vObjPos.y += fValue ;
 		_OtherObject->Transform()->SetRelativePos(vObjPos);
 		playerScript->SetOnGround(true);
+	}
 
-
-		
+	if (nullptr != GravityScript)
+	{
+		GravityScript->SetOnGround(true);
 	}
 
 
@@ -114,10 +121,16 @@ void CGroundScript::OnCollisionExit(CGameObject* _OtherObject)
 {
 	// Player <-> Ground  Collide Check
 	CPlayerScript* playerScript = (CPlayerScript*)_OtherObject->GetScriptByName(L"CPlayerScript");
+	CGravityScript* GravityScript = (CGravityScript*)_OtherObject->GetScriptByName(L"CGravityScript");
+
 	if (nullptr != playerScript)
 	{
 		playerScript->SetOnGround(false);
+	}
 
+	if (nullptr != GravityScript)
+	{
+		GravityScript->SetOnGround(false);
 	}
 }
 

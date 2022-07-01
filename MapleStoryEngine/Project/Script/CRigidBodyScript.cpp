@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "CRigidBodyScript.h"
+#include "CPlayerScript.h" 
+#include "CGravityScript.h"
 
 #include <Engine/CTimeMgr.h>
-
 #include <Engine/CTransform.h>
 
 
@@ -10,7 +11,7 @@ CRigidBodyScript::CRigidBodyScript()
 	: CScript((int)SCRIPT_TYPE::RIGIDBODYSCRIPT)
 	, m_fMass(1.f)
 	, m_fFricCoeff(100.f)
-	, m_fMaxSpeed(200.f)
+	, m_vMaxVelocity(Vec3(250.f, 500.f, 0.f))
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -34,12 +35,16 @@ void CRigidBodyScript::start()
 
 void CRigidBodyScript::update()
 {
+
+
 	if (0.f != m_vForce.Length())
 	{
 		// Velocity 
 		m_vAccel = m_vForce / m_fMass;
-		m_vVelocity += m_vAccel * DT;					// 가속도에 따른 속도 변화 
 	}
+
+	m_vAccel += m_vAccelA;								// 추가 가속도 ex) 중력 
+	m_vVelocity += m_vAccel * DT;						// 가속도에 따른 속도 변화 
 
 	if (!m_vVelocity.IsZero())
 	{
@@ -57,10 +62,18 @@ void CRigidBodyScript::update()
 		}
 	}
 
-	if (m_fMaxSpeed < m_vVelocity.Length())
+
+	if (abs(m_vMaxVelocity.x) < abs(m_vVelocity.x))
 	{
-		m_vVelocity.Normalize();
-		m_vVelocity *= m_fMaxSpeed;						// 최대 속력 제한 
+		m_vVelocity.x = (m_vVelocity.x / abs(m_vVelocity.x)) * abs(m_vMaxVelocity.x);	// 최대 속도  제한 (x축)
+	}
+	if (abs(m_vMaxVelocity.y) < abs(m_vVelocity.y))
+	{
+		m_vVelocity.y = (m_vVelocity.y / abs(m_vVelocity.y)) * abs(m_vMaxVelocity.y);	// 최대 속도  제한 (y축)
+	}
+	if (abs(m_vMaxVelocity.z) < abs(m_vVelocity.z))
+	{
+		m_vVelocity.z = (m_vVelocity.z / abs(m_vVelocity.z)) * abs(m_vMaxVelocity.z);	// 최대 속도  제한 (z축)
 	}
 
 	// Move 
@@ -77,6 +90,8 @@ void CRigidBodyScript::update()
 
 
 	m_vForce = Vec3(0.f, 0.f, 0.f);						// 힘 초기화 
+	m_vAccel = Vec3(0.f, 0.f, 0.f);						// 가속도 초기화 
+	m_vAccelA = Vec3(0.f, 0.f, 0.f);					// 추가 가속도 초기화
 }
 
 void CRigidBodyScript::lateupdate()

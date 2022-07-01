@@ -33,6 +33,7 @@
 #include <Script/CRigidBodyScript.h>
 #include <Script/CGravityScript.h>
 #include <Script/CGroundScript.h>
+#include <Script/CGravityScript.h>
 
 
 #include <Engine/CTestShader.h>
@@ -399,8 +400,9 @@ void CTestScene::Add_MapleStory_Player(CScene* _pCurScene)
 	pObj->AddComponent(new CMeshRender);
 	pObj->AddComponent(new CAnimator2D);
 	
-	pObj->AddComponent(new CRigidBodyScript);
 	pObj->AddComponent(new CPlayerScript);
+	pObj->AddComponent(new CRigidBodyScript);
+	pObj->AddComponent(new CGravityScript);
 
 
 	pObj->Transform()->SetRelativePos(0.f, 0.f, 50.f);

@@ -20,8 +20,8 @@ private:
 
 
 public:
-    void SetGround(bool _b) { m_bGround = _b; }
-
+    void SetOnGround(bool _b);
+    bool GetOnGround() { return m_bGround; }
 
 public:
     virtual void start();

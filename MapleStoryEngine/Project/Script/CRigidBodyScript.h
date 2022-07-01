@@ -11,10 +11,11 @@ private:
 
     Vec3            m_vForce;       // 크기 , 방향 
     Vec3            m_vAccel;       // 가속도  
+    Vec3            m_vAccelA;      // 추가 가속도 
     Vec3            m_vVelocity;    // 속도 ( 크기 : 속력 , 방향 )
+    Vec3            m_vMaxVelocity;    // 최대 속도  
 
     float           m_fMass;        // 질량 
-    float           m_fMaxSpeed;    // 최대 속력 
     
     float           m_fFricCoeff;   // 마찰 계수 
 
@@ -39,13 +40,16 @@ public:
     void SetForce(Vec3 _vForce) { m_vForce = _vForce; }
     void SetVelocity(Vec3 _v) { m_vVelocity = _v; }
     void SetMass(float _fMass) { m_fMass = _fMass; }
-    void SetMaxSpeed(float _v) { m_fMaxSpeed = _v; }
+    void SetMaxVelocity(Vec3 _v) { m_vMaxVelocity = _v; }
     void SetFricCoeff(float _fFricCoeff) { m_fFricCoeff = _fFricCoeff; }
+    void SetAccelAlpha(Vec3 _vAccelA) { m_vAccelA = _vAccelA; }
+
 
     Vec3 GetForce() { return m_vForce; }
-    Vec3 GetVeclocity() { return m_vVelocity; }
+    Vec3 GetVelocity() { return m_vVelocity; }
+    Vec3 GetAccelAlpha() { return m_vAccelA; }
+    Vec3 GetMaxVelocity() { return m_vMaxVelocity; }
     float GetMass() { return m_fMass; }
-    float GetMaxSpeed() { return m_fMaxSpeed; }
     float GetFricCoeff() { return m_fFricCoeff; }
 
 

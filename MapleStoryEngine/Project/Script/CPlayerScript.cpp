@@ -287,10 +287,17 @@ void CPlayerScript::Update_State()
 		m_eDir = PLAYER_DIRECTION::DOWN;
 	}
 
+	if (KEY_TAP(KEY::SPACE))
+	{
+		m_eCurState = PLAYER_STATE::JUMP;
+		m_eDir = PLAYER_DIRECTION::UP;
+	}
+
+	
 	CRigidBodyScript* pRigid = (CRigidBodyScript*)GetOwner()->GetScriptByName(L"CRigidBodyScript");
 	if (nullptr != pRigid)
 	{
-		float fSpeed = pRigid->GetVeclocity().Length();
+		float fSpeed = pRigid->GetVelocity().Length();
 		if (0.f == fSpeed)
 			m_eCurState = PLAYER_STATE::IDLE;	
 
@@ -301,6 +308,13 @@ void CPlayerScript::Update_State()
 
 void CPlayerScript::Update_Move()
 {
+	if (KEY_TAP(KEY::ENTER))
+	{
+		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+		GetOwner()->Transform()->SetRelativePos(Vec3(0.f, 0.f, vPos.z));
+	}
+
+
 	CRigidBodyScript* pRigid = (CRigidBodyScript*)GetOwner()->GetScriptByName(L"CRigidBodyScript");
 	if (nullptr != pRigid)
 	{
@@ -333,6 +347,15 @@ void CPlayerScript::Update_Move()
 			}
 			
 			
+		}
+		if (KEY_TAP(KEY::SPACE))
+		{			
+			if (nullptr != pRigid)
+			{
+				// pRigid->AddVelocity(Vec3(pRigid->GetVelocity().x , 400.f, 0.f)); // 앞으로 확감=
+				pRigid->AddVelocity(Vec3(0.f, 400.f, 0.f));
+
+			}
 		}
 
 
@@ -393,6 +416,10 @@ void CPlayerScript::Update_Animation()
 	}
 
 		break;
+	case PLAYER_STATE::JUMP:
+
+		break;
+
 	case PLAYER_STATE::ATTACK:
 
 		break;
