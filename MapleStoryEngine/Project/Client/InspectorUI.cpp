@@ -17,6 +17,7 @@
 #include "ListUI.h"
 #include "TileMapUI.h"
 #include "PrefabUI.h"
+#include "SceneOutlinerTool.h"
 
 #include "CImGuiMgr.h"
 
@@ -36,6 +37,8 @@
 #include <Engine/CMeshRender.h>
 #include <Engine/CTileMap.h>
 #include <Engine/CParticleSystem.h>
+#include <Engine/CCollisionMgr.h>
+#include <Engine/CScript.h>
 
 
 #include <ResourceUI.h>
@@ -44,9 +47,14 @@
 #include <Script/CScriptMgr.h>
 
 
+
 InspectorUI::InspectorUI()
 	: UI("Inspector")
 	, m_pTargetObject(nullptr)
+	, m_pTargetLayer(nullptr)
+	, m_pTargetScene(nullptr)
+	, m_pColLeftLayer(nullptr)
+	, m_pColRightLayer(nullptr)
 	, m_pTargetRes(nullptr)
 	, m_arrComUI{}
 	, m_arrResUI{}
@@ -146,6 +154,15 @@ void InspectorUI::update()
 
 void InspectorUI::render_update()
 {
+	if (nullptr == m_pTargetObject)
+	{
+		SceneTool_subFunc();
+		LayerTool_subFunc();
+		SetCollisionCheck();
+		ShowCollisionLayer();
+
+	}
+
 	GameObjectTool_SubFunc();
 
 }
@@ -196,6 +213,12 @@ void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 				pScriptUI = AddScriptUI();
 			else
 				pScriptUI = m_vecScriptUI[i];
+			
+			// == todo ==
+			// 삭제시키기 위해서 title로 이름 저장 
+			wstring ScriptName = CScriptMgr::GetScriptName(vecScripts[i]);
+			pScriptUI->SetTitle(string(ScriptName.begin(), ScriptName.end()));
+			// == == == ==
 
 			pScriptUI->SetTargetObject(m_pTargetObject);
 			pScriptUI->SetTargetScript(vecScripts[i]);
@@ -434,11 +457,35 @@ void InspectorUI::DeleteComponent(DWORD_PTR _param)
 	m_arrComUI[(UINT)eComType]->SetTargetObject(nullptr);
 }
 
+// _param : CSCript*
+void InspectorUI::DeleteScript(DWORD_PTR _param)
+{
+	CScript* pScript = (CScript*)_param;
+	
+	// 해당 Script 삭제 
+	wstring wstrScriptName = CScriptMgr::GetScriptName(pScript);
+	string strScriptName = string(wstrScriptName.begin(), wstrScriptName.end());
+	m_pTargetObject->DeleteScript(wstrScriptName);
 
+	// UI 갱신 
+	for (int i = 0; i < m_vecScriptUI.size(); ++i)
+	{
+		if (m_vecScriptUI[i]->GetTitle() == strScriptName)
+		{
+			DeleteChild(m_vecScriptUI[i]);
+			m_vecScriptUI.erase(m_vecScriptUI.begin() + i);
+			break;
+		}
+	}
+	
+}
 
 
 void InspectorUI::GameObjectTool_SubFunc()
 {
+	if (nullptr == m_pTargetObject)
+		return;
+
 	ImGui::BeginChild("GameObject tool", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	// Add Component Button 
@@ -516,8 +563,6 @@ void InspectorUI::GameObjectTool_SubFunc()
 				CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
 				pPref->Save(FullPath);
 
-				
-
 			}
 			// Prefab 이 이미 있을 경우 
 			else
@@ -530,8 +575,6 @@ void InspectorUI::GameObjectTool_SubFunc()
 					CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
 
 					pPref->Save(FullPath);
-					
-
 				}
 
 			}
@@ -601,3 +644,354 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 }
 
+void InspectorUI::SceneTool_subFunc()
+{
+	if (nullptr == m_pTargetScene)
+		return;
+
+	wstring wstrSceneName = m_pTargetScene->GetName();
+	string strSceneName = string(wstrSceneName.begin(), wstrSceneName.end());
+
+
+	ImGui::PushID(0);
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.8f, 0.f, 0.5f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(1.f, 0.2f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
+	ImGui::Button(strSceneName.c_str());
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+
+	ImGui::SameLine();
+	bool unused_open = true;
+	if (ImGui::Button("Change Scene Name"))
+		ImGui::OpenPopup("Change Scene Name");
+
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+	if (ImGui::BeginPopupModal("Change Scene Name", &unused_open))
+	{
+		ImGui::Text("Change Scene Name\n\n");
+
+		static char buf[512];
+		ImGui::InputText("name", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+
+		if (ImGui::Button("Change Scene Name"))
+		{
+			string strName = buf;
+			wstring wstrName = wstring(strName.begin(), strName.end());
+
+			m_pTargetScene->SetName(wstrName);
+
+			// CImGuiMgr 에 Delegate 등록 
+			tUIDelegate tDeleteCom;
+			tDeleteCom.dwParam = (DWORD_PTR)nullptr;
+			tDeleteCom.pFunc = (PARAM_1)&SceneOutlinerTool::Reset;
+			tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("SceneOutlinerTool");
+
+			CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+			ImGui::CloseCurrentPopup();
+
+			buf[0] = '\0';
+			ImGui::CloseCurrentPopup();
+			SetModalUI(false);
+		}
+		ImGui::EndPopup();
+	}
+}
+
+void InspectorUI::LayerTool_subFunc()
+{
+	if (nullptr == m_pTargetLayer)
+		return;
+
+	wstring wstrLayerName = m_pTargetLayer->GetName();
+	string strLayerName = string(wstrLayerName.begin(), wstrLayerName.end());
+
+
+	ImGui::PushID(0);
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.8f, 0.f, 0.5f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(1.f, 0.2f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
+	ImGui::Button(strLayerName.c_str());
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+
+	ImGui::SameLine();
+	bool unused_open = true;
+	if (ImGui::Button("Change Layer Name"))
+		ImGui::OpenPopup("Change Layer Name");
+
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+	ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		if (ImGui::BeginPopupModal("Change Layer Name", &unused_open))
+		{
+			ImGui::Text("Change Layer Name\n\n");
+
+			static char buf[512];
+			ImGui::InputText("name", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_None);
+
+			if (ImGui::Button("Change Layer Name"))
+			{
+				string strName = buf;
+				wstring wstrName = wstring(strName.begin(), strName.end());
+
+				m_pTargetLayer->SetName(wstrName);
+
+				// CImGuiMgr 에 Delegate 등록 
+				tUIDelegate tDeleteCom;
+				tDeleteCom.dwParam = (DWORD_PTR)nullptr;
+				tDeleteCom.pFunc = (PARAM_1)&SceneOutlinerTool::Reset;
+				tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("SceneOutlinerTool");
+
+				CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+				ImGui::CloseCurrentPopup();
+
+				buf[0] = '\0';
+				ImGui::CloseCurrentPopup();
+				SetModalUI(false);
+			}
+			ImGui::EndPopup();
+		}
+
+}
+
+
+
+
+void InspectorUI::SetCollisionCheck()
+{
+	if (m_pTargetScene == nullptr)
+		return;
+	ImGui::Separator();
+
+	static string LeftLayerName = "Left Layer";
+	static string RIghtLayerName = "Right Layer";
+
+	// Fill Layer Info
+	vector<CLayer*> vecLayer;
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		if (L"" == m_pTargetScene->GetLayer(i)->GetName())
+			continue;
+
+		vecLayer.push_back(m_pTargetScene->GetLayer(i));
+	}
+
+	// Left Collide Layer Setting
+	ImGui::PushItemWidth(100.f);
+	if (ImGui::BeginCombo("##Left Layer", LeftLayerName.c_str(), ImGuiComboFlags_NoArrowButton))
+	{
+		for (int n = 0; n < vecLayer.size(); ++n)
+		{
+			string LayerName = string(vecLayer[n]->GetName().begin(), vecLayer[n]->GetName().end());
+			if (ImGui::Selectable(LayerName.c_str()))
+			{
+				LeftLayerName = LayerName;
+				m_pColLeftLayer = vecLayer[n];
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::PopItemWidth();
+
+	ImGui::SameLine();
+	ImGui::Text("--");
+	ImGui::SameLine();
+	
+	// Collide Setting Button 
+	if (ImGui::Button("Collide"))
+	{
+		if (nullptr != m_pColLeftLayer && nullptr != m_pColRightLayer)
+		{
+			CCollisionMgr::GetInst()->CollisionCheck(m_pColLeftLayer->GetName(), m_pColRightLayer->GetName());
+
+			LeftLayerName = "Left Layer";
+			RIghtLayerName = "Right Layer";
+			m_pColLeftLayer = nullptr;
+			m_pColRightLayer = nullptr;
+
+		}
+	}
+	
+	
+	ImGui::SameLine();
+	ImGui::Text("--");
+	ImGui::SameLine();
+
+	ImGui::PushItemWidth(100.f);
+
+	// Right Collide Layer Setting 
+	if (ImGui::BeginCombo("##Right Layer", RIghtLayerName.c_str(), ImGuiComboFlags_NoArrowButton))
+	{
+		for (int n = 0; n < vecLayer.size(); ++n)
+		{
+			string LayerName = string(vecLayer[n]->GetName().begin(), vecLayer[n]->GetName().end());
+			if (ImGui::Selectable(LayerName.c_str()))
+			{
+				RIghtLayerName = LayerName;
+				m_pColRightLayer = vecLayer[n];
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::PopItemWidth();
+
+}
+
+void InspectorUI::ShowCollisionLayer()
+{
+	if (m_pTargetScene == nullptr)
+		return;
+	const UINT* arrCol = CCollisionMgr::GetInst()->GetColArrCheck();
+	
+	ImGui::Separator();
+
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		for (UINT j = i; j < MAX_LAYER; ++j)
+		{
+			if (arrCol[i] & (1 << j))
+			{
+				CLayer* LeftLayer = m_pTargetScene->GetLayer(i);
+				CLayer* RightLayer = m_pTargetScene->GetLayer(j);
+
+				string LeftName = string(LeftLayer->GetName().begin(), LeftLayer->GetName().end());
+				string RIghtName = string(RightLayer->GetName().begin(), RightLayer->GetName().end());
+				
+				string ButtonNum = std::to_string(i * MAX_LAYER + j);
+				string ButtonName = ButtonNum + string("_") + string("Off");
+				if (ImGui::Button(ButtonName.c_str()))
+				{
+					
+					CCollisionMgr::GetInst()->CollisionOff(i, j);
+
+					// Left Layer 
+					vector<CGameObject*> LeftvecObjs;
+					vector<CGameObject*> RightvecObjs;
+
+					LeftvecObjs = LeftLayer->GetRootObjects();
+					RightvecObjs = RightLayer->GetRootObjects();
+
+					for (int i = 0; i < LeftvecObjs.size(); ++i)
+					{
+						for (int k = 0; k < RightvecObjs.size(); ++k)
+						{
+							CCollider2D* LeftCol = LeftvecObjs[i]->Collider2D();
+							CCollider2D* RightCol = RightvecObjs[k]->Collider2D();
+
+							if (nullptr == LeftCol || nullptr == RightCol)
+								continue;
+
+							if (IsCollision(LeftCol, RightCol))
+							{
+
+								LeftCol->OnCollisionExit(RightCol);
+								RightCol->OnCollisionExit(LeftCol);
+
+							}
+
+							CCollisionMgr::GetInst()->EraseColInfo(LeftCol, RightCol);
+						}
+					}
+				}
+				ImGui::SameLine();
+				ImGui::Text(LeftName.c_str());
+				ImGui::SameLine();
+				ImGui::TextColored(ImVec4(0.f, 0.9f, 0.5f, 1.f), "Collide Checking");
+				ImGui::SameLine();
+				ImGui::Text(RIghtName.c_str());
+			}
+		}
+	}
+	
+
+	ImGui::Separator();
+
+}
+
+
+
+bool InspectorUI::IsCollision(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
+{
+	if (_pLeftCol->GetCollider2DType() == COLLIDER2D_TYPE::BOX
+		&& _pRightCol->GetCollider2DType() == COLLIDER2D_TYPE::BOX)
+	{
+		return IsCollision_Box(_pLeftCol, _pRightCol);
+	}
+	else if (_pLeftCol->GetCollider2DType() == COLLIDER2D_TYPE::CIRCLE
+		&& _pRightCol->GetCollider2DType() == COLLIDER2D_TYPE::CIRCLE)
+	{
+		return IsCollision_Circle(_pLeftCol, _pRightCol);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool InspectorUI::IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
+{
+	// 충돌체가 사용하는 기본 도형(사각형) 로컬 정점위치를 알아낸다.
+	// 0 -- 1
+	// | \  |
+	// 3 -- 2	
+	static CMesh* pRectMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh").Get();
+	static Vtx* pVtx = pRectMesh->GetVtxSysMem();
+	static Vec3 vLocalPos[4] = { pVtx[0].vPos, pVtx[1].vPos, pVtx[2].vPos, pVtx[3].vPos };
+
+	Matrix matLeft = _pLeftCol->GetWorldMat();
+	Matrix matRight = _pRightCol->GetWorldMat();
+
+	// Local 스페이스의 네개의 정점을 각 충돌체 월드 위치로 보낸다.
+	Vec3 vAsix[4] = {};
+
+	// (Vector3, 0.f) X Matirx(4x4)
+	// XMVector3TransformNormal();
+
+	// (Vector3, 1.f) X Matirx(4x4)
+	// 월드로 보낸 정점을 통해서 각 투영 축 이면서 투영시킬 벡터 성분 4개를 구한다.
+	vAsix[0] = XMVector3TransformCoord(vLocalPos[1], matLeft) - XMVector3TransformCoord(vLocalPos[0], matLeft);
+	vAsix[1] = XMVector3TransformCoord(vLocalPos[3], matLeft) - XMVector3TransformCoord(vLocalPos[0], matLeft);
+	vAsix[2] = XMVector3TransformCoord(vLocalPos[1], matRight) - XMVector3TransformCoord(vLocalPos[0], matRight);
+	vAsix[3] = XMVector3TransformCoord(vLocalPos[3], matRight) - XMVector3TransformCoord(vLocalPos[0], matRight);
+
+	// 월드에 배치된 두 충돌체의 중심을 이은 벡터
+	//Vec3 vCenter = XMVector3TransformCoord(Vec3::Zero, matRight) - XMVector3TransformCoord(Vec3::Zero, matLeft);	
+	Vec3 vCenter = _pRightCol->GetWorldPos() - _pLeftCol->GetWorldPos();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		vAsix[i].z = 0.f;
+		Vec3 vProj = vAsix[i];
+		vProj.Normalize();
+
+		float fDist = 0.f;
+
+		for (int j = 0; j < 4; ++j)
+		{
+			// vProj 에 vAsix[j] 를 투영시킨 길이		
+			fDist += abs(vAsix[j].Dot(vProj));
+		}
+		fDist *= 0.5f;
+		float fCenterDist = abs(vCenter.Dot(vProj));
+
+		if (fDist < fCenterDist)
+			return false;
+	}
+
+	return true;
+}
+
+bool InspectorUI::IsCollision_Circle(CCollider2D* _pLeftCol, CCollider2D* _pRightCol)
+{
+	Vec3 vCenter = _pLeftCol->GetWorldPos() - _pRightCol->GetWorldPos();
+	float fDist = vCenter.Length();
+	float fRadius = fabsf(_pLeftCol->GetWorldScale().x) * 0.5f + fabsf(_pRightCol->GetWorldScale().x) * 0.5f;
+
+	if (fRadius < fDist)
+	{
+		return false;
+	}
+
+	return true;
+}

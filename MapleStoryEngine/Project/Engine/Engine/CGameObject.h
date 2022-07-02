@@ -69,6 +69,7 @@ public:
     // ======= Todo 
 
     void DeleteComponent(COMPONENT_TYPE _eType);
+    void DeleteScript(wstring _name);
     CGameObject* GetAncestor();
     // ===========
 

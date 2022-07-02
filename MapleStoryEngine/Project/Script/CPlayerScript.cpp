@@ -8,6 +8,8 @@
 
 #include <Engine/CAnimator2D.h>
 #include <Engine/CLight2D.h>
+#include <Engine/CCollider2D.h>
+
 
 #include "CRigidBodyScript.h"
 
@@ -63,6 +65,9 @@ void CPlayerScript::start()
 	m_eDir = PLAYER_DIRECTION::RIGHT;
 	m_eCurState = PLAYER_STATE::IDLE;
 	m_ePrevState = PLAYER_STATE::IDLE;
+
+	m_bOnGround = false;
+	Collider2D()->Reset();
 
 	ClearScriptParam();
 	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
@@ -151,7 +156,6 @@ void CPlayerScript::lateupdate()
 
 void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
-	int i = 0;
 
 }
 

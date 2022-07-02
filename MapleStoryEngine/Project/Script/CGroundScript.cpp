@@ -12,29 +12,40 @@ CGroundScript::CGroundScript()
 	: CScript((int)SCRIPT_TYPE::GROUNDSCRIPT)
 
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
+
 }
 
 CGroundScript::CGroundScript(const CGroundScript& _origin)
 	: CScript((int)SCRIPT_TYPE::GROUNDSCRIPT)
 
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
+
 }
 
 CGroundScript::~CGroundScript()
 {
+
 }
 
 void CGroundScript::start()
 {
+	Collider2D()->Reset();
+
 
 }
 
 void CGroundScript::update()
 {
+
 }
 
 void CGroundScript::lateupdate()
 {
+
 }
 
 

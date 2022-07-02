@@ -57,6 +57,10 @@ public:
     void render();
 
 
+    // == todo == 
+public:
+    void Reset() { m_iCollisionCount = 0; }
+    // == == == ==
 
 
 

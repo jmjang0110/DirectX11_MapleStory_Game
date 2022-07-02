@@ -92,16 +92,16 @@ void CTestScene::CreateTestScene()
 
 
 	// Prefab 제작
-	CGameObject* pMissileObj = new CGameObject;
-	pMissileObj->AddComponent(new CTransform);
-	pMissileObj->AddComponent(new CMeshRender);
-	//pMissileObj->AddComponent(new CMissileScript);
+	//CGameObject* pMissileObj = new CGameObject;
+	//pMissileObj->AddComponent(new CTransform);
+	//pMissileObj->AddComponent(new CMeshRender);
+	////pMissileObj->AddComponent(new CMissileScript);
 
-	pMissileObj->Transform()->SetRelativeScale(Vec3(50.f, 50.f, 1.f));
-	pMissileObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
-	pMissileObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\TestMtrl.mtrl"));
+	//pMissileObj->Transform()->SetRelativeScale(Vec3(50.f, 50.f, 1.f));
+	//pMissileObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+	//pMissileObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"material\\TestMtrl.mtrl"));
 
-	CResMgr::GetInst()->AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pMissileObj));
+	//CResMgr::GetInst()->AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pMissileObj));
 
 
 	// Camera Object 추가
@@ -248,7 +248,7 @@ void CTestScene::CreateTestScene()
 
 	// Prefab 
 	CPrefab* pPrefab = new CPrefab;
-	pPrefab->SetProto(pObject->Clone());
+	//pPrefab->SetProto(pObject->Clone());
 	CResMgr::GetInst()->AddRes<CPrefab>(L"prefab\\Background.pref", pPrefab);
 	
 

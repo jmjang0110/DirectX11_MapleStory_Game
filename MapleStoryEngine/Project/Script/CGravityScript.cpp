@@ -3,6 +3,7 @@
 
 #include "CRigidBodyScript.h"	
 #include "CPlayerScript.h"
+#include <Engine/CCollider2D.h>
 
 
 
@@ -50,6 +51,8 @@ void CGravityScript::SetOnGround(bool _b)
 
 void CGravityScript::start()
 {
+	m_bGround = false;
+	Collider2D()->Reset();
 
 }
 

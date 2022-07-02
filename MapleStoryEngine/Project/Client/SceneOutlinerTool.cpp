@@ -143,7 +143,10 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 		m_pSelectedLayer = nullptr;
 
 		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
-		pInspectorUI->SetTargetObject(nullptr);
+		pInspectorUI->SetTargetScene(m_pSelectedScene);
+		pInspectorUI->SetTargetLayer(m_pSelectedLayer);
+		pInspectorUI->SetTargetObject(m_pSelectedGameObject);
+
 	}
 		break;
 	case ENGINE_TYPE::LAYER:
@@ -152,7 +155,9 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 		m_pSelectedGameObject = nullptr;
 
 		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
-		pInspectorUI->SetTargetObject(nullptr);
+		pInspectorUI->SetTargetLayer(m_pSelectedLayer);
+		pInspectorUI->SetTargetObject(m_pSelectedGameObject);
+
 	}
 		break;
 	case ENGINE_TYPE::GAME_OBJECT:
@@ -161,7 +166,7 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 		m_pSelectedGameObject = pObject;
 
 		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
-		pInspectorUI->SetTargetObject(pObject);
+		pInspectorUI->SetTargetObject(m_pSelectedGameObject);	
 	}
 		break;
 
@@ -518,6 +523,8 @@ void SceneOutlinerTool::NewLayerButton()
 	}
 }
 
+
+
 void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 {
 	string strSelectedName = (char*)_param;
@@ -536,7 +543,7 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 		// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
 		CGameObject* NewObj = pPrefab->Instantiate();
 		m_pSelectedScene->AddObject(NewObj, m_pSelectedLayer->GetName());
-
+		SAFE_DELETE(pPrefab);
 		// TReeUI 에 추가하기 위해서 Reset() 
 		Reset();
 	}
@@ -544,4 +551,10 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 }
 
 
+
+void SceneOutlinerTool::SettingCollisionCheckButton()
+{
+
+
+}
 

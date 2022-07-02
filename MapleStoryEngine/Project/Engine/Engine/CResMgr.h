@@ -72,7 +72,6 @@ public:
 
 	friend class CEventMgr;
 };
-
 template<typename type>
 inline RES_TYPE CResMgr::GetResType()
 {
@@ -109,7 +108,7 @@ Ptr<type> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath,
 	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
 	wstring strFilePath = strContentPath + _strRelativePath;
 
-	pRes = new type; // 기본생성자가 있어야한다. 
+	pRes = new type;
 	if (FAILED(pRes->Load(strFilePath)))
 	{
 		MessageBox(nullptr, L"리소스 로딩 실패", L"리소스 로딩 오류", MB_OK);

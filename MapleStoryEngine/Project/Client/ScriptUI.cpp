@@ -5,6 +5,9 @@
 #include <Script/CScriptMgr.h>
 
 #include "ParamUI.h"
+#include "CImGuiMgr.h"
+#include "InspectorUI.h"
+
 
 ScriptUI::ScriptUI()
 	: UI("Script")
@@ -38,6 +41,46 @@ void ScriptUI::render_update()
 
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
+
+	ImGui::SameLine(150.f);
+	if (ImGui::Button("X"))
+	{
+		m_bDel = true;
+	}
+
+	if (m_bDel)
+	{
+		ImGui::OpenPopup("ReallyDelete?");
+		bool unused_open = true;
+		if (ImGui::BeginPopupModal("ReallyDelete?", &unused_open))
+		{
+
+			ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "WARNING\n\nAre You sure you want to delete this Script? \n\n");
+			if (ImGui::Button("Yes"))
+			{
+				m_bDel = false;
+
+				// CImGuiMgr ¿¡ Delegate µî·Ï 
+				tUIDelegate tDeleteCom;
+				tDeleteCom.dwParam = (DWORD_PTR)m_pTargetScript;
+				tDeleteCom.pFunc = (PARAM_1)&InspectorUI::DeleteScript;
+				tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("Inspector");
+
+				CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("No"))
+			{
+				m_bDel = false;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+
 
 	const vector<tScriptParamInfo>& vecParam = m_pTargetScript->GetScriptParam();
 
@@ -78,4 +121,10 @@ void ScriptUI::render_update()
 			break;
 		}
 	}
+
+
+
+	
+
+
 }

@@ -379,6 +379,22 @@ void CGameObject::DeleteComponent(COMPONENT_TYPE _eType)
 
 }
 
+void CGameObject::DeleteScript(wstring _name)
+{
+	for (int i = 0; i < m_vecScript.size(); ++i)
+	{
+		if (m_vecScript[i]->GetName() == _name)
+		{
+			SAFE_DELETE(m_vecScript[i]);
+			m_vecScript.erase(m_vecScript.begin() + i);
+			break;
+		}
+	}
+
+
+
+}
+
 
 
 void CGameObject::Destroy()

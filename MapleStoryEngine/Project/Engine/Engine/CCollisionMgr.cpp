@@ -59,7 +59,7 @@ void CCollisionMgr::CollisionBetweenLayer(const vector<CGameObject*>& _left, con
 
 			// ========== TdDo ==========
 			// 같은 레이어에 같은 오브젝트 즉 자기 자신 끼리는 충돌체크를 하지 않는다. 
-			if (pLeftCol->GetOwner()->GetName() == pRightCol->GetOwner()->GetName())
+			if (pLeftCol->GetOwner()->GetID() == pRightCol->GetOwner()->GetID())
 				continue;
 
 			// 오브젝트랑 자신의 자식오브젝트 끼리는 충돌체크 하지 않는다. 
@@ -232,6 +232,20 @@ bool CCollisionMgr::IsCollision_Circle(CCollider2D* _pLeftCol, CCollider2D* _pRi
 	}
 
 	return true;
+}
+
+void CCollisionMgr::EraseColInfo(CCollider2D* _LeftCol, CCollider2D* _RightCol)
+{
+	COLLIDER_ID ID;
+	ID.iLeftID = _LeftCol->GetID();
+	ID.iRightID = _RightCol->GetID();
+
+
+	map<long long, bool>::iterator iter = m_mapColInfo.find(ID.id);
+	if (iter == m_mapColInfo.end())
+		return;
+	m_mapColInfo.erase(iter);
+
 }
 
 

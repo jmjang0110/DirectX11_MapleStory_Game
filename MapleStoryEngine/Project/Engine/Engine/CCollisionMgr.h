@@ -37,5 +37,11 @@ private:
 	bool IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
 	bool IsCollision_Circle(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
 
+	// ==== todo ====
+public:
+	const UINT* GetColArrCheck() { return m_arrCheck; };
+	void EraseColInfo(CCollider2D* _LeftCol, CCollider2D* _RightCol);
+	// ==============
+
 };
 
