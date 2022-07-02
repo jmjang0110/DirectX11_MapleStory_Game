@@ -14,25 +14,42 @@
 
 CPlayerScript::CPlayerScript()
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
-	, m_pMissilePrefab(nullptr)
+	//, m_pMissilePrefab(nullptr)
 	, m_fSpeed(10.f)
-	, m_fBurnStrength(0.f)
-	, m_bBurn(false)
 	, m_eDir(PLAYER_DIRECTION::RIGHT)
 	, m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
 	, m_bOnGround(false)
 
 {
-	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
+
 	SetName(CScriptMgr::GetScriptName(this));
 
+
+	ClearScriptParam();
+	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
+	AddScriptParam("Direction", SCRIPTPARAM_TYPE::INT, &m_eDir);
+	AddScriptParam("PlayerOnGround", SCRIPTPARAM_TYPE::INT, &m_bOnGround);
 
 }
 
 CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
+	, m_fSpeed(_origin.m_fSpeed)
+	, m_eDir(_origin.m_eDir)
+	, m_eCurState(_origin.m_eCurState)
+	, m_ePrevState(_origin.m_ePrevState)
+	, m_bOnGround(false)
+
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
+
+	ClearScriptParam();
+	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
+	AddScriptParam("Direction", SCRIPTPARAM_TYPE::INT, &m_eDir);
+	AddScriptParam("PlayerOnGround", SCRIPTPARAM_TYPE::INT, &m_bOnGround);
+
 }
 
 CPlayerScript::~CPlayerScript()
@@ -43,6 +60,14 @@ CPlayerScript::~CPlayerScript()
 void CPlayerScript::start()
 {
 	//m_pMissilePrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MissilePrefab");
+	m_eDir = PLAYER_DIRECTION::RIGHT;
+	m_eCurState = PLAYER_STATE::IDLE;
+	m_ePrevState = PLAYER_STATE::IDLE;
+
+	ClearScriptParam();
+	AddScriptParam("PlayerSpeed", SCRIPTPARAM_TYPE::FLOAT, &m_fSpeed);
+	AddScriptParam("Direction", SCRIPTPARAM_TYPE::INT, &m_eDir);
+	AddScriptParam("PlayerOnGround", SCRIPTPARAM_TYPE::INT, &m_bOnGround);
 }
 
 void CPlayerScript::update()
@@ -61,121 +86,6 @@ void CPlayerScript::update()
 //
 //void CPlayerScript::update()
 //{
-//	static Vec3 PrevPos = Vec3(0.f, 0.f, 0.f);
-//
-//
-//
-//	
-//
-//	m_ePrevState = m_eCurState;
-//
-//
-//	if (KEY_PRESSED(KEY::LEFT))
-//	{
-//		m_vForce += Vec3(-400.f, 0.f, 0.f);
-//		m_eDir = PLAYER_DIRECTION::LEFT;
-//		m_eCurState = PLAYER_STATE::WALK;
-//
-//
-//	}
-//
-//	if (KEY_PRESSED(KEY::RIGHT))
-//	{
-//		m_vForce += Vec3(400.f, 0.f, 0.f);
-//		m_eDir = PLAYER_DIRECTION::RIGHT;
-//		m_eCurState = PLAYER_STATE::WALK;
-//
-//	}
-//
-//	if (KEY_PRESSED(KEY::UP))
-//	{
-//		m_vForce += Vec3(0.f, 400.f, 0.f);
-//		m_eDir = PLAYER_DIRECTION::UP;
-//		m_eCurState = PLAYER_STATE::WALK;
-//
-//	}
-//
-//	if (KEY_PRESSED(KEY::DOWN))
-//	{
-//		m_vForce += Vec3(0.f, -400.f, 0.f);
-//		m_eDir = PLAYER_DIRECTION::DOWN;
-//		m_eCurState = PLAYER_STATE::WALK;
-//
-//	}
-//
-//
-//	if (KEY_AWAY(KEY::LEFT) || KEY_AWAY(KEY::RIGHT) 
-//		|| KEY_AWAY(KEY::UP) || KEY_AWAY(KEY::DOWN))
-//	{
-//		m_eCurState = PLAYER_STATE::IDLE;
-//
-//	}
-//
-//
-//
-//	if (KEY_TAP(KEY::LALT))
-//		int i = 0;
-//
-//
-//	//// 힘의 크기 
-//	float fForce = m_vForce.Length();
-//
-//	if (0.f != fForce)
-//	{
-//		// 힘의 방향 
-//		m_vForce.Normalize();
-//
-//		// 가속도의 크기 F = M * A
-//		float fAccel = fForce / m_fMass;
-//
-//		// 가속도 
-//		m_vAccel = m_vForce * fAccel;
-//
-//		// 속도
-//		m_vVelocity += m_vAccel * DT;
-//
-//		
-//	}
-//
-//	// 마찰력에 의한 반대방햐응로의 가속도  적용 
-//	if (!m_vVelocity.IsZero())
-//	{
-//		Vec3 vFricDir = -m_vVelocity;
-//		vFricDir.Normalize();
-//
-//		Vec3 vFriction = vFricDir * m_fFricCoeff * DT;
-//		if (m_vVelocity.Length() < vFriction.Length())
-//		{
-//			// 마찰 가속도가 본개 속도보디 더 큰 경우 
-//			m_vVelocity = Vec3(0.f, 0.f, 0.f); // 멈춘다.
-//
-//		}
-//		else
-//		{
-//			// 마찰력 적용 
-//			m_vVelocity += vFriction;
-//		}
-//	}
-//	
-//	// 속도제한 검사
-//	if (m_fMaxSpeed < m_vVelocity.Length())
-//	{
-//		m_vVelocity.Normalize();
-//		m_vVelocity *= m_fMaxSpeed;
-//
-//	}
-//	
-//
-//	Vec3 vPos = Transform()->GetRelativePos();
-//
-//	
-//
-//	Move();
-//	// 힘 초기화
-//	m_vForce = Vec3(0.f, 0.f, 0.f);
-//
-//
-//
 //	/*if (KEY_PRESSED(KEY::Z))
 //	{
 //		Vec3 vRot = Transform()->GetRelativeRotation();
@@ -238,21 +148,6 @@ void CPlayerScript::lateupdate()
 {
 
 }
-
-
-void CPlayerScript::Burnning()
-{
-	if (!m_bBurn)
-		return;
-
-	m_fBurnStrength += DT * (1.f / 3.f);
-
-	Ptr<CMaterial> pMtrl = MeshRender()->GetMaterial();
-	pMtrl->SetScalarParam(SCALAR_PARAM::FLOAT_0, &m_fBurnStrength);
-}
-
-
-
 
 void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
@@ -443,11 +338,22 @@ void CPlayerScript::Update_Gravity()
 
 void CPlayerScript::SaveToScene(FILE* _pFile)
 {
+
+	CScript::SaveToScene(_pFile);
+
 	fwrite(&m_fSpeed, sizeof(float), 1, _pFile);
+	fwrite(&m_bOnGround, sizeof(bool), 1, _pFile);
+
+
 }
 
 void CPlayerScript::LoadFromScene(FILE* _pFile)
 {
+	CScript::LoadFromScene(_pFile);
+
+
 	fread(&m_fSpeed, sizeof(float), 1, _pFile);
+	fread(&m_bOnGround, sizeof(bool), 1, _pFile);
+
 }
 

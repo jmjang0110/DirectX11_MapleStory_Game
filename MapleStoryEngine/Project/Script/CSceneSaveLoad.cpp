@@ -84,16 +84,16 @@ void CSceneSaveLoad::SaveGameObject(CGameObject* _pObj, FILE* _pFile)
 }
 
 // Todo =====
-void CSceneSaveLoad::SavePrefab(CGameObject* _pProtoObj, CPrefab* _pPrefab, FILE* _pFile)
-{
-    wstring wstrResKey = L"prefab\\" + _pProtoObj->GetName() + L".pref";
-    // Prefab 의 Key 를 저장 = RelativePath 
- 
-    SaveWStringToFile(wstrResKey, _pFile);
-    // Proto Object 저장 
-    SaveGameObject(_pProtoObj, _pFile);
-
-}
+//void CSceneSaveLoad::SavePrefab(CGameObject* _pProtoObj, CPrefab* _pPrefab, FILE* _pFile)
+//{
+//    wstring wstrResKey = L"prefab\\" + _pProtoObj->GetName() + L".pref";
+//    // Prefab 의 Key 를 저장 = RelativePath 
+// 
+//    SaveWStringToFile(wstrResKey, _pFile);
+//    // Proto Object 저장 
+//    SaveGameObject(_pProtoObj, _pFile);
+//
+//}
 // ===========-
 CScene* CSceneSaveLoad::LoadScene(const wstring& _strSceneFilePath)
 {
@@ -174,22 +174,55 @@ CGameObject* CSceneSaveLoad::LoadGameObject(FILE* _pFile)
 }
 
 // Todo ========
-CPrefab* CSceneSaveLoad::LoadPrefab(FILE* _pFile)
-{
-    CPrefab* pLoadPrefab = nullptr;
-    CGameObject* pLoadObj = new CGameObject;
-    wstring PrefabKey = L"";
-
-    LoadWStringFromFile(PrefabKey, _pFile);
-   
-    pLoadObj = LoadGameObject(_pFile);
-    pLoadPrefab = new CPrefab(pLoadObj);
-    pLoadPrefab->Load(PrefabKey);             // Key , RelativePath 저장 
- 
-
-    return pLoadPrefab;
-}
+//CPrefab* CSceneSaveLoad::LoadPrefab(FILE* _pFile)
+//{
+//    CPrefab* pLoadPrefab = nullptr;
+//    CGameObject* pLoadObj = new CGameObject;
+//    wstring PrefabKey = L"";
+//
+//    LoadWStringFromFile(PrefabKey, _pFile);
+//   
+//    pLoadObj = LoadGameObject(_pFile);
+//    pLoadPrefab = new CPrefab(pLoadObj);
+//    pLoadPrefab->Load(PrefabKey);             // Key , RelativePath 저장 
+// 
+//
+//    return pLoadPrefab;
+//}
 // ================
 
+
+
+
+
+// ======
+// Prefab
+// ======
+void CSceneSaveLoad::SavePrefab(CPrefab* _Prefab, const wstring& _strFilePath)
+{
+    FILE* pFile = nullptr;
+
+    _wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
+
+    SaveGameObject(_Prefab->GetProto(), pFile);
+
+    fclose(pFile);
+}
+
+int CSceneSaveLoad::LoadPrefab(CPrefab* _Prefab, const wstring& _strFilePath)
+{
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
+
+    if (nullptr == pFile)
+        return E_FAIL;
+
+    CGameObject* pProto = LoadGameObject(pFile);
+    _Prefab->SetProto(pProto);
+
+    fclose(pFile);
+
+    return S_OK;
+}
 
 

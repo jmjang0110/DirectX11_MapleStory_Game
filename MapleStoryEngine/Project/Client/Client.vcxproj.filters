@@ -122,6 +122,7 @@
     <ClCompile Include="CToolObjMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Light2DUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -259,6 +260,7 @@
     <ClInclude Include="CToolObjMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Light2DUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="39Engine.ico">

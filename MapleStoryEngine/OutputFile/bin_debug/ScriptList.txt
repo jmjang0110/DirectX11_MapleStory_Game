@@ -3,5 +3,6 @@ CCursorScript
 CGravityScript
 CGroundScript
 CMissileScript
+CPaperBurnScript
 CPlayerScript
 CRigidBodyScript

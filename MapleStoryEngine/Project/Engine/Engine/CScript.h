@@ -44,6 +44,7 @@ public:
 
 protected:
     void AddScriptParam(string _strParamName, SCRIPTPARAM_TYPE _eType, void* _pData) { m_vecParamInfo.push_back(tScriptParamInfo{ _strParamName , _eType, _pData }); }
+    void ClearScriptParam() { m_vecParamInfo.clear(); }
 
 
 public:
@@ -68,5 +69,7 @@ public:
 public:
     CScript(int _iScriptType);
     ~CScript();
+
 };
+
 

@@ -507,8 +507,6 @@ void SceneOutlinerTool::NewLayerButton()
 						Reset();
 						
 					}
-					
-					
 				}
 				ImGui::CloseCurrentPopup();
 			}
@@ -517,15 +515,8 @@ void SceneOutlinerTool::NewLayerButton()
 			ImGui::EndPopup();
 		}
 
-
-
-
-
 	}
 }
-
-
-
 
 void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 {
@@ -535,12 +526,8 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 	wstring FullPath = strContent + strPrefabKey;
 
 
-	FILE* pFile = nullptr;
-	_wfopen_s(&pFile, FullPath.c_str(), L"rb");
-
-	assert(pFile);
-	CPrefab* pPrefab =  CSceneSaveLoad::LoadPrefab(pFile);
-	fclose(pFile);
+	CPrefab* pPrefab = new CPrefab; 
+	pPrefab->Load(FullPath);
 
 	assert(pPrefab);
 

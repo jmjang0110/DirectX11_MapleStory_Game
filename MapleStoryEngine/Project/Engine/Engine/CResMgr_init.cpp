@@ -307,92 +307,54 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes<CMaterial>(L"material\\Std2DMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 
 	// Std2D_Light Mtrl 持失
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DLightShader"));
 	AddRes<CMaterial>(L"material\\Std2DLightMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 
 	// Std2D_Empty Mtrl 持失
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DRenderEmptyShader"));
 	AddRes<CMaterial>(L"material\\Std2DEmptyMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 
 
 	// Std2DAlphaBlend
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
 	AddRes<CMaterial>(L"material\\Std2DAlphaBlendMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 	// PaperBurnMtrl	
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PaperBurnShader"));
 	AddRes<CMaterial>(L"material\\PaperBurnMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 
 	// TileMapMtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
 	AddRes<CMaterial>(L"material\\TileMapMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
-
+	
 	// Collider2DMtrl 
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Collider2DShader"));
 	AddRes<CMaterial>(L"material\\Collider2DMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
-
+	
 	// Particle Render Mtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes<CMaterial>(L"material\\ParticleRenderMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 
 	// PostProcess Mtrl
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
 	pMtrl->SetTexParam(TEX_PARAM::TEX_0, FindRes<CTexture>(L"PostProcessTex"));
 	AddRes<CMaterial>(L"material\\PostProcessMtrl.mtrl", pMtrl);
-	pMtrl->CRes::SetRelativePath(pMtrl->GetKey());
-	if (FAILED(pMtrl->Load(strContent + pMtrl->GetRelativePath())))
-	{
-		pMtrl->Save(strContent + pMtrl->GetKey());
-	}
+	
 }
 
 

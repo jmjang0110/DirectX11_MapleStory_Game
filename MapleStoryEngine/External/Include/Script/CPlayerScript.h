@@ -48,15 +48,9 @@ private:
 
 
 private:
-    Ptr<CPrefab>    m_pMissilePrefab;
+    //Ptr<CPrefab>    m_pMissilePrefab;
     float           m_fSpeed;
-
-    float           m_fBurnStrength;
-    bool            m_bBurn;
-
-
-private:
-    bool        m_bOnGround;
+    bool            m_bOnGround;
 
 public:
     void SetOnGround(bool _b) { m_bOnGround = _b; }
@@ -75,12 +69,6 @@ public:
     void Update_Gravity();
     void Update_State();
     void Update_Animation();
-
-
-private:
-    void Burnning();
-
-
 
 public:
     virtual void SaveToScene(FILE* _pFile) override;

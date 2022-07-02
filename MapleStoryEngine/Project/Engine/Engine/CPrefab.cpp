@@ -5,7 +5,8 @@
 
 #include "CSceneMgr.h"
 
-
+CPrefab::SaveFunc CPrefab::m_pSaveFunc = nullptr;
+CPrefab::LoadFunc CPrefab::m_pLoadFunc = nullptr;
 
 CPrefab::CPrefab()
     : CRes(RES_TYPE::PREFAB)
@@ -32,17 +33,31 @@ CGameObject* CPrefab::Instantiate()
     return m_pProtoObj->Clone();
 }
 
+//int CPrefab::Save(const wstring& _strFilePath)
+//{
+//    CRes::SetKey(_strFilePath);
+//    CRes::SetRelativePath(_strFilePath);
+//    return S_OK;
+//}
+//
+//int CPrefab::Load(const wstring& _strFilePath)
+//{
+//    CRes::SetKey(_strFilePath);
+//    CRes::SetRelativePath(_strFilePath);
+//
+//	return S_OK;
+//}
+
 int CPrefab::Save(const wstring& _strFilePath)
 {
-    CRes::SetKey(_strFilePath);
-    CRes::SetRelativePath(_strFilePath);
+    m_pSaveFunc(this, _strFilePath);
+
+    CRes::Save(_strFilePath);
+
     return S_OK;
 }
 
 int CPrefab::Load(const wstring& _strFilePath)
 {
-    CRes::SetKey(_strFilePath);
-    CRes::SetRelativePath(_strFilePath);
-
-	return S_OK;
+    return m_pLoadFunc(this, _strFilePath);
 }

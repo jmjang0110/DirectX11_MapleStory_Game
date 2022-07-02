@@ -13,6 +13,10 @@ class InspectorUI :
     public UI
 {
 private:
+    
+
+
+private:
     CGameObject*        m_pTargetObject;
     CRes*               m_pTargetRes;
 
@@ -42,6 +46,7 @@ public:
     const CGameObject* GetTargetObject() { return m_pTargetObject; }
      CRes* GetTargetRes() { return m_pTargetRes; }
      void AddComponent(DWORD_PTR _param);
+     void AddScript(DWORD_PTR _param);
      void DeleteComponent(DWORD_PTR _param);
 private:
     void GameObjectTool_SubFunc();

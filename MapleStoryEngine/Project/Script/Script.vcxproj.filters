@@ -40,6 +40,12 @@
     <Filter Include="Script\03. Object\Ball">
       <UniqueIdentifier>{e4f636f9-dab4-4354-8283-91b585d4bc87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\04. Effect">
+      <UniqueIdentifier>{aa9d4192-9a14-4af8-b5d9-53c5814d9edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\04. Effect\PaperBurn">
+      <UniqueIdentifier>{496344d4-acd8-4f89-a001-a6a0b3be0bb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -71,6 +77,9 @@
     <ClInclude Include="CGroundScript.h">
       <Filter>Script\03. Object\Ground</Filter>
     </ClInclude>
+    <ClInclude Include="CPaperBurnScript.h">
+      <Filter>Script\04. Effect\PaperBurn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -101,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="CGroundScript.cpp">
       <Filter>Script\03. Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="CPaperBurnScript.cpp">
+      <Filter>Script\04. Effect\PaperBurn</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

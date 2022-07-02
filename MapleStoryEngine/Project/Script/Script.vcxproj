@@ -177,6 +177,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CGravityScript.h" />
     <ClInclude Include="CGroundScript.h" />
     <ClInclude Include="CMissileScript.h" />
+    <ClInclude Include="CPaperBurnScript.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CRigidBodyScript.h" />
     <ClInclude Include="CSceneSaveLoad.h" />
@@ -190,6 +191,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CGravityScript.cpp" />
     <ClCompile Include="CGroundScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
+    <ClCompile Include="CPaperBurnScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CRigidBodyScript.cpp" />
     <ClCompile Include="CSceneSaveLoad.cpp" />

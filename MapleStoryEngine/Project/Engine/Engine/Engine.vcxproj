@@ -186,6 +186,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CMeshRender.h" />
+    <ClInclude Include="CMgrScript.h" />
     <ClInclude Include="CParticleUpdateShader.h" />
     <ClInclude Include="CParticleSystem.h" />
     <ClInclude Include="CPathMgr.h" />

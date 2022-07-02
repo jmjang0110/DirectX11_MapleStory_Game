@@ -3,6 +3,7 @@
 
 #include <Engine/CResMgr.h>
 #include <Engine/CEventMgr.h>
+#include <Engine/CPrefab.h>
 
 #include "CImGuiMgr.h"
 #include "InspectorUI.h"

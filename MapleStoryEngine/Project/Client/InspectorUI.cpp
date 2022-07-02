@@ -41,6 +41,8 @@
 #include <ResourceUI.h>
 
 #include <Script/CSceneSaveLoad.h>
+#include <Script/CScriptMgr.h>
+
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
@@ -402,6 +404,17 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 }
 
+void InspectorUI::AddScript(DWORD_PTR _param)
+{
+	string strScriptType = (char*)_param;
+	wstring wstrSCriptType = wstring(strScriptType.begin(), strScriptType.end());
+
+	m_pTargetObject->AddComponent((CComponent*)CScriptMgr::GetScript(wstrSCriptType));
+
+
+
+}
+
 
 
 // =======================================================					=======================================================
@@ -451,6 +464,33 @@ void InspectorUI::GameObjectTool_SubFunc()
 		}
 	}
 
+	// Add Script Button 
+	if (nullptr != m_pTargetObject)
+	{
+		if (ImGui::Button("Add Script"))
+		{
+			// ListUI 활성화한다.
+			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+			pListUI->Clear();
+			pListUI->SetTitle("Script List");
+
+
+			vector<wstring> vecScriptInfo;
+			CScriptMgr::GetScriptInfo(vecScriptInfo);
+
+			for (int i = 0; i < vecScriptInfo.size(); ++i)
+			{
+				if(nullptr == m_pTargetObject->GetScriptByName(vecScriptInfo[i]))
+					pListUI->AddList(string(vecScriptInfo[i].begin(), vecScriptInfo[i].end()));
+			}
+
+			pListUI->Activate();
+			// TODO - 선택된 Component 를 TargetObjecct 에 AddComponent 한다 . 
+			pListUI->SetDBCEvent(this, (DBCLKED)&InspectorUI::AddScript);
+		}
+	}
+
+
 	// Change To Prefab Button
 	if (nullptr != m_pTargetObject)
 	{
@@ -465,36 +505,32 @@ void InspectorUI::GameObjectTool_SubFunc()
 			wstring wstrResKey = L"prefab\\" + m_pTargetObject->GetName() + L".pref";
 			wstring FullPath = strContent + wstrResKey;
 
-			CGameObject* pProtoObj = m_pTargetObject->Clone();
-			CPrefab* pPref = new CPrefab(pProtoObj);
-			pPref->Save(wstrResKey); 
+			//CGameObject* pProtoObj = m_pTargetObject->Clone();
+			CPrefab* pPref = new CPrefab;;// (pProtoObj);
+			pPref->SetProto(m_pTargetObject->Clone());
+			//pPref->Save(wstrResKey); 
 
+			// Prefab 추가
 			if (nullptr == CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey))
 			{
 				CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
+				pPref->Save(FullPath);
 
-				FILE* pFile = nullptr;
-				_wfopen_s(&pFile, FullPath.c_str(), L"wb");
-
-				CSceneSaveLoad::SavePrefab(pProtoObj, pPref, pFile);
-
-				fclose(pFile);
+				
 
 			}
+			// Prefab 이 이미 있을 경우 
 			else
 			{
 				RES_TYPE pResType = CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey)->GetResType();
 				if (RES_TYPE::PREFAB == pResType)
 				{
+					// 기존 Prefab 을 지우고 갱신한다 
 					CResMgr::GetInst()->DeletePrefabRes<CPrefab>(wstrResKey);
 					CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
 
-					FILE* pFile = nullptr;
-					_wfopen_s(&pFile, FullPath.c_str(), L"wb");
-
-					CSceneSaveLoad::SavePrefab(pProtoObj, pPref, pFile);
-
-					fclose(pFile);
+					pPref->Save(FullPath);
+					
 
 				}
 

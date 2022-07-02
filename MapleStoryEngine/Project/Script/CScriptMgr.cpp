@@ -6,6 +6,7 @@
 #include "CGravityScript.h"
 #include "CGroundScript.h"
 #include "CMissileScript.h"
+#include "CPaperBurnScript.h"
 #include "CPlayerScript.h"
 #include "CRigidBodyScript.h"
 
@@ -16,6 +17,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CGravityScript");
 	_vec.push_back(L"CGroundScript");
 	_vec.push_back(L"CMissileScript");
+	_vec.push_back(L"CPaperBurnScript");
 	_vec.push_back(L"CPlayerScript");
 	_vec.push_back(L"CRigidBodyScript");
 }
@@ -32,6 +34,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CGroundScript;
 	if (L"CMissileScript" == _strScriptName)
 		return new CMissileScript;
+	if (L"CPaperBurnScript" == _strScriptName)
+		return new CPaperBurnScript;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
 	if (L"CRigidBodyScript" == _strScriptName)
@@ -57,6 +61,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::MISSILESCRIPT:
 		return new CMissileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::PAPERBURNSCRIPT:
+		return new CPaperBurnScript;
 		break;
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
@@ -90,6 +97,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::MISSILESCRIPT:
 		return L"CMissileScript";
+		break;
+
+	case SCRIPT_TYPE::PAPERBURNSCRIPT:
+		return L"CPaperBurnScript";
 		break;
 
 	case SCRIPT_TYPE::PLAYERSCRIPT:

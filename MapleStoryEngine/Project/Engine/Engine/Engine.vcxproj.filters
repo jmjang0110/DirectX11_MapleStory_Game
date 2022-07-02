@@ -148,6 +148,9 @@
     <ClInclude Include="CLight2D.h">
       <Filter>Engine\05. Component\07. Light2D</Filter>
     </ClInclude>
+    <ClInclude Include="CMgrScript.h">
+      <Filter>Engine\05. Component\15. Script\MgrScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -449,6 +452,9 @@
     </Filter>
     <Filter Include="Engine\05. Component\15. Script">
       <UniqueIdentifier>{ff03e518-d9da-478d-89f0-592827240b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Component\15. Script\MgrScript">
+      <UniqueIdentifier>{00e5eaf0-1b2a-4afa-aeaa-1962412a640c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 
 CGravityScript::CGravityScript()
 	:CScript((int)SCRIPT_TYPE::GRAVITYSCRIPT)
+	, m_bGround(false)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -15,7 +16,9 @@ CGravityScript::CGravityScript()
 
 CGravityScript::CGravityScript(const CGravityScript& _origin)
 	: CScript((int)SCRIPT_TYPE::GRAVITYSCRIPT)
+	, m_bGround(_origin.m_bGround)
 {
+	SetName(CScriptMgr::GetScriptName(this));
 
 }
 
@@ -62,9 +65,13 @@ void CGravityScript::update()
 			bool bPlayerOnGround = playerScript->GetOnGround();
 			if(bPlayerOnGround == false)
 				rigidBodyScript->SetAccelAlpha(Vec3(0.f, -1000.f, 0.f));
+		}
+		else
+		{
+			if (m_bGround == false)
+				rigidBodyScript->SetAccelAlpha(Vec3(0.f, -1000.f, 0.f));
 
 		}
-
 	}
 
 	

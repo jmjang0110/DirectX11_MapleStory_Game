@@ -9,9 +9,16 @@ class CPrefab :
 private:
     CGameObject* m_pProtoObj;
 
+public:
+    typedef void (*SaveFunc) (CPrefab*, const wstring&);
+    typedef int (*LoadFunc) (CPrefab*, const wstring&);
+    static SaveFunc        m_pSaveFunc;
+    static LoadFunc        m_pLoadFunc;
 
 public:
     CGameObject* Instantiate();
+    CGameObject* GetProto() { return m_pProtoObj; }
+    void SetProto(CGameObject* _pProto) { m_pProtoObj = _pProto; }
 
 
 public:

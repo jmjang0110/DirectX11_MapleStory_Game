@@ -9,9 +9,13 @@
 
 CRigidBodyScript::CRigidBodyScript()
 	: CScript((int)SCRIPT_TYPE::RIGIDBODYSCRIPT)
+	, m_vForce(Vec3(0.f, 0.f, 0.f))
+	, m_vAccel(Vec3(0.f, 0.f, 0.f))
+	, m_vAccelA(Vec3(0.f, 0.f, 0.f))
+	, m_vVelocity(Vec3(0.f, 0.f, 0.f))
+	, m_vMaxVelocity(Vec3(250.f, 500.f, 0.f))
 	, m_fMass(1.f)
 	, m_fFricCoeff(100.f)
-	, m_vMaxVelocity(Vec3(250.f, 500.f, 0.f))
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -20,7 +24,16 @@ CRigidBodyScript::CRigidBodyScript()
 
 CRigidBodyScript::CRigidBodyScript(const CRigidBodyScript& _origin)
 	: CScript((int)SCRIPT_TYPE::RIGIDBODYSCRIPT)
+	, m_vForce(Vec3(0.f, 0.f, 0.f))
+	, m_vAccel(Vec3(0.f, 0.f, 0.f))
+	, m_vAccelA(Vec3(0.f, 0.f, 0.f))
+	, m_vVelocity(Vec3(0.f, 0.f, 0.f))
+	, m_vMaxVelocity(Vec3(250.f, 500.f, 0.f))
+	, m_fMass(1.f)
+	, m_fFricCoeff(100.f)
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
 }
 
 CRigidBodyScript::~CRigidBodyScript()

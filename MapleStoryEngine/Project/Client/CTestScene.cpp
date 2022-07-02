@@ -78,11 +78,13 @@ void CTestScene::CreateTestScene()
 	//Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"MagicCircle");
 
 	// Texture Create 하기
-	Ptr<CTexture> pTestTex = CResMgr::GetInst()->CreateTexture(L"TestTexture", 1024, 1024
-		, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+	//Ptr<CTexture> pTestTex = CResMgr::GetInst()->CreateTexture(L"TestTexture", 1024, 1024
+	//	, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
 
 	// ComputeShader 실행하기
 	Ptr<CTestShader> pCS = (CTestShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"TestCS").Get();
+	Ptr<CTexture> pTestTex = CResMgr::GetInst()->Load<CTexture>(L"Texture\\back.0.png", L"Texture\\back.0.png");
+
 
 	pCS->SetOutputTexture(pTestTex);
 	pCS->SetColor(Vec4(0.f, 1.f, 0.f, 1.f));
@@ -244,7 +246,10 @@ void CTestScene::CreateTestScene()
 
 	pCurScene->AddObject(pObject, L"Tile");
 
-
+	// Prefab 
+	CPrefab* pPrefab = new CPrefab;
+	pPrefab->SetProto(pObject->Clone());
+	CResMgr::GetInst()->AddRes<CPrefab>(L"prefab\\Background.pref", pPrefab);
 	
 
 	// 충돌 레이어 설정

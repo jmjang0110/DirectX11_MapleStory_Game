@@ -17,11 +17,13 @@ CScript::~CScript()
 
 void CScript::SaveToScene(FILE* _pFile)
 {
+	CComponent::SaveToScene(_pFile);
+
 
 }
 
 void CScript::LoadFromScene(FILE* _pFile)
 {
-
+	CComponent::LoadFromScene(_pFile);
 
 }
