@@ -435,7 +435,37 @@ void InspectorUI::AddScript(DWORD_PTR _param)
 	m_pTargetObject->AddComponent((CComponent*)CScriptMgr::GetScript(wstrSCriptType));
 
 
+	// UI 갱신 
+	const vector<CScript*>& vecScripts = m_pTargetObject->GetScripts();
+	ScriptUI* pScriptUI = nullptr;
 
+	for (size_t i = 0; i < vecScripts.size(); ++i)
+	{
+		if (m_vecScriptUI.size() <= i)
+			pScriptUI = AddScriptUI();
+		else
+			pScriptUI = m_vecScriptUI[i];
+
+		// == todo ==
+		// 삭제시키기 위해서 title로 이름 저장 
+		wstring ScriptName = CScriptMgr::GetScriptName(vecScripts[i]);
+		pScriptUI->SetTitle(string(ScriptName.begin(), ScriptName.end()));
+		// == == == ==
+
+		pScriptUI->SetTargetObject(m_pTargetObject);
+		pScriptUI->SetTargetScript(vecScripts[i]);
+		pScriptUI->Activate();
+	}
+
+	// ScriptUI 가 더 많이 있을때
+	if (vecScripts.size() < m_vecScriptUI.size())
+	{
+		// 대응하는 UI 를 제외한 나머지 ScriptUI 들을 비활성화 한다.ㄴ
+		for (int i = vecScripts.size(); i < m_vecScriptUI.size(); ++i)
+		{
+			m_vecScriptUI[i]->Deactivate();
+		}
+	}
 }
 
 
@@ -859,7 +889,7 @@ void InspectorUI::ShowCollisionLayer()
 				string RIghtName = string(RightLayer->GetName().begin(), RightLayer->GetName().end());
 				
 				string ButtonNum = std::to_string(i * MAX_LAYER + j);
-				string ButtonName = ButtonNum + string("_") + string("Off");
+				string ButtonName = ButtonNum + string("_Off");
 				if (ImGui::Button(ButtonName.c_str()))
 				{
 					
@@ -881,13 +911,28 @@ void InspectorUI::ShowCollisionLayer()
 
 							if (nullptr == LeftCol || nullptr == RightCol)
 								continue;
+							if (LeftCol->GetID() == RightCol->GetID())
+								continue;
+
 
 							if (IsCollision(LeftCol, RightCol))
 							{
+								if (LeftCol->GetCollisionCount() > 0 &&
+									RightCol->GetCollisionCount() > 0)
+								{
+									LeftCol->OnCollisionExit(RightCol);
+									RightCol->OnCollisionExit(LeftCol);
 
-								LeftCol->OnCollisionExit(RightCol);
-								RightCol->OnCollisionExit(LeftCol);
+									// 같은 레이어끼리 충돌체크 했을 때 (i = j) / (j = i) 
+									// 두번 충돌체크 하기에 없앨 때도 한번 더 처리 한다. 
+									if (LeftLayer == RightLayer)
+									{
+										LeftCol->OnCollisionExit(RightCol);
+										RightCol->OnCollisionExit(LeftCol);
+									}
 
+
+								}
 							}
 
 							CCollisionMgr::GetInst()->EraseColInfo(LeftCol, RightCol);
@@ -945,10 +990,6 @@ bool InspectorUI::IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCo
 	// Local 스페이스의 네개의 정점을 각 충돌체 월드 위치로 보낸다.
 	Vec3 vAsix[4] = {};
 
-	// (Vector3, 0.f) X Matirx(4x4)
-	// XMVector3TransformNormal();
-
-	// (Vector3, 1.f) X Matirx(4x4)
 	// 월드로 보낸 정점을 통해서 각 투영 축 이면서 투영시킬 벡터 성분 4개를 구한다.
 	vAsix[0] = XMVector3TransformCoord(vLocalPos[1], matLeft) - XMVector3TransformCoord(vLocalPos[0], matLeft);
 	vAsix[1] = XMVector3TransformCoord(vLocalPos[3], matLeft) - XMVector3TransformCoord(vLocalPos[0], matLeft);
@@ -956,7 +997,6 @@ bool InspectorUI::IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCo
 	vAsix[3] = XMVector3TransformCoord(vLocalPos[3], matRight) - XMVector3TransformCoord(vLocalPos[0], matRight);
 
 	// 월드에 배치된 두 충돌체의 중심을 이은 벡터
-	//Vec3 vCenter = XMVector3TransformCoord(Vec3::Zero, matRight) - XMVector3TransformCoord(Vec3::Zero, matLeft);	
 	Vec3 vCenter = _pRightCol->GetWorldPos() - _pLeftCol->GetWorldPos();
 
 	for (int i = 0; i < 4; ++i)

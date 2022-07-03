@@ -117,6 +117,14 @@ void CRigidBodyScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
 }
 
+void CRigidBodyScript::OnCollision(CGameObject* _OtherObject)
+{
+}
+
+void CRigidBodyScript::OnCollisionExit(CGameObject* _OtherObject)
+{
+}
+
 void CRigidBodyScript::SaveToScene(FILE* _pFile)
 {
 }

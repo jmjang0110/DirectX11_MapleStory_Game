@@ -12,6 +12,9 @@ public:
     virtual void lateupdate();
 
     virtual void OnCollisionEnter(CGameObject* _OtherObject) override;
+    virtual void OnCollision(CGameObject* _OtherObject) override;
+    virtual void OnCollisionExit(CGameObject* _OtherObject) override;
+
 
     CLONE(CCursorScript);
 public:

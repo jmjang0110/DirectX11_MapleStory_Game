@@ -6,6 +6,7 @@ CPaperBurnScript::CPaperBurnScript()
 	, m_fBurnStrength(0.f)
 	, m_bBurn(false)
 {
+	SetName(CScriptMgr::GetScriptName(this));
 
 }
 
@@ -14,10 +15,14 @@ CPaperBurnScript::CPaperBurnScript(const CPaperBurnScript& _origin)
 	, m_fBurnStrength(_origin.m_fBurnStrength)
 	, m_bBurn(_origin.m_bBurn)
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
 }
 
 CPaperBurnScript::~CPaperBurnScript()
 {
+
+
 }
 
 void CPaperBurnScript::start()
@@ -30,13 +35,18 @@ void CPaperBurnScript::start()
 
 void CPaperBurnScript::update()
 {
-
-	Burnning();
+	if (KEY_TAP(KEY::B))
+	{
+		m_bBurn = true;
+	}
 
 }
 
 void CPaperBurnScript::lateupdate()
 {
+	Burnning();
+
+
 }
 
 

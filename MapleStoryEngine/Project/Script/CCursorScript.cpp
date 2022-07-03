@@ -12,11 +12,15 @@
 CCursorScript::CCursorScript()
 	: CScript((int)SCRIPT_TYPE::CURSORSCRIPT)
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
 }
 
 CCursorScript::CCursorScript(const CCursorScript& _origin)
 	: CScript((int)SCRIPT_TYPE::CURSORSCRIPT)
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
 }
 
 CCursorScript::~CCursorScript()
@@ -79,6 +83,14 @@ void CCursorScript::lateupdate()
 }
 
 void CCursorScript::OnCollisionEnter(CGameObject* _OtherObject)
+{
+}
+
+void CCursorScript::OnCollision(CGameObject* _OtherObject)
+{
+}
+
+void CCursorScript::OnCollisionExit(CGameObject* _OtherObject)
 {
 }
 

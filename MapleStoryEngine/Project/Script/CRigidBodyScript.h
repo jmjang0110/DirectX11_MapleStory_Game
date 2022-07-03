@@ -1,6 +1,10 @@
 #pragma once
 #include <Engine/CScript.h>
 
+// F : Force 
+// M : Mass
+// A : Accel
+
 
 // F = M * A  <->  A = F / M
 
@@ -26,6 +30,8 @@ public:
     virtual void lateupdate();
 
     virtual void OnCollisionEnter(CGameObject* _OtherObject) override;
+    virtual void OnCollision(CGameObject* _OtherObject) override;
+    virtual void OnCollisionExit(CGameObject* _OtherObject) override;
 
 public:
     virtual void SaveToScene(FILE* _pFile) override;

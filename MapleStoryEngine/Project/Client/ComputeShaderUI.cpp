@@ -50,17 +50,22 @@ void ComputeShaderUI::render_update()
 
 	ImGui::Separator();
 
-	Vec3 GroupCnt = pComputeShader->GetGroupCount();
-	Vec3 GroupPerThreadCnt = pComputeShader->GetGroupPerThreadCount();
+	UINT GrouCntX = pComputeShader->GetGroupCountX();
+	UINT GrouCntY = pComputeShader->GetGroupCountY();
+	UINT GrouCntZ = pComputeShader->GetGroupCountZ();
 
-	int group[3] = { (UINT)GroupCnt.x, (UINT)GroupCnt.y ,(UINT)GroupCnt.z };
+	UINT GroupPerThreadCntX = pComputeShader->GetGroupPerThreadCountX();
+	UINT GroupPerThreadCntY = pComputeShader->GetGroupPerThreadCountY();
+	UINT GroupPerThreadCntZ = pComputeShader->GetGroupPerThreadCountZ();
+
+	int group[3] = { GrouCntX, GrouCntY ,GrouCntZ };
 
 	ImGui::Text("Group Count");
 	ImGui::SameLine(150);
 	ImGui::InputInt3("##GroupCnt", group, ImGuiInputTextFlags_ReadOnly);
 
 
-	int groupPer[3] = { (UINT)GroupPerThreadCnt.x, (UINT)GroupPerThreadCnt.y ,(UINT)GroupPerThreadCnt.z };
+	int groupPer[3] = { GroupPerThreadCntX, GroupPerThreadCntY ,GroupPerThreadCntZ };
 	ImGui::Text("GroupPerThread Count");
 	ImGui::SameLine(150);
 	ImGui::InputInt3("##GroupPerThreadCnt", groupPer, ImGuiInputTextFlags_ReadOnly);

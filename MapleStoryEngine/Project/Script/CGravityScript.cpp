@@ -90,6 +90,14 @@ void CGravityScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 }
 
+void CGravityScript::OnCollision(CGameObject* _OtherObject)
+{
+}
+
+void CGravityScript::OnCollisionExit(CGameObject* _OtherObject)
+{
+}
+
 void CGravityScript::SaveToScene(FILE* _pFile)
 {
 

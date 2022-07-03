@@ -44,8 +44,14 @@ public:
     int CreateComputeShader(const wstring& _strRelativePath, const string& _strFunc);
 
     // ========== Todo ===============
-    Vec3 GetGroupPerThreadCount() { return Vec3(m_iGroupPerThreadCountX, m_iGroupPerThreadCountY, m_iGroupPerThreadCountZ); }
-    Vec3 GetGroupCount() { return Vec3(m_iGroupX, m_iGroupY, m_iGroupZ); }
+    UINT GetGroupPerThreadCountX() { return m_iGroupPerThreadCountX; }
+    UINT GetGroupPerThreadCountY() { return m_iGroupPerThreadCountY; }
+    UINT GetGroupPerThreadCountZ() { return m_iGroupPerThreadCountZ; }
+
+    UINT GetGroupCountX() { return m_iGroupX; }
+    UINT GetGroupCountY() { return m_iGroupY; }
+    UINT GetGroupCountZ() { return m_iGroupZ; }
+
     tScalarParam    GetScalarParam() { return m_Param; }
 
 

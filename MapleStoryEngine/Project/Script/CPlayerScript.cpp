@@ -159,6 +159,14 @@ void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 }
 
+void CPlayerScript::OnCollision(CGameObject* _OtherObject)
+{
+}
+
+void CPlayerScript::OnCollisionExit(CGameObject* _OtherObject)
+{
+}
+
 
 
 

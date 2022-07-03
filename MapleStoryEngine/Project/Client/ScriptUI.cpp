@@ -31,7 +31,7 @@ void ScriptUI::render_update()
 {
 	// 담당 Script 이름
 	ImGui::PushID(0);
-	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.8f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
 
@@ -42,7 +42,20 @@ void ScriptUI::render_update()
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
 
-	ImGui::SameLine(150.f);
+	// Script Active Button 
+	bool IsActive = m_pTargetScript->IsActive();
+	ImGui::SameLine();
+	ImGui::Checkbox("##ScriptActive", &IsActive);
+
+	if (m_pTargetScript->IsActive() != IsActive)
+	{
+		if (IsActive)
+			m_pTargetScript->Activate();
+		else
+			m_pTargetScript->Deactivate();
+	}
+	ImGui::SameLine();
+	// Script Delete Button 
 	if (ImGui::Button("X"))
 	{
 		m_bDel = true;
@@ -121,10 +134,6 @@ void ScriptUI::render_update()
 			break;
 		}
 	}
-
-
-
-	
-
+	ImGui::Separator();
 
 }

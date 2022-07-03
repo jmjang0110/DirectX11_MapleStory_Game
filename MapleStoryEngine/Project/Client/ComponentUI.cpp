@@ -62,7 +62,8 @@ void ComponentUI::render_update()
 				pComponent->Deactivate();
 		}
 
-		ImGui::SameLine(300);
+		ImGui::SameLine();
+		// Component Delete Buttton
 		if (ImGui::Button("X"))
 		{
 			m_bDel = true;

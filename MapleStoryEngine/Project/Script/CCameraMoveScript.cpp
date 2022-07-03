@@ -12,12 +12,15 @@ CCameraMoveScript::CCameraMoveScript()
 	, m_fCamSpeed(500.f)
 	
 {
+	SetName(CScriptMgr::GetScriptName(this));
 
 }
 
 CCameraMoveScript::CCameraMoveScript(const CCameraMoveScript& _origin)
 	: CScript((int)SCRIPT_TYPE::CAMERAMOVESCRIPT)
 {
+	SetName(CScriptMgr::GetScriptName(this));
+
 }
 
 CCameraMoveScript::~CCameraMoveScript()
