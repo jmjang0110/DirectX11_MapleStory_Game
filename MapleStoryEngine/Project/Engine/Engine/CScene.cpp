@@ -173,6 +173,8 @@ void CScene::SetSceneState(SCENE_STATE _eState)
 
 void CScene::CopyLayer(CLayer* _pLayer, int _TargetLayerIdx)
 {
+	if (m_arrLayer[_TargetLayerIdx] == nullptr)
+		return;
 	if (m_arrLayer[_TargetLayerIdx]->GetRootObjects().size() != 0)
 		return;
 
@@ -189,6 +191,7 @@ void CScene::CopyLayer(CLayer* _pLayer, int _TargetLayerIdx)
 	}
 }
 
+
 void CScene::StoreCollideCheckLayerInfo(UINT _ArrColCheck[MAX_LAYER])
 {
 	for (int i = 0; i < MAX_LAYER; ++i)
@@ -198,3 +201,13 @@ void CScene::StoreCollideCheckLayerInfo(UINT _ArrColCheck[MAX_LAYER])
 
 }
 
+void CScene::SetLayer(CLayer* _pLayer, int _TargetLayerIdx)
+{
+	assert(!(_TargetLayerIdx < 0 || MAX_LAYER <= _TargetLayerIdx));
+
+	if (m_arrLayer[_TargetLayerIdx] != nullptr)
+		return;
+
+	m_arrLayer[_TargetLayerIdx] = _pLayer;
+
+}

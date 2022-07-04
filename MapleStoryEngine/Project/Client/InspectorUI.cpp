@@ -514,7 +514,9 @@ void InspectorUI::GameObjectTool_SubFunc()
 	if (nullptr == m_pTargetObject)
 		return;
 
-	ImGui::BeginChild("GameObject tool", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+	ImVec2 ToolBoxSize = ImVec2(200.f ,80.f);
+
+	ImGui::BeginChild("GameObject tool", ToolBoxSize, true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	// Add Component Button 
 	if (nullptr != m_pTargetObject)
@@ -617,7 +619,7 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 	ImGui::SameLine();
 
-	ImGui::BeginChild("GameObject Delete tool", ImVec2(200.f, 70.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+	ImGui::BeginChild("GameObject Delete tool", ToolBoxSize, true, ImGuiWindowFlags_HorizontalScrollbar);
 
 	// Delete Object Button
 	static bool bDelete = false;
@@ -685,7 +687,7 @@ void InspectorUI::SceneTool_subFunc()
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
 
-	ImGui::SameLine();
+	ImGui::SameLine(150.f);
 	bool unused_open = true;
 	if (ImGui::Button("Change Scene Name"))
 		ImGui::OpenPopup("Change Scene Name");
@@ -745,7 +747,7 @@ void InspectorUI::LayerTool_subFunc()
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
 
-	ImGui::SameLine();
+	ImGui::SameLine(150.f);
 	bool unused_open = true;
 	if (ImGui::Button("Change Layer Name"))
 		ImGui::OpenPopup("Change Layer Name");

@@ -18,7 +18,7 @@ private:
 public:
     void SetResKey(const wstring& _strKey) { m_strResKey = _strKey; }
     void UpdateLayerIdx(int _LayerIdx);
-
+    void SetLayerIdx(int _LayerIdx);
 // ==========
 public:
     int GetLayerIdx() { return m_iLayerIdx; }

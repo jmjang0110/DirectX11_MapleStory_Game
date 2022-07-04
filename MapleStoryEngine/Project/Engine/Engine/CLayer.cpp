@@ -104,3 +104,15 @@ void CLayer::UpdateLayerIdx(int _LayerIdx)
 
 
 }
+
+void CLayer::SetLayerIdx(int _LayerIdx)
+{
+	assert(!(_LayerIdx < 0 || MAX_LAYER <= _LayerIdx));
+	
+	if (m_iLayerIdx < 0 || MAX_LAYER <= m_iLayerIdx)
+		m_iLayerIdx = _LayerIdx;
+
+
+}
+
+

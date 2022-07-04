@@ -79,18 +79,23 @@ void SceneOutlinerTool::update()
 
 void SceneOutlinerTool::render_update()
 {
-	ImGui::BeginChild("New Object", ImVec2(280.f, 50.f), true, ImGuiWindowFlags_HorizontalScrollbar);
-	SceneSaveButton();
-	SaveLayerButton();
-
+	ImGui::BeginChild("New Object", ImVec2(150.f, 80.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+	
 	NewSceneButton();
-	ImGui::SameLine();
 	NewLayerButton();
 	NewObjectButton();
 
 	ImGui::EndChild();
-	
-	
+
+	ImGui::SameLine();
+
+	ImGui::BeginChild("SaveDelete", ImVec2(150.f, 80.f), true, ImGuiWindowFlags_HorizontalScrollbar);
+
+	SceneSaveButton();
+	SaveLayerButton();
+	DeleteLayerButton();
+
+	ImGui::EndChild();
 
 }
 
@@ -568,7 +573,7 @@ void SceneOutlinerTool::SceneSaveButton()
 	if (m_pSelectedScene->GetName() == L"")
 		return;
 
-	if(ImGui::Button("Save Scene"))
+	if(ImGui::Button("Save Scene", ImVec2(100.f, 20.f)))
 	{
 
 		// File 저장 
@@ -604,7 +609,7 @@ void SceneOutlinerTool::SaveLayerButton()
 	if (m_pSelectedLayer->GetName() == L"")
 		return;
 
-	if (ImGui::Button("Save Layer"))
+	if (ImGui::Button("Save Layer", ImVec2(100.f, 20.f)))
 	{
 
 		// File 저장 
@@ -630,6 +635,72 @@ void SceneOutlinerTool::SaveLayerButton()
 	}
 
 	return;
+
+}
+
+void SceneOutlinerTool::DeleteLayerButton()
+{
+	if (nullptr == m_pSelectedLayer)
+		return;
+	if (m_pSelectedLayer->GetName() == L"")
+		return;
+
+
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.8f, 0.8f));
+
+	if (ImGui::Button("Delete Layer", ImVec2(100.f, 20.f)))
+	{
+		ImGui::OpenPopup("Delete Layer");
+	}
+
+	bool unused_open = true;
+	if (ImGui::BeginPopupModal("Delete Layer", &unused_open))
+	{
+		wstring LayerName = m_pSelectedLayer->GetName();
+		string strLayerName = string(LayerName.begin(), LayerName.end());
+
+		ImGui::TextColored(ImVec4(0.f,0.5f, 0.8f,1.f),strLayerName.c_str());
+		ImGui::Text("Are you sure you delete this layer?");
+
+		if (ImGui::Button("Complete"))
+		{
+			UINT	LayerIdx = m_pSelectedLayer->GetLayerIdx();
+
+			// CImGuiMgr 에 Delegate 등록 
+			tUIDelegate tDeleteCom;
+			tDeleteCom.dwParam = (DWORD_PTR)LayerIdx;
+			tDeleteCom.pFunc = (PARAM_1)&SceneOutlinerTool::DeleteLayer;
+			tDeleteCom.pInst = CImGuiMgr::GetInst()->FindUI("SceneOutlinerTool");
+
+			CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
+
+
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+	ImGui::PopStyleColor(1);
+
+	return;
+
+}
+
+
+// _param : LayerIdx
+void SceneOutlinerTool::DeleteLayer(DWORD_PTR _param)
+{
+	UINT delLayerIdx = (UINT)_param;
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	CLayer* pLayer = pCurScene->GetLayer(delLayerIdx);
+
+	SAFE_DELETE(pLayer);
+
+	CLayer* NewLayer = new CLayer;
+	NewLayer->SetLayerIdx(delLayerIdx);
+	
+	pCurScene->SetLayer(NewLayer, delLayerIdx);
+
+	Reset();
 
 }
 

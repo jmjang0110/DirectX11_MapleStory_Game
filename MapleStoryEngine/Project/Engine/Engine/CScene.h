@@ -44,6 +44,7 @@ public:
 
     // ============= Todo ===============
     void CopyLayer(CLayer* _pLayer, int _TargetLayerIdx);
+    void SetLayer(CLayer* _pLayer, int _TargetLayerIdx);
     void StoreCollideCheckLayerInfo(UINT _ArrColCheck[MAX_LAYER]);
     UINT* GetCollideCheckLayerInfo() { return m_arrCollideCheck; }
     // ============= Todo ===============

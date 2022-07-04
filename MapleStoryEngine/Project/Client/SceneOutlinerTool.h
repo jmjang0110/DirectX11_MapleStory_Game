@@ -63,6 +63,10 @@ private:
     void SceneSaveButton();
     void SaveLayerButton();
 
+    void DeleteLayerButton();
+    void DeleteLayer(DWORD_PTR _param);
+
+
     // ======== Todo ==============
 
 public:
