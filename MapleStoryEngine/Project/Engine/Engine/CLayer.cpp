@@ -14,6 +14,7 @@ CLayer::~CLayer()
 	Safe_Del_Vec(m_vecRoot);
 }
 
+
 void CLayer::start()
 {
 	for (size_t i = 0; i < m_vecRoot.size(); ++i)
@@ -84,3 +85,22 @@ void CLayer::DeregisterObject(CGameObject* _pObj)
 
 
 
+
+// 자신의 Root 오브젝트들에 자신의 레이어 인덱스를 알린다. 
+void CLayer::UpdateLayerIdx(int _LayerIdx)
+{
+	for (int i = 0; i < m_vecRoot.size(); ++i)
+	{
+		m_vecRoot[i]->m_iLayerIdx = _LayerIdx;
+		// 자식 오브젝트 
+		vector<CGameObject*> vecChildObj = m_vecRoot[i]->GetChild();
+		for (int k = 0; k < vecChildObj.size(); ++k)
+		{
+			vecChildObj[k]->m_iLayerIdx = _LayerIdx;
+
+		}
+
+	}
+
+
+}

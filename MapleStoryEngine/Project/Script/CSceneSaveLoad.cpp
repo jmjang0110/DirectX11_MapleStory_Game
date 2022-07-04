@@ -12,7 +12,11 @@
 #include <Engine/CScript.h>
 
 #include <Engine/CParticleSystem.h>
+#include <Engine/CCollisionMgr.h>
+#include <Engine/CCollider2D.h>
 
+
+#include <Engine/CLayerFile.h>
 
 
 void CSceneSaveLoad::SaveScene(CScene* _pScene, const wstring& _strSceneFilePath)
@@ -48,7 +52,20 @@ void CSceneSaveLoad::SaveScene(CScene* _pScene, const wstring& _strSceneFilePath
         {
             SaveGameObject(vecRootObj[j], pFile);
         }
+
+
+       
     }
+
+    // Todo ========
+       // Layer 충돌 정보 저장 
+    const UINT* ArrColinfo = CCollisionMgr::GetInst()->GetColArrCheck();
+
+    for (int i = 0; i < MAX_LAYER; ++i)
+    {
+        fwrite(&ArrColinfo[i], sizeof(UINT), 1, pFile);
+    }
+    // == == == == == 
 
 
     fclose(pFile);
@@ -135,6 +152,18 @@ CScene* CSceneSaveLoad::LoadScene(const wstring& _strSceneFilePath)
             pLoadScene->AddObject(pLoadObj, i);
         }
     }
+
+
+    // Todo ========
+       // Layer 충돌 정보 불러오기  
+    UINT ArrColinfo[MAX_LAYER] = { 0 };
+    for (int i = 0; i < MAX_LAYER; ++i)
+    {
+        fread(&ArrColinfo[i], sizeof(UINT), 1, pFile);
+    }
+    CCollisionMgr::GetInst()->SetColChcek(ArrColinfo);
+    // == == == == == 
+
 
     fclose(pFile);
 
@@ -225,4 +254,80 @@ int CSceneSaveLoad::LoadPrefab(CPrefab* _Prefab, const wstring& _strFilePath)
     return S_OK;
 }
 
+
+
+
+// ======
+// Layer
+// ======
+void CSceneSaveLoad::SaveLayer(CLayer* _pLayer, const wstring& _strLayerFilePath)
+{
+    // 리소스 변경상태 저장
+    CResMgr::GetInst()->SaveChangedRes();
+
+
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, _strLayerFilePath.c_str(), L"wb");
+
+    assert(pFile);
+    if (nullptr == pFile)
+        return;
+
+
+    // Layer 이름 저장
+    CLayer* pLayer = _pLayer;
+    pLayer->SaveToScene(pFile);
+
+    // Layer 가 보유중인 Root 오브젝트 개수 저장
+    vector<CGameObject*>& vecRootObj = pLayer->GetRootObjects();
+    size_t iObjCount = vecRootObj.size();
+    fwrite(&iObjCount, sizeof(size_t), 1, pFile);
+
+    // 각 루트오브젝트 저장
+    for (size_t j = 0; j < vecRootObj.size(); ++j)
+    {
+        SaveGameObject(vecRootObj[j], pFile);
+    }
+
+    fclose(pFile);
+}
+
+
+CLayer* CSceneSaveLoad::LoadLayer(const wstring& _strLayerFIlePath)
+{
+    // 최종 경로에서 상대경로만 추출
+    wstring strKey = CPathMgr::GetInst()->GetRelativePath(_strLayerFIlePath);
+
+    // CResMgr 에서 상대경로를 키값으로, CLayerFile 을 찾아냄
+    CResMgr::GetInst()->Load<CLayerFile>(strKey, strKey);
+
+    // Load 할 Scene 생성 및 파일로부터 로딩
+    CLayer* pLoadLayer = new CLayer;
+    pLoadLayer->SetResKey(strKey);
+
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, _strLayerFIlePath.c_str(), L"rb");
+
+    assert(pFile);
+    if (nullptr == pFile)
+        return nullptr;
+
+    // Layer 이름 불러오기
+    pLoadLayer->LoadFromScene(pFile);
+
+    // Layer 보유 오브젝트 개수
+    size_t iObjCount = 0;
+    fread(&iObjCount, sizeof(size_t), 1, pFile);
+
+    // Root 오브젝트
+    for (size_t j = 0; j < iObjCount; ++j)
+    {
+        CGameObject* pLoadObj = LoadGameObject(pFile);
+        pLoadLayer->AddObject(pLoadObj);
+    }
+
+    fclose(pFile);
+
+    return pLoadLayer;
+}
 

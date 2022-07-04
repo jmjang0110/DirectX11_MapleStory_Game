@@ -13,8 +13,12 @@
 #include <Engine/CScene.h>
 #include <Script/CSceneSaveLoad.h>
 
+#include <Engine/CLayerFile.h>
+
+
 #include "SceneOutlinerTool.h"
 #include <experimental/filesystem>
+
 
 ResourceUI::ResourceUI()
 	: UI("Resource")
@@ -166,6 +170,11 @@ void ResourceUI::Reload()
 		case RES_TYPE::SCENEFILE:
 			CResMgr::GetInst()->Load<CSceneFile>(m_vecResPath[i], m_vecResPath[i]);
 			break;
+
+		case RES_TYPE::LAYERFILE:
+			CResMgr::GetInst()->Load<CLayerFile>(m_vecResPath[i], m_vecResPath[i]);
+			break;
+
 		}
 	}
 
@@ -281,6 +290,9 @@ RES_TYPE ResourceUI::GetResTypeFromExt(const wstring& _strExt)
 		return RES_TYPE::MESH;
 	else if (L".scene" == strExt)
 		return RES_TYPE::SCENEFILE;
+	else if (L".layer" == strExt)
+		return RES_TYPE::LAYERFILE;
+
 
 	return RES_TYPE::END;
 }

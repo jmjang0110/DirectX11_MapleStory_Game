@@ -151,6 +151,9 @@
     <ClInclude Include="CMgrScript.h">
       <Filter>Engine\05. Component\15. Script\MgrScript</Filter>
     </ClInclude>
+    <ClInclude Include="CLayerFile.h">
+      <Filter>Engine\09. LayerFile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -285,6 +288,9 @@
     </ClCompile>
     <ClCompile Include="CLight2D.cpp">
       <Filter>Engine\05. Component\07. Light2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CLayerFile.cpp">
+      <Filter>Engine\09. LayerFile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -455,6 +461,9 @@
     </Filter>
     <Filter Include="Engine\05. Component\15. Script\MgrScript">
       <UniqueIdentifier>{00e5eaf0-1b2a-4afa-aeaa-1962412a640c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\09. LayerFile">
+      <UniqueIdentifier>{d797dc90-2958-4478-a9a8-8c91bc3f2d09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

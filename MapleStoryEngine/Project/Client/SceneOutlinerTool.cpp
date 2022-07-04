@@ -36,6 +36,7 @@ SceneOutlinerTool::SceneOutlinerTool()
 	, m_pSelectedLayer(nullptr)
 	, m_pSelectedGameObject(nullptr)
 	, m_RecentClickedType(ENGINE_TYPE::NONE)
+	, m_NewLayerIdx(0)
 {
 	m_TreeUI = new TreeUI(true);
 	m_TreeUI->SetTitle("SceneOutlinerTool");
@@ -79,14 +80,16 @@ void SceneOutlinerTool::update()
 void SceneOutlinerTool::render_update()
 {
 	ImGui::BeginChild("New Object", ImVec2(280.f, 50.f), true, ImGuiWindowFlags_HorizontalScrollbar);
-	
+	SceneSaveButton();
+	SaveLayerButton();
+
 	NewSceneButton();
 	ImGui::SameLine();
 	NewLayerButton();
 	NewObjectButton();
-	
-	ImGui::EndChild();
 
+	ImGui::EndChild();
+	
 	
 
 }
@@ -121,6 +124,15 @@ void SceneOutlinerTool::Reset()
 	// InspectorUI 
 	InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	pInspectorUI->SetTargetObject(nullptr);
+	pInspectorUI->SetTargetLayer(nullptr);
+	pInspectorUI->SetTargetScene(nullptr);
+
+
+	// SceneOutlinerUI 갱신
+	m_pSelectedScene = nullptr;
+	m_pSelectedLayer = nullptr;
+	m_pSelectedGameObject = nullptr;
+
 
 }
 
@@ -300,7 +312,6 @@ void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop
 		}
 
 	}
-
 	
 }
 
@@ -434,8 +445,13 @@ void SceneOutlinerTool::NewSceneButton()
 				CScene* NewScene = new CScene;
 				NewScene->SetName(newName);
 
+				// File 저장 
+				wstring SceneResKey = L"scene\\" + newName + L".scene";
+				NewScene->SetResKey(SceneResKey);
+				wstring strSceneFilePath = CPathMgr::GetInst()->GetContentPath();
+				CSceneSaveLoad::SaveScene(NewScene, strSceneFilePath + SceneResKey);
 
-				NewScene->SetLayerName(1, L"Default");
+				NewScene->SetLayerName(0, L"Default");
 				
 				// Camera Object 추가
 				CGameObject* pCamObj = new CGameObject;
@@ -485,6 +501,28 @@ void SceneOutlinerTool::NewLayerButton()
 			static int layerIdx = 0;
 			ImGui::DragInt("##LayerIdx", &layerIdx, 1.f, 0, MAX_LAYER);
 
+
+			ImGui::Text("Show Layer List");
+			ImGui::SameLine();
+			if (ImGui::Button("##LayerListBtn", Vec2(15, 15)))
+			{
+				// ListUI 활성화한다.
+				const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::LAYERFILE);
+				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+				pListUI->Clear();
+				pListUI->SetTitle("Layer List");
+
+				for (const auto& pair : mapRes)
+				{
+					pListUI->AddList(string(pair.first.begin(), pair.first.end()));
+				}
+
+				pListUI->Activate();
+				pListUI->SetDBCEvent(this, (DBCLKED) & ::SceneOutlinerTool::LayerSelect);
+				m_NewLayerIdx = layerIdx;
+
+			}
+
 			if (ImGui::Button("Complete"))
 			{
 				string name = buf;
@@ -523,8 +561,80 @@ void SceneOutlinerTool::NewLayerButton()
 	}
 }
 
+void SceneOutlinerTool::SceneSaveButton()
+{
+	if (nullptr == m_pSelectedScene )
+		return;
+	if (m_pSelectedScene->GetName() == L"")
+		return;
+
+	if(ImGui::Button("Save Scene"))
+	{
+
+		// File 저장 
+		wstring SceneName = m_pSelectedScene->GetName();
+		wstring SceneResKey = L"scene\\" + SceneName + L".scene";
+		m_pSelectedScene->SetResKey(SceneResKey);
+		wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
+		CSceneSaveLoad::SaveScene(m_pSelectedScene, strContentPath + SceneResKey);
+
+		ImGui::OpenPopup("Save Scene");
+	}
+
+	bool unused_open = true;
+	if (ImGui::BeginPopupModal("Save Scene", &unused_open))
+	{
+		ImGui::Text("Save Scene Complete");
+
+		if (ImGui::Button("Complete"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+	return;
+
+}
+
+void SceneOutlinerTool::SaveLayerButton()
+{
+	if (nullptr == m_pSelectedLayer)
+		return;
+	if (m_pSelectedLayer->GetName() == L"")
+		return;
+
+	if (ImGui::Button("Save Layer"))
+	{
+
+		// File 저장 
+		wstring LayerName = m_pSelectedLayer->GetName();
+		wstring LayerResKey = L"layer\\" + LayerName + L".layer";
+		m_pSelectedLayer->SetResKey(LayerResKey);
+		wstring strContentFilePath = CPathMgr::GetInst()->GetContentPath();
+		CSceneSaveLoad::SaveLayer(m_pSelectedLayer, strContentFilePath + LayerResKey);
+
+		ImGui::OpenPopup("Save Layer");
+	}
+
+	bool unused_open = true;
+	if (ImGui::BeginPopupModal("Save Layer", &unused_open))
+	{
+		ImGui::Text("Save Layer Complete");
+
+		if (ImGui::Button("Complete"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+	return;
+
+}
 
 
+// _param : Prefab Name
 void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 {
 	string strSelectedName = (char*)_param;
@@ -550,11 +660,32 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 
 }
 
-
-
-void SceneOutlinerTool::SettingCollisionCheckButton()
+// _param : Layer Name ( selected from List )
+void SceneOutlinerTool::LayerSelect(DWORD_PTR _param)
 {
+	
+	string strSelectedName = (char*)_param;
+	wstring strLayerName = wstring(strSelectedName.begin(), strSelectedName.end());
+	wstring strContent = CPathMgr::GetInst()->GetContentPath();
+	wstring FullPath = strContent + strLayerName;
 
+
+	CLayer* pLayer = new CLayer;
+	pLayer = CSceneSaveLoad::LoadLayer(FullPath);
+
+	assert(pLayer);
+
+	
+
+	if (m_pSelectedScene)
+	{
+		m_pSelectedScene->CopyLayer(pLayer, m_NewLayerIdx);
+		SAFE_DELETE(pLayer);
+		m_NewLayerIdx = 0;
+
+		// TReeUI 에 추가하기 위해서 Reset() 
+		Reset();
+	}
 
 }
 

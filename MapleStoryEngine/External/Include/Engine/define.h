@@ -49,6 +49,9 @@ enum class RES_TYPE
 	TEXTURE,
 	SOUND,	
 	SCENEFILE,
+	// == todo ==
+	LAYERFILE,
+	// ==========
 	END,
 };
 

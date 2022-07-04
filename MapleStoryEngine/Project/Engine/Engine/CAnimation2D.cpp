@@ -57,6 +57,10 @@ void CAnimation2D::UpdateData()
 	// Todo 
 	if (m_vecFrm.size() == 0)
 		return;
+
+	if (nullptr == m_pAtlasTex)
+		return;
+
 	// ====
 
 	static CConstBuffer* pBuffer = CDevice::GetInst()->GetCB(CB_TYPE::ANIM2D);

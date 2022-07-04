@@ -205,7 +205,7 @@ void MenuUI::Task()
         CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
         SCENE_STATE eState = pCurScene->GetSceneState();
 
-        if (SCENE_STATE::STOP == eState)
+        if (SCENE_STATE::STOP == eState || SCENE_STATE::PAUSE == eState)
         {
             pCurScene->SetSceneState(SCENE_STATE::PLAY);
         }

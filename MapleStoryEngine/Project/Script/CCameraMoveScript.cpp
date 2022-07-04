@@ -29,6 +29,9 @@ CCameraMoveScript::~CCameraMoveScript()
 
 void CCameraMoveScript::update()
 {
+	if (nullptr == Camera())
+		return;
+
 	Vec3 vPos = Transform()->GetRelativePos();
 	float fSpeed = m_fCamSpeed;
 

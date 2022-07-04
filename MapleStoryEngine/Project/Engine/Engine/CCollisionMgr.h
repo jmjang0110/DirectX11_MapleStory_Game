@@ -41,6 +41,7 @@ private:
 public:
 	const UINT* GetColArrCheck() { return m_arrCheck; };
 	void EraseColInfo(CCollider2D* _LeftCol, CCollider2D* _RightCol);
+	void SetColChcek(UINT* _ArrCheck) { for (int i = 0; i < MAX_LAYER; ++i) m_arrCheck[i] = _ArrCheck[i]; m_mapColInfo.clear(); }
 	// ==============
 
 };

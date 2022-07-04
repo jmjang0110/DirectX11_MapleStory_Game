@@ -11,7 +11,15 @@ private:
     vector<CGameObject*>    m_vecObj;       // 매 프레임 마다 파악되는 레이어 소속 모든 오브젝트
     int                     m_iLayerIdx;    // Scene 에서의 인덱스
 
+// == todo ==
+private:
+    wstring                 m_strResKey;
 
+public:
+    void SetResKey(const wstring& _strKey) { m_strResKey = _strKey; }
+    void UpdateLayerIdx(int _LayerIdx);
+
+// ==========
 public:
     int GetLayerIdx() { return m_iLayerIdx; }
 

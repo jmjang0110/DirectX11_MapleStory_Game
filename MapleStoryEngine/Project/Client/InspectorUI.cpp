@@ -171,8 +171,6 @@ void InspectorUI::render_update()
 
 void InspectorUI::SetTargetObject(CGameObject* _pTarget)
 {
-
-
 	m_pTargetObject = _pTarget;
 
 	for (int i = 0; i < (int)COMPONENT_TYPE::END; ++i)
@@ -521,7 +519,7 @@ void InspectorUI::GameObjectTool_SubFunc()
 	// Add Component Button 
 	if (nullptr != m_pTargetObject)
 	{
-		if (ImGui::Button("Add Component"))
+		if (ImGui::Button("Add Component", ImVec2(150.f, 20.f)))
 		{
 			// ListUI 활성화한다.
 			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
@@ -544,7 +542,7 @@ void InspectorUI::GameObjectTool_SubFunc()
 	// Add Script Button 
 	if (nullptr != m_pTargetObject)
 	{
-		if (ImGui::Button("Add Script"))
+		if (ImGui::Button("Add Script", ImVec2(150.f, 20.f)))
 		{
 			// ListUI 활성화한다.
 			ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
@@ -568,10 +566,10 @@ void InspectorUI::GameObjectTool_SubFunc()
 	}
 
 
-	// Change To Prefab Button
+	// REgister  Prefab Button
 	if (nullptr != m_pTargetObject)
 	{
-		if (ImGui::Button("Register Prefab"))
+		if (ImGui::Button("Register Prefab", ImVec2(150.f, 20.f)))
 		{
 			// Prefab 하려는 GameObject 가 이미 존재한다면 
 			if (nullptr != CResMgr::GetInst()->FindRes<CPrefab>(m_pTargetObject->GetName()))
@@ -582,16 +580,14 @@ void InspectorUI::GameObjectTool_SubFunc()
 			wstring wstrResKey = L"prefab\\" + m_pTargetObject->GetName() + L".pref";
 			wstring FullPath = strContent + wstrResKey;
 
-			//CGameObject* pProtoObj = m_pTargetObject->Clone();
 			CPrefab* pPref = new CPrefab;;// (pProtoObj);
 			pPref->SetProto(m_pTargetObject->Clone());
-			//pPref->Save(wstrResKey); 
 
 			// Prefab 추가
 			if (nullptr == CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey))
 			{
+				// Prefab 추가 
 				CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
-				pPref->Save(FullPath);
 
 			}
 			// Prefab 이 이미 있을 경우 
@@ -601,10 +597,8 @@ void InspectorUI::GameObjectTool_SubFunc()
 				if (RES_TYPE::PREFAB == pResType)
 				{
 					// 기존 Prefab 을 지우고 갱신한다 
-					CResMgr::GetInst()->DeletePrefabRes<CPrefab>(wstrResKey);
-					CResMgr::GetInst()->AddRes<CPrefab>(wstrResKey, pPref);
+					CResMgr::GetInst()->UpdatePrefabRes<CPrefab>(wstrResKey, pPref);
 
-					pPref->Save(FullPath);
 				}
 
 			}
@@ -710,7 +704,12 @@ void InspectorUI::SceneTool_subFunc()
 			string strName = buf;
 			wstring wstrName = wstring(strName.begin(), strName.end());
 
+			// File 저장 
 			m_pTargetScene->SetName(wstrName);
+			wstring SceneResKey = L"scene\\" + wstrName + L".scene";
+			m_pTargetScene->SetResKey(SceneResKey);
+			wstring strSceneFilePath = CPathMgr::GetInst()->GetContentPath();
+			CSceneSaveLoad::SaveScene(m_pTargetScene, strSceneFilePath + SceneResKey);
 
 			// CImGuiMgr 에 Delegate 등록 
 			tUIDelegate tDeleteCom;

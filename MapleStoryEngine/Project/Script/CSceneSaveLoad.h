@@ -1,6 +1,7 @@
 #pragma once
 
 class CScene;
+class CLayer;
 class CGameObject;
 class CPrefab;
 
@@ -22,7 +23,11 @@ public:
 
 	static int LoadPrefab(CPrefab* _Prefab, const wstring& _strFilePath);
 
+	// == todo === 
+	static void SaveLayer(CLayer* _pLayer, const wstring& _strLayerFilePath);
+	static CLayer* LoadLayer(const wstring& _strLayerFIlePath);
 
+	// == == == ==
 
 };
 

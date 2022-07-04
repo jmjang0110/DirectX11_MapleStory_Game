@@ -27,7 +27,9 @@ private:
     CLayer*         m_pSelectedLayer;
     CGameObject*    m_pSelectedGameObject;
 
-
+private:
+    UINT           m_NewLayerIdx;
+    
 public:
     virtual void update() override;
     virtual void render_update() override;
@@ -46,6 +48,8 @@ public:
     void DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop);
 
     void PrefabSelect(DWORD_PTR _param);
+    void LayerSelect(DWORD_PTR _param);
+
     // ======== Todo ==============
 private:
     ENGINE_TYPE m_RecentClickedType;
@@ -55,7 +59,9 @@ private:
     void NewSceneButton();
     void NewLayerButton();
 
-    void SettingCollisionCheckButton();
+
+    void SceneSaveButton();
+    void SaveLayerButton();
 
     // ======== Todo ==============
 

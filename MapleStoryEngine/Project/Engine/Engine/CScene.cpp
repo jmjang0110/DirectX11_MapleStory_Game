@@ -162,6 +162,39 @@ void CScene::SetSceneState(SCENE_STATE _eState)
 			assert(CResMgr::GetInst()->FindRes<CSceneFile>(m_strResKey).Get());
 		}
 	}
+	else if (SCENE_STATE::PAUSE == m_eSceneState)
+	{
+		if (SCENE_STATE::PLAY == _eState)
+		{
+			m_eSceneState = _eState;
+		}
+	}
 }
 
+void CScene::CopyLayer(CLayer* _pLayer, int _TargetLayerIdx)
+{
+	if (m_arrLayer[_TargetLayerIdx]->GetRootObjects().size() != 0)
+		return;
+
+	assert(0 <= _TargetLayerIdx && _TargetLayerIdx < MAX_LAYER);
+	wstring LayerName = _pLayer->GetName() + wstring(L"_Copy");
+	vector<CGameObject*> vecRoot = _pLayer->GetRootObjects();
+
+
+	m_arrLayer[_TargetLayerIdx]->SetName(LayerName);
+	for (int i = 0; i < vecRoot.size(); ++i)
+	{
+		m_arrLayer[_TargetLayerIdx]->RegisterObjectAsRoot(vecRoot[i]->Clone());
+		m_arrLayer[_TargetLayerIdx]->UpdateLayerIdx(_TargetLayerIdx);
+	}
+}
+
+void CScene::StoreCollideCheckLayerInfo(UINT _ArrColCheck[MAX_LAYER])
+{
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		m_arrCollideCheck[i] = _ArrColCheck[i];
+	}
+
+}
 

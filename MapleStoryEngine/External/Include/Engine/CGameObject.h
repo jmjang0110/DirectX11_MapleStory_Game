@@ -70,6 +70,7 @@ public:
 
     void DeleteComponent(COMPONENT_TYPE _eType);
     void DeleteScript(wstring _name);
+    void UpdateLayerIdx(int _LayerIdx);
     CGameObject* GetAncestor();
     // ===========
 

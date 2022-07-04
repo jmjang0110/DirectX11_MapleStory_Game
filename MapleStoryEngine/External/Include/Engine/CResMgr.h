@@ -14,6 +14,9 @@
 //#include "CSound.h"
 //#include "CMeshData.h"
 
+#include "CLayerFile.h"
+
+
 
 
 class CResMgr
@@ -61,11 +64,11 @@ private:
 	void DeleteRes(const wstring& _strKey);
 
 	// Todo ========
-public:
+public:	
 	template<typename type>
 	void DeletePrefabRes(const wstring& _strKey); 
 	template<typename type>
-	void UpdatePrefabRes(const wstring& _strKey, type* _pPrefabRes, CGameObject* _pProtoObj);
+	void UpdatePrefabRes(const wstring& _strKey, type* _pPrefabRes, bool _bEngineRes = false);
 
 	// =============
 
@@ -91,7 +94,8 @@ inline RES_TYPE CResMgr::GetResType()
 		return RES_TYPE::TEXTURE;
 	else if (info.hash_code() == typeid(CSceneFile).hash_code())
 		return RES_TYPE::SCENEFILE;
-
+	else if (info.hash_code() == typeid(CLayerFile).hash_code())
+		return RES_TYPE::LAYERFILE;
 
 	return RES_TYPE::END;
 }
@@ -162,6 +166,8 @@ void CResMgr::AddRes(const wstring& _strKey, type* _pRes, bool _bEngineRes)
 	}
 }
 
+
+
 // =========== Todo ==================
 template<typename type>
 inline void CResMgr::DeletePrefabRes(const wstring& _strKey)
@@ -171,16 +177,32 @@ inline void CResMgr::DeletePrefabRes(const wstring& _strKey)
 }
 
 template<typename type>
-inline void CResMgr::UpdatePrefabRes(const wstring& _strKey, type* _pPrefabRes, CGameObject* _pProtoObj)
+inline void CResMgr::UpdatePrefabRes(const wstring& _strKey, type* _pPrefabRes, bool _bEngineRes)
 {
 	const type_info& info = typeid(type);
 	assert(info.hash_code() == typeid(CPrefab).hash_code());
 
-	DeletePrefabRes(_strKey, _pPrefabRes);
-	
-	
-	CPrefab* pPrefab = new CPrefab(_pProtoObj);
-	AddRes<type>(_strKey, pPrefab);
+	// 기존 Prefab 을 지운다. 
+	DeletePrefabRes<type>(_strKey);
+
+
+	Ptr<type> pRes = FindRes<type>(_strKey);
+	RES_TYPE eType = GetResType<type>();
+
+	assert(nullptr == pRes);
+
+	_pPrefabRes->SetKey(_strKey);
+	_pPrefabRes->SetRelativePath(_strKey);
+	_pPrefabRes->m_bEngineRes = _bEngineRes;
+
+	m_Res[(UINT)eType].insert(make_pair(_strKey, _pPrefabRes));
+
+	if (_bEngineRes)
+		return;
+
+	wstring strContent = CPathMgr::GetInst()->GetContentPath();
+	_pPrefabRes->Save(strContent + _pPrefabRes->GetKey());
+
 
 }
 

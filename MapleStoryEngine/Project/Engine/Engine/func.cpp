@@ -61,6 +61,7 @@ const wchar_t* ToWString(RES_TYPE _type)
         L"TEXTURE",
         L"SOUND",
         L"SCENEFILE",
+        L"LAYERFILE",
 
     };
 
@@ -79,7 +80,8 @@ const char* ToString(RES_TYPE _type)
         "MESH",
         "TEXTURE",
         "SOUND",
-        "SCENEFILE"
+        "SCENEFILE",
+        "LAYERFILE"
 
     };
 

@@ -258,7 +258,8 @@ void CResMgr::CreateEngineShader()
 		
 	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
 
-	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	//pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	//pShader->SetDSType(DS_TYPE::NO_WRITE);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 	//pShader->AddScalarParamInfo(L"IsCollision", SCALAR_PARAM::INT_0);

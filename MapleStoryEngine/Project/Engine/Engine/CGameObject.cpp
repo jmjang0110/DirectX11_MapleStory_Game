@@ -397,6 +397,7 @@ void CGameObject::DeleteScript(wstring _name)
 
 
 
+
 void CGameObject::Destroy()
 {	
 	if (m_bDead)
@@ -410,9 +411,19 @@ void CGameObject::Destroy()
 	CEventMgr::GetInst()->AddEvent(info);
 }
 
+// == todo ==
+void CGameObject::UpdateLayerIdx(int _LayerIdx)
+{
+	m_iLayerIdx = _LayerIdx;
+	for (int i = 0; i < m_vecChild.size(); ++i)
+	{
+		m_vecChild[i]->UpdateLayerIdx(_LayerIdx);
+
+	}
 
 
-
+}
+// == === == === 
 #include "CCamera.h"
 #include "CCollider2D.h"
 //#include "CCollider3D.h"
@@ -526,6 +537,12 @@ void CGameObject::LoadFromScene(FILE* _pFile)
 	}
 
 }
+
+
+
+
+
+
 
 
 /*

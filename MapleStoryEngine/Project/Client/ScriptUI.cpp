@@ -48,7 +48,7 @@ void ScriptUI::render_update()
 	ImGui::Checkbox("##ScriptActive", &IsActive);
 
 	if (m_pTargetScript->IsActive() != IsActive)
-	{
+	{ 
 		if (IsActive)
 			m_pTargetScript->Activate();
 		else

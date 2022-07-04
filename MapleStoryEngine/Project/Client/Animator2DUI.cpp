@@ -77,7 +77,8 @@ void Animator2DUI::render_update()
 	if (nullptr != pCurAnim)
 	{
 		 strCurAnim = string(pCurAnim->GetName().begin(), pCurAnim->GetName().end());
-		 strCurAnimTex = string(pCurAnim->GetTex()->GetKey().begin(), pCurAnim->GetTex()->GetKey().end());
+		 if(nullptr != pCurAnim->GetTex())
+			strCurAnimTex = string(pCurAnim->GetTex()->GetKey().begin(), pCurAnim->GetTex()->GetKey().end());
 	}
 	
 
@@ -139,7 +140,7 @@ void Animator2DUI::render_update()
 		if (ImGui::BeginPopupModal("ReallyDelete?", &unused_open))
 		{
 
-			ImGui::Text("\t\tWARNING!!\n\nAre You Really DELETE this Animation ?? \n\n");
+			ImGui::Text("\t\tWARNING!!\n\nAre You sure you DELETE this Animation ?? \n\n");
 			if (ImGui::Button("Yes"))
 			{
 				bDelButton = false;
