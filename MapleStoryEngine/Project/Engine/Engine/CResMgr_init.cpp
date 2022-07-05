@@ -20,7 +20,7 @@ void CResMgr::CreateEngineMesh()
 
 	Vtx v;
 
-	// ==========
+	// ==========M
 	// Point Mesh	
 	// ==========
 	v.vPos = Vec3(0.f, 0.f, 0.f);
@@ -168,8 +168,8 @@ void CResMgr::CreateEngineShader()
 	//pShader->SetBSType(BS_TYPE::DEFAULT);
 		
 	pShader->AddScalarParamInfo(L"Mask Limit", SCALAR_PARAM::FLOAT_0);
-	//pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_0);
-	//pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_1);
+	pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_0);
+	pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_1);
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 
 	AddRes<CGraphicsShader>(L"Std2DShader", pShader, true);

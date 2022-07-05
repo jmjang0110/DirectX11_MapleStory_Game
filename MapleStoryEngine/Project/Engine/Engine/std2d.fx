@@ -161,6 +161,9 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         //}
                 
         vOutColor = g_Atlas.Sample(g_sam_1, vUV);     
+        
+
+        
     }
     else
     {
@@ -175,10 +178,12 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }        
     }
     
-    if (vOutColor.a <= 0.f)
+    
+    if (vOutColor.a <= 0.1f)
     {
-        discard;
-    }        
+        vOutColor = float4(1.f, 0.f, 1.f, 1.f);
+        //discard;
+    }
    
     return vOutColor;
 }
