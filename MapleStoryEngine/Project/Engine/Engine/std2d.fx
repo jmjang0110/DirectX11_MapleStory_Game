@@ -178,12 +178,17 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }        
     }
     
-    
-    if (vOutColor.a <= 0.1f)
+    if (vOutColor.a >= 0.0f && vOutColor.a <= 0.5f)
     {
-        vOutColor = float4(1.f, 0.f, 1.f, 1.f);
-        //discard;
+        //vOutColor.a += 0.2f;
+       //vOutColor = float4(1.f, 0.f, 1.f, 1.f);
+       // discard;
     }
+
+    //if (vOutColor.a < 0.3f)
+    //{
+    //    vOutColor.a += 0.45f;
+    //}
    
     return vOutColor;
 }
