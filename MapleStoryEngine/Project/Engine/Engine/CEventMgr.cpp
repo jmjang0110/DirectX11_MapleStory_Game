@@ -185,8 +185,24 @@ void CEventMgr::update()
 
 			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 			pCurScene->GetLayer(iLayerIdx)->DeregisterObject(pObject);
+			m_bObjEvn = true;
+
 		}
 		break;
+
+		case EVENT_TYPE::SWAP_LAYER:
+		{
+			// lParam : Left Layer Index, WParam : Right Layer Index
+			int iLeftLayer_idx = (int)m_vecEvent[i].lParam;
+			int iRightLayer_idx = (int)m_vecEvent[i].wParam;
+
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->SwapLayer(iLeftLayer_idx, iRightLayer_idx);
+			m_bObjEvn = true;
+
+		}
+		break;
+
 		// =========================
 
 

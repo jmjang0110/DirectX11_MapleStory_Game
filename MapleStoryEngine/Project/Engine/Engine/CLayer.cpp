@@ -89,6 +89,10 @@ void CLayer::DeregisterObject(CGameObject* _pObj)
 // 자신의 Root 오브젝트들에 자신의 레이어 인덱스를 알린다. 
 void CLayer::UpdateLayerIdx(int _LayerIdx)
 {
+	assert(!(_LayerIdx < 0 || MAX_LAYER <= _LayerIdx));
+
+	m_iLayerIdx = _LayerIdx;
+
 	for (int i = 0; i < m_vecRoot.size(); ++i)
 	{
 		m_vecRoot[i]->m_iLayerIdx = _LayerIdx;
@@ -111,8 +115,6 @@ void CLayer::SetLayerIdx(int _LayerIdx)
 	
 	if (m_iLayerIdx < 0 || MAX_LAYER <= m_iLayerIdx)
 		m_iLayerIdx = _LayerIdx;
-
-
 }
 
 

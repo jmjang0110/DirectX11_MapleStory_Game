@@ -189,17 +189,10 @@ void CScene::CopyLayer(CLayer* _pLayer, int _TargetLayerIdx)
 		m_arrLayer[_TargetLayerIdx]->RegisterObjectAsRoot(vecRoot[i]->Clone());
 		m_arrLayer[_TargetLayerIdx]->UpdateLayerIdx(_TargetLayerIdx);
 	}
-}
-
-
-void CScene::StoreCollideCheckLayerInfo(UINT _ArrColCheck[MAX_LAYER])
-{
-	for (int i = 0; i < MAX_LAYER; ++i)
-	{
-		m_arrCollideCheck[i] = _ArrColCheck[i];
-	}
 
 }
+
+
 
 void CScene::SetLayer(CLayer* _pLayer, int _TargetLayerIdx)
 {
@@ -210,4 +203,26 @@ void CScene::SetLayer(CLayer* _pLayer, int _TargetLayerIdx)
 
 	m_arrLayer[_TargetLayerIdx] = _pLayer;
 
+}
+
+bool CScene::SwapLayer(int _Lidx, int _Ridx)
+{
+
+	assert(!(_Lidx < 0 || MAX_LAYER <= _Lidx));
+	assert(!(_Ridx < 0 || MAX_LAYER <= _Ridx));
+
+	CLayer* Left = m_arrLayer[_Lidx];
+	CLayer* Right = m_arrLayer[_Ridx];
+	CLayer* Empty = nullptr;
+
+
+
+	Empty = Left;
+	m_arrLayer[_Lidx] = Right;
+	m_arrLayer[_Ridx] = Empty;
+
+	Left->UpdateLayerIdx(_Ridx);
+	Right->UpdateLayerIdx(_Lidx);
+
+	return true;
 }

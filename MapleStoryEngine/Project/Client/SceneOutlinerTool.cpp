@@ -3,6 +3,7 @@
 
 #include <Engine/CSceneMgr.h>
 #include <Engine/CEventMgr.h>
+#include <Engine/CCollisionMgr.h>
 
 
 #include <Engine/CScene.h>
@@ -20,11 +21,12 @@
 #include <Engine/CTransform.h>
 #include <Engine/CMeshRender.h>
 #include <Engine/CCamera.h>
-
+#include <Engine/CCollider2D.h>
 
 #include "CImGuiMgr.h"
 #include "ListUI.h"
 #include "PrefabUI.h"
+#include "InspectorUI.h"
 
 #include <Script/CSceneSaveLoad.h>
 
@@ -80,7 +82,7 @@ void SceneOutlinerTool::update()
 void SceneOutlinerTool::render_update()
 {
 	ImGui::BeginChild("New Object", ImVec2(150.f, 80.f), true, ImGuiWindowFlags_HorizontalScrollbar);
-	
+
 	NewSceneButton();
 	NewLayerButton();
 	NewObjectButton();
@@ -118,7 +120,7 @@ void SceneOutlinerTool::Reset()
 
 		// second Tree Node - Layer 
 		TreeNode* pLayerNode = PushLayerToTree(pLayer, pSceneNode);
-		
+
 		// Third Tree Node - GameObject 
 		vector<CGameObject*>& vecRoots = pLayer->GetRootObjects();
 		for (size_t i = 0; i < vecRoots.size(); ++i)
@@ -165,7 +167,7 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 		pInspectorUI->SetTargetObject(m_pSelectedGameObject);
 
 	}
-		break;
+	break;
 	case ENGINE_TYPE::LAYER:
 	{
 		m_pSelectedLayer = (CLayer*)data;
@@ -176,23 +178,23 @@ void SceneOutlinerTool::ObjectClicked(DWORD_PTR _dw)
 		pInspectorUI->SetTargetObject(m_pSelectedGameObject);
 
 	}
-		break;
+	break;
 	case ENGINE_TYPE::GAME_OBJECT:
 	{
 		CGameObject* pObject = (CGameObject*)data;
 		m_pSelectedGameObject = pObject;
 
 		InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
-		pInspectorUI->SetTargetObject(m_pSelectedGameObject);	
+		pInspectorUI->SetTargetObject(m_pSelectedGameObject);
 	}
-		break;
+	break;
 
 	default:
 		break;
 	}
-	
 
-	
+
+
 }
 
 TreeNode* SceneOutlinerTool::PushSceneToTree(CScene* _pScene, TreeNode* _pDestNode)
@@ -306,19 +308,46 @@ void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop
 		if (nullptr != pDropTargetLayer)
 		{
 			// 최상위 오브젝트로 있는 오브젝트만 받는다. 
-			if(pObject != pObject->GetAncestor())
+			if (pObject != pObject->GetAncestor())
 				return;
 
 			// 현재 레이어의 m_vecRoot 에서 지운다. 
 			CSceneMgr::GetInst()->DeRegisterObjInLayer(pObject, pObject->GetLayerIndex());
-			// 새로운 레이어에 등록한다.
+			// 새로운 레이어에 등록한다. ( EVENT 등록 )
 			CSceneMgr::GetInst()->SpawnObject(pObject, pDropTargetLayer->GetLayerIdx());
 
 		}
 
 	}
-	
+
+	// Layer -> Layer 
+	if (ENGINE_TYPE::LAYER == m_TreeUI->GetDragNode()->GetObjType()
+		&& ENGINE_TYPE::LAYER == m_TreeUI->GetDropNode()->GetObjType())
+	{
+
+		CLayer* pDragLayer = (CLayer*)_dwDrag;
+		CLayer* pDropLayer = (CLayer*)_dwDrop;
+
+		// 드롭 목적지가 제대로 들어 온 경우
+		if (nullptr != pDropLayer)
+		{
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			int iDragLayer_idx = pDragLayer->GetLayerIdx();
+			int iDropLayer_idx = pDropLayer->GetLayerIdx();
+
+			if (nullptr != pCurScene)
+				CSceneMgr::GetInst()->SwapLayer(iDragLayer_idx, iDropLayer_idx);
+
+			InspectorUI* pInspectorUI = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+			pInspectorUI->CollisionOffAll(pCurScene);
+
+			
+		}
+	}
+
 }
+
+
 
 // ====== Todo 
 void SceneOutlinerTool::NewObjectButton()
@@ -376,7 +405,7 @@ void SceneOutlinerTool::NewObjectButton()
 				}
 
 				pListUI->Activate();
-				pListUI->SetDBCEvent(this, (DBCLKED)&::SceneOutlinerTool::PrefabSelect);
+				pListUI->SetDBCEvent(this, (DBCLKED) & ::SceneOutlinerTool::PrefabSelect);
 			}
 
 
@@ -457,7 +486,7 @@ void SceneOutlinerTool::NewSceneButton()
 				CSceneSaveLoad::SaveScene(NewScene, strSceneFilePath + SceneResKey);
 
 				NewScene->SetLayerName(0, L"Default");
-				
+
 				// Camera Object 추가
 				CGameObject* pCamObj = new CGameObject;
 				pCamObj->SetName(L"MainCamera");
@@ -482,7 +511,7 @@ void SceneOutlinerTool::NewSceneButton()
 
 		}
 
-		
+
 	}
 
 
@@ -533,9 +562,6 @@ void SceneOutlinerTool::NewLayerButton()
 				string name = buf;
 				wstring newName = wstring(name.begin(), name.end());
 
-				CLayer* NewLayer = new CLayer;
-				NewLayer->SetName(newName);
-
 				if (nullptr != m_pSelectedScene)
 				{
 					bool bCheckCreate = true;
@@ -546,14 +572,14 @@ void SceneOutlinerTool::NewLayerButton()
 					{
 						bCheckCreate = false;
 					}
-				
+
 					// Layer 생성 
 					if (bCheckCreate)
 					{
 						m_pSelectedScene->SetLayerName(layerIdx, newName);
 
 						Reset();
-						
+
 					}
 				}
 				ImGui::CloseCurrentPopup();
@@ -568,12 +594,12 @@ void SceneOutlinerTool::NewLayerButton()
 
 void SceneOutlinerTool::SceneSaveButton()
 {
-	if (nullptr == m_pSelectedScene )
+	if (nullptr == m_pSelectedScene)
 		return;
 	if (m_pSelectedScene->GetName() == L"")
 		return;
 
-	if(ImGui::Button("Save Scene", ImVec2(100.f, 20.f)))
+	if (ImGui::Button("Save Scene", ImVec2(100.f, 20.f)))
 	{
 
 		// File 저장 
@@ -659,7 +685,7 @@ void SceneOutlinerTool::DeleteLayerButton()
 		wstring LayerName = m_pSelectedLayer->GetName();
 		string strLayerName = string(LayerName.begin(), LayerName.end());
 
-		ImGui::TextColored(ImVec4(0.f,0.5f, 0.8f,1.f),strLayerName.c_str());
+		ImGui::TextColored(ImVec4(0.f, 0.5f, 0.8f, 1.f), strLayerName.c_str());
 		ImGui::Text("Are you sure you delete this layer?");
 
 		if (ImGui::Button("Complete"))
@@ -693,13 +719,7 @@ void SceneOutlinerTool::DeleteLayer(DWORD_PTR _param)
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CLayer* pLayer = pCurScene->GetLayer(delLayerIdx);
 
-	SAFE_DELETE(pLayer);
-
-	CLayer* NewLayer = new CLayer;
-	NewLayer->SetLayerIdx(delLayerIdx);
-	
-	pCurScene->SetLayer(NewLayer, delLayerIdx);
-
+	pLayer->Reset();
 	Reset();
 
 }
@@ -714,7 +734,7 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 	wstring FullPath = strContent + strPrefabKey;
 
 
-	CPrefab* pPrefab = new CPrefab; 
+	CPrefab* pPrefab = new CPrefab;
 	pPrefab->Load(FullPath);
 
 	assert(pPrefab);
@@ -734,19 +754,19 @@ void SceneOutlinerTool::PrefabSelect(DWORD_PTR _param)
 // _param : Layer Name ( selected from List )
 void SceneOutlinerTool::LayerSelect(DWORD_PTR _param)
 {
-	
+
 	string strSelectedName = (char*)_param;
 	wstring strLayerName = wstring(strSelectedName.begin(), strSelectedName.end());
 	wstring strContent = CPathMgr::GetInst()->GetContentPath();
 	wstring FullPath = strContent + strLayerName;
 
 
-	CLayer* pLayer = new CLayer;
+	CLayer* pLayer = nullptr;
 	pLayer = CSceneSaveLoad::LoadLayer(FullPath);
 
 	assert(pLayer);
 
-	
+
 
 	if (m_pSelectedScene)
 	{

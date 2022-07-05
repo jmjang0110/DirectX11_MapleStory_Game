@@ -59,12 +59,7 @@ void CSceneSaveLoad::SaveScene(CScene* _pScene, const wstring& _strSceneFilePath
 
     // Todo ========
        // Layer 충돌 정보 저장 
-    const UINT* ArrColinfo = CCollisionMgr::GetInst()->GetColArrCheck();
-
-    for (int i = 0; i < MAX_LAYER; ++i)
-    {
-        fwrite(&ArrColinfo[i], sizeof(UINT), 1, pFile);
-    }
+    CCollisionMgr::GetInst()->SaveToFile(pFile);
     // == == == == == 
 
 
@@ -100,18 +95,6 @@ void CSceneSaveLoad::SaveGameObject(CGameObject* _pObj, FILE* _pFile)
     }
 }
 
-// Todo =====
-//void CSceneSaveLoad::SavePrefab(CGameObject* _pProtoObj, CPrefab* _pPrefab, FILE* _pFile)
-//{
-//    wstring wstrResKey = L"prefab\\" + _pProtoObj->GetName() + L".pref";
-//    // Prefab 의 Key 를 저장 = RelativePath 
-// 
-//    SaveWStringToFile(wstrResKey, _pFile);
-//    // Proto Object 저장 
-//    SaveGameObject(_pProtoObj, _pFile);
-//
-//}
-// ===========-
 CScene* CSceneSaveLoad::LoadScene(const wstring& _strSceneFilePath)
 {
     // 최종 경로에서 상대경로만 추출
@@ -156,12 +139,7 @@ CScene* CSceneSaveLoad::LoadScene(const wstring& _strSceneFilePath)
 
     // Todo ========
        // Layer 충돌 정보 불러오기  
-    UINT ArrColinfo[MAX_LAYER] = { 0 };
-    for (int i = 0; i < MAX_LAYER; ++i)
-    {
-        fread(&ArrColinfo[i], sizeof(UINT), 1, pFile);
-    }
-    CCollisionMgr::GetInst()->SetColChcek(ArrColinfo);
+    CCollisionMgr::GetInst()->LoadFromFile(pFile);
     // == == == == == 
 
 

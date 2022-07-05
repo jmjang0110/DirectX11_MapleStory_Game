@@ -38,7 +38,7 @@
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI</Filter>
     </ClCompile>
     <ClCompile Include="MeshRenderUI.cpp">
-      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\08. MeshRenderUI</Filter>
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\09. MeshRenderUI</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ListUI.cpp">
@@ -84,7 +84,7 @@
       <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\MeshUI</Filter>
     </ClCompile>
     <ClCompile Include="ParticleSystemUI.cpp">
-      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem</Filter>
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\11. ParticleSystem</Filter>
     </ClCompile>
     <ClCompile Include="SceneOutlinerTool.cpp">
       <Filter>ImGui\UI\00. SceneTool</Filter>
@@ -99,7 +99,7 @@
       <Filter>ImGui\UI\01. InspectorUI\ScriptUI</Filter>
     </ClCompile>
     <ClCompile Include="TileMapUI.cpp">
-      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\09. TileMap</Filter>
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. TileMap</Filter>
     </ClCompile>
     <ClCompile Include="CTestScene.cpp">
       <Filter>TestScene</Filter>
@@ -122,7 +122,9 @@
     <ClCompile Include="CToolObjMgr.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Light2DUI.cpp" />
+    <ClCompile Include="Light2DUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\07. Light2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -177,7 +179,7 @@
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI</Filter>
     </ClInclude>
     <ClInclude Include="MeshRenderUI.h">
-      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\08. MeshRenderUI</Filter>
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\09. MeshRenderUI</Filter>
     </ClInclude>
     <ClInclude Include="ListUI.h">
       <Filter>ImGui\UI\Module\ListUI</Filter>
@@ -222,7 +224,7 @@
       <Filter>ImGui\UI\01. InspectorUI\ResInfoUI\MeshUI</Filter>
     </ClInclude>
     <ClInclude Include="ParticleSystemUI.h">
-      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem</Filter>
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\11. ParticleSystem</Filter>
     </ClInclude>
     <ClInclude Include="SceneOutlinerTool.h">
       <Filter>ImGui\UI\00. SceneTool</Filter>
@@ -237,7 +239,7 @@
       <Filter>ImGui\UI\01. InspectorUI\ScriptUI</Filter>
     </ClInclude>
     <ClInclude Include="TileMapUI.h">
-      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\09. TileMap</Filter>
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\10. TileMap</Filter>
     </ClInclude>
     <ClInclude Include="CTestScene.h">
       <Filter>TestScene</Filter>
@@ -260,7 +262,9 @@
     <ClInclude Include="CToolObjMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Light2DUI.h" />
+    <ClInclude Include="Light2DUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\07. Light2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="39Engine.ico">
@@ -312,21 +316,6 @@
     </Filter>
     <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\07. BoundingBox">
       <UniqueIdentifier>{4b791906-806e-4fc6-930e-873cfc10edb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\09. TileMap">
-      <UniqueIdentifier>{f8395617-a34a-4d18-95bb-b765b714f8dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\08. MeshRenderUI">
-      <UniqueIdentifier>{a2cf5616-8103-4784-b665-c96e92e18528}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\10. ParticleSystem">
-      <UniqueIdentifier>{5e4a9609-8a77-4f6d-9ba0-a6805f1f6016}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\11. LandScape">
-      <UniqueIdentifier>{5910c6ad-3ac2-48bf-be59-339a04ef2696}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\12. Decal">
-      <UniqueIdentifier>{9769ba0a-ad17-4d4f-91b9-fa12d9c16f9f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ImGui\UI\02. ResourceUI">
       <UniqueIdentifier>{5415a04f-4c63-42a9-afa6-c2998d7738a0}</UniqueIdentifier>
@@ -390,6 +379,27 @@
     </Filter>
     <Filter Include="EditorObject\EditorScript">
       <UniqueIdentifier>{8f352e6e-4c9b-4cbf-96eb-cf97c55615f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\09. MeshRenderUI">
+      <UniqueIdentifier>{a2cf5616-8103-4784-b665-c96e92e18528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\10. TileMap">
+      <UniqueIdentifier>{f8395617-a34a-4d18-95bb-b765b714f8dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\11. ParticleSystem">
+      <UniqueIdentifier>{5e4a9609-8a77-4f6d-9ba0-a6805f1f6016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\12. LandScape">
+      <UniqueIdentifier>{5910c6ad-3ac2-48bf-be59-339a04ef2696}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\13. Decal">
+      <UniqueIdentifier>{9769ba0a-ad17-4d4f-91b9-fa12d9c16f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\08. Light3D">
+      <UniqueIdentifier>{45004b69-bb67-44af-b755-5b227b61424a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\07. Light2D">
+      <UniqueIdentifier>{d9c06d94-1205-442f-828e-994da10ef7d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

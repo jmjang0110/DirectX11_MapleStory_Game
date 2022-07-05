@@ -249,6 +249,7 @@ void CCollisionMgr::EraseColInfo(CCollider2D* _LeftCol, CCollider2D* _RightCol)
 }
 
 
+
 void CCollisionMgr::CollisionCheck(int _iLayerLeftIdx, int _iLayerRightIdx)
 {
 	UINT iCol = 0, iRow = 0;
@@ -304,3 +305,30 @@ void CCollisionMgr::CollisionOff(const wstring& _strLeftName, const wstring& _st
 	if (pLeftLayer && pRightLayer)
 		CollisionOff(pLeftLayer->GetLayerIdx(), pRightLayer->GetLayerIdx());
 }
+
+
+
+void CCollisionMgr::SaveToFile(FILE* _pFile)
+{
+	if (nullptr == _pFile)
+		return;
+
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		fwrite(&m_arrCheck[i], sizeof(UINT), 1, _pFile);
+	}
+}
+
+void CCollisionMgr::LoadFromFile(FILE* _pFile)
+{
+
+	if (nullptr == _pFile)
+		return;
+
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		fread(&m_arrCheck[i], sizeof(UINT), 1, _pFile);
+	}
+}
+
+

@@ -71,10 +71,10 @@ public:
     void SetCollisionCheck();
     void ShowCollisionLayer();
 
+    void CollisionOffAll(CScene* _pScene);
     bool IsCollision(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
     bool IsCollision_Box(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
     bool IsCollision_Circle(CCollider2D* _pLeftCol, CCollider2D* _pRightCol);
-
 // ============================================
 
 public:

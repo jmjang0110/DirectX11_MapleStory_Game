@@ -235,7 +235,7 @@ enum class EVENT_TYPE
 
 	// ===== Todo ========
 	DEREGISTER_OBJ_IN_LAYER,	// lParam : Object Adress, WParam : Layer Index
-
+	SWAP_LAYER,					// lParam : Left Layer Index, wParam : Right Layer Index 
 	// ===================
 
 	END,

@@ -42,6 +42,11 @@ public:
 	const UINT* GetColArrCheck() { return m_arrCheck; };
 	void EraseColInfo(CCollider2D* _LeftCol, CCollider2D* _RightCol);
 	void SetColChcek(UINT* _ArrCheck) { for (int i = 0; i < MAX_LAYER; ++i) m_arrCheck[i] = _ArrCheck[i]; m_mapColInfo.clear(); }
+
+	void SaveToFile(FILE* _pFile);
+	void LoadFromFile(FILE* _pFile);
+	bool IsCollisionCheck(CCollider2D* _pLeftCol, CCollider2D* _pRightCol) { return IsCollision(_pLeftCol, _pRightCol); }
+	void ClearCollisionInfo() { for (int i = 0; i < MAX_LAYER; ++i) m_arrCheck[i] = 0; m_mapColInfo.clear(); }
 	// ==============
 
 };

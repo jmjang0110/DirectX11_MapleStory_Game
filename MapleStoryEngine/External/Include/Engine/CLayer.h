@@ -19,6 +19,7 @@ public:
     void SetResKey(const wstring& _strKey) { m_strResKey = _strKey; }
     void UpdateLayerIdx(int _LayerIdx);
     void SetLayerIdx(int _LayerIdx);
+    void Reset() { Safe_Del_Vec(m_vecRoot); Clear(); SetName(L""); }
 // ==========
 public:
     int GetLayerIdx() { return m_iLayerIdx; }

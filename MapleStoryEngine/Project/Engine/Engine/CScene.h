@@ -16,8 +16,6 @@ private:
     SCENE_STATE     m_eSceneState;
     wstring         m_strResKey;
 
-private:
-    UINT			m_arrCollideCheck[MAX_LAYER];
 
 public:
     void start();
@@ -45,8 +43,7 @@ public:
     // ============= Todo ===============
     void CopyLayer(CLayer* _pLayer, int _TargetLayerIdx);
     void SetLayer(CLayer* _pLayer, int _TargetLayerIdx);
-    void StoreCollideCheckLayerInfo(UINT _ArrColCheck[MAX_LAYER]);
-    UINT* GetCollideCheckLayerInfo() { return m_arrCollideCheck; }
+    bool SwapLayer(int _Lidx, int _Ridx);
     // ============= Todo ===============
 
     
