@@ -118,4 +118,13 @@ void TransformUI::render_update()
 	vRot.ToRadian();
 	pTrans->SetRelativeRotation(vRot);
 
+	if (nullptr != pTargetObject->GetParent())
+	{
+		m_bIgnorantParentScale = pTrans->GetIgnoreParentScale();
+		ImGui::Checkbox("IgnoreParentScale", &m_bIgnorantParentScale);
+		{
+			pTrans->SetIgnoreParentScale(m_bIgnorantParentScale);
+		}
+	}
+
 }

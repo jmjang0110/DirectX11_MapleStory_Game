@@ -50,12 +50,12 @@ void CEditorCamScript::update()
 
 	if (KEY_PRESSED(KEY::_1))
 	{
-		Camera()->SetWidth(Camera()->GetWidth() - DT * 100.f);
+		Camera()->SetWidth(Camera()->GetWidth() - DT * 300.f);
 	}
 
 	if (KEY_PRESSED(KEY::_2))
 	{
-		Camera()->SetWidth(Camera()->GetWidth() + DT * 100.f);
+		Camera()->SetWidth(Camera()->GetWidth() + DT * 300.f);
 	}
 
 

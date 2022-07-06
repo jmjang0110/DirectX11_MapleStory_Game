@@ -41,7 +41,7 @@ VTX_OUT VS_Std2D(VTX_IN _in)
 float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
-    
+
     // Animation 정보가 있는 경우
     if (g_useAnim2D)
     {
@@ -161,8 +161,7 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         //}
                 
         vOutColor = g_Atlas.Sample(g_sam_1, vUV);     
-        
-
+  
         
     }
     else
@@ -178,18 +177,12 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }        
     }
     
-    if (vOutColor.a >= 0.0f && vOutColor.a <= 0.5f)
+   if(vOutColor.a <= 0.05f)
     {
-        //vOutColor.a += 0.2f;
-       //vOutColor = float4(1.f, 0.f, 1.f, 1.f);
-       // discard;
+        discard;
     }
 
-    //if (vOutColor.a < 0.3f)
-    //{
-    //    vOutColor.a += 0.45f;
-    //}
-   
+  
     return vOutColor;
 }
 

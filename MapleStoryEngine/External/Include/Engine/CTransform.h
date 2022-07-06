@@ -42,7 +42,7 @@ public:
 	const Vec3& GetWorldFrontDir()  { return m_arrWorldDir[(UINT)DIR_TYPE::FRONT]; }
 
 
-
+    bool GetIgnoreParentScale() { return m_bIgnoreParentScale; }
 
 
     Vec3 GetWorldPos() { return m_matWorld.Translation(); }

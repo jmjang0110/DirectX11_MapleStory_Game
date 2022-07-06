@@ -31,11 +31,46 @@ void Light2DUI::render_update()
 {
 	ComponentUI::render_update();
 
-	tLightInfo LightInfo = GetTargetObject()->Light2D()->GetLightInfo();
+	CGameObject* pTargetObject = GetTargetObject();
+	CLight2D* pLight = pTargetObject->Light2D();
+	tLightInfo LightInfo = pLight->GetLightInfo();
 
+	/*
+		struct tLightInfo
+	{
+		tLightColor color;
+		int			iLightType;
+	};
+	*/
 
-	ImGui::InputFloat("Range", &LightInfo.fRange);
-	ImGui::InputFloat("Ragne", &LightInfo.fRange);
+	ImGui::Text("Range"); ImGui::SameLine();
+	ImGui::PushItemWidth(60);
+	ImGui::DragFloat("##Range", &LightInfo.fRange);
+	ImGui::PopItemWidth();
+	pLight->SetRange(LightInfo.fRange);
+
+	ImGui::Text("Angle"); ImGui::SameLine();
+	ImGui::PushItemWidth(60);
+	ImGui::DragFloat("##Angle", &LightInfo.fAngle);
+	ImGui::PopItemWidth();
+	pLight->SetAngle(LightInfo.fAngle);
+
+	ImGui::Text("DirX"); ImGui::SameLine();
+	ImGui::PushItemWidth(60);
+	ImGui::DragFloat("##DirX", &LightInfo.vLightDir.x);
+	ImGui::PopItemWidth();
+
+	ImGui::Text("DirY"); ImGui::SameLine();
+	ImGui::PushItemWidth(60);
+	ImGui::DragFloat("##DirY", &LightInfo.vLightDir.y);
+	ImGui::PopItemWidth();
+
+	ImGui::Text("DirZ"); ImGui::SameLine();
+	ImGui::PushItemWidth(60);
+	ImGui::DragFloat("##DirZ", &LightInfo.vLightDir.z);
+	ImGui::PopItemWidth();
+	pLight->SetLightDir(LightInfo.vLightDir);
+
 
 
 	m_LightInfo.color;

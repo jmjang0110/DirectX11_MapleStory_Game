@@ -279,6 +279,9 @@ void SceneOutlinerTool::DragAndDropDelegate(DWORD_PTR _dwDrag, DWORD_PTR _dwDrop
 				return;
 			}
 
+			// Todo 
+			pDropTargetObject->Transform()->SetIgnoreParentScale(true);
+			// == == 
 			CSceneMgr::GetInst()->AddChild(pDropTargetObject, pChildObject);
 		}
 

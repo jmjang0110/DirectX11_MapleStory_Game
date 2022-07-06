@@ -290,7 +290,8 @@ int CDevice::CreateBlendState()
 
 	D3D11_BLEND_DESC desc = {};
 
-	desc.AlphaToCoverageEnable = true;		// 커버레이지 옵션 사용 유무
+	//desc.AlphaToCoverageEnable = true;		// 커버레이지 옵션 사용 유무
+	desc.AlphaToCoverageEnable = false;
 	desc.IndependentBlendEnable = false;	// 렌더타겟 블랜드스테이드 독립실행
 
 	desc.RenderTarget[0].BlendEnable = true;			// 블랜딩 스테이트 사용

@@ -69,9 +69,9 @@ void Collider2DUI::render_update()
 	Vec2 resolution = CDevice::GetInst()->GetRenderResolution();
 	ImGui::Text("OffSetPos");
 	ImGui::SameLine(150);
-	ImGui::DragFloat("##OffSetPos_x", &OffSetPos.x, 0.5f, -resolution.x / 2, resolution.x / 2);
+	ImGui::DragFloat("##OffSetPos_x", &OffSetPos.x, 0.5f);
 	ImGui::SameLine();
-	ImGui::DragFloat("##OffSetPos_y", &OffSetPos.y, 0.5f, -resolution.y / 2, resolution.y / 2);
+	ImGui::DragFloat("##OffSetPos_y", &OffSetPos.y, 0.5f);
 	pCollider2D->SetOffsetPos(OffSetPos);
 	ImGui::PopItemWidth();
 
@@ -80,9 +80,9 @@ void Collider2DUI::render_update()
 	Vec2 OffSetScale = pCollider2D->GetOffsetScale();
 	ImGui::Text("OffSetScale");
 	ImGui::SameLine(150);
-	ImGui::DragFloat("##OffSetScale_x", &OffSetScale.x, 0.5f, -resolution.x / 2, resolution.x / 2);
+	ImGui::DragFloat("##OffSetScale_x", &OffSetScale.x, 0.5f);
 	ImGui::SameLine();
-	ImGui::DragFloat("##OffSetScale_y", &OffSetScale.y, 0.5f, -resolution.y / 2, resolution.y / 2);
+	ImGui::DragFloat("##OffSetScale_y", &OffSetScale.y, 0.5f);
 	pCollider2D->SetOffsetScale(OffSetScale);
 
 	ImGui::PopItemWidth();
