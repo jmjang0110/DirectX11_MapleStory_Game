@@ -8,6 +8,8 @@
 #include <Engine/CMeshRender.h>
 #include <Engine/CMesh.h>
 #include <Engine/CMaterial.h>
+#include <Engine/CSceneMgr.h>
+#include <Engine/CScene.h>
 
 MeshRenderUI::MeshRenderUI()
 	: ComponentUI("MeshRender", COMPONENT_TYPE::MESHRENDER)
@@ -96,6 +98,39 @@ void MeshRenderUI::render_update()
 		pListUI->Activate();
 		pListUI->SetDBCEvent(this, (DBCLKED)&MeshRenderUI::MtrlSelect);
 	}
+
+	// Dynamic Mtrl - SCENE_STATE :: PLAY 에서만 동작 가능 
+	if (CSceneMgr::GetInst()->GetCurScene()->GetSceneState() == SCENE_STATE::PLAY)
+	{
+		bool bDynamicMtrlUse = pMeshRender->GetDynamicMtrlCheck();
+		ImGui::Checkbox("Use Dynamic Mtrl", &bDynamicMtrlUse);
+		if (bDynamicMtrlUse)
+		{
+			pMeshRender->SetUseDynamicMtrlCheck(bDynamicMtrlUse);
+			ImGui::Text("Texture");
+			ImGui::SameLine(86.f);
+
+			if (ImGui::Button("##TextureListBtn", Vec2(15, 15)))
+			{
+				// ListUI 활성화한다.
+				const map<wstring, CRes*>& mapRes = CResMgr::GetInst()->GetResList(RES_TYPE::TEXTURE);
+				ListUI* pListUI = (ListUI*)CImGuiMgr::GetInst()->FindUI("##ListUI");
+				pListUI->Clear();
+				pListUI->SetTitle("Texture List");
+
+				for (const auto& pair : mapRes)
+				{
+					pListUI->AddList(string(pair.first.begin(), pair.first.end()));
+				}
+
+				pListUI->Activate();
+				pListUI->SetDBCEvent(this, (DBCLKED)&MeshRenderUI::TexSelect);
+			}
+
+		}
+	}
+
+
 }
 
 void MeshRenderUI::MeshSelect(DWORD_PTR _param)
@@ -120,6 +155,27 @@ void MeshRenderUI::MtrlSelect(DWORD_PTR _param)
 
 	CMeshRender* pMeshRender = GetTargetObject()->MeshRender();
 	pMeshRender->SetSharedMaterial(pMtrl);
+}
+
+void MeshRenderUI::TexSelect(DWORD_PTR _param)
+{
+	string strSelectedName = (char*)_param;
+	wstring strTexKey = wstring(strSelectedName.begin(), strSelectedName.end());
+
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(strTexKey);
+	assert(pTex.Get());
+
+	CMeshRender* pMeshRender = GetTargetObject()->MeshRender();
+
+	if (pMeshRender->GetDynamicMtrlCheck())
+	{
+		pMeshRender->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+	}
+	else
+	{
+		pMeshRender->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex.Get());
+	}
+
 }
 
 

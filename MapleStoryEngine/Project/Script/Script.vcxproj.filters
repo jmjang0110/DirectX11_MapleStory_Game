@@ -46,6 +46,9 @@
     <Filter Include="Script\04. Effect\PaperBurn">
       <UniqueIdentifier>{496344d4-acd8-4f89-a001-a6a0b3be0bb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\03. Object\BackGround">
+      <UniqueIdentifier>{ab160730-930f-48c8-93ca-d5ad077859bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -80,6 +83,12 @@
     <ClInclude Include="CPaperBurnScript.h">
       <Filter>Script\04. Effect\PaperBurn</Filter>
     </ClInclude>
+    <ClInclude Include="CBackGroundScript.h">
+      <Filter>Script\03. Object\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraPlayerMoveScript.h">
+      <Filter>Script\02. UI\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -113,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="CPaperBurnScript.cpp">
       <Filter>Script\04. Effect\PaperBurn</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGroundScript.cpp">
+      <Filter>Script\03. Object\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraPlayerMoveScript.cpp">
+      <Filter>Script\02. UI\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

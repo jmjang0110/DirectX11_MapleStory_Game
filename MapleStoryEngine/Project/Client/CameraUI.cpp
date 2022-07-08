@@ -3,6 +3,8 @@
 
 
 #include <Engine/CCamera.h>
+#include <Engine/CRenderMgr.h>
+
 
 CameraUI::CameraUI()
     : ComponentUI("Camera", COMPONENT_TYPE::CAMERA)
@@ -93,4 +95,7 @@ void CameraUI::render_update()
     float fFar = pCameraCom->GetFar();
     ImGui::InputFloat("##InputFar", &fFar);
     pCameraCom->SetFar(fFar);
+
+
+
 }

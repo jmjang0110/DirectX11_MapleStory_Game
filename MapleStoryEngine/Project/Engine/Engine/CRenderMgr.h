@@ -29,6 +29,8 @@ public:
 private:
     void render_play();
     void render_editor();
+
+
 public:
     void RegisterCamera(CCamera* _pCam);
     void RegisterEditorCamera(CCamera* _pCam) { m_pEditorCam = _pCam; }

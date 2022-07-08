@@ -31,6 +31,8 @@
 
 #include <Engine/CRes.h>
 #include <Engine/CPrefab.h>
+#include <Engine/CRenderMgr.h>
+
 // COMPONENT-TYPE
 #include <Engine/CTransform.h>
 #include <Engine/CCamera.h>
@@ -715,6 +717,7 @@ void InspectorUI::GameObjectTool_SubFunc()
 	}
 
 
+	
 	ImGui::EndChild();
 
 }
@@ -834,6 +837,7 @@ void InspectorUI::LayerTool_subFunc()
 	}
 
 }
+
 
 void InspectorUI::SetCollisionCheck()
 {

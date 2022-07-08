@@ -50,6 +50,7 @@ void CRenderMgr::render()
 	if (pCurScene->GetSceneState() == SCENE_STATE::PLAY)
 	{
 		render_play();
+
 	}
 
 	else
@@ -131,6 +132,7 @@ void CRenderMgr::render_editor()
 	// PostProcess ¹°Ã¼ ·»´õ¸µ
 	m_pEditorCam->render_postprocess();
 }
+
 
 
 void CRenderMgr::RegisterCamera(CCamera* _pCam)

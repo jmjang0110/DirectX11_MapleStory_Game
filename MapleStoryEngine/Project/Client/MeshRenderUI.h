@@ -14,6 +14,8 @@ public:
 public:
     void MeshSelect(DWORD_PTR _param);
     void MtrlSelect(DWORD_PTR _param);
+    void TexSelect(DWORD_PTR _param);
+
 
 public:
     MeshRenderUI();

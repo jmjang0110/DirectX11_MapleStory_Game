@@ -291,8 +291,8 @@ int CDevice::CreateBlendState()
 	D3D11_BLEND_DESC desc = {};
 
 	//desc.AlphaToCoverageEnable = true;		// 커버레이지 옵션 사용 유무
-	desc.AlphaToCoverageEnable = false;
-	desc.IndependentBlendEnable = false;	// 렌더타겟 블랜드스테이드 독립실행
+	desc.AlphaToCoverageEnable = FALSE;
+	desc.IndependentBlendEnable = TRUE;	// 렌더타겟 블랜드스테이드 독립실행
 
 	desc.RenderTarget[0].BlendEnable = true;			// 블랜딩 스테이트 사용
 	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;	// 가산 혼합
@@ -306,6 +306,28 @@ int CDevice::CreateBlendState()
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	if (FAILED(DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::ALPHA_BLEND].GetAddressOf())))
+	{
+		return E_FAIL;
+	}
+
+	// == Todo 
+
+	//desc.AlphaToCoverageEnable = true;		// 커버레이지 옵션 사용 유무
+	desc.AlphaToCoverageEnable = TRUE;
+	desc.IndependentBlendEnable = TRUE;	// 렌더타겟 블랜드스테이드 독립실행
+
+	desc.RenderTarget[1].BlendEnable = true;			// 블랜딩 스테이트 사용
+	desc.RenderTarget[1].BlendOp = D3D11_BLEND_OP_ADD;	// 가산 혼합
+	desc.RenderTarget[1].SrcBlend = D3D11_BLEND_SRC_ALPHA; // SrcRGB 블랜드 계수 ==> (SrcA)
+	desc.RenderTarget[1].DestBlend = D3D11_BLEND_INV_SRC_ALPHA; // DestRGB 블랜드 계수 ==> (1 - SrcA)	
+
+	desc.RenderTarget[1].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[1].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[1].DestBlendAlpha = D3D11_BLEND_ZERO;
+
+	desc.RenderTarget[1].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	if (FAILED(DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::DEFAULT].GetAddressOf())))
 	{
 		return E_FAIL;
 	}

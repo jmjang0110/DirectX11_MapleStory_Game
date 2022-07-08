@@ -7,6 +7,10 @@
 #include <Engine/CLayer.h>
 #include <Engine/CGameObject.h>
 
+#include <Engine/CKeyMgr.h>
+#include <Engine/CAnimator2D.h>
+#include <Engine/CAnimation2D.h>
+
 
 
 CCursorScript::CCursorScript()
@@ -34,7 +38,19 @@ void CCursorScript::start()
 
 void CCursorScript::update()
 {
+	Update_CursorPos();
+	Update_CursorState();
+	Update_CursorAnimation();
+}
 
+void CCursorScript::lateupdate()
+{
+}
+
+
+
+void CCursorScript::Update_CursorPos()
+{
 
 	Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
 	Vec3 vMouseScale = GetOwner()->Transform()->GetRelativeScale();
@@ -70,20 +86,50 @@ void CCursorScript::update()
 		// 실제 월드상에서의 좌표값 
 		Vec2 vRealPos = vDx11Pos + vCameraPos;
 
-		GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x + (vMouseScale.x / 2.f), vRealPos.y - (vMouseScale.y / 2.f), 0.f));
+		//GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x + (vMouseScale.x / 2.f)
+		//	, vRealPos.y - (vMouseScale.y / 2.f), vCameraPos.z + 300.f));
 
+
+		GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x 
+			, vRealPos.y, vCameraPos.z + 300.f));
 
 	}
 
-
 }
 
-void CCursorScript::lateupdate()
+void CCursorScript::Update_CursorState()
+{
+	CAnimator2D* pAnimator = Animator2D();
+	if (pAnimator == nullptr)
+		return;
+
+
+	if (KEY_TAP(KEY::LBTN))
+	{
+		m_CursorState = CURSOR_STATE::DOWN;
+		pAnimator->Play(L"DOWN", true);
+	}
+
+	if (KEY_TAP(KEY::RBTN))
+	{
+		m_CursorState = CURSOR_STATE::UP;
+		pAnimator->Play(L"UP", true);
+
+	}
+}
+
+void CCursorScript::Update_CursorAnimation()
 {
 }
+
 
 void CCursorScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+	CAnimator2D* pAnimator = Animator2D();
+	if (pAnimator == nullptr)
+		return;
+	m_CursorState = CURSOR_STATE::DOWN;
+	pAnimator->Play(L"DOWN", true);
 }
 
 void CCursorScript::OnCollision(CGameObject* _OtherObject)
@@ -92,5 +138,9 @@ void CCursorScript::OnCollision(CGameObject* _OtherObject)
 
 void CCursorScript::OnCollisionExit(CGameObject* _OtherObject)
 {
+	CAnimator2D* pAnimator = Animator2D();
+	if (pAnimator == nullptr)
+		return;
+	m_CursorState = CURSOR_STATE::UP;
+	pAnimator->Play(L"UP", true);
 }
-

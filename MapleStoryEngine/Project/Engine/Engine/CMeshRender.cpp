@@ -9,6 +9,7 @@
 
 CMeshRender::CMeshRender()
 	: CRenderComponent(COMPONENT_TYPE::MESHRENDER)
+	, m_bUseDynamicMtrl(false)
 	
 {
 }
@@ -17,6 +18,7 @@ CMeshRender::~CMeshRender()
 {
 
 }
+
 
 
 void CMeshRender::finalupdate()
@@ -57,4 +59,19 @@ void CMeshRender::LoadFromScene(FILE* _pFile)
 }
 
 
+
+
+void CMeshRender::SetUseDynamicMtrlCheck(bool _bUse)
+{
+	m_bUseDynamicMtrl = _bUse;
+
+	if (m_bUseDynamicMtrl)
+	{
+		GetDynamicMaterial();
+	}
+	else
+	{
+		GetSharedMaterial();
+	}
+}
 

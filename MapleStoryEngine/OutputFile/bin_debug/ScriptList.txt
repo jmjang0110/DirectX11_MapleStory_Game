@@ -1,3 +1,5 @@
+CameraPlayerMoveScript
+CBackGroundScript
 CCameraMoveScript
 CCursorScript
 CGravityScript

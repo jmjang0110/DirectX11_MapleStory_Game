@@ -354,6 +354,7 @@ void TileMapUI::EditorUpdate()
 			{
 				m_bTilemapInnerClicked = true;
 
+				Vec2 TileMapSize = (GetTargetObject()->TileMap()->GetTileSize());
 				int iCol = (vRealPos.x - vTileMapLT.x) / (GetTargetObject()->TileMap()->GetTileSize().x);
 				int iRow = (vTileMapLT.y - vRealPos.y) / (GetTargetObject()->TileMap()->GetTileSize().y);
 

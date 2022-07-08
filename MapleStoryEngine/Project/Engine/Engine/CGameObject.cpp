@@ -158,6 +158,7 @@ void CGameObject::render()
 		Collider2D()->render();
 }
 
+
 CScript* CGameObject::GetScript(UINT _iIdx)
 {
 	return m_vecScript[_iIdx];
@@ -298,6 +299,8 @@ CGameObject* CGameObject::GetAncestor()
 	return pObj;
 
 }
+
+
 
 void CGameObject::AddChild(CGameObject* _pChild)
 {
@@ -537,10 +540,6 @@ void CGameObject::LoadFromScene(FILE* _pFile)
 	}
 
 }
-
-
-
-
 
 
 

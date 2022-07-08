@@ -50,7 +50,7 @@ void CTestScene::CreateTestScene()
 
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
-	//return;
+	return;
 
 
 	pCurScene->SetName(L"firstScene");

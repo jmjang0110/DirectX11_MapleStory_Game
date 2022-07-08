@@ -7,6 +7,12 @@
 class CMeshRender :
     public CRenderComponent
 {
+private:
+    bool        m_bUseDynamicMtrl;
+
+public:
+    void SetUseDynamicMtrlCheck(bool _bUse);
+    bool GetDynamicMtrlCheck() { return m_bUseDynamicMtrl; }
 public:
     virtual void finalupdate() override;
     virtual void render() override;

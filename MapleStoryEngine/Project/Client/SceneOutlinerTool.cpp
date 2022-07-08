@@ -430,7 +430,7 @@ void SceneOutlinerTool::NewObjectButton()
 					// 기본적으로 CTransform 을 갖는다. 
 					NewObj->AddComponent(new CTransform);
 
-					NewObj->Transform()->SetRelativePos(0.f, 0.f, 100.f);
+					NewObj->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 					NewObj->Transform()->SetRelativeScale(200.f, 200.f, 1.f);
 
 

@@ -33,7 +33,7 @@ protected:
     float                   m_fFar;         // 최대 시야 거리
 
     UINT                    m_iLayerMask;
-    int                     m_iCamIdx;  // RenderMgr 상에서   
+    int                     m_iCamIdx;      // RenderMgr 상에서   
 
 
 public:
@@ -58,7 +58,6 @@ public:
 
     const Matrix& GetViewMat() { return m_matView; }
     const Matrix& GetProjMat() { return m_matProj; }
-
 
 private:
     void SortGameObject();  // Shader Domain 에 따른 물체 분류

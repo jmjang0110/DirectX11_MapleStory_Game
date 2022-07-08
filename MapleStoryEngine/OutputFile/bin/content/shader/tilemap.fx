@@ -68,8 +68,8 @@ float4 PS_TileMap(VTX_OUT _in) : SV_Target
             }
         }
        
-        
-        //discard;
+        else
+            discard;
     }
     else
     {
@@ -82,8 +82,12 @@ float4 PS_TileMap(VTX_OUT _in) : SV_Target
         float2 vSampleUI = vLeftTopUV + vImgUV * SliceSizeUV;
     
         vOutColor = g_tex_0.Sample(g_sam_1, vSampleUI);
+        
    // vOutColor *= 1.5f;
     }
+    
+    //if(vOutColor.a <= 0.0f)
+    //    discard;
     
     return vOutColor;
 }

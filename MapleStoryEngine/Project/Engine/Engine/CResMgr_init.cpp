@@ -164,14 +164,33 @@ void CResMgr::CreateEngineShader()
 		
 	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_MASKED);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+
+	pShader->AddScalarParamInfo(L"Mask Limit", SCALAR_PARAM::FLOAT_0);
+	pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_0);
+	pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_1);
+	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
+	AddRes<CGraphicsShader>(L"Std2DShader", pShader, true);
+
+
+
+	// Std2DNoDepthShader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D_NO_DEPTH");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D_NO_DEPTH");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+
 
 	pShader->AddScalarParamInfo(L"Mask Limit", SCALAR_PARAM::FLOAT_0);
 	pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_0);
 	pShader->AddScalarParamInfo(L"HorizontalFlip_Onlyfor_Anim", SCALAR_PARAM::INT_1);
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 
-	AddRes<CGraphicsShader>(L"Std2DShader", pShader, true);
+	AddRes<CGraphicsShader>(L"Std2DNoDepthShader", pShader, true);
 
 
 	// Std2D Light Shader
@@ -241,9 +260,10 @@ void CResMgr::CreateEngineShader()
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
 
-	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_MASKED);
-	pShader->SetRSType(RS_TYPE::CULL_NONE);	
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
 
 	pShader->AddTexParamInfo(L"TileMapAtlas", TEX_PARAM::TEX_0);
 
@@ -308,6 +328,11 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes<CMaterial>(L"material\\Std2DMtrl.mtrl", pMtrl);
 	
+	// Std2DNoDepthMtrl 持失
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DNoDepthShader"));
+	AddRes<CMaterial>(L"material\\Std2DNoDepthMtrl.mtrl", pMtrl);
+
 
 	// Std2D_Light Mtrl 持失
 	pMtrl = new CMaterial;

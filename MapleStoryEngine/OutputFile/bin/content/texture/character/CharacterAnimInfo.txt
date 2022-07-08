@@ -1,0 +1,154 @@
+walk1 
+	- [body]  Start_px(0, 0)   px(31,32) 
+	  [arm]    Start_px(180, 0) , px(60, 32) 
+walk2 
+	- [body]  Start_px(0, 46) px(26,32) 
+	  [arm]    Start_px(180, 46), px(60, 32) 
+	  [hand]   Start_px(420,46), px(60,32)
+stnad1
+	- [body]  Start_px(0, 92) px(23,31) 
+	  [arm]    Start_px(180, 92), px(60, 31) 
+stnad2
+	- [body]  Start_px(0, 140) px(20,31) 
+	  [arm]    Start_px(180, 140), px(60, 31)  // OffSet(20,0) 
+	  [hand]   Start_px(416,140) px(60,31)   // hand Over - 4px
+alert 
+	- [body] Start_px(0, 192) px(24, 31 )  
+	  [arm]   Start_px(180, 192), px(60, 31) 
+ 	  [hand]  Start_px(420, 192) px(60,31)
+swingO1 
+	- [body] Start_px(0, 249) px(55, 31) 
+	  [arm]   Start_px(180, 249), px(60,31)
+swingO2 
+	- [body] Start_px(0, 296) px(37, 31) 
+	  [arm]   Start_px(180, 296), px(60,31)
+	- offset() - arm
+
+swingO3
+	- [body] Start_px(0, 376) px(47, 30) 
+	  [arm]   Start_px(180, 376), px(60,30) 
+	- offset() - arm
+
+swingOF
+	- [body] Start_px(0, 429) px(37, 31) 
+	  [arm]   Start_px(358, 429), px(60,31) -  OffSet(2, 0)
+	
+
+
+swingT1
+	- [body] Start_px(0, 507) px(47, 31) - SwingT1.2.body - Offset(0,3)
+	  [arm]   Start_px(180, 507), px(60,31) 
+	- offset() - arm - 애니메이션 만들때 60 31 로 만들면 짤리니까
+	올릴거 아니야 그 올라간 만큼 Offset을 주면 되겠네 
+
+SwingT2
+	- [body] Start_px(0, 589) px(41, 37)
+	  [arm]   Start_px(180, 589), px(60,41) 
+
+SwingT3
+	- [body] Start_px(0, 645) px(41, 40)
+	  [arm]   Start_px(180, 645), px(60,40)  - swingT3.2.arm - offset(-8, 0)
+
+SwingTF
+	- [body] Start_px(0, 700) px(42, 48)
+	  [arm]   Start_px(180, 700), px(60,48) - swingTF.2.arm - offset(0,7)
+
+SwingP1
+	- [body] Start_px(0, 774) px(42, 31)
+	  [arm]   Start_px(180, 774), px(60,31) - swingP1.0.arm - offset (0, -19) / swingP1.1.arm - offset (0, -12)
+
+
+SwingP2
+	- [body] Start_px(0, 810) px(40, 48)
+	  [arm]   Start_px(180, 810), px(60,48) - swingP1.0.arm
+
+SwingPF
+	- [body] Start_px(0, 870) px(39, 61)
+	  [arm]   Start_px(180, 870), px(60,61) - swingP1.0.arm
+				- swingPF.0.hand - offset(-7, 0)
+				- swingPF.1.hand - offset(-19, 0)
+
+StabO1
+	- [body] Start_px(0, 945) px(41, 29)
+	  [arm]   Start_px(180, 945), px(60,29) - swingP1.0.arm
+					- Stab.O1.1.arn - offset(15,0)
+
+
+StabOF
+	- [body] Start_px(0, 945) px(41, 29)
+	  [arm]   Start_px(180, 945), px(60,29) - swingP1.0.arm
+					- Stab.O1.1.arn - offset(15,0)
+
+StabT1
+	- [body] Start_px(0, 1035) px( 60 , 32 )
+	 [arm]   Start_px(180, 1035), px(60,32)
+					- StabT1.1.arn - offset(15,0)
+
+StabTF
+	- [body] Start_px(0, 1080) px( 39 , 61 )
+	 [arm]   Start_px(180, 1080), px(60,61)
+
+
+Shoot1
+	- [body] Start_px(0, 1140) px( 37 , 31 )- Offset ( -8, 0 )
+	 [arm]   Start_px(180, 1140), px(60,31)
+- Shoot1.0.arn - offset(0,5)
+- Shoot1.1.arn - offset(10,6)
+
+
+Shoot2
+	- [body] Start_px(0, 1184) px( 31 , 30 )
+	 [arm]   Start_px(180, 1184), px(60, 30)
+- Shoot2.1.arn - offset(0,6)
+- Shoot2.2.arn - offset(0,3)
+
+
+ShootF
+	- [body] Start_px(0, 1230) px( 43 , 36 )
+	 [arm]   Start_px(180, 1230), px(60, 36)
+- ShootF.0.arn - offset(0,3)
+- ShootF.1.arn - offset(0,2)
+
+
+Jump
+	- [body] Start_px(0, 1280) px( 35 , 30 )
+	 [arm]   Start_px(180, 1280), px(60,30)
+Jump[arm]   - Offset(0, 1 )
+Jump[hand]   - Offset(0, 1 )
+
+Ladder
+	-[body] start_px(0, 1320) px(23,43)
+
+rope
+	-[body] start_px(60, 1320) px(19,43)
+
+sit
+	-[body] start_px(120, 1320) px(25,25)
+	-[arm] starT_px(145, 1320) px( 25,25)
+dead
+	-[body] start_px(180, 1320) px(28,28)
+fly
+	-[body] start_px(0, 1380) px(24,37)
+ 	[arm]   Start_px(180, 1380), px(60,37)
+- fly.1.arm offset(0, 2)
+
+- fly.0.hand offset(0, -3)
+- fly.1.hand offset(0, 2)
+
+
+ProneStab
+	-[body] start_px(0, 1440) px(63,15)
+ 	[arm]   Start_px(180, 1440), px(60,15)
+
+
+ px start 
+[arm]  180 - 240 - 300 - 360 
+[hand] 420 - 480 - 540 - 600   
+
+
+
+
+
+
+
+

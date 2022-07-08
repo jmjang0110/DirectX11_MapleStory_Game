@@ -102,7 +102,7 @@ void CCameraMoveScript::update()
 
 	
 
-	/*if (KEY_PRESSED(KEY::RBTN))
+	if (KEY_PRESSED(KEY::RBTN))
 	{
 		Vec3 vRot = Transform()->GetRelativeRotation();
 		
@@ -111,7 +111,7 @@ void CCameraMoveScript::update()
 		vRot.x -= DT * vMouseDir.y * XM_PI;
 
 		Transform()->SetRelativeRotation(vRot);
-	}*/
+	}
 
 	Transform()->SetRelativePos(vPos);
 }
