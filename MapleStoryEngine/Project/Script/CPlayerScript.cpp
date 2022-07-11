@@ -78,13 +78,14 @@ void CPlayerScript::start()
 void CPlayerScript::update()
 {
 	
+	Update_State();
 	Update_Move();
 	Update_Gravity();
-
-	Update_State();
-	//Update_Animation();
+	Update_Animation();
 	
 	m_ePrevState = m_eCurState;
+	m_ePrevDir = m_eDir;
+
 }
 
 
@@ -173,26 +174,41 @@ void CPlayerScript::OnCollisionExit(CGameObject* _OtherObject)
 void CPlayerScript::Update_State()
 {
 
+	CRigidBodyScript* pRigid = (CRigidBodyScript*)GetOwner()->GetScriptByName(L"CRigidBodyScript");
+	if (nullptr != pRigid)
+	{
+		float fSpeed = pRigid->GetVelocity().Length();
+		if (0.f == fSpeed && m_bOnGround)
+		{
+			m_eCurState = PLAYER_STATE::IDLE;
+			m_eDir = PLAYER_DIRECTION::LEFT;
+		}
+
+		if (m_ePrevState == PLAYER_STATE::JUMP)
+		{
+			if (m_bOnGround == TRUE)
+			{
+				m_eCurState = PLAYER_STATE::IDLE;
+				m_eDir = PLAYER_DIRECTION::LEFT; // TEST 
+
+			}
+		}
+
+	}
+
 	if (KEY_TAP(KEY::LEFT))
 	{
 		m_eCurState = PLAYER_STATE::WALK;
 		m_eDir = PLAYER_DIRECTION::LEFT;
+		m_eMoveDir = PLAYER_DIRECTION::LEFT;
 	}
 	if (KEY_TAP(KEY::RIGHT))
 	{
 		m_eCurState = PLAYER_STATE::WALK;
 		m_eDir = PLAYER_DIRECTION::RIGHT;
+		m_eMoveDir = PLAYER_DIRECTION::RIGHT;
 	}
-	if (KEY_TAP(KEY::UP))
-	{
-		m_eCurState = PLAYER_STATE::WALK;
-		m_eDir = PLAYER_DIRECTION::UP;
-	}
-	if (KEY_TAP(KEY::DOWN))
-	{
-		m_eCurState = PLAYER_STATE::WALK;
-		m_eDir = PLAYER_DIRECTION::DOWN;
-	}
+
 
 	if (KEY_TAP(KEY::SPACE))
 	{
@@ -201,14 +217,7 @@ void CPlayerScript::Update_State()
 	}
 
 	
-	CRigidBodyScript* pRigid = (CRigidBodyScript*)GetOwner()->GetScriptByName(L"CRigidBodyScript");
-	if (nullptr != pRigid)
-	{
-		float fSpeed = pRigid->GetVelocity().Length();
-		if (0.f == fSpeed)
-			m_eCurState = PLAYER_STATE::IDLE;	
 
-	}
 //if (KEY_AWAY(KEY::LEFT) && KEY_AWAY(KEY::RIGHT))
 //	m_eCurState = PLAYER_STATE::IDLE;
 }
@@ -299,44 +308,121 @@ void CPlayerScript::Update_Move()
 
 void CPlayerScript::Update_Animation()
 {
-	if (m_ePrevState == m_eCurState)
-		return;
+	//if (m_ePrevState == m_eCurState)
+	//	return;
 
-	switch (m_eCurState)
+	CGameObject* owner = GetOwner();
+	vector<CGameObject*> vecChild = GetOwner()->GetChild();
+	for (int i = 0; i < vecChild.size(); ++i)
 	{
-	case PLAYER_STATE::IDLE:
-	{
-		GetOwner()->Animator2D()->Play(L"", false);
-	}
+		if (vecChild[i]->Animator2D() == nullptr)
+			continue;
+		CAnimator2D* pAnimator2D = vecChild[i]->Animator2D();
 
-		break;
-	case PLAYER_STATE::WALK:
-	{
-		if (PLAYER_DIRECTION::LEFT == m_eDir)
+		// Test
+		if (vecChild[i]->GetName() == L"Body")
 		{
+			switch (m_eCurState)
+			{
+			case PLAYER_STATE::IDLE:
+			{
 
+				if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+				{
+					pAnimator2D->Play(L"STAND1_LEFT", true);
+				}
+				else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+				{
+					pAnimator2D->Play(L"STAND1_RIGHT", true);
+
+				}
+
+			}
+
+			break;
+			case PLAYER_STATE::WALK:
+			{
+				if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+				{
+ 					pAnimator2D->Play(L"WALK1_LEFT", true);
+				}
+				else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+				{
+					pAnimator2D->Play(L"WALK1_RIGHT", true);
+
+				}
+			}
+
+			break;
+			case PLAYER_STATE::JUMP:
+			{
+				if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+				{
+					pAnimator2D->Play(L"JUMP_LEFT", true);
+
+				}
+				else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+				{
+					pAnimator2D->Play(L"JUMP_RIGHT", true);
+
+				}
+
+				
+			}
+
+			break;
+
+			case PLAYER_STATE::ATTACK:
+
+				break;
+			case PLAYER_STATE::ALERT:
+
+				break;
+			case PLAYER_STATE::DEAD:
+
+				break;
+			}
 		}
-		else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+
+		if (vecChild[i]->GetName() == L"Head")
 		{
+			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			{
+				pAnimator2D->Play(L"HEAD_LEFT", true);
+			}
+			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			{
+				pAnimator2D->Play(L"HEAD_RIGHT", true);
 
+			}
+
+			vector<CGameObject*> ChildChildObj = vecChild[i]->GetChild();
+			for (int i = 0; i < ChildChildObj.size(); ++i)
+			{
+				if (ChildChildObj[i]->GetName() == L"Eye")
+				{
+					CAnimator2D* pAnimator2D = ChildChildObj[i]->Animator2D();
+
+					if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+					{
+						pAnimator2D->Play(L"BLINK_LEFT", true);
+					}
+					else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+					{
+						pAnimator2D->Play(L"BLINK_RIGHT", true);
+
+					}
+				}
+			}
 		}
+
+		
+
 	}
 
-		break;
-	case PLAYER_STATE::JUMP:
 
-		break;
 
-	case PLAYER_STATE::ATTACK:
-
-		break;
-	case PLAYER_STATE::ALERT:
-
-		break;
-	case PLAYER_STATE::DEAD:
-
-		break;
-	}
+	
 
 }
 

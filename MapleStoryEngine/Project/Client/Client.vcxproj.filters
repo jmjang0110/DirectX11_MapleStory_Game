@@ -125,6 +125,9 @@
     <ClCompile Include="Light2DUI.cpp">
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI\07. Light2D</Filter>
     </ClCompile>
+    <ClCompile Include="DamageParticleUI.cpp">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\000. DamageParticleUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -265,6 +268,9 @@
     <ClInclude Include="Light2DUI.h">
       <Filter>ImGui\UI\01. InspectorUI\ComponentUI\07. Light2D</Filter>
     </ClInclude>
+    <ClInclude Include="DamageParticleUI.h">
+      <Filter>ImGui\UI\01. InspectorUI\ComponentUI\000. DamageParticleUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="39Engine.ico">
@@ -400,6 +406,9 @@
     </Filter>
     <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\07. Light2D">
       <UniqueIdentifier>{d9c06d94-1205-442f-828e-994da10ef7d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\UI\01. InspectorUI\ComponentUI\000. DamageParticleUI">
+      <UniqueIdentifier>{1cf02835-cba9-468c-96ea-1e522a037307}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

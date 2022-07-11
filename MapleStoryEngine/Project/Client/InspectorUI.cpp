@@ -20,6 +20,9 @@
 #include "SceneOutlinerTool.h"
 #include "Light2DUI.h"
 
+#include "DamageParticleUI.h"
+
+
 
 #include "CImGuiMgr.h"
 
@@ -45,10 +48,15 @@
 #include <Engine/CScript.h>
 #include <Engine/CLight2D.h>
 
+#include <Engine/CDamageParticle.h>
+
 #include <ResourceUI.h>
 
 #include <Script/CSceneSaveLoad.h>
 #include <Script/CScriptMgr.h>
+
+#include <Engine/CDamageParticle.h>
+
 
 
 
@@ -87,6 +95,12 @@ InspectorUI::InspectorUI()
 	pComUI = new ParticleSystemUI;
 	AddChild(pComUI);
 	m_arrComUI[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = pComUI;
+
+	// Daamage PArticle SYstem UI
+	pComUI = new DamageParticleUI;
+	AddChild(pComUI);
+	m_arrComUI[(UINT)COMPONENT_TYPE::DAMAGE_PARTICLESYSTEM] = pComUI;
+
 
 	//Collider2D SYstem UI
 	pComUI = new Collider2DUI;
@@ -406,6 +420,30 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 				}
 				break;
 
+				case COMPONENT_TYPE::DAMAGE_PARTICLESYSTEM:
+				{
+					if (nullptr == m_pTargetObject->GetRenderComponent())
+					{
+						m_pTargetObject->AddComponent(new CDamageParticle);
+						Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\hit\\damageSkin.png", L"texture\\hit\\damageSkin.png");
+						Vec2 sliceUV = Vec2(37.f / pParticleTex->Width(), 39.f / pParticleTex->Height());
+						Vec2 StartUV = Vec2(0.f / pParticleTex->Width(), 100.f / pParticleTex->Height());
+						// TEST 
+						m_pTargetObject->DamageParticle()->GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, pParticleTex);
+						m_pTargetObject->DamageParticle()->SetDamageNum(123456789);
+						m_pTargetObject->DamageParticle()->SetStartLT_UV(StartUV);
+						m_pTargetObject->DamageParticle()->setSliceUV(sliceUV);
+
+						m_pTargetObject->DamageParticle()->SetMaxParticleCount(9);
+						m_pTargetObject->DamageParticle()->SetAliveCount(9);
+
+
+					}
+
+				}
+				break;
+
+
 				case COMPONENT_TYPE::COLLIDER3D:
 				case COMPONENT_TYPE::ANIMATOR3D:
 				case COMPONENT_TYPE::BOUNDINGBOX:
@@ -439,6 +477,9 @@ void InspectorUI::AddScript(DWORD_PTR _param)
 	wstring wstrSCriptType = wstring(strScriptType.begin(), strScriptType.end());
 
 	m_pTargetObject->AddComponent((CComponent*)CScriptMgr::GetScript(wstrSCriptType));
+	CScript* pScript = m_pTargetObject->GetScriptByName(wstrSCriptType);
+	if (pScript != nullptr)
+		pScript->start();
 
 
 	// UI °»½Å 

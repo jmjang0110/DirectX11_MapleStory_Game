@@ -18,7 +18,9 @@ private:
     bool                m_bDel;
 
 public:
-    void SetTargetObject(CGameObject* _pTarget) { m_pTargetObject = _pTarget; }
+    void SetTargetObject(CGameObject* _pTarget) {
+        int i = 0;
+    m_pTargetObject = _pTarget; }
     CGameObject* GetTargetObject() { return m_pTargetObject; }
 
     // ===== Todo 

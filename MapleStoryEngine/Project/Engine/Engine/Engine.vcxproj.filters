@@ -154,6 +154,12 @@
     <ClInclude Include="CLayerFile.h">
       <Filter>Engine\09. LayerFile</Filter>
     </ClInclude>
+    <ClInclude Include="CDamageParticle.h">
+      <Filter>Engine\05. Component\10~14. RenderComponent\000. CParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="CDamageParticleShader.h">
+      <Filter>Engine\ShaderCode\ComputeShader\DamageParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -291,6 +297,12 @@
     </ClCompile>
     <ClCompile Include="CLayerFile.cpp">
       <Filter>Engine\09. LayerFile</Filter>
+    </ClCompile>
+    <ClCompile Include="CDamageParticle.cpp">
+      <Filter>Engine\05. Component\10~14. RenderComponent\000. CParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="CDamageParticleShader.cpp">
+      <Filter>Engine\ShaderCode\ComputeShader\DamageParticle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -465,6 +477,12 @@
     <Filter Include="Engine\09. LayerFile">
       <UniqueIdentifier>{d797dc90-2958-4478-a9a8-8c91bc3f2d09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\05. Component\10~14. RenderComponent\000. CParticle">
+      <UniqueIdentifier>{d49ea903-89c4-48d6-b179-fa4414685e19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ShaderCode\ComputeShader\DamageParticle">
+      <UniqueIdentifier>{15516e3a-e820-4725-b261-cbdf8ed252a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -505,6 +523,12 @@
     </FxCompile>
     <FxCompile Include="std2d_light.fx">
       <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DamageRender.fx">
+      <Filter>Engine\ShaderCode\GraphicsShader</Filter>
+    </FxCompile>
+    <FxCompile Include="DamageParticle.fx">
+      <Filter>Engine\ShaderCode\ComputeShader\DamageParticle</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

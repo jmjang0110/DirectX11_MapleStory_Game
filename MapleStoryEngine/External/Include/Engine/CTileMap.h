@@ -66,6 +66,8 @@ public:
     void SetTileSize(Vec2 _vPixelSize, Vec2 _AllTileSize);
     void SetTileData(int _iTileIdx, int _iImgIdx, Vec2 _AllTileSize, Vec2 StartPos_px);
 
+    // for DamageSkin - 타일 RenderLT 를 _vOffset 만큼 이동 
+    void SetTileData(int _iTileIdx, int _iImgIdx, Vec2 _vOffset);
 
     // ===============================
 

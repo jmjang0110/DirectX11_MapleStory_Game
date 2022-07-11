@@ -270,6 +270,21 @@ void CResMgr::CreateEngineShader()
 	AddRes<CGraphicsShader>(L"TileMapShader", pShader, true);
 
 
+	// TileMap2 Shader - Damage Skin - LT, Offset 지정 가능 TileMap
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap2");
+	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap2");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+
+	pShader->AddTexParamInfo(L"TileMapAtlas", TEX_PARAM::TEX_0);
+
+	AddRes<CGraphicsShader>(L"TileMap2Shader", pShader, true);
+
+
 	// Collider2D Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Collider2D");
@@ -300,6 +315,22 @@ void CResMgr::CreateEngineShader()
 
 	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
 	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader, true);
+
+
+	// Damage Particle Render Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"Shader\\Damagerender.fx", "VS_DamageParticleRender");
+	pShader->CreateGeometryShader(L"Shader\\Damagerender.fx", "GS_DamageParticleRender");
+	pShader->CreatePixelShader(L"Shader\\Damagerender.fx", "PS_DamageParticleRender");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetBSType(BS_TYPE::ALPHA_BLEND);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+
+	pShader->AddTexParamInfo(L"OutputTex", TEX_PARAM::TEX_0);
+	AddRes<CGraphicsShader>(L"DamageParticleRenderShader", pShader, true);
 
 	// PostProcess Shader
 	pShader = new CGraphicsShader;
@@ -363,6 +394,11 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
 	AddRes<CMaterial>(L"material\\TileMapMtrl.mtrl", pMtrl);
 	
+	// TileMap2Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"TileMap2Shader"));
+	AddRes<CMaterial>(L"material\\TileMap2Mtrl.mtrl", pMtrl);
+
 	// Collider2DMtrl 
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Collider2DShader"));
@@ -373,6 +409,10 @@ void CResMgr::CreateEngineMaterial()
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes<CMaterial>(L"material\\ParticleRenderMtrl.mtrl", pMtrl);
 	
+	// Damage Particle Render Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"DamageParticleRenderShader"));
+	AddRes<CMaterial>(L"material\\DamageParticleRenderMtrl.mtrl", pMtrl);
 
 	// PostProcess Mtrl
 	pMtrl = new CMaterial;
@@ -399,6 +439,13 @@ void CResMgr::CreateEngineComputeShader()
 	pCS = new CParticleUpdateShader;
 	pCS->CreateComputeShader(L"Shader\\particle.fx", "CS_Particle");
 	AddRes<CComputeShader>(L"ParticleUpdateShader", pCS, true);
+
+
+	// Damage Particle Update Shader
+	pCS = new CParticleUpdateShader;
+	pCS->CreateComputeShader(L"Shader\\DamageParticle.fx", "CS_DamageParticle");
+	AddRes<CComputeShader>(L"DamageParticleUpdateShader", pCS, true);
+
 }
 
 

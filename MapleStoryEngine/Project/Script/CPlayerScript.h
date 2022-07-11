@@ -10,19 +10,23 @@ enum class PLAYER_DIRECTION
     RIGHT,
     LEFT,
 
+    END,
+
 };
+
 
 enum class PLAYER_STATE
 {
     IDLE,
     WALK,
-    ATTACK,
     JUMP,
     ALERT,
+    ATTACK,
     DEAD,
+
+    END,
+
 };
-
-
 
 enum class PLAYER_ATTACK_STATE
 {
@@ -33,6 +37,14 @@ enum class PLAYER_ATTACK_STATE
     SKILL_ATT_1,
     // ......
 
+    END,
+
+};
+
+enum class PLAYER_JOB
+{
+    ARCHER,
+    END,
 };
 
 
@@ -42,6 +54,9 @@ class CPlayerScript :
     // for state
 private:
     PLAYER_DIRECTION    m_eDir;
+    PLAYER_DIRECTION    m_ePrevDir;
+
+    PLAYER_DIRECTION    m_eMoveDir; // LEFT RIGHT ∏∏ ¿˙¿Â 
     
     PLAYER_STATE        m_eCurState;
     PLAYER_STATE        m_ePrevState;
@@ -52,10 +67,18 @@ private:
     float           m_fSpeed;
     bool            m_bOnGround;
 
+private:
+    int             m_iLevel;
+
+    float           m_fHP;
+    float           m_fMP;
+    float           m_fEXP;
+
+
 public:
     void SetOnGround(bool _b) { m_bOnGround = _b; }
     bool GetOnGround() { return m_bOnGround; }
-
+    void SetCurDir(PLAYER_DIRECTION _eDir) { m_eDir = _eDir; }
 
 public:
     virtual void start();
@@ -67,9 +90,9 @@ public:
     virtual void OnCollisionExit(CGameObject* _OtherObject) override;
 
 public:
+    void Update_State();
     void Update_Move();
     void Update_Gravity();
-    void Update_State();
     void Update_Animation();
 
 public:

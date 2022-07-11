@@ -135,6 +135,8 @@ enum class COMPONENT_TYPE
 	PARTICLESYSTEM, // 입자 렌더링
 	LANDSCAPE,		// 지형 렌더링
 	DECAL,			// 데칼 오브젝트
+
+	DAMAGE_PARTICLESYSTEM, // 파티클 시스템 TEst 
 	
 	END,
 

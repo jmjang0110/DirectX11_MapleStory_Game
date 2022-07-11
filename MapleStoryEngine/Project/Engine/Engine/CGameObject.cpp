@@ -343,6 +343,8 @@ void CGameObject::AddComponent(CComponent* _component)
 		case COMPONENT_TYPE::PARTICLESYSTEM:
 		case COMPONENT_TYPE::LANDSCAPE:
 		case COMPONENT_TYPE::DECAL:
+		case COMPONENT_TYPE::DAMAGE_PARTICLESYSTEM:
+
 		{
 			// 하나의 오브젝트에 Render 기능을 가진 컴포넌트는 2개이상 들어올 수 없다.
 			assert(!m_pRenderComponent);
@@ -370,6 +372,8 @@ void CGameObject::DeleteComponent(COMPONENT_TYPE _eType)
 	case COMPONENT_TYPE::PARTICLESYSTEM:
 	case COMPONENT_TYPE::LANDSCAPE:
 	case COMPONENT_TYPE::DECAL:
+	case COMPONENT_TYPE::DAMAGE_PARTICLESYSTEM:
+
 	{
 		// m_pRenderComponent를 무조건 갖고있을 것이다.
 		if(nullptr != m_pRenderComponent)

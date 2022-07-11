@@ -5,6 +5,7 @@
 #include "CBackGroundScript.h"
 #include "CCameraMoveScript.h"
 #include "CCursorScript.h"
+#include "CDamageScript.h"
 #include "CGravityScript.h"
 #include "CGroundScript.h"
 #include "CMissileScript.h"
@@ -18,6 +19,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CBackGroundScript");
 	_vec.push_back(L"CCameraMoveScript");
 	_vec.push_back(L"CCursorScript");
+	_vec.push_back(L"CDamageScript");
 	_vec.push_back(L"CGravityScript");
 	_vec.push_back(L"CGroundScript");
 	_vec.push_back(L"CMissileScript");
@@ -36,6 +38,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CCameraMoveScript;
 	if (L"CCursorScript" == _strScriptName)
 		return new CCursorScript;
+	if (L"CDamageScript" == _strScriptName)
+		return new CDamageScript;
 	if (L"CGravityScript" == _strScriptName)
 		return new CGravityScript;
 	if (L"CGroundScript" == _strScriptName)
@@ -66,6 +70,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::CURSORSCRIPT:
 		return new CCursorScript;
+		break;
+	case (UINT)SCRIPT_TYPE::DAMAGESCRIPT:
+		return new CDamageScript;
 		break;
 	case (UINT)SCRIPT_TYPE::GRAVITYSCRIPT:
 		return new CGravityScript;
@@ -107,6 +114,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::CURSORSCRIPT:
 		return L"CCursorScript";
+		break;
+
+	case SCRIPT_TYPE::DAMAGESCRIPT:
+		return L"CDamageScript";
 		break;
 
 	case SCRIPT_TYPE::GRAVITYSCRIPT:

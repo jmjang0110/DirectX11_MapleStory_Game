@@ -25,7 +25,11 @@ private:
 	int                         m_iVertical_Flip;       // 1 : yes 0 : No
 
 public:
-	void SetHorizontalFlip(int _horizonFlip) {  m_iHorizontal_Flip = _horizonFlip; }
+	void SetHorizontalFlip(int _horizonFlip) 
+	{  
+		m_iHorizontal_Flip = _horizonFlip; 
+
+	}
 	void SetVerticalFlip(int _verticalFlip) {  m_iVertical_Flip = _verticalFlip; }
 
 	int GetHorizontalFlip() { return m_iHorizontal_Flip; }

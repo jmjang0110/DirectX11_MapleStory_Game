@@ -70,6 +70,7 @@ void CTileMap::UpdateData()
 	if (nullptr == m_pAtlasTex)
 		return;
 
+
 	GetMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTex);
 
 	GetMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &m_iTileCountX);
@@ -115,7 +116,7 @@ void CTileMap::SetTileData(int _iTileIdx, int _iImgIdx)
 	{
 		return;
 	}
-
+	
 	m_vecTileData[_iTileIdx].iImgIdx = _iImgIdx;
 
 	// 아틀라스에서 타일의 행, 렬 개수 구하기
@@ -152,12 +153,6 @@ void CTileMap::ClearTileData()
 
 	m_bBufferUpdated = false;
 }
-
-
-
-
-
-
 
 
 /*

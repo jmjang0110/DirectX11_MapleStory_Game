@@ -19,6 +19,8 @@ const wchar_t* ToWString(COMPONENT_TYPE _type)
         L"PARTICLESYSTEM",
         L"LANDSCAPE",
         L"DECAL",
+       L"DAMAGE_PARTICLESYSTEM", // test
+
     };
 
     return szWString[(UINT)_type];
@@ -42,6 +44,8 @@ const char* ToString(COMPONENT_TYPE _type)
         "PARTICLESYSTEM",
         "LANDSCAPE",
         "DECAL",
+        "DAMAGE_PARTICLESYSTEM", // test
+
     };
 
     return szString[(UINT)_type];

@@ -2,6 +2,7 @@ CameraPlayerMoveScript
 CBackGroundScript
 CCameraMoveScript
 CCursorScript
+CDamageScript
 CGravityScript
 CGroundScript
 CMissileScript

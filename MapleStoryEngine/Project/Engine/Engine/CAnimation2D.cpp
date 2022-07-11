@@ -185,6 +185,11 @@ void CAnimation2D::SaveToScene(FILE* _pFile)
 
 	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrame), FrmCnt, _pFile);
 	fwrite(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
+
+	fwrite(&m_iHorizontal_Flip, sizeof(int), 1, _pFile);
+	fwrite(&m_iVertical_Flip, sizeof(int), 1, _pFile);
+
+
 	SaveResPtr(m_pAtlasTex, _pFile);
 }
 
@@ -198,5 +203,9 @@ void CAnimation2D::LoadFromScene(FILE* _pFile)
 
 	fread(m_vecFrm.data(), sizeof(tAnim2DFrame), FrmCnt, _pFile);
 	fread(&m_vBackgroundSize, sizeof(Vec2), 1, _pFile);
+
+	fread(&m_iHorizontal_Flip, sizeof(int), 1, _pFile);
+	fread(&m_iVertical_Flip, sizeof(int), 1, _pFile);
+
 	LoadResPtr(m_pAtlasTex, _pFile);
 }

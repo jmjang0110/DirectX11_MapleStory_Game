@@ -167,6 +167,7 @@
     <ClInclude Include="ComputeShaderUI.h" />
     <ClInclude Include="CTestScene.h" />
     <ClInclude Include="CToolObjMgr.h" />
+    <ClInclude Include="DamageParticleUI.h" />
     <ClInclude Include="GraphicsShaderUI.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="ComputeShaderUI.cpp" />
     <ClCompile Include="CTestScene.cpp" />
     <ClCompile Include="CToolObjMgr.cpp" />
+    <ClCompile Include="DamageParticleUI.cpp" />
     <ClCompile Include="GraphicsShaderUI.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

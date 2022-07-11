@@ -73,6 +73,9 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
             float width = R_x - (lt.x - ((g_vBackgroundSize.x - slice.x) / 2.f));
             float M_x = lt.x -  ((g_vBackgroundSize.x - slice.x) / 2.f) + (width / 2.f);
            
+          
+            
+  
             vUV = vUV - (g_vBackgroundSize - slice) / 2.f + lt - g_vOffset;
             
             float dist = M_x - vUV.x;
@@ -100,6 +103,7 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
             float height = R_y - (lt.y - ((g_vBackgroundSize.y - slice.y) / 2.f));
             float M_y = lt.y - ((g_vBackgroundSize.y - slice.y) / 2.f) + (height / 2.f);
            
+  
             vUV = vUV - (g_vBackgroundSize - slice) / 2.f + lt - g_vOffset;
             
             float dist = M_y - vUV.y;
@@ -131,6 +135,8 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
             float height = R_y - (lt.y - ((g_vBackgroundSize.y - slice.y) / 2.f));
             float M_y = lt.y - ((g_vBackgroundSize.y - slice.y) / 2.f) + (height / 2.f);
             
+            
+     
             vUV = vUV - (g_vBackgroundSize - slice) / 2.f + lt - g_vOffset;
     
             

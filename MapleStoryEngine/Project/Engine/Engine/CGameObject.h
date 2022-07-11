@@ -87,6 +87,7 @@ public:
     GET_COMPONENT(ParticleSystem, PARTICLESYSTEM)
     GET_COMPONENT(Light2D, LIGHT2D)
 
+    GET_COMPONENT(DamageParticle, DAMAGE_PARTICLESYSTEM)
 
     const vector<CScript*>& GetScripts() { return m_vecScript; }
     CScript* GetScript(UINT _iIdx);
