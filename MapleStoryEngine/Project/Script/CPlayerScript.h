@@ -74,8 +74,11 @@ private:
     float           m_fMP;
     float           m_fEXP;
 
+    Vec3            m_vPrevPos;
+
 
 public:
+    Vec3 GetPrevPos() { return m_vPrevPos; }
     void SetOnGround(bool _b) { m_bOnGround = _b; }
     bool GetOnGround() { return m_bOnGround; }
     void SetCurDir(PLAYER_DIRECTION _eDir) { m_eDir = _eDir; }

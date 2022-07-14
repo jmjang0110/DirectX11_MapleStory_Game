@@ -23,7 +23,6 @@ private:
     vector<tAnim2DFrame>    m_vecTexInfo;
     
     vector<UINT>            m_vecDamageNum;
-    vector<CGameObject*>    m_vecDamageObj;
     CGameObject*            m_DamagePrefab;
 
     int                     m_iDamage;

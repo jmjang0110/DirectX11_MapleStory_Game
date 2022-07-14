@@ -1,0 +1,11 @@
+size : ( 37, 26 )
+stand - hit -  (43 , 33) - offset(0, 7 )
+
+move 
+	startpx ( 0, 35)
+
+
+die1
+startpx ( 0, 61
+size( 44, 33)
+offset ( 0, -4)

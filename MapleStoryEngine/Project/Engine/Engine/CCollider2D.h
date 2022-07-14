@@ -23,6 +23,7 @@ private:
 
     Vec2                m_vOffsetPos;       // 오브젝트로 부터의 충돌체의 상대 거리
     Vec2                m_vOffsetScale;     // 오브젝트 크기로 부터 충돌체의 배율
+    float               m_fRotAngle;
 
     Ptr<CMesh>          m_pMesh;            // 충돌체 모양
     Ptr<CMaterial>      m_pMtrl;            // 충돌체 랜더링 재질
@@ -36,12 +37,12 @@ public:
     void SetOffsetPos(Vec2 _vOffsetPos) { m_vOffsetPos = _vOffsetPos; }
     Vec2 GetOffsetPos() { return m_vOffsetPos; }
     void SetOffsetPos(float _x, float _y) { m_vOffsetPos = Vec2(_x, _y); }
-
+    void SetOffsetRotation(float _angle) { m_fRotAngle = _angle; }
 
     void SetOffsetScale(Vec2 _vOffsetScale);
     void SetOffsetScale(float _x, float _y);
     Vec2 GetOffsetScale() { return m_vOffsetScale; }
-
+    float GetOffsetRotation() { return m_fRotAngle; }
 
     COLLIDER2D_TYPE GetCollider2DType() { return m_eColliderType; }
     Vec3 GetWorldPos() { return m_matColWorld.Translation(); }

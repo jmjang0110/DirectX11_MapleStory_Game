@@ -172,6 +172,7 @@ call CodeGen.exe</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CAIScript.h" />
     <ClInclude Include="CameraPlayerMoveScript.h" />
     <ClInclude Include="CBackGroundScript.h" />
     <ClInclude Include="CCameraMoveScript.h" />
@@ -179,16 +180,22 @@ call CodeGen.exe</Command>
     <ClInclude Include="CDamageScript.h" />
     <ClInclude Include="CGravityScript.h" />
     <ClInclude Include="CGroundScript.h" />
+    <ClInclude Include="CIdleStateScript.h" />
     <ClInclude Include="CMissileScript.h" />
+    <ClInclude Include="CMonsterFactoryScript.h" />
+    <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CPaperBurnScript.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CRigidBodyScript.h" />
     <ClInclude Include="CSceneSaveLoad.h" />
     <ClInclude Include="CScriptMgr.h" />
+    <ClInclude Include="CStateScript.h" />
+    <ClInclude Include="CTraceStateScript.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CAIScript.cpp" />
     <ClCompile Include="CameraPlayerMoveScript.cpp" />
     <ClCompile Include="CBackGroundScript.cpp" />
     <ClCompile Include="CCameraMoveScript.cpp" />
@@ -196,12 +203,17 @@ call CodeGen.exe</Command>
     <ClCompile Include="CDamageScript.cpp" />
     <ClCompile Include="CGravityScript.cpp" />
     <ClCompile Include="CGroundScript.cpp" />
+    <ClCompile Include="CIdleStateScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
+    <ClCompile Include="CMonsterFactoryScript.cpp" />
+    <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CPaperBurnScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CRigidBodyScript.cpp" />
     <ClCompile Include="CSceneSaveLoad.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
+    <ClCompile Include="CStateScript.cpp" />
+    <ClCompile Include="CTraceStateScript.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

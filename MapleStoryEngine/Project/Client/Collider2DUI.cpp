@@ -87,7 +87,15 @@ void Collider2DUI::render_update()
 
 	ImGui::PopItemWidth();
 
-	
+	// Offset Rotation
+	ImGui::PushItemWidth(150.f);
+	float  Angle = pCollider2D->GetOffsetRotation();
+	ImGui::Text("OffSetRotation");
+	ImGui::SameLine(150);
+	ImGui::DragFloat("##OffSetRotation_z", &Angle, 0.05f);
+	pCollider2D->SetOffsetRotation(Angle);
+
+	ImGui::PopItemWidth();
 
 }
 

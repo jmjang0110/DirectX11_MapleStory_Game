@@ -126,7 +126,7 @@ void CDamageScript::start()
 
 		pOwner->DamageParticle()->SetMaxParticleCount(m_vecDamageNum.size() + 1);
 		pOwner->DamageParticle()->SetAliveCount(m_vecDamageNum.size() + 1);
-
+		
 		pOwner->DamageParticle()->SetMaxLifeTime(m_fMaxTime);
 
 	}

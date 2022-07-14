@@ -1,12 +1,25 @@
 #pragma once
 #include <Engine/CScript.h>
 
+typedef struct Line {
+    Vec2 p1;
+    Vec2 p2;
+    void Init(Vec2 _p1, Vec2 _p2) { p1 = _p1; p2 = _p2; }
+}Line;
 
 class CGroundScript :
     public CScript
 {
 private:
+    float       m_fDiff;
 
+
+
+public:
+    bool    LineInterSection(Line l1, Line l2);
+    int     CCW(Vec2 p1, Vec2 p2, Vec2 p3);
+    int     Comparator(Vec2 Left, Vec2 Right);
+    void    Swap(Vec2* p1, Vec2* p2);
 
 
 

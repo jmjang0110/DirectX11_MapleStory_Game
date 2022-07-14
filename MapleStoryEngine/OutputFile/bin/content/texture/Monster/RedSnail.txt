@@ -1,0 +1,8 @@
+Red Snail
+
+hit
+	startpx(0,0) size px (41, 39)
+move
+	startpx(0,42) sizepx(44,34)
+die 
+	startpx(0, 80) sizepx(56 , 32)

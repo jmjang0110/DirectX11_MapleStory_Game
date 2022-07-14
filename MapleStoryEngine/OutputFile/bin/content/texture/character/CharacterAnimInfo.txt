@@ -136,7 +136,7 @@ fly
 - fly.1.hand offset(0, 2)
 
 
-ProneStab
+ProneStab - offset( 0, 7)
 	-[body] start_px(0, 1440) px(63,15)
  	[arm]   Start_px(180, 1440), px(60,15)
 

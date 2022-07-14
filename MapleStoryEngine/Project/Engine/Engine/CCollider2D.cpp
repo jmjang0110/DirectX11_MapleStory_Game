@@ -14,6 +14,7 @@ CCollider2D::CCollider2D()
 	, m_eColliderType(COLLIDER2D_TYPE::BOX)
 	, m_vOffsetPos(Vec2(0.f, 0.f))
 	, m_vOffsetScale(Vec2(1.f, 1.f))
+	, m_fRotAngle(0.f)
 	, m_iCollisionCount(0)
 {
 	// Collider2D 모양에 맞는 메쉬 참조
@@ -28,6 +29,7 @@ CCollider2D::CCollider2D(const CCollider2D& _Origin)
 	, m_eColliderType(_Origin.m_eColliderType)
 	, m_vOffsetPos(_Origin.m_vOffsetPos)
 	, m_vOffsetScale(_Origin.m_vOffsetScale)
+	, m_fRotAngle(0.f)
 	, m_iCollisionCount(0)
 {
 	// Collider2D 모양에 맞는 메쉬 참조
@@ -80,7 +82,20 @@ void CCollider2D::finalupdate()
 {
 	Matrix matTrans = XMMatrixTranslation(m_vOffsetPos.x, m_vOffsetPos.y, 0.f);
 	Matrix matScale = XMMatrixScaling(m_vOffsetScale.x, m_vOffsetScale.y, 1.f);	
-	m_matColWorld = matScale * matTrans;
+
+	// todo //
+	//Matrix matRotX = XMMatrixRotationX(m_vRelativeRot.x);
+	//Matrix matRotY = XMMatrixRotationY(m_vRelativeRot.y);
+	//Matrix matRotZ = XMMatrixRotationY(m_fRotAngle);	
+	//Matrix matRotation = matRotZ;
+	
+	FXMVECTOR Axis = Vector3(0.f, 0.f, 1.f);
+	float radian = m_fRotAngle * (3.141592f / 180.f);
+	Matrix matRotation =  XMMatrixRotationNormal(Axis, radian);
+
+	// ==== //
+
+	m_matColWorld = matScale * matRotation * matTrans;
 		
 	Vec3 vObjScale = Transform()->GetWorldScale();
 	Matrix matObjScaleInv = XMMatrixInverse(nullptr, XMMatrixScaling(vObjScale.x, vObjScale.y, vObjScale.z));
@@ -152,6 +167,8 @@ void CCollider2D::SaveToScene(FILE* _pFile)
 	fwrite(&m_eColliderType, sizeof(UINT), 1, _pFile);
 	fwrite(&m_vOffsetPos, sizeof(Vec2), 1, _pFile);
 	fwrite(&m_vOffsetScale, sizeof(Vec2), 1, _pFile);
+	fwrite(&m_fRotAngle, sizeof(float), 1, _pFile);
+
 }
 
 void CCollider2D::LoadFromScene(FILE* _pFile)
@@ -161,6 +178,9 @@ void CCollider2D::LoadFromScene(FILE* _pFile)
 	fread(&m_eColliderType, sizeof(UINT), 1, _pFile);
 	fread(&m_vOffsetPos, sizeof(Vec2), 1, _pFile);
 	fread(&m_vOffsetScale, sizeof(Vec2), 1, _pFile);
+	fread(&m_fRotAngle, sizeof(float), 1, _pFile);
 
 	SetCollider2DType(m_eColliderType);
 }
+
+

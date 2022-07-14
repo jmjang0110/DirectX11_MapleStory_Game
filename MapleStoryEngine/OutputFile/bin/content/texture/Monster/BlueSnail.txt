@@ -1,0 +1,14 @@
+blue snail
+
+hit 
+	startpx ( 0,0 ) 
+	size (41, 39)
+Stand - MoveFrame 에서 첫번쨰 
+Move 
+		startpx ( 0,41 ) 
+	size (41, 39)
+
+die
+	startpx(0, 80)
+	size(56, 32)
+	

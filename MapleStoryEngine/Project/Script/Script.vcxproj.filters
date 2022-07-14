@@ -52,6 +52,27 @@
     <Filter Include="Script\03. Object\Damage">
       <UniqueIdentifier>{d3fd387c-21cc-4d3f-a1ff-7574b5aad849}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\05. State">
+      <UniqueIdentifier>{feb89250-c157-4095-b16f-1bc55983201d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\05. State\Idle">
+      <UniqueIdentifier>{12455068-a93b-4fec-afef-6b1e7fd2b762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\05. State\Attack">
+      <UniqueIdentifier>{8d71bbdc-1731-4888-9b65-074b85064ed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\05. State\Dead">
+      <UniqueIdentifier>{dd3607a9-f4e4-4ffd-8bbf-a0277daebc5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\05. State\Trace">
+      <UniqueIdentifier>{41f63599-adba-4115-b141-f39438a56c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\05. State\AI">
+      <UniqueIdentifier>{588e746f-1427-4f4a-9d5c-cba69eef69d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\Monster\MonsterFactory">
+      <UniqueIdentifier>{bb6033de-8a14-4337-bc66-9d8fb12a8f50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -95,6 +116,24 @@
     <ClInclude Include="CDamageScript.h">
       <Filter>Script\03. Object\Damage</Filter>
     </ClInclude>
+    <ClInclude Include="CAIScript.h">
+      <Filter>Script\05. State\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="CStateScript.h">
+      <Filter>Script\05. State</Filter>
+    </ClInclude>
+    <ClInclude Include="CIdleStateScript.h">
+      <Filter>Script\05. State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="CTraceStateScript.h">
+      <Filter>Script\05. State\Trace</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterScript.h">
+      <Filter>Script\03. Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterFactoryScript.h">
+      <Filter>Script\03. Object\Monster\MonsterFactory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -137,6 +176,24 @@
     </ClCompile>
     <ClCompile Include="CDamageScript.cpp">
       <Filter>Script\03. Object\Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="CAIScript.cpp">
+      <Filter>Script\05. State\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="CStateScript.cpp">
+      <Filter>Script\05. State</Filter>
+    </ClCompile>
+    <ClCompile Include="CIdleStateScript.cpp">
+      <Filter>Script\05. State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="CTraceStateScript.cpp">
+      <Filter>Script\05. State\Trace</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterScript.cpp">
+      <Filter>Script\03. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterFactoryScript.cpp">
+      <Filter>Script\03. Object\Monster\MonsterFactory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

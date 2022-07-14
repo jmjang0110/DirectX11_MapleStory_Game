@@ -77,7 +77,8 @@ void CPlayerScript::start()
 
 void CPlayerScript::update()
 {
-	
+	m_vPrevPos = GetOwner()->Transform()->GetRelativePos();
+
 	Update_State();
 	Update_Move();
 	Update_Gravity();
@@ -369,7 +370,7 @@ void CPlayerScript::Update_Animation()
 
 				
 			}
-
+			   
 			break;
 
 			case PLAYER_STATE::ATTACK:
