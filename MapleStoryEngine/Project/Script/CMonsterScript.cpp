@@ -1,12 +1,23 @@
 #include "pch.h"
 #include "CMonsterScript.h"
 
+#include <Engine/CScene.h>
+#include <Engine/CLayer.h>
+#include <Engine/CGameObject.h>
+#include <Engine/CTransform.h>
+#include <Engine/CAnimator2D.h>
+#include <Engine/CAnimation2D.h>
+
 #include "CAIScript.h"
+#include "CTraceStateScript.h"
+#include "CIdleStateScript.h"
+
 
 
 
 CMonsterScript::CMonsterScript()
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
+	, m_vPrevPos(Vec2(0.f, 0.f))
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -15,6 +26,7 @@ CMonsterScript::CMonsterScript()
 
 CMonsterScript::CMonsterScript(const CMonsterScript& _origin)
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
+	, m_vPrevPos(Vec2(0.f, 0.f))
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -31,10 +43,52 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::start()
 {
+	CAIScript* pAI = (CAIScript*)GetOwner()->GetScriptByName(L"CAIScript");
+	m_pAI = pAI;
+	if (pAI != nullptr)
+		m_pAI = pAI;
+
+	srand((unsigned int)(NULL));
+	int randDir = rand() % 2;
+
+	if (randDir == 1)
+		m_eDir = MONSTER_DIRECTION::LEFT;
+	else
+		m_eDir = MONSTER_DIRECTION::RIGHT;
+
+	CGameObject* pOwner = GetOwner();
+	if (pOwner != nullptr)
+	{
+		CAnimator2D* pAnimator = pOwner->Animator2D();
+		if (pAnimator != nullptr)
+		{
+			if(m_eDir == MONSTER_DIRECTION::LEFT)
+				pAnimator->Play(L"Stand_Left", true);
+			else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+				pAnimator->Play(L"Stand_Right", true);
+		}
+	}
+
+
+	// Monster Info Test
+	m_tInfo.fRecogRange = 200.f;
+	m_tInfo.fSpeed = 1.f;
+
+
 }
 
 void CMonsterScript::update()
 {
+
+	Update_State();
+	Update_Move();
+	Update_Gravity();
+	Update_Animation();
+
+	m_ePrevStateType = m_eCurStateType;
+	m_ePrevDir = m_eDir;
+	m_vPrevPos = GetOwner()->Transform()->GetRelativePos();
+
 }
 
 void CMonsterScript::lateupdate()
@@ -51,6 +105,80 @@ void CMonsterScript::OnCollision(CGameObject* _OtherObject)
 
 void CMonsterScript::OnCollisionExit(CGameObject* _OtherObject)
 {
+}
+
+void CMonsterScript::Update_State()
+{
+	CGameObject* pOwner = GetOwner();
+	if (pOwner == nullptr)
+		return;
+
+	Vec3 vPos = pOwner->Transform()->GetRelativePos();
+	if (m_vPrevPos.x - vPos.x > 0)
+		SetDir(MONSTER_DIRECTION::LEFT);
+	else
+		SetDir(MONSTER_DIRECTION::RIGHT);
+
+}
+
+void CMonsterScript::Update_Move()
+{
+
+	
+}
+
+void CMonsterScript::Update_Gravity()
+{
+}
+
+void CMonsterScript::Update_Animation()
+{
+
+
+
+	CAIScript* pAI = (CAIScript*)GetOwner()->GetScriptByName(L"CAIScript");
+	m_pAI = pAI;
+
+	MONSTER_STATE eStateType = pAI->GetCurStateType();
+	CGameObject* pOwner = GetOwner();
+
+	m_eCurStateType = eStateType;
+
+	if (pOwner == nullptr)
+		return;
+
+	CAnimator2D* pAnimator = pOwner->Animator2D();
+	
+	if (pAnimator == nullptr)
+		return;
+
+	switch (eStateType)
+	{
+	case MONSTER_STATE::IDLE:
+	{
+		if (m_eDir == MONSTER_DIRECTION::LEFT)
+			pAnimator->Play(L"Stand_Left", true);
+		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+			pAnimator->Play(L"Stand_Right", true);
+	}
+		break;
+	case MONSTER_STATE::PATROL:
+		break;
+	case MONSTER_STATE::TRACE:
+	{
+		if (m_eDir == MONSTER_DIRECTION::LEFT)
+			pAnimator->Play(L"Move_Left", true);
+		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+			pAnimator->Play(L"Move_Right", true);
+	}
+		break;
+	case MONSTER_STATE::ATT:
+		break;
+	case MONSTER_STATE::RUN:
+		break;
+	case MONSTER_STATE::DEAD:
+		break;
+	}
 }
 
 void CMonsterScript::SaveToScene(FILE* _pFile)

@@ -17,6 +17,9 @@ public:
     void ChangeState(MONSTER_STATE _eNextState);
 
 public:
+    MONSTER_STATE GetCurStateType() { if (m_pCurState != nullptr) return m_pCurState->GetMonsterStateType(); }
+    CStateScript* GetCurStateScript() { return m_pCurState; }
+public:
     virtual void start();
     virtual void update();
     virtual void lateupdate();
@@ -39,6 +42,7 @@ public:
     CAIScript();
     CAIScript(const CAIScript& _origin);
     ~CAIScript();
+
 
 };
 

@@ -56,7 +56,9 @@ void ScriptUI::render_update()
 	}
 	ImGui::SameLine();
 	// Script Delete Button 
-	if (ImGui::Button("X"))
+	string ButtonName = strScriptName + "_X";
+
+	if (ImGui::Button(ButtonName.c_str()))
 	{
 		m_bDel = true;
 	}

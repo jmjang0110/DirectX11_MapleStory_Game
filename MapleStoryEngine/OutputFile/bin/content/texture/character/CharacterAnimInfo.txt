@@ -1,4 +1,7 @@
-walk1 
+Arm - worldpos  = (19 , 2)
+Body ( 0, 3)
+
+180walk1 - duration - 0.125
 	- [body]  Start_px(0, 0)   px(31,32) 
 	  [arm]    Start_px(180, 0) , px(60, 32) 
 walk2 
@@ -7,18 +10,20 @@ walk2
 	  [hand]   Start_px(420,46), px(60,32)
 stnad1
 	- [body]  Start_px(0, 92) px(23,31) 
-	  [arm]    Start_px(180, 92), px(60, 31) 
+	  [arm]    Start_px(180, 92), px(60, 31) -(right) Offset( -33, -1))
 stnad2
 	- [body]  Start_px(0, 140) px(20,31) 
 	  [arm]    Start_px(180, 140), px(60, 31)  // OffSet(20,0) 
 	  [hand]   Start_px(416,140) px(60,31)   // hand Over - 4px
-alert 
+alert  - duration 0.5f
 	- [body] Start_px(0, 192) px(24, 31 )  
 	  [arm]   Start_px(180, 192), px(60, 31) 
  	  [hand]  Start_px(420, 192) px(60,31)
-swingO1 
+
+swingO1 - duration : 0.3 - 0.15 - 0.32
 	- [body] Start_px(0, 249) px(55, 31) 
-	  [arm]   Start_px(180, 249), px(60,31)
+	  [arm]   Start_px(180, 249), px(60,31) - Offset -15 -3, -15 -3 , -19 -7 - 마지막 -size(60, 50)
+
 swingO2 
 	- [body] Start_px(0, 296) px(37, 31) 
 	  [arm]   Start_px(180, 296), px(60,31)

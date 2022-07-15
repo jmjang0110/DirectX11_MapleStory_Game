@@ -6,8 +6,12 @@
 #include <Engine/CLayer.h>
 #include <Engine/CGameObject.h>
 #include <Engine/CTransform.h>
+#include <Engine/CAnimator2D.h>
+#include <Engine/CAnimation2D.h>
 
 #include "CMonsterScript.h"
+#include "CAIScript.h"
+#include "CTraceStateScript.h"
 
 
 
@@ -44,11 +48,12 @@ void CIdleStateScript::Exit()
 
 void CIdleStateScript::start()
 {
+
 }
 
 void CIdleStateScript::update()
 {
-	// Player 의 위치를 받는다. 
+	// Get GameObject "player"
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CLayer* pLayer = pCurScene->GetLayer(L"Player");
 	if (pLayer == nullptr)
@@ -69,24 +74,25 @@ void CIdleStateScript::update()
 	if (pPlayer == nullptr)
 		return;
 
-	Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();
-	Vec3 vMonsterPos = GetOwner()->Transform()->GetRelativePos();
+	// Calculate Diff - Monster <-> player 
+	Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();			// Player Pos 
+	CGameObject* Monster = GetOwner();
 
-	Vec2 vDiff = Vec2(vPlayerPos.x - vMonsterPos.x, vPlayerPos.y = vMonsterPos.y);
+	Vec3 vMonsterPos = GetOwner()->Transform()->GetRelativePos();		// Monster Pos 
+
+	Vec2 vDiff = Vec2(vPlayerPos.x - vMonsterPos.x, vPlayerPos.y - vMonsterPos.y);
 	float fLen = vDiff.Length();
-
 
 	CMonsterScript* pMonScript = (CMonsterScript*)GetOwner()->GetScriptByName(L"CMonsterScript");
 	if (pMonScript == nullptr)
 		return;
 
 	tMonsterInfo tMonInfo = pMonScript->GetMonsterInfo();
-
-
-	// 플레이어가 몬스터의 인식범위 안으로 진입 
+	// Monster <-> player - Out of Monster's RecogRange 
 	if (fLen < pMonScript->GetMonsterInfo().fRecogRange)
 	{
-
+		// Change State 
+		GetAI()->ChangeState(MONSTER_STATE::TRACE);
 	}
 
 }

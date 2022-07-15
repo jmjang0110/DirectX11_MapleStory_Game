@@ -20,6 +20,7 @@ enum class PLAYER_STATE
     IDLE,
     WALK,
     JUMP,
+    DOUBLE_JUMP,
     ALERT,
     ATTACK,
     DEAD,
@@ -76,6 +77,10 @@ private:
 
     Vec3            m_vPrevPos;
 
+private:
+    class CPrefab* m_pPrefab;
+    class CPrefab* m_pDbJumpPrefab;
+
 
 public:
     Vec3 GetPrevPos() { return m_vPrevPos; }
@@ -97,6 +102,13 @@ public:
     void Update_Move();
     void Update_Gravity();
     void Update_Animation();
+
+public:
+    void RegisterDoubleJumpEff();
+
+private:
+    void Update_Animation(CGameObject* _pObj, wstring _name);
+  
 
 public:
     virtual void SaveToScene(FILE* _pFile) override;

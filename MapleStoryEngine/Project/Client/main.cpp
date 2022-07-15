@@ -74,6 +74,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY39ENGINE));
     MSG msg;
+    srand(time(NULL));
 
     // 메시지 루프입니다:
     while (true)

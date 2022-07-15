@@ -1131,11 +1131,16 @@ void Animator2DUI::DrawDecisionFrameBtn()
 		m_FrmCnt = 0;
 		m_iDemoFrameIdx = 0;
 
+		m_pNewAnim2D = nullptr;
+
 
 		m_CurMode = ANIMATOR_MODE::CREATE;
 		m_ModifyFrameIdx = -1;
 		m_bModifyBtn = false;
+		m_bSwapBtn = false;
 
+		m_iHorizontal_Flip = 0;
+		m_iVertical_Flip = 0;
 
 		m_NewFrameInfo.fDuration = 0.1f;
 		m_NewFrameInfo.vLT = Vec2(0.f, 0.f);

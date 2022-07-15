@@ -13,9 +13,9 @@ CRigidBodyScript::CRigidBodyScript()
 	, m_vAccel(Vec3(0.f, 0.f, 0.f))
 	, m_vAccelA(Vec3(0.f, 0.f, 0.f))
 	, m_vVelocity(Vec3(0.f, 0.f, 0.f))
-	, m_vMaxVelocity(Vec3(200.f, 400.f, 0.f))
+	, m_vMaxVelocity(Vec3(150.f, 400.f, 0.f))
 	, m_fMass(1.f)
-	, m_fFricCoeff(180.f)
+	, m_fFricCoeff(200.f)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -28,9 +28,9 @@ CRigidBodyScript::CRigidBodyScript(const CRigidBodyScript& _origin)
 	, m_vAccel(Vec3(0.f, 0.f, 0.f))
 	, m_vAccelA(Vec3(0.f, 0.f, 0.f))
 	, m_vVelocity(Vec3(0.f, 0.f, 0.f))
-	, m_vMaxVelocity(Vec3(200.f, 400.f, 0.f))
+	, m_vMaxVelocity(Vec3(150.f, 400.f, 0.f))
 	, m_fMass(1.f)
-	, m_fFricCoeff(180.f)
+	, m_fFricCoeff(200.f)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -75,7 +75,7 @@ void CRigidBodyScript::update()
 		}
 	}
 
-
+  
 	if (abs(m_vMaxVelocity.x) < abs(m_vVelocity.x))
 	{
 		m_vVelocity.x = (m_vVelocity.x / abs(m_vVelocity.x)) * abs(m_vMaxVelocity.x);	// 최대 속도  제한 (x축)

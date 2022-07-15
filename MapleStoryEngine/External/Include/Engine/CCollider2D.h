@@ -42,12 +42,7 @@ public:
     void SetOffsetScale(Vec2 _vOffsetScale);
     void SetOffsetScale(float _x, float _y);
     Vec2 GetOffsetScale() { return m_vOffsetScale; }
-    float GetOffsetRotation() {
-        return m_fRotAngle;
-
-        int i = 0;
-
-    }
+    float GetOffsetRotation() { return m_fRotAngle; }
 
     COLLIDER2D_TYPE GetCollider2DType() { return m_eColliderType; }
     Vec3 GetWorldPos() { return m_matColWorld.Translation(); }

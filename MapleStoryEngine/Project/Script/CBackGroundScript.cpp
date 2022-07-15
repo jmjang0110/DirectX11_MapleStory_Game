@@ -30,30 +30,30 @@ void CBackGroundScript::start()
 void CBackGroundScript::update()
 {
 
-	Vec3 vPos = Transform()->GetRelativePos();
-	float fSpeed = m_fSpeed;
+	//Vec3 vPos = Transform()->GetRelativePos();
+	//float fSpeed = m_fSpeed;
 
-	if (KEY_PRESSED(KEY::UP))
-	{
-		vPos.y += DT * fSpeed;
-	}
+	//if (KEY_PRESSED(KEY::UP))
+	//{
+	//	vPos.y += DT * fSpeed;
+	//}
 
-	if (KEY_PRESSED(KEY::DOWN))
-	{
-		vPos.y -= DT * fSpeed;
-	}
+	//if (KEY_PRESSED(KEY::DOWN))
+	//{
+	//	vPos.y -= DT * fSpeed;
+	//}
 
-	if (KEY_PRESSED(KEY::LEFT))
-	{
-		vPos.x -= DT * fSpeed;
-	}
+	//if (KEY_PRESSED(KEY::LEFT))
+	//{
+	//	vPos.x -= DT * fSpeed;
+	//}
 
-	if (KEY_PRESSED(KEY::RIGHT))
-	{
-		vPos.x += DT * fSpeed;
-	}
+	//if (KEY_PRESSED(KEY::RIGHT))
+	//{
+	//	vPos.x += DT * fSpeed;
+	//}
 
-	Transform()->SetRelativePos(vPos);
+	//Transform()->SetRelativePos(vPos);
 
 }
 

@@ -73,6 +73,15 @@
     <Filter Include="Script\03. Object\Monster\MonsterFactory">
       <UniqueIdentifier>{bb6033de-8a14-4337-bc66-9d8fb12a8f50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\05. State\Patrol">
+      <UniqueIdentifier>{0b054e5b-fd54-4381-9b7c-a3104192c3f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\Ball\BasicBall">
+      <UniqueIdentifier>{4a203aeb-d114-434d-b66f-a299c37f70f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\DoubleJumpEff">
+      <UniqueIdentifier>{78b8e329-9e4d-43ff-8cc0-d6e6fe11b983}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -134,6 +143,21 @@
     <ClInclude Include="CMonsterFactoryScript.h">
       <Filter>Script\03. Object\Monster\MonsterFactory</Filter>
     </ClInclude>
+    <ClInclude Include="CAttackStateScript.h">
+      <Filter>Script\05. State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="CDeadStateScript.h">
+      <Filter>Script\05. State\Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="CPatrolStateScript.h">
+      <Filter>Script\05. State\Patrol</Filter>
+    </ClInclude>
+    <ClInclude Include="CBasicBallScript.h">
+      <Filter>Script\03. Object\Ball\BasicBall</Filter>
+    </ClInclude>
+    <ClInclude Include="CDoubleJumpScript.h">
+      <Filter>Script\03. Object\DoubleJumpEff</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -194,6 +218,21 @@
     </ClCompile>
     <ClCompile Include="CMonsterFactoryScript.cpp">
       <Filter>Script\03. Object\Monster\MonsterFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="CAttackStateScript.cpp">
+      <Filter>Script\05. State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CDeadStateScript.cpp">
+      <Filter>Script\05. State\Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="CPatrolStateScript.cpp">
+      <Filter>Script\05. State\Patrol</Filter>
+    </ClCompile>
+    <ClCompile Include="CBasicBallScript.cpp">
+      <Filter>Script\03. Object\Ball\BasicBall</Filter>
+    </ClCompile>
+    <ClCompile Include="CDoubleJumpScript.cpp">
+      <Filter>Script\03. Object\DoubleJumpEff</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

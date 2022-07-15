@@ -7,7 +7,6 @@ class CTraceStateScript :
 private:
 
 
-
 public:
     virtual void Enter();
     virtual void Exit();

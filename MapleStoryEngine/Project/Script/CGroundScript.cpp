@@ -69,6 +69,13 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 	float fAngle = Collider2D()->GetOffsetRotation();
 
+	Vec3 obj = _OtherObject->Transform()->GetRelativePos();
+	Vec3 Col = _OtherObject->Collider2D()->GetWorldPos();
+
+	float _y = vObjPos.y - vObjScale.y / 2.f;
+	int i = 0;
+	
+
 	if (fAngle == 0.f)
 	{
 
@@ -152,79 +159,46 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 		GroundLine.p2.y += fLen * Normal.y;
 
 
-		if (LineInterSection(ObjLine, GroundLine))
+		// 올린다. 
+		Vec3 playerPrevPos = Vec3(0.f, 0.f, 0.f);
+		Vec3 playerCurPos = Vec3(0.f, 0.f, 0.f);
+		if (nullptr != playerScript)
 		{
-			// 올린다. 
-			Vec3 playerPrevPos = Vec3(0.f, 0.f, 0.f);
-			Vec3 playerCurPos = Vec3(0.f, 0.f, 0.f);
+			playerPrevPos = playerScript->GetPrevPos();
+			playerCurPos = _OtherObject->Transform()->GetRelativePos();
+
+		}
+
+		// 위 -> 아래로 향할 때 
+		if (playerPrevPos.y - playerCurPos.y >= 0.f)
+		{
+			vObjPos = _OtherObject->Transform()->GetRelativePos();
+			Vec3 vColPos = _OtherObject->Collider2D()->GetWorldPos();
+			Vec2 vColScale = _OtherObject->Collider2D()->GetOffsetScale();
+
+			// 직선의 방정식 - Ground 
+			float m = (GroundLine.p2.y - GroundLine.p1.y) / (GroundLine.p2.x - GroundLine.p1.x);
+			float y = 0.f, OnLineY = 0.f;
+
+			OnLineY = m * (vColPos.x - GroundLine.p1.x) + GroundLine.p1.y;
+			m_fDiff = vObjPos.y - OnLineY;
+
+			vObjPos.y = OnLineY + m_fDiff - 1.f;;
+
+
+			_OtherObject->Transform()->SetRelativePos(vObjPos);
+
 			if (nullptr != playerScript)
 			{
-				playerPrevPos = playerScript->GetPrevPos();
-				playerCurPos = _OtherObject->Transform()->GetRelativePos();
-
+				playerScript->SetOnGround(true);
 			}
 
-			// 위 -> 아래로 향할 때 
-			if (playerPrevPos.y - playerCurPos.y >= 0.f)
+			if (nullptr != gravityScript)
 			{
-				vObjPos = _OtherObject->Transform()->GetRelativePos();
-				Vec3 ColPos = _OtherObject->Collider2D()->GetWorldPos();
-
-				Vec2 ColOffsetPos = _OtherObject->Collider2D()->GetOffsetPos();
-				// 직선의 방정식 - Ground 
-				float m = (GroundLine.p2.y - GroundLine.p1.y) / (GroundLine.p2.x - GroundLine.p1.x);
-				float y;
-
-				// Player Move 
-				if (0.f < fAngle && fAngle <= 90.f)
-				{
-					vObjPos.y = m * (vObjPos.x + (vObjScale.x / 2.f) - GroundLine.p1.x) + GroundLine.p1.y;
-					y = m * (vObjPos.x - GroundLine.p1.x) + GroundLine.p1.y;
-				}
-				else if (-90.f <= fAngle && fAngle < 0.f)
-				{
-					vObjPos.y = m * (vObjPos.x - (vObjScale.x / 2.f) - GroundLine.p1.x) + GroundLine.p1.y;
-					y = m * (vObjPos.x - GroundLine.p1.x) + GroundLine.p1.y;
-
-				}
-
-				float fDiff = vObjPos.y - y;
-				vObjPos.y += fDiff;
-
-				m_fDiff = fDiff;
-
-				_OtherObject->Transform()->SetRelativePos(vObjPos);
-
-				if (nullptr != playerScript)
-				{
-					playerScript->SetOnGround(true);
-				}
-
-				if (nullptr != gravityScript)
-				{
-					gravityScript->SetOnGround(true);
-				}
-
+				gravityScript->SetOnGround(true);
 			}
 		}
 	}
-
-
-
-
-
-
-	/*if (rigidBodyScript != nullptr)
-	{
-		Vec3 vForce = rigidBodyScript->GetForce();
-		vForce.y = 0.f;
-		Vec3 vVelocity = rigidBodyScript->GetVelocity();
-		vVelocity.y = 0.f;
-
-		rigidBodyScript->SetForce(vForce);
-		rigidBodyScript->SetVelocity(vVelocity);
-
-	}*/
 
 }
 
@@ -293,12 +267,9 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 	}
 	else
 	{
-		float vGround_SountLine_y = vGroundPos.y - (vGroundScale.y / 2);
-		float vGround_NorthLine_y = vGroundPos.y + (vGroundScale.y / 2);
+
 		float vObj_SouthLine_y = vObjPos.y - (vObjScale.y / 2);
-
 		float fRadian = (fAngle * 3.141592f) / 180.f;
-
 		float Ground_x = (vGroundScale.x / 2.f);
 		float Ground_y = 0.f;
 
@@ -327,6 +298,8 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 		GroundLine.p2.x += fLen * Normal.x;
 		GroundLine.p2.y += fLen * Normal.y;
 
+			ObjLine.p2.x += 10.f;
+			ObjLine.p1.x -= 10.f;
 
 		if (LineInterSection(ObjLine, GroundLine))
 		{
@@ -343,28 +316,16 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 			// 위 -> 아래로 향할 때 
 			if (playerPrevPos.y - playerCurPos.y >= 0.f)
 			{
- 				vObjPos = _OtherObject->Transform()->GetRelativePos();
-				Vec2 ColOffsetPos = _OtherObject->Collider2D()->GetOffsetPos();
+				vObjPos = _OtherObject->Transform()->GetRelativePos();
+				Vec3 vColPos = _OtherObject->Collider2D()->GetWorldPos();
+				Vec2 vColScale = _OtherObject->Collider2D()->GetOffsetScale();
+
 				// 직선의 방정식 - Ground 
 				float m = (GroundLine.p2.y - GroundLine.p1.y) / (GroundLine.p2.x - GroundLine.p1.x);
-				float y;
+				float y = 0.f, OnLineY = 0.f;
 
-				// Player Move 
-				if (0.f < fAngle && fAngle <= 90.f)
-				{
-					vObjPos.y = m * (vObjPos.x   + (vObjScale.x / 2.f) - GroundLine.p1.x) + GroundLine.p1.y;
-					y = m * (vObjPos.x  - GroundLine.p1.x) + GroundLine.p1.y;
-				}
-				else if (-90.f <= fAngle && fAngle < 0.f)
-				{
-					vObjPos.y = m * (vObjPos.x  - (vObjScale.x / 2.f) - GroundLine.p1.x) + GroundLine.p1.y;
-					y = m * (vObjPos.x  - GroundLine.p1.x) + GroundLine.p1.y;
-
-				}
-
-				//float fDiff = vObjPos.y - y;
-				vObjPos.y += m_fDiff;
-
+				OnLineY = m * (vColPos.x - GroundLine.p1.x) + GroundLine.p1.y;
+				vObjPos.y = OnLineY + m_fDiff - 1.f;
 
 				_OtherObject->Transform()->SetRelativePos(vObjPos);
 
@@ -378,6 +339,18 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 					gravityScript->SetOnGround(true);
 				}
 
+			}
+		}
+		else
+		{
+			if (nullptr != playerScript)
+			{
+				playerScript->SetOnGround(false);
+			}
+
+			if (nullptr != gravityScript)
+			{
+				gravityScript->SetOnGround(false);
 			}
 		}
 	}

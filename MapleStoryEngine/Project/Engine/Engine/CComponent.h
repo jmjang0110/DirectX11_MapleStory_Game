@@ -29,6 +29,7 @@ public:
 public:
     COMPONENT_TYPE GetType() { return m_eComType; }
     CGameObject* GetOwner() { return m_pOwner; }
+    void SetOwner(CGameObject* _pOwner) { if (m_pOwner == nullptr) m_pOwner = _pOwner; }
 
     GET_OTHER_COMPONENT(Transform)
     GET_OTHER_COMPONENT(MeshRender)

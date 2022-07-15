@@ -473,6 +473,9 @@ void InspectorUI::AddComponent(DWORD_PTR _param)
 
 void InspectorUI::AddScript(DWORD_PTR _param)
 {
+	if (m_pTargetObject == nullptr)
+		return;
+
 	string strScriptType = (char*)_param;
 	wstring wstrSCriptType = wstring(strScriptType.begin(), strScriptType.end());
 
@@ -606,6 +609,12 @@ void InspectorUI::GameObjectTool_SubFunc()
 
 			for (int i = 0; i < vecScriptInfo.size(); ++i)
 			{
+				// Except Script List 
+				if (vecScriptInfo[i] == L"CIdleStateScript" ||
+					vecScriptInfo[i] == L"CStateScript" ||
+					vecScriptInfo[i] == L"CTraceStateScript")
+					continue;
+
 				if (nullptr == m_pTargetObject->GetScriptByName(vecScriptInfo[i]))
 					pListUI->AddList(string(vecScriptInfo[i].begin(), vecScriptInfo[i].end()));
 			}

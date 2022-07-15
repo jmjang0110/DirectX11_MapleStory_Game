@@ -102,16 +102,16 @@ void CCameraMoveScript::update()
 
 	
 
-	if (KEY_PRESSED(KEY::RBTN))
-	{
-		Vec3 vRot = Transform()->GetRelativeRotation();
-		
-		Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
-		vRot.y += DT * vMouseDir.x * XM_PI;
-		vRot.x -= DT * vMouseDir.y * XM_PI;
+	//if (KEY_PRESSED(KEY::RBTN))
+	//{
+	//	Vec3 vRot = Transform()->GetRelativeRotation();
+	//	
+	//	Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
+	//	vRot.y += DT * vMouseDir.x * XM_PI;
+	//	vRot.x -= DT * vMouseDir.y * XM_PI;
 
-		Transform()->SetRelativeRotation(vRot);
-	}
+	//	Transform()->SetRelativeRotation(vRot);
+	//}
 
 	Transform()->SetRelativePos(vPos);
 }

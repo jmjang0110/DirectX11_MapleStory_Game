@@ -1,9 +1,13 @@
 CAIScript
 CameraPlayerMoveScript
+CAttackStateScript
 CBackGroundScript
+CBasicBallScript
 CCameraMoveScript
 CCursorScript
 CDamageScript
+CDeadStateScript
+CDoubleJumpScript
 CGravityScript
 CGroundScript
 CIdleStateScript
@@ -11,6 +15,7 @@ CMissileScript
 CMonsterFactoryScript
 CMonsterScript
 CPaperBurnScript
+CPatrolStateScript
 CPlayerScript
 CRigidBodyScript
 CStateScript
