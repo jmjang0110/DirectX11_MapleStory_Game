@@ -1,5 +1,5 @@
-Arm - worldpos  = (19 , 2)
-Body ( 0, 3)
+Arm - worldpos  = (19 , 1)
+Body ( 0, 2)
 
 180walk1 - duration - 0.125
 	- [body]  Start_px(0, 0)   px(31,32) 
