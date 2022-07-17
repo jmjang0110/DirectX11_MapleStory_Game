@@ -12,6 +12,7 @@ CBasicBallScript::CBasicBallScript()
 	, m_fSpeed(200.f)
 	, m_fMaxTime(3.f)
 	, m_fTimer(0.f)
+	, m_fAngle(0.f)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -24,7 +25,7 @@ CBasicBallScript::CBasicBallScript(const CBasicBallScript& _origin)
 	, m_fSpeed(200.f)
 	, m_fMaxTime(3.f)
 	, m_fTimer(0.f)
-
+	, m_fAngle(0.f)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -54,15 +55,31 @@ void CBasicBallScript::update()
 	m_fTimer += DT;
 	Vec3 vPos = pOwner->Transform()->GetRelativePos();
 	
-	if (m_eDir == BALL_DIRECTION::LEFT)
+	// Move 
+	switch (m_eDir)
+	{
+	case BALL_DIRECTION::LEFT:
 	{
 		vPos.x -= DT * m_fSpeed;
+
 	}
-	else if (m_eDir == BALL_DIRECTION::RIGHT)
+		break;
+	case BALL_DIRECTION::RIGHT:
 	{
 		vPos.x += DT * m_fSpeed;
 
 	}
+		break;
+	case BALL_DIRECTION::LEFT_DIAGONAL:
+		break;
+	case BALL_DIRECTION::RIGHT_DIAGONAL:
+		break;
+	case BALL_DIRECTION::LEFT_PARABOLA:
+		break;
+	case BALL_DIRECTION::RIGHT_PARABOLA:
+		break;
+	}
+
 
 	pOwner->Transform()->SetRelativePos(vPos);
 }
@@ -73,15 +90,11 @@ void CBasicBallScript::lateupdate()
 	// Delete Obj
 	if (m_fTimer >= m_fMaxTime)
 	{
+		// Event 
+		CGameObject* pDelObj = GetOwner();
+		int pDelObj_LayerIdx = GetOwner()->GetLayerIndex();
 
-		tEventInfo info = {};
-
-		info.eType = EVENT_TYPE::DEREGISTER_OBJ_IN_LAYER;
-		info.lParam = (DWORD_PTR)GetOwner();
-		info.wParam = (DWORD_PTR)GetOwner()->GetLayerIndex();
-
-		CEventMgr::GetInst()->AddEvent(info);
-
+		CSceneMgr::GetInst()->DeRegisterObjInLayer(pDelObj, pDelObj_LayerIdx);
 		GetOwner()->Destroy();
 		return;
 

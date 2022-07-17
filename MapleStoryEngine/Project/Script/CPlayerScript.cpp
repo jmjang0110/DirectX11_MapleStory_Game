@@ -13,12 +13,12 @@
 #include <Engine/CLayer.h>
 #include <Engine/CSceneMgr.h>
 #include <Engine/CPrefab.h>
-
+#include <Engine/CAnimation2D.h>
 
 #include "CRigidBodyScript.h"
 #include "CBasicBallScript.h"
 #include "CDoubleJumpScript.h"
-
+#include "CSkillScript.h"
 CPlayerScript::CPlayerScript()
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
 	//, m_pMissilePrefab(nullptr)
@@ -28,7 +28,8 @@ CPlayerScript::CPlayerScript()
 	, m_ePrevState(PLAYER_STATE::IDLE)
 	, m_bOnGround(false)
 	, m_pPrefab(nullptr)
-
+	, m_pDbJumpSubPrefab(nullptr)
+	, m_pDbJumpPrefab(nullptr)
 {
 
 	SetName(CScriptMgr::GetScriptName(this));
@@ -49,6 +50,8 @@ CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
 	, m_ePrevState(_origin.m_ePrevState)
 	, m_bOnGround(false)
 	, m_pPrefab(nullptr)
+	, m_pDbJumpSubPrefab(nullptr)
+	, m_pDbJumpPrefab(nullptr)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -65,6 +68,7 @@ CPlayerScript::~CPlayerScript()
 {
 	SAFE_DELETE(m_pPrefab);
 	SAFE_DELETE(m_pDbJumpPrefab);
+	SAFE_DELETE(m_pDbJumpSubPrefab);
 
 }
 
@@ -85,12 +89,68 @@ void CPlayerScript::start()
 
 	m_pPrefab = nullptr;
 	m_pDbJumpPrefab = nullptr;
+	m_pDbJumpSubPrefab = nullptr;
 
 }
 
 void CPlayerScript::update()
 {
 	m_vPrevPos = GetOwner()->Transform()->GetRelativePos();
+
+	/*
+	* Skill Test
+	*/
+	if (KEY_TAP(KEY::A))
+	{
+		CGameObject* ptest = new CGameObject;
+		ptest->SetName(L"SkillTest");
+		ptest->AddComponent(new CTransform);
+		ptest->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
+
+
+		wstring strPrefabKey = L"prefab\\StormPrepare.pref";
+		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+		wstring FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab1 = new CPrefab;
+		pPrefab1->Load(FullPath);
+		assert(pPrefab1);
+
+		strPrefabKey = L"prefab\\Storm.pref";
+		strContent = CPathMgr::GetInst()->GetContentPath();
+		FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab2 = new CPrefab;
+		pPrefab2->Load(FullPath);
+		assert(pPrefab2);
+
+		strPrefabKey = L"prefab\\StormEnd.pref";
+		strContent = CPathMgr::GetInst()->GetContentPath();
+		FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab3 = new CPrefab;
+		pPrefab3->Load(FullPath);
+		assert(pPrefab3);
+
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+		CSkillScript* pScript = (CSkillScript*)CScriptMgr::GetScript(L"CSkillScript");
+		ptest->AddComponent((CComponent*)pScript);
+
+		pScript->SetKey(KEY::A);
+		pScript->SetSkillObjByPrefab(pPrefab1, pPrefab2, pPrefab3);
+		pScript->SetName(L"stormSkill");
+
+		pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		pCurScene->AddObject(ptest, L"Skill");
+
+		SAFE_DELETE(pPrefab1);
+		SAFE_DELETE(pPrefab2);
+		SAFE_DELETE(pPrefab3);
+
+
+
+	}
 
 	Update_State();
 	Update_Move();
@@ -101,57 +161,7 @@ void CPlayerScript::update()
 	m_ePrevDir = m_eDir;
 
 
-	// Test 
-	if (KEY_TAP(KEY::LCTRL))
-	{
-		static CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		static CLayer* pCurLayer = pCurScene->GetLayer(L"Player");
-
-
-
-		if (m_pPrefab == nullptr)
-		{
-			wstring strPrefabKey = L"prefab\\BasicBall.pref";
-			wstring strContent = CPathMgr::GetInst()->GetContentPath();
-			wstring FullPath = strContent + strPrefabKey;
-
-			m_pPrefab = new CPrefab;
-			m_pPrefab->Load(FullPath);
-			assert(m_pPrefab);
-		}
-
-
-		// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
-		CGameObject* NewObj = m_pPrefab->Instantiate();
-
 	
-		int Offset_y = rand() % 100;
-		if (Offset_y % 2 == 1)
-			Offset_y *= -1;
-
-		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
-		vPos.y += Offset_y;
-		NewObj->Transform()->SetRelativePos(vPos);
-
-		CBasicBallScript* pScript = (CBasicBallScript*)CScriptMgr::GetScript(L"CBasicBallScript");
-
-		if (m_eDir == PLAYER_DIRECTION::LEFT)
-		{
-			pScript->SetDir(BALL_DIRECTION::LEFT);
-			NewObj->Animator2D()->Play(L"Move_Left", true);
-
-		}
-		else if (m_eDir == PLAYER_DIRECTION::RIGHT)
-		{
-
-			pScript->SetDir(BALL_DIRECTION::RIGHT);
-			NewObj->Animator2D()->Play(L"Move_Right", true);
-		}
-
-		NewObj->AddComponent((CComponent*)pScript);
-		pCurScene->AddObject(NewObj, pCurLayer->GetName());
-
-	}
 }
 
 
@@ -254,7 +264,9 @@ void CPlayerScript::Update_State()
 			m_eCurState = PLAYER_STATE::IDLE;
 		}
 
-		if (0.f == fSpeed && m_bOnGround)
+		if (0.f == fSpeed && m_bOnGround 
+			&& m_ePrevState != PLAYER_STATE::ATTACK
+			&& m_ePrevState != PLAYER_STATE::ALERT)
 		{
 			m_eCurState = PLAYER_STATE::IDLE;
 			m_eDir = m_ePrevDir;
@@ -343,6 +355,39 @@ void CPlayerScript::Update_State()
 
 	}
 
+
+
+	if (m_eCurState == PLAYER_STATE::ATTACK)
+	{
+
+		vector<CGameObject*> vecChild = GetOwner()->GetChild();
+		for (int i = 0; i < vecChild.size(); ++i)
+		{
+			if (vecChild[i]->GetName() == L"Body")
+			{
+				CAnimator2D* pAnimator2D = vecChild[i]->Animator2D();
+				CAnimation2D* pAnim = pAnimator2D->GetCurAnim();
+				if (pAnim->IsFinish() == true)
+				{
+					m_eCurState = PLAYER_STATE::ALERT;
+					ResetAnim(PLAYER_STATE::ATTACK, GetOwner());
+
+				}
+				break;
+			}
+		}
+	}
+
+
+	if (m_eCurState != PLAYER_STATE::JUMP && m_eCurState != PLAYER_STATE::DOUBLE_JUMP)
+	{
+		if (KEY_TAP(KEY::LCTRL) || KEY_PRESSED(KEY::LCTRL))
+		{
+			m_eCurState = PLAYER_STATE::ATTACK;
+		}
+	}
+
+
 }
 
 void CPlayerScript::Update_Move()
@@ -424,6 +469,61 @@ void CPlayerScript::Update_Move()
 		
 	}
 
+
+
+
+	// Test  - ATtack 
+	if (KEY_TAP(KEY::LCTRL))
+	{
+		static CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		static CLayer* pCurLayer = pCurScene->GetLayer(L"Player");
+
+
+
+		if (m_pPrefab == nullptr)
+		{
+			wstring strPrefabKey = L"prefab\\BasicBall.pref";
+			wstring strContent = CPathMgr::GetInst()->GetContentPath();
+			wstring FullPath = strContent + strPrefabKey;
+
+			m_pPrefab = new CPrefab;
+			m_pPrefab->Load(FullPath);
+			assert(m_pPrefab);
+		}
+
+
+		// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
+		CGameObject* NewObj = m_pPrefab->Instantiate();
+
+
+		int Offset_y = rand() % 100;
+		if (Offset_y % 2 == 1)
+			Offset_y *= -1;
+
+		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+		vPos.y += Offset_y;
+		NewObj->Transform()->SetRelativePos(vPos);
+
+		CBasicBallScript* pScript = (CBasicBallScript*)CScriptMgr::GetScript(L"CBasicBallScript");
+
+		if (m_eDir == PLAYER_DIRECTION::LEFT)
+		{
+			pScript->SetDir(BALL_DIRECTION::LEFT);
+			NewObj->Animator2D()->Play(L"Move_Left", true);
+
+		}
+		else if (m_eDir == PLAYER_DIRECTION::RIGHT)
+		{
+
+			pScript->SetDir(BALL_DIRECTION::RIGHT);
+			NewObj->Animator2D()->Play(L"Move_Right", true);
+		}
+
+		NewObj->AddComponent((CComponent*)pScript);
+		pCurScene->AddObject(NewObj, pCurLayer->GetName());
+
+	}
+
 }
 
 void CPlayerScript::Update_Animation()
@@ -463,7 +563,18 @@ void CPlayerScript::RegisterDoubleJumpEff()
 		m_pDbJumpPrefab->Load(FullPath);
 		assert(m_pDbJumpPrefab);
 	}
+	if (m_pDbJumpSubPrefab == nullptr)
+	{
+		wstring strPrefabKey = L"prefab\\DoubleJumpSubEffect.pref";
+		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+		wstring FullPath = strContent + strPrefabKey;
 
+		m_pDbJumpSubPrefab = new CPrefab;
+		m_pDbJumpSubPrefab->Load(FullPath);
+		assert(m_pDbJumpSubPrefab);
+	}
+
+	// ** m_pDbJumpPrefab ** 
 	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
 	CGameObject* NewObj = m_pDbJumpPrefab->Instantiate();
 	CDoubleJumpScript* pScript = (CDoubleJumpScript*)CScriptMgr::GetScript(L"CDoubleJumpScript");
@@ -483,6 +594,58 @@ void CPlayerScript::RegisterDoubleJumpEff()
 	pCurScene->AddObject(NewObj, L"Player");
 	CSceneMgr::GetInst()->AddChild(GetOwner(), NewObj);
 
+
+	// ** m_pDbJumpSubPrefab ** 
+	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
+	NewObj = m_pDbJumpSubPrefab->Instantiate();
+	
+	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+
+	pScript = (CDoubleJumpScript*)CScriptMgr::GetScript(L"CDoubleJumpScript");
+
+	if (m_eDir == PLAYER_DIRECTION::LEFT)
+	{
+		vPos.x += 50.f;
+		vPos.y += 20.f;
+		NewObj->Animator2D()->Play(L"Move_Left", false);
+
+	}
+	else if (m_eDir == PLAYER_DIRECTION::RIGHT)
+	{
+		vPos.y += 20.f;
+		vPos.x -= 50.f;
+		NewObj->Animator2D()->Play(L"Move_Right", false);
+	}
+	NewObj->Transform()->SetRelativePos(vPos);
+	NewObj->AddComponent((CComponent*)pScript);
+	pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	pCurScene->AddObject(NewObj, L"Skill");
+
+}
+
+void CPlayerScript::ResetAnim(PLAYER_STATE _eState, CGameObject* _pObj)
+{
+	if (_eState != PLAYER_STATE::ATTACK)
+		return;
+
+	vector<CGameObject*> vecChild = _pObj->GetChild();
+	for (int i = 0; i < vecChild.size(); ++i)
+	{
+		if (vecChild[i]->Animator2D() == nullptr)
+			continue;
+		CAnimator2D* pAnimator2D = vecChild[i]->Animator2D();
+		CAnimation2D* pAnim = pAnimator2D->GetCurAnim();
+		if (pAnim->IsFinish() == true)
+		{
+			pAnim->Reset();
+
+		}
+		if (vecChild[i]->GetChild().empty() == false)
+		{
+			ResetAnim(PLAYER_STATE::ATTACK, vecChild[i]);
+		}
+	}
+
 }
 
 void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
@@ -493,41 +656,7 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 	m_eMoveDir = m_eDir;
 	CAnimator2D* pAnimator2D = _pObj->Animator2D();
 
-	if (_pObj->GetName() == L"Head")
-	{
-		if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
-		{
-			pAnimator2D->Play(L"HEAD_LEFT", true);
-		}
-		else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
-		{
-			pAnimator2D->Play(L"HEAD_RIGHT", true);
 
-		}
-
-		vector<CGameObject*> ChildChildObj = _pObj->GetChild();
-		for (int i = 0; i < ChildChildObj.size(); ++i)
-		{
-			if (ChildChildObj[i]->GetName() == L"Eye")
-			{
-				CAnimator2D* pAnimator2D = ChildChildObj[i]->Animator2D();
-
-				if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
-				{
-					pAnimator2D->Play(L"BLINK_LEFT", true);
-				}
-				else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
-				{
-					pAnimator2D->Play(L"BLINK_RIGHT", true);
-
-				}
-			}
-		}
-
-		return;
-	}
-
-	// Body, Arm
 	if (_pObj->GetName() == _name)
 	{
 		switch (m_eCurState)
@@ -564,12 +693,15 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 		{
 			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
 			{
-				pAnimator2D->Play(L"JUMP_LEFT", true);
+				
+					pAnimator2D->Play(L"JUMP_LEFT", true);
+			
 
 			}
 			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
 			{
-				pAnimator2D->Play(L"JUMP_RIGHT", true);
+				
+					pAnimator2D->Play(L"JUMP_RIGHT", true);
 
 			}
 		}
@@ -577,15 +709,53 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 		break;
 
 		case PLAYER_STATE::ATTACK:
+		{
+			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			{
 
+				pAnimator2D->Play(L"SWINGO1_LEFT", false);
+
+
+			}
+			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			{
+				// 아직 안만듬 
+				//pAnimator2D->Play(L"SWINGO1_RIGHT", true);
+
+			}
+		}
 			break;
 		case PLAYER_STATE::ALERT:
+		{
+			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			{
+
+				pAnimator2D->Play(L"ALERT_LEFT", true);
+
+
+			}
+			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			{
+				pAnimator2D->Play(L"ALERT_RIGHT", true);
+
+			}
+		}
 
 			break;
 		case PLAYER_STATE::DEAD:
 
 			break;
 		}
+
+		vector<CGameObject*> ChildChildObj = _pObj->GetChild();
+		if (ChildChildObj.empty() == false)
+		{
+			for (int i = 0; i < ChildChildObj.size(); ++i)
+			{
+				Update_Animation(ChildChildObj[i], L"Eye");
+			}
+		}
+
 	}
 
 	

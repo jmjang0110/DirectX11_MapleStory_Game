@@ -82,6 +82,9 @@
     <Filter Include="Script\03. Object\DoubleJumpEff">
       <UniqueIdentifier>{78b8e329-9e4d-43ff-8cc0-d6e6fe11b983}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\03. Object\Skill">
+      <UniqueIdentifier>{7ab3cb77-204a-4d77-ad0a-5c62ebe57803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -158,6 +161,9 @@
     <ClInclude Include="CDoubleJumpScript.h">
       <Filter>Script\03. Object\DoubleJumpEff</Filter>
     </ClInclude>
+    <ClInclude Include="CSkillScript.h">
+      <Filter>Script\03. Object\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -233,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="CDoubleJumpScript.cpp">
       <Filter>Script\03. Object\DoubleJumpEff</Filter>
+    </ClCompile>
+    <ClCompile Include="CSkillScript.cpp">
+      <Filter>Script\03. Object\Skill</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

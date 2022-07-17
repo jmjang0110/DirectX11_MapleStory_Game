@@ -80,6 +80,8 @@ private:
 private:
     class CPrefab* m_pPrefab;
     class CPrefab* m_pDbJumpPrefab;
+    class CPrefab* m_pDbJumpSubPrefab;
+
 
 
 public:
@@ -105,6 +107,8 @@ public:
 
 public:
     void RegisterDoubleJumpEff();
+    void ResetAnim(PLAYER_STATE _eState, CGameObject* _pObj);
+
 
 private:
     void Update_Animation(CGameObject* _pObj, wstring _name);

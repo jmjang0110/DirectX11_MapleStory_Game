@@ -21,6 +21,7 @@
 #include "CPatrolStateScript.h"
 #include "CPlayerScript.h"
 #include "CRigidBodyScript.h"
+#include "CSkillScript.h"
 #include "CStateScript.h"
 #include "CTraceStateScript.h"
 
@@ -46,6 +47,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPatrolStateScript");
 	_vec.push_back(L"CPlayerScript");
 	_vec.push_back(L"CRigidBodyScript");
+	_vec.push_back(L"CSkillScript");
 	_vec.push_back(L"CStateScript");
 	_vec.push_back(L"CTraceStateScript");
 }
@@ -92,6 +94,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPlayerScript;
 	if (L"CRigidBodyScript" == _strScriptName)
 		return new CRigidBodyScript;
+	if (L"CSkillScript" == _strScriptName)
+		return new CSkillScript;
 	if (L"CStateScript" == _strScriptName)
 		return new CStateScript;
 	if (L"CTraceStateScript" == _strScriptName)
@@ -162,6 +166,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::RIGIDBODYSCRIPT:
 		return new CRigidBodyScript;
+		break;
+	case (UINT)SCRIPT_TYPE::SKILLSCRIPT:
+		return new CSkillScript;
 		break;
 	case (UINT)SCRIPT_TYPE::STATESCRIPT:
 		return new CStateScript;
@@ -255,6 +262,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::RIGIDBODYSCRIPT:
 		return L"CRigidBodyScript";
+		break;
+
+	case SCRIPT_TYPE::SKILLSCRIPT:
+		return L"CSkillScript";
 		break;
 
 	case SCRIPT_TYPE::STATESCRIPT:

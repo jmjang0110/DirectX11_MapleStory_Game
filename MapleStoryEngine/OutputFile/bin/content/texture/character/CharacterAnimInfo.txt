@@ -121,10 +121,10 @@ Jump
 Jump[arm]   - Offset(0, 1 )
 Jump[hand]   - Offset(0, 1 )
 
-Ladder
+Ladder - 0.2
 	-[body] start_px(0, 1320) px(23,43)
 
-rope
+rope  0.2
 	-[body] start_px(60, 1320) px(19,43)
 
 sit

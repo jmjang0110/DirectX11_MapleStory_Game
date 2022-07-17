@@ -3,8 +3,18 @@
 
 enum class BALL_DIRECTION
 {
-    LEFT,
-    RIGHT,
+    // 직선 
+    LEFT,         
+    RIGHT,      
+    
+    // 대각선 - 직선 
+    LEFT_DIAGONAL,       
+    RIGHT_DIAGONAL,
+
+    // 포물선 
+    LEFT_PARABOLA,
+    RIGHT_PARABOLA,
+
     END,
 
 };
@@ -16,6 +26,8 @@ class CBasicBallScript :
 
 private:
     float               m_fSpeed;
+    float               m_fAngle; // degree 
+
     BALL_DIRECTION      m_eDir;
 
     float m_fTimer;
