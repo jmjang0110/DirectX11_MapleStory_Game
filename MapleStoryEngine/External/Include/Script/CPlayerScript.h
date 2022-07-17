@@ -86,6 +86,7 @@ private:
 
 public:
     Vec3 GetPrevPos() { return m_vPrevPos; }
+    PLAYER_DIRECTION GetDir() { return m_eDir; }
     void SetOnGround(bool _b) { m_bOnGround = _b; }
     bool GetOnGround() { return m_bOnGround; }
     void SetCurDir(PLAYER_DIRECTION _eDir) { m_eDir = _eDir; }
@@ -100,6 +101,8 @@ public:
     virtual void OnCollisionExit(CGameObject* _OtherObject) override;
 
 public:
+    void Update_Skill();
+
     void Update_State();
     void Update_Move();
     void Update_Gravity();

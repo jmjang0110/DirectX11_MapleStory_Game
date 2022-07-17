@@ -164,6 +164,9 @@
     <ClInclude Include="CSkillScript.h">
       <Filter>Script\03. Object\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="CSkillnearScript.h">
+      <Filter>Script\03. Object\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -241,6 +244,9 @@
       <Filter>Script\03. Object\DoubleJumpEff</Filter>
     </ClCompile>
     <ClCompile Include="CSkillScript.cpp">
+      <Filter>Script\03. Object\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="CSkillnearScript.cpp">
       <Filter>Script\03. Object\Skill</Filter>
     </ClCompile>
   </ItemGroup>

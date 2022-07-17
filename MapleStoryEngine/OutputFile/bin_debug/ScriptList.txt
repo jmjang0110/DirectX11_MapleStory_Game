@@ -18,6 +18,7 @@ CPaperBurnScript
 CPatrolStateScript
 CPlayerScript
 CRigidBodyScript
+CSkillnearScript
 CSkillScript
 CStateScript
 CTraceStateScript

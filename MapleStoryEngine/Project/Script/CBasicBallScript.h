@@ -1,6 +1,17 @@
 #pragma once
 #include <Engine/CScript.h>
 
+enum class BALLMOVE_TYPE
+{
+    LINEAR,
+    DIAGONAL,
+    PARABOLA,
+    BALLISTIC,
+
+    END,
+
+};
+
 enum class BALL_DIRECTION
 {
     // 직선 
@@ -14,6 +25,11 @@ enum class BALL_DIRECTION
     // 포물선 
     LEFT_PARABOLA,
     RIGHT_PARABOLA,
+
+    // 탄도 
+    LEFT_BALLISTIC,
+    RIGHT_BALLISTIC,
+
 
     END,
 
@@ -29,10 +45,24 @@ private:
     float               m_fAngle; // degree 
 
     BALL_DIRECTION      m_eDir;
+    BALLMOVE_TYPE       m_eMoveType;
 
-    float m_fTimer;
-    float m_fMaxTime;
+    float               m_fTimer;
+    float               m_fMaxTime;
 
+    Vec3                m_vStartPos;
+    Vec3                m_vPrevPos;
+
+
+private:
+    void LinearMove();
+    void DiagonalMove();
+    void ParabolaMove();
+    void BallisticMove();
+
+public:
+    void SetBallMoveType(BALLMOVE_TYPE _type) { m_eMoveType = _type; }
+    void Init(Vec3 _startpos);
 
 public:
     virtual void start();

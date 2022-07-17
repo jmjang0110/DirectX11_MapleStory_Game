@@ -194,6 +194,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CRigidBodyScript.h" />
     <ClInclude Include="CSceneSaveLoad.h" />
     <ClInclude Include="CScriptMgr.h" />
+    <ClInclude Include="CSkillnearScript.h" />
     <ClInclude Include="CSkillScript.h" />
     <ClInclude Include="CStateScript.h" />
     <ClInclude Include="CTraceStateScript.h" />
@@ -223,6 +224,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CRigidBodyScript.cpp" />
     <ClCompile Include="CSceneSaveLoad.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
+    <ClCompile Include="CSkillnearScript.cpp" />
     <ClCompile Include="CSkillScript.cpp" />
     <ClCompile Include="CStateScript.cpp" />
     <ClCompile Include="CTraceStateScript.cpp" />

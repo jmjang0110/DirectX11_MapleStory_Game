@@ -19,6 +19,8 @@
 #include "CBasicBallScript.h"
 #include "CDoubleJumpScript.h"
 #include "CSkillScript.h"
+#include "CSkillnearScript.h"
+
 CPlayerScript::CPlayerScript()
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
 	//, m_pMissilePrefab(nullptr)
@@ -97,6 +99,46 @@ void CPlayerScript::update()
 {
 	m_vPrevPos = GetOwner()->Transform()->GetRelativePos();
 
+	Update_Skill();
+
+	Update_State();
+	Update_Move();
+	Update_Gravity();
+	Update_Animation();
+	
+	m_ePrevState = m_eCurState;
+	m_ePrevDir = m_eDir;
+
+
+	
+}
+
+
+
+
+void CPlayerScript::lateupdate()
+{
+
+}
+
+void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
+{
+
+}
+
+void CPlayerScript::OnCollision(CGameObject* _OtherObject)
+{
+}
+
+void CPlayerScript::OnCollisionExit(CGameObject* _OtherObject)
+{
+}
+
+
+
+
+void CPlayerScript::Update_Skill()
+{
 	/*
 	* Skill Test
 	*/
@@ -140,6 +182,11 @@ void CPlayerScript::update()
 		pScript->SetKey(KEY::A);
 		pScript->SetSkillObjByPrefab(pPrefab1, pPrefab2, pPrefab3);
 		pScript->SetName(L"stormSkill");
+		pScript->SetUser(GetOwner());
+		pScript->SetBallName(L"prefab\\BasicBall.pref");
+		pScript->SetBallMoveType(BALLMOVE_TYPE::LINEAR);
+		pScript->SetOffsetY(true);
+
 
 		pCurScene = CSceneMgr::GetInst()->GetCurScene();
 		pCurScene->AddObject(ptest, L"Skill");
@@ -148,104 +195,95 @@ void CPlayerScript::update()
 		SAFE_DELETE(pPrefab2);
 		SAFE_DELETE(pPrefab3);
 
+	}
 
+	if (KEY_TAP(KEY::S))
+	{
+		CGameObject* ptest = new CGameObject;
+		ptest->SetName(L"ArrowFlatter");
+		ptest->AddComponent(new CTransform);
+		ptest->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
+
+
+		wstring strPrefabKey = L"prefab\\ArrowFlatterPrepare.pref";
+		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+		wstring FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab1 = new CPrefab;
+		pPrefab1->Load(FullPath);
+		assert(pPrefab1);
+
+		strPrefabKey = L"prefab\\ArrowFlatter.pref";
+		strContent = CPathMgr::GetInst()->GetContentPath();
+		FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab2 = new CPrefab;
+		pPrefab2->Load(FullPath);
+		assert(pPrefab2);
+
+		strPrefabKey = L"prefab\\ArrowFlatterEnd.pref";
+		strContent = CPathMgr::GetInst()->GetContentPath();
+		FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab3 = new CPrefab;
+		pPrefab3->Load(FullPath);
+		assert(pPrefab3);
+
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+		CSkillScript* pScript = (CSkillScript*)CScriptMgr::GetScript(L"CSkillScript");
+		ptest->AddComponent((CComponent*)pScript);
+
+		pScript->SetKey(KEY::S);
+		pScript->SetSkillObjByPrefab(pPrefab1, pPrefab2, pPrefab3);
+		pScript->SetName(L"ArrowFlatterSkill");
+		pScript->SetUser(GetOwner());
+		pScript->SetBallName(L"prefab\\ArrowFlatterBall.pref");
+		pScript->SetBallMoveType(BALLMOVE_TYPE::DIAGONAL);
+		pScript->SetOffsetY(false);
+
+
+		pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		pCurScene->AddObject(ptest, L"Skill");
+
+		SAFE_DELETE(pPrefab1);
+		SAFE_DELETE(pPrefab2);
+		SAFE_DELETE(pPrefab3);
+
+	}
+	if (KEY_TAP(KEY::LCTRL))
+	{
+		CGameObject* ptest = new CGameObject;
+		ptest->SetName(L"FinalBlow");
+		ptest->AddComponent(new CTransform);
+		ptest->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
+
+		wstring strPrefabKey = L"prefab\\FinalBlow.pref";
+		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+		wstring FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab1 = new CPrefab;
+		pPrefab1->Load(FullPath);
+		assert(pPrefab1);
+
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+		CSkillnearScript* pScript = (CSkillnearScript*)CScriptMgr::GetScript(L"CSkillnearScript");
+		ptest->AddComponent((CComponent*)pScript);
+
+		pScript->SetKey(KEY::LCTRL);
+		pScript->SetSkillObjByPrefab(pPrefab1, L"FinalBlow");
+		pScript->SetUser(GetOwner());
+
+		pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		pCurScene->AddObject(ptest, L"Skill");
+
+		SAFE_DELETE(pPrefab1);
 
 	}
 
-	Update_State();
-	Update_Move();
-	Update_Gravity();
-	Update_Animation();
-	
-	m_ePrevState = m_eCurState;
-	m_ePrevDir = m_eDir;
-
-
-	
-}
-
-
-//
-//void CPlayerScript::update()
-//{
-//	/*if (KEY_PRESSED(KEY::Z))
-//	{
-//		Vec3 vRot = Transform()->GetRelativeRotation();
-//		vRot.z += DT * XM_2PI;
-//		Transform()->SetRelativeRotation(vRot);
-//	}
-//
-//	if (KEY_TAP(KEY::SPACE))
-//	{
-//		GetOqwner()->Destroy();
-//		GetOwner()->GetChild().at(0)->Destroy();
-//
-//		GetOwner()->GetChild().at(0)->Destroy();
-//		GetOwner()->Destroy();
-//
-//		GetOwner()->GetChild().at(0)->Destroy();
-//		GetOwner()->Destroy();
-//
-//		if (nullptr != m_pMissilePrefab)
-//		{
-//			CGameObject* pMissileObject = m_pMissilePrefab->Instantiate();
-//
-//			Vec3 vMissilePos = Transform()->GetRelativePos();
-//			vMissilePos.y += Transform()->GetRelativeScale().y / 2.f;
-//
-//			CSceneMgr::GetInst()->SpawnObject(pMissileObject, vMissilePos, L"Missile", 0);
-//		}		
-//	}
-//
-//	if (KEY_TAP(KEY::B))
-//	{
-//		m_bBurn = true;
-//		Ptr<CMaterial> pMtrl = MeshRender()->GetMaterial();
-//		Vec4 vColor(1.f, 0.75f, 0.5f, 0.f);
-//		pMtrl->SetScalarParam(SCALAR_PARAM::VEC4_0, &vColor);
-//	}
-//
-//	Burnning();
-//	*/
-//
-//
-//	// ===== Todo ========
-//	// 이동 방향에 따라 CLight2D 의 Dir 을 바꾼다. 
-//	vector<CGameObject*> vecChild = GetOwner()->GetChild();
-//	for (int i = 0; i < vecChild.size(); ++i)
-//	{
-//		if (nullptr != vecChild[i]->GetComponent(COMPONENT_TYPE::LIGHT2D))
-//		{
-//			Vec3 vDir = GetOwner()->Transform()->GetRelativePos() - PrevPos;
-//			if(vDir != Vec3(0.f, 0.f ,0.f))
-//				vecChild[i]->Light2D()->SetLightDir(vDir);
-//
-//		}
-//	}
-//	PrevPos = GetOwner()->Transform()->GetRelativePos();
-//
-//}
-
-void CPlayerScript::lateupdate()
-{
 
 }
-
-void CPlayerScript::OnCollisionEnter(CGameObject* _OtherObject)
-{
-
-}
-
-void CPlayerScript::OnCollision(CGameObject* _OtherObject)
-{
-}
-
-void CPlayerScript::OnCollisionExit(CGameObject* _OtherObject)
-{
-}
-
-
-
 
 void CPlayerScript::Update_State()
 {
@@ -790,3 +828,63 @@ void CPlayerScript::LoadFromScene(FILE* _pFile)
 
 }
 
+//
+//void CPlayerScript::update()
+//{
+//	/*if (KEY_PRESSED(KEY::Z))
+//	{
+//		Vec3 vRot = Transform()->GetRelativeRotation();
+//		vRot.z += DT * XM_2PI;
+//		Transform()->SetRelativeRotation(vRot);
+//	}
+//
+//	if (KEY_TAP(KEY::SPACE))
+//	{
+//		GetOqwner()->Destroy();
+//		GetOwner()->GetChild().at(0)->Destroy();
+//
+//		GetOwner()->GetChild().at(0)->Destroy();
+//		GetOwner()->Destroy();
+//
+//		GetOwner()->GetChild().at(0)->Destroy();
+//		GetOwner()->Destroy();
+//
+//		if (nullptr != m_pMissilePrefab)
+//		{
+//			CGameObject* pMissileObject = m_pMissilePrefab->Instantiate();
+//
+//			Vec3 vMissilePos = Transform()->GetRelativePos();
+//			vMissilePos.y += Transform()->GetRelativeScale().y / 2.f;
+//
+//			CSceneMgr::GetInst()->SpawnObject(pMissileObject, vMissilePos, L"Missile", 0);
+//		}		
+//	}
+//
+//	if (KEY_TAP(KEY::B))
+//	{
+//		m_bBurn = true;
+//		Ptr<CMaterial> pMtrl = MeshRender()->GetMaterial();
+//		Vec4 vColor(1.f, 0.75f, 0.5f, 0.f);
+//		pMtrl->SetScalarParam(SCALAR_PARAM::VEC4_0, &vColor);
+//	}
+//
+//	Burnning();
+//	*/
+//
+//
+//	// ===== Todo ========
+//	// 이동 방향에 따라 CLight2D 의 Dir 을 바꾼다. 
+//	vector<CGameObject*> vecChild = GetOwner()->GetChild();
+//	for (int i = 0; i < vecChild.size(); ++i)
+//	{
+//		if (nullptr != vecChild[i]->GetComponent(COMPONENT_TYPE::LIGHT2D))
+//		{
+//			Vec3 vDir = GetOwner()->Transform()->GetRelativePos() - PrevPos;
+//			if(vDir != Vec3(0.f, 0.f ,0.f))
+//				vecChild[i]->Light2D()->SetLightDir(vDir);
+//
+//		}
+//	}
+//	PrevPos = GetOwner()->Transform()->GetRelativePos();
+//
+//}

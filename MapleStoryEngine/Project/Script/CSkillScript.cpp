@@ -8,6 +8,13 @@
 #include <Engine/CScene.h>
 #include <Engine/CLayer.h>
 
+#include <Engine/CPrefab.h>
+
+#include "CScriptMgr.h"
+#include "CPlayerScript.h"
+
+
+
 
 
 CSkillScript::CSkillScript()
@@ -15,6 +22,11 @@ CSkillScript::CSkillScript()
 	, m_PrepareObj(nullptr)
 	, m_KeyDownObj(nullptr)
 	, m_EndObj(nullptr)
+	, m_fArrowTimer(0.f)
+	, m_fMaxArrowTimer(0.15f)
+	, m_eBallMoveType(BALLMOVE_TYPE::LINEAR)
+	, m_bOffsetY(false)
+
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -26,6 +38,11 @@ CSkillScript::CSkillScript(const CSkillScript& _origin)
 	, m_PrepareObj(nullptr)
 	, m_KeyDownObj(nullptr)
 	, m_EndObj(nullptr)
+	, m_fArrowTimer(0.f)
+	, m_fMaxArrowTimer(0.15f)
+	, m_eBallMoveType(BALLMOVE_TYPE::LINEAR)
+	, m_bOffsetY(false)
+
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -34,6 +51,7 @@ CSkillScript::CSkillScript(const CSkillScript& _origin)
 
 CSkillScript::~CSkillScript()
 {
+	SAFE_DELETE(m_ArrowPrefab);
 
 
 }
@@ -42,13 +60,13 @@ CSkillScript::~CSkillScript()
 void CSkillScript::start()
 {
 	m_eState = SKILL_STATE::PREPARE;
-
+	m_fArrowTimer = 0.f;
+	m_fMaxArrowTimer = 0.15f;
 
 }
 
 void CSkillScript::update()
 {
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 	UpdatePos();
 
@@ -58,17 +76,19 @@ void CSkillScript::update()
 	{
 		Prepare();
 	}
-		break;
+	break;
 	case SKILL_STATE::KEYDOWN:
 	{
 		KeyDown();
+		AttackArrow();
+
 	}
-		break;
+	break;
 	case SKILL_STATE::SKILLEND:
 	{
 		SkillEnd();
 	}
-		break;
+	break;
 
 	}
 
@@ -128,7 +148,7 @@ void CSkillScript::Prepare()
 
 			}
 		}
-	
+
 		// Change State 
 		m_eState = SKILL_STATE::KEYDOWN;
 		return;
@@ -152,7 +172,19 @@ void CSkillScript::Prepare()
 
 	if (KEY_TAP(m_eKey))
 	{
-		pAnimator2D->Play(L"Move_Left", false);
+		CPlayerScript* pPlayerScript = (CPlayerScript*)m_pSkillUser->GetScriptByName(L"CPlayerScript");
+
+		if (pPlayerScript->GetDir() == PLAYER_DIRECTION::LEFT)
+		{
+			pAnimator2D->Play(L"Move_Left", false);
+
+		}
+		else if (pPlayerScript->GetDir() == PLAYER_DIRECTION::RIGHT)
+		{
+			pAnimator2D->Play(L"Move_Right", false);
+		}
+
+
 
 	}
 	if (pCurAnim->IsFinish() == true)
@@ -219,7 +251,17 @@ void CSkillScript::KeyDown()
 
 	if (KEY_PRESSED(m_eKey))
 	{
-		pAnimator2D->Play(L"Move_Left", true);
+		CPlayerScript* pPlayerScript = (CPlayerScript*)m_pSkillUser->GetScriptByName(L"CPlayerScript");
+
+		if (pPlayerScript->GetDir() == PLAYER_DIRECTION::LEFT)
+		{
+			pAnimator2D->Play(L"Move_Left", true);
+
+		}
+		else if (pPlayerScript->GetDir() == PLAYER_DIRECTION::RIGHT)
+		{
+			pAnimator2D->Play(L"Move_Right", true);
+		}
 
 	}
 	if (KEY_AWAY(m_eKey))
@@ -280,8 +322,17 @@ void CSkillScript::SkillEnd()
 	// On
 
 	CAnimator2D* pAnimator2D = m_EndObj->Animator2D();
-	pAnimator2D->Play(L"Move_Left", false);
+	CPlayerScript* pPlayerScript = (CPlayerScript*)m_pSkillUser->GetScriptByName(L"CPlayerScript");
 
+	if (pPlayerScript->GetDir() == PLAYER_DIRECTION::LEFT)
+	{
+		pAnimator2D->Play(L"Move_Left", false);
+
+	}
+	else if (pPlayerScript->GetDir() == PLAYER_DIRECTION::RIGHT)
+	{
+		pAnimator2D->Play(L"Move_Right", false);
+	}
 	CAnimation2D* pCurAnim = pAnimator2D->GetCurAnim();
 	if (pCurAnim->IsFinish() == true)
 	{
@@ -353,6 +404,81 @@ void CSkillScript::UpdatePos()
 	// Update Pos
 	GetOwner()->Transform()->SetRelativePos(vPlayerPos);
 
+
+}
+
+void CSkillScript::AttackArrow()
+{
+	m_fArrowTimer += DT;
+	// 1초에 10개 화살 
+	if (m_fArrowTimer < m_fMaxArrowTimer)
+		return;
+	else
+		m_fArrowTimer = 0.f;
+
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	CLayer* pLayer = pCurScene->GetLayer(L"SubSkill_1");
+
+
+
+	if (m_ArrowPrefab == nullptr)
+	{
+		wstring strPrefabKey = m_wstrBallPrefabName;
+		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+		wstring FullPath = strContent + strPrefabKey;
+
+		m_ArrowPrefab = new CPrefab;
+		m_ArrowPrefab->Load(FullPath);
+		assert(m_ArrowPrefab);
+	}
+
+
+	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
+	CGameObject* NewObj = m_ArrowPrefab->Instantiate();
+	static int ArrowCnt = 0;
+	ArrowCnt++;
+
+	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+
+	if (m_bOffsetY)
+	{
+		int Offset_y = rand() % 20;
+		if (Offset_y % 2 == 1)
+			Offset_y *= -1;
+		vPos.y += Offset_y;
+	}
+
+
+
+
+
+	CBasicBallScript* pScript = (CBasicBallScript*)CScriptMgr::GetScript(L"CBasicBallScript");
+	CPlayerScript* pPlayerScript = (CPlayerScript*)m_pSkillUser->GetScriptByName(L"CPlayerScript");
+	pScript->SetBallMoveType(m_eBallMoveType);
+
+
+	if (pPlayerScript->GetDir() == PLAYER_DIRECTION::LEFT)
+	{
+		pScript->SetDir(BALL_DIRECTION::LEFT);
+		NewObj->Animator2D()->Play(L"Move_Left", true);
+		vPos.x -= 100.f;
+
+	}
+	else if (pPlayerScript->GetDir() == PLAYER_DIRECTION::RIGHT)
+	{
+
+		pScript->SetDir(BALL_DIRECTION::RIGHT);
+		NewObj->Animator2D()->Play(L"Move_Right", true);
+		vPos.x += 100.f;
+
+	}
+
+	NewObj->Transform()->SetRelativePos(vPos);
+	NewObj->AddComponent((CComponent*)pScript);
+
+	pCurScene->AddObject(NewObj, pLayer->GetName());
+	pScript->Init(vPos);
 
 }
 
