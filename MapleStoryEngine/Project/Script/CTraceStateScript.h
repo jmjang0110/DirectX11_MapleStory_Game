@@ -5,6 +5,7 @@ class CTraceStateScript :
 {
 
 private:
+    float       m_fRangeToAttack;
 
 
 public:

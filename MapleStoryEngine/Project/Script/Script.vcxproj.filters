@@ -85,6 +85,45 @@
     <Filter Include="Script\03. Object\Skill">
       <UniqueIdentifier>{7ab3cb77-204a-4d77-ad0a-5c62ebe57803}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\02. UI\Inventory">
+      <UniqueIdentifier>{1d61b9d1-5cc1-4958-a9ff-b2064aebaa54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Exp">
+      <UniqueIdentifier>{f1aef136-ba43-4046-9ad9-df256f3b8ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Inventory\Equip">
+      <UniqueIdentifier>{02189978-6eda-4b40-823a-c9f8fcb6dedd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Button">
+      <UniqueIdentifier>{2e1a05b6-80ae-4dc9-8b9a-be4acbd45c18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Inventory\Consume">
+      <UniqueIdentifier>{8ae92e3b-8759-4977-8cac-c33b6ebd5616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Inventory\Etc">
+      <UniqueIdentifier>{b8a24a0e-6a97-4d8c-a77b-80f6d997c734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\Item">
+      <UniqueIdentifier>{43abf150-4c4e-4076-97ca-fe416395e1ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\MainBar">
+      <UniqueIdentifier>{79fbcdfe-f892-4896-b2ec-33bc189fde0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\HP/MP">
+      <UniqueIdentifier>{6dc2f0f3-5aaf-48b4-b2ea-08fd7bc4a749}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Number">
+      <UniqueIdentifier>{f17cbb26-9b53-432c-9b21-e732b82d7bd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\BackGround\Cloud">
+      <UniqueIdentifier>{c3132b5a-874e-4618-955f-7153822f4f76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\Skill\BossMobSkill">
+      <UniqueIdentifier>{3b27e8ad-3d59-45be-896d-2ee8368c7734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\Wall">
+      <UniqueIdentifier>{25879a9b-8740-4cd8-986b-2ffc15b4ed70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -167,6 +206,45 @@
     <ClInclude Include="CSkillnearScript.h">
       <Filter>Script\03. Object\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="CButtonScript.h">
+      <Filter>Script\02. UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="CConsumeScript.h">
+      <Filter>Script\02. UI\Inventory\Consume</Filter>
+    </ClInclude>
+    <ClInclude Include="CItemScript.h">
+      <Filter>Script\03. Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="CInventoryScript.h">
+      <Filter>Script\02. UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="CExpScript.h">
+      <Filter>Script\02. UI\Exp</Filter>
+    </ClInclude>
+    <ClInclude Include="CMainBarScript.h">
+      <Filter>Script\02. UI\MainBar</Filter>
+    </ClInclude>
+    <ClInclude Include="CHpScript.h">
+      <Filter>Script\02. UI\HP/MP</Filter>
+    </ClInclude>
+    <ClInclude Include="CMpScript.h">
+      <Filter>Script\02. UI\HP/MP</Filter>
+    </ClInclude>
+    <ClInclude Include="CNumberScript.h">
+      <Filter>Script\02. UI\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="CCloudScript.h">
+      <Filter>Script\03. Object\BackGround\Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossMonsterScript.h">
+      <Filter>Script\03. Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="CLaunchSkillScript.h">
+      <Filter>Script\03. Object\Skill\BossMobSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="CWallScript.h">
+      <Filter>Script\03. Object\Wall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -248,6 +326,45 @@
     </ClCompile>
     <ClCompile Include="CSkillnearScript.cpp">
       <Filter>Script\03. Object\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="CButtonScript.cpp">
+      <Filter>Script\02. UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="CConsumeScript.cpp">
+      <Filter>Script\02. UI\Inventory\Consume</Filter>
+    </ClCompile>
+    <ClCompile Include="CItemScript.cpp">
+      <Filter>Script\03. Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="CInventoryScript.cpp">
+      <Filter>Script\02. UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="CExpScript.cpp">
+      <Filter>Script\02. UI\Exp</Filter>
+    </ClCompile>
+    <ClCompile Include="CMainBarScript.cpp">
+      <Filter>Script\02. UI\MainBar</Filter>
+    </ClCompile>
+    <ClCompile Include="CHpScript.cpp">
+      <Filter>Script\02. UI\HP/MP</Filter>
+    </ClCompile>
+    <ClCompile Include="CMpScript.cpp">
+      <Filter>Script\02. UI\HP/MP</Filter>
+    </ClCompile>
+    <ClCompile Include="CNumberScript.cpp">
+      <Filter>Script\02. UI\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="CCloudScript.cpp">
+      <Filter>Script\03. Object\BackGround\Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossMonsterScript.cpp">
+      <Filter>Script\03. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="CLaunchSkillScript.cpp">
+      <Filter>Script\03. Object\Skill\BossMobSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="CWallScript.cpp">
+      <Filter>Script\03. Object\Wall</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -61,6 +61,10 @@ CGameObject::CGameObject(const CGameObject& _origin)
 
 CGameObject::~CGameObject()
 {
+	if (GetName() == L"RedPortion")
+		int i = 0;
+
+
 	Safe_Del_Arr(m_arrCom);
 	Safe_Del_Vec(m_vecScript);
 	Safe_Del_Vec(m_vecChild);
@@ -298,6 +302,26 @@ CGameObject* CGameObject::GetAncestor()
 
 	return pObj;
 
+}
+
+CGameObject* CGameObject::FindChildObj(wstring _name)
+{
+	for (int i = 0; i < m_vecChild.size(); ++i)
+	{
+		if (m_vecChild[i]->GetName() == _name)
+			return m_vecChild[i];
+
+		vector<CGameObject*> child = m_vecChild[i]->GetChild();
+		for (int k = 0; k < child.size(); ++k)
+		{
+			CGameObject* obj = FindChildObj(_name);
+			if (obj != nullptr)
+				return obj;
+		}
+
+	}
+
+	return nullptr;
 }
 
 

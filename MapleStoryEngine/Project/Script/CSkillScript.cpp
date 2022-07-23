@@ -410,12 +410,12 @@ void CSkillScript::UpdatePos()
 void CSkillScript::AttackArrow()
 {
 	m_fArrowTimer += DT;
+
 	// 1초에 10개 화살 
 	if (m_fArrowTimer < m_fMaxArrowTimer)
 		return;
 	else
 		m_fArrowTimer = 0.f;
-
 
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CLayer* pLayer = pCurScene->GetLayer(L"SubSkill_1");
@@ -436,9 +436,6 @@ void CSkillScript::AttackArrow()
 
 	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
 	CGameObject* NewObj = m_ArrowPrefab->Instantiate();
-	static int ArrowCnt = 0;
-	ArrowCnt++;
-
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 
 	if (m_bOffsetY)
@@ -457,12 +454,11 @@ void CSkillScript::AttackArrow()
 	CPlayerScript* pPlayerScript = (CPlayerScript*)m_pSkillUser->GetScriptByName(L"CPlayerScript");
 	pScript->SetBallMoveType(m_eBallMoveType);
 
-
 	if (pPlayerScript->GetDir() == PLAYER_DIRECTION::LEFT)
 	{
 		pScript->SetDir(BALL_DIRECTION::LEFT);
 		NewObj->Animator2D()->Play(L"Move_Left", true);
-		vPos.x -= 100.f;
+		vPos.x -= 80.f;
 
 	}
 	else if (pPlayerScript->GetDir() == PLAYER_DIRECTION::RIGHT)
@@ -470,7 +466,7 @@ void CSkillScript::AttackArrow()
 
 		pScript->SetDir(BALL_DIRECTION::RIGHT);
 		NewObj->Animator2D()->Play(L"Move_Right", true);
-		vPos.x += 100.f;
+		vPos.x += 80.f;
 
 	}
 
@@ -479,6 +475,8 @@ void CSkillScript::AttackArrow()
 
 	pCurScene->AddObject(NewObj, pLayer->GetName());
 	pScript->Init(vPos);
+	pScript->SetMaxAttack(pPlayerScript->GetMaxAttack());
+	pScript->SetMinAttack(pPlayerScript->GetMinAttack());
 
 }
 

@@ -177,17 +177,29 @@ call CodeGen.exe</Command>
     <ClInclude Include="CAttackStateScript.h" />
     <ClInclude Include="CBackGroundScript.h" />
     <ClInclude Include="CBasicBallScript.h" />
+    <ClInclude Include="CBossMonsterScript.h" />
+    <ClInclude Include="CButtonScript.h" />
     <ClInclude Include="CCameraMoveScript.h" />
+    <ClInclude Include="CCloudScript.h" />
+    <ClInclude Include="CConsumeScript.h" />
     <ClInclude Include="CCursorScript.h" />
     <ClInclude Include="CDamageScript.h" />
     <ClInclude Include="CDeadStateScript.h" />
     <ClInclude Include="CDoubleJumpScript.h" />
+    <ClInclude Include="CExpScript.h" />
     <ClInclude Include="CGravityScript.h" />
     <ClInclude Include="CGroundScript.h" />
+    <ClInclude Include="CHpScript.h" />
     <ClInclude Include="CIdleStateScript.h" />
+    <ClInclude Include="CInventoryScript.h" />
+    <ClInclude Include="CItemScript.h" />
+    <ClInclude Include="CLaunchSkillScript.h" />
+    <ClInclude Include="CMainBarScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CMonsterFactoryScript.h" />
     <ClInclude Include="CMonsterScript.h" />
+    <ClInclude Include="CMpScript.h" />
+    <ClInclude Include="CNumberScript.h" />
     <ClInclude Include="CPaperBurnScript.h" />
     <ClInclude Include="CPatrolStateScript.h" />
     <ClInclude Include="CPlayerScript.h" />
@@ -198,6 +210,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CSkillScript.h" />
     <ClInclude Include="CStateScript.h" />
     <ClInclude Include="CTraceStateScript.h" />
+    <ClInclude Include="CWallScript.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
@@ -207,17 +220,29 @@ call CodeGen.exe</Command>
     <ClCompile Include="CAttackStateScript.cpp" />
     <ClCompile Include="CBackGroundScript.cpp" />
     <ClCompile Include="CBasicBallScript.cpp" />
+    <ClCompile Include="CBossMonsterScript.cpp" />
+    <ClCompile Include="CButtonScript.cpp" />
     <ClCompile Include="CCameraMoveScript.cpp" />
+    <ClCompile Include="CCloudScript.cpp" />
+    <ClCompile Include="CConsumeScript.cpp" />
     <ClCompile Include="CCursorScript.cpp" />
     <ClCompile Include="CDamageScript.cpp" />
     <ClCompile Include="CDeadStateScript.cpp" />
     <ClCompile Include="CDoubleJumpScript.cpp" />
+    <ClCompile Include="CExpScript.cpp" />
     <ClCompile Include="CGravityScript.cpp" />
     <ClCompile Include="CGroundScript.cpp" />
+    <ClCompile Include="CHpScript.cpp" />
     <ClCompile Include="CIdleStateScript.cpp" />
+    <ClCompile Include="CInventoryScript.cpp" />
+    <ClCompile Include="CItemScript.cpp" />
+    <ClCompile Include="CLaunchSkillScript.cpp" />
+    <ClCompile Include="CMainBarScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CMonsterFactoryScript.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
+    <ClCompile Include="CMpScript.cpp" />
+    <ClCompile Include="CNumberScript.cpp" />
     <ClCompile Include="CPaperBurnScript.cpp" />
     <ClCompile Include="CPatrolStateScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
@@ -228,6 +253,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CSkillScript.cpp" />
     <ClCompile Include="CStateScript.cpp" />
     <ClCompile Include="CTraceStateScript.cpp" />
+    <ClCompile Include="CWallScript.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

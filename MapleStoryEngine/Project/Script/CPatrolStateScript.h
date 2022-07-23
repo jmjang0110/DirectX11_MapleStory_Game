@@ -1,9 +1,19 @@
 #pragma once
 #include "CStateScript.h"
+
+
 class CPatrolStateScript :
     public CStateScript
 {
 private:
+
+    float       m_fPatrolDist;
+    float       m_fTimer;
+   
+    float       m_fMove;
+    int         m_iDir;
+
+
 
 
 public:

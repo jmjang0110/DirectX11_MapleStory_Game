@@ -12,13 +12,16 @@
 #include "CTraceStateScript.h"
 #include "CIdleStateScript.h"
 
+#include "CBasicBallScript.h"
+#include "CDamageScript.h"
+#include "CPlayerScript.h"
 
 
 
 CMonsterScript::CMonsterScript()
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
-	, m_vPrevPos(Vec2(0.f, 0.f))
-
+	, m_vPrevPos(Vec3(0.f, 0.f, 0.f))
+	, m_iHitCnt(0)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -26,7 +29,7 @@ CMonsterScript::CMonsterScript()
 
 CMonsterScript::CMonsterScript(const CMonsterScript& _origin)
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
-	, m_vPrevPos(Vec2(0.f, 0.f))
+	, m_vPrevPos(Vec3(0.f, 0.f, 0.f))
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -44,7 +47,7 @@ CMonsterScript::~CMonsterScript()
 void CMonsterScript::start()
 {
 	CAIScript* pAI = (CAIScript*)GetOwner()->GetScriptByName(L"CAIScript");
-	m_pAI = pAI;
+
 	if (pAI != nullptr)
 		m_pAI = pAI;
 
@@ -95,17 +98,7 @@ void CMonsterScript::lateupdate()
 {
 }
 
-void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
-{
-}
 
-void CMonsterScript::OnCollision(CGameObject* _OtherObject)
-{
-}
-
-void CMonsterScript::OnCollisionExit(CGameObject* _OtherObject)
-{
-}
 
 void CMonsterScript::Update_State()
 {
@@ -180,6 +173,57 @@ void CMonsterScript::Update_Animation()
 		break;
 	}
 }
+
+
+void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
+{
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	
+	CBasicBallScript* pBallScript = (CBasicBallScript*)_OtherObject->GetScriptByName(L"CBasicBallScript");
+	if (pBallScript != nullptr)
+	{
+		pBallScript->SetHit(true); // Next Frame - Delete Ball(Arrow)
+		m_iHitCnt++;
+		if (m_iHitCnt >= 8)
+			m_iHitCnt = 0;
+
+
+		float OffsetY = 50.f;
+		if (m_iHitCnt > 0)
+			OffsetY = 35.f;
+
+		// Damage 
+		int damage = rand() % 100000; // Test 
+		CGameObject* pDamageObj = new CGameObject;
+		pDamageObj->SetName(L"damage");
+		pDamageObj->AddComponent(new CTransform);
+		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+		vPos.y += (m_iHitCnt * OffsetY);
+
+		pDamageObj->Transform()->SetRelativePos(vPos);
+		CDamageScript* pDamageScript = (CDamageScript*)CScriptMgr::GetScript(L"CDamageScript");
+		pDamageObj->AddComponent((CComponent*)pDamageScript);
+		pDamageScript->Init(DAMAGE_TYPE::CRITICAL_1, damage, 2.f);
+
+		pCurScene->AddObject(pDamageObj, L"Damage");
+
+	}
+	
+}
+
+void CMonsterScript::OnCollision(CGameObject* _OtherObject)
+{
+
+
+}
+
+void CMonsterScript::OnCollisionExit(CGameObject* _OtherObject)
+{
+
+
+}
+
+
 
 void CMonsterScript::SaveToScene(FILE* _pFile)
 {

@@ -145,6 +145,9 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 
 void CStructuredBuffer::SetData(void* _pSrc, UINT _iElementCount)
 {
+	if (m_bCpuAccess == false)
+		m_bCpuAccess = true;
+
 	assert(m_bCpuAccess);
 
 
@@ -161,6 +164,8 @@ void CStructuredBuffer::SetData(void* _pSrc, UINT _iElementCount)
 
 void CStructuredBuffer::GetData(void* _pDst)
 {
+	if (m_bCpuAccess == false)
+		m_bCpuAccess = true;
 	assert(m_bCpuAccess);
 
 

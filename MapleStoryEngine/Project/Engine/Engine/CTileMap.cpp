@@ -91,6 +91,9 @@ void CTileMap::UpdateData()
 
 void CTileMap::render()
 {
+	//if (GetOwner()->GetName() == L"Number")
+	//	return;
+
 	if (nullptr == GetMesh() || nullptr == GetMaterial() || nullptr == m_pAtlasTex)
 		return;
 

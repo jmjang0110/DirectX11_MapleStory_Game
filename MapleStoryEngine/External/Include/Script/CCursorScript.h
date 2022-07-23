@@ -15,6 +15,12 @@ class CCursorScript :
 private:
     CURSOR_STATE    m_CursorState;
 
+private:
+    Vec3            m_vPos;
+
+public:
+    Vec3 GetPos() { return m_vPos;}
+
 
 public:
     virtual void start();

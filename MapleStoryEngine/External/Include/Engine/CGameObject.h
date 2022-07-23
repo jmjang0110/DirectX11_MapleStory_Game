@@ -74,6 +74,8 @@ public:
     void DeleteScript(wstring _name);
     void UpdateLayerIdx(int _LayerIdx);
     CGameObject* GetAncestor();
+    CGameObject* FindChildObj(wstring _name);
+
     // ===========
 
     void Destroy();

@@ -10,8 +10,6 @@ enum class MONSTER_STATE
 	ATT,
 	RUN,
 	DEAD,
-
-
 	END,
 
 };
@@ -24,10 +22,8 @@ class CStateScript
 {
 
 private:
-	CAIScript* m_pAI;
+	CAIScript*			m_pAI;
 	MONSTER_STATE		m_eMonsterState;
-
-
 
 public:
 	CAIScript* GetAI() { return m_pAI; }

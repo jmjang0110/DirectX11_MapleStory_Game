@@ -1,0 +1,7 @@
+UIWindow2/Skill
+
+
+우트가르드 보우
+
+ProneStab1 - OffsetX -16
+( 150, 150 )

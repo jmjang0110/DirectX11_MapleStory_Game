@@ -5,6 +5,7 @@ class CIdleStateScript :
 {
 private:
 
+    float       m_fTimer;
 
 
 public:

@@ -1,9 +1,31 @@
 #pragma once
 #include "CStateScript.h"
+#include "CBossMonsterScript.h"
+#include "CMonsterScript.h"
+
+
 class CAttackStateScript :
     public CStateScript
 {
 private:
+    BOSS_ATTACK_STATE   m_eCurAttState;
+    BOSS_ATTACK_STATE   m_ePrevAttState;
+
+    float               m_fTimer;
+    CPrefab*            m_pSkillPrefab1;
+    int                 m_Skill1_Cnt;
+
+
+private:
+    bool                m_bAttackEnd; // Attack End 
+
+public:
+    void SetAttackEnd(bool _b) { m_bAttackEnd = _b; }
+
+
+private:
+    void UpdateBossMobAttack();
+
 
 
 public:

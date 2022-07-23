@@ -38,7 +38,12 @@ private:
     MONSTER_STATE       m_ePrevStateType;
     MONSTER_STATE       m_eCurStateType;
 
-    Vec2    m_vPrevPos;
+  
+private:
+    int             m_iHitCnt;
+
+    float           m_fDiff_Between_Ground;
+    Vec3            m_vPrevPos;
 
 
 
@@ -53,6 +58,15 @@ private:
     void    SetMonsterInfo(const tMonsterInfo& _info) { m_tInfo = _info; }
     void    SetDir(MONSTER_DIRECTION _dir) { m_eDir = _dir; }
 
+
+public:
+
+    Vec3 GetPrevPos() { return m_vPrevPos; }
+
+
+public:
+    void SetDiffBetweenGround(float _fDiff) { m_fDiff_Between_Ground = _fDiff; }
+    float GetDiffBetweenGround() { return m_fDiff_Between_Ground; }
 
 public:
     virtual void start();

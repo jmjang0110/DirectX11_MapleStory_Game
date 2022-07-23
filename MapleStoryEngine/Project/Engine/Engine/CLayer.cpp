@@ -117,4 +117,20 @@ void CLayer::SetLayerIdx(int _LayerIdx)
 		m_iLayerIdx = _LayerIdx;
 }
 
+CGameObject* CLayer::FindObj(wstring _objname)
+{
+	CGameObject* pObj = nullptr;
+
+	for (size_t i = 0; i < m_vecRoot.size(); ++i)
+	{
+		if (m_vecRoot[i]->GetName() == _objname)
+		{
+			pObj = m_vecRoot[i];
+			break;
+
+		}
+	}
+	return pObj;
+}
+
 

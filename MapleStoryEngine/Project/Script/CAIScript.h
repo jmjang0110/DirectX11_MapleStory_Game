@@ -11,14 +11,16 @@ private:
     CStateScript*                       m_pCurState;
 
 public:
-    void AddState(CStateScript* _pState);
-    CStateScript* GetStateScript(MONSTER_STATE _eState);
-    void SetCurState(MONSTER_STATE _eState);
-    void ChangeState(MONSTER_STATE _eNextState);
+    void            AddState(CStateScript* _pState);
+    void            SetCurState(MONSTER_STATE _eState);
+    void            ChangeState(MONSTER_STATE _eNextState);
 
 public:
-    MONSTER_STATE GetCurStateType() { if (m_pCurState != nullptr) return m_pCurState->GetMonsterStateType(); }
-    CStateScript* GetCurStateScript() { return m_pCurState; }
+    MONSTER_STATE   GetCurStateType() { if (m_pCurState != nullptr) return m_pCurState->GetMonsterStateType(); }
+    CStateScript*   GetCurStateScript() { return m_pCurState; }
+    CStateScript*   GetStateScript(MONSTER_STATE _eState);
+
+
 public:
     virtual void start();
     virtual void update();

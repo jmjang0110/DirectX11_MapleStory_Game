@@ -11,6 +11,9 @@
 #include "CMonsterScript.h"
 #include "CAIScript.h"
 #include "CIdleStateScript.h"
+#include "CBossMonsterScript.h"
+
+
 
 CTraceStateScript::CTraceStateScript()
 	: CStateScript((int)SCRIPT_TYPE::TRACESTATESCRIPT)
@@ -45,6 +48,9 @@ void CTraceStateScript::Enter()
 		MONSTER_DIRECTION eDir = pMonScript->GetDir();
 		
 	}*/
+
+	m_fRangeToAttack = 300.f;
+
 }
 
 void CTraceStateScript::Exit()
@@ -62,44 +68,77 @@ void CTraceStateScript::update()
 	CLayer* pLayer = pCurScene->GetLayer(L"Player");
 	if (pLayer == nullptr)
 		return;
-	vector<CGameObject*> Objs = pLayer->GetRootObjects();
-	CGameObject* pPlayer = nullptr;
-	for (int i = 0; i < Objs.size(); ++i)
-	{
-		if (Objs[i]->GetName() == L"player")
-		{
-			pPlayer = Objs[i];
-			break;
-		}
-	}
+
+	CGameObject* pPlayer = pLayer->FindObj(L"player");
 	if (pPlayer == nullptr)
 		return;
 
 	// Calculate Diff -  Monster <-> player 
-	Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();
-	Vec3 vMonsterPos = GetOwner()->Transform()->GetRelativePos();
-
-	Vec2 vDiff = Vec2(vPlayerPos.x - vMonsterPos.x, vPlayerPos.y - vMonsterPos.y);
-	float fLen = vDiff.Length();
-
 	CMonsterScript* pMonScript = (CMonsterScript*)GetOwner()->GetScriptByName(L"CMonsterScript");
-	if (pMonScript == nullptr)
-		return;
-	tMonsterInfo tMonInfo = pMonScript->GetMonsterInfo();
-
-	// Move 
-	Vec2 vMove = vDiff * DT * tMonInfo.fSpeed;
-	vMonsterPos.x += vMove.x;
-	GetOwner()->Transform()->SetRelativePos(vMonsterPos);
 
 
-	// Monster <-> player ( out of Range )
-	if (fLen > tMonInfo.fRecogRange)
+	if (pMonScript != nullptr)
 	{
-		// Change State 
-		GetAI()->ChangeState(MONSTER_STATE::IDLE);
+		Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();
+		Vec3 vMonsterPos = GetOwner()->Transform()->GetRelativePos();
+
+		Vec2 vDiff = Vec2(vPlayerPos.x - vMonsterPos.x, vPlayerPos.y - vMonsterPos.y);
+		float fLen = vDiff.Length();
+
+
+		tMonsterInfo tMonInfo = pMonScript->GetMonsterInfo();
+
+		// Move 
+		Vec2 vMove = vDiff * DT * tMonInfo.fSpeed;
+		vMonsterPos.x += vMove.x;
+		GetOwner()->Transform()->SetRelativePos(vMonsterPos);
+
+
+		// Monster <-> player ( out of Range )
+		if (fLen > tMonInfo.fRecogRange)
+		{
+			// Change State 
+			GetAI()->ChangeState(MONSTER_STATE::IDLE);
+		}
+	}
+	
+	CBossMonsterScript* pBossScript = (CBossMonsterScript*)GetOwner()->GetScriptByName(L"CBossMonsterScript");
+
+	if (pBossScript != nullptr)
+	{
+		// Calculate Diff -  Boss <-> player 
+		Vec3 vBossPos = GetOwner()->Transform()->GetRelativePos();
+
+		Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();
+		Vec2 vDiff = Vec2(vPlayerPos.x - vBossPos.x, vPlayerPos.y - vBossPos.y);
+		float fLen = vDiff.Length();
+
+		if (pBossScript == nullptr)
+			return;
+		tBossMonInfo tBossInfo = pBossScript->GetMonsterInfo();
+
+		// Move 
+		vDiff.Normalize();
+		Vec2 vMove2player = vDiff * DT * tBossInfo.fSpeed;
+		vBossPos.x += vMove2player.x;
+		GetOwner()->Transform()->SetRelativePos(vBossPos);
+
+
+		// Monster <-> player ( out of Range )
+		if (fLen > tBossInfo.fRecogRange)
+		{
+			// Change State 
+			GetAI()->ChangeState(MONSTER_STATE::IDLE);
+		}
+
+		if (fLen <= m_fRangeToAttack)
+		{
+			// Change State
+			GetAI()->ChangeState(MONSTER_STATE::ATT);
+		}
 	}
 
+	
 
 
 

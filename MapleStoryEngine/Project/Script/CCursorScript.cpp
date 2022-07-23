@@ -15,6 +15,7 @@
 
 CCursorScript::CCursorScript()
 	: CScript((int)SCRIPT_TYPE::CURSORSCRIPT)
+	, m_vPos(0.f, 0.f, 0.f)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -89,9 +90,12 @@ void CCursorScript::Update_CursorPos()
 		//GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x + (vMouseScale.x / 2.f)
 		//	, vRealPos.y - (vMouseScale.y / 2.f), vCameraPos.z + 300.f));
 
-
+		
 		GetOwner()->Transform()->SetRelativePos(Vec3(vRealPos.x 
 			, vRealPos.y, vCameraPos.z + 300.f));
+
+
+		m_vPos = GetOwner()->Transform()->GetRelativePos();
 
 	}
 

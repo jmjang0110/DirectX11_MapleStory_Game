@@ -12,11 +12,13 @@
 
 CBasicBallScript::CBasicBallScript()
 	: CScript((int)SCRIPT_TYPE::BASICBALLSCRIPT)
-	, m_fSpeed(500.f)
+	, m_fSpeed(600.f)
 	, m_fMaxTime(1.f)
 	, m_fTimer(0.f)
-	, m_fAngle(0.f)
+	, m_fRadian(0.f)
 	, m_eMoveType(BALLMOVE_TYPE::LINEAR)
+	, m_bStart(true)
+	, m_bHit(false)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -26,12 +28,13 @@ CBasicBallScript::CBasicBallScript()
 
 CBasicBallScript::CBasicBallScript(const CBasicBallScript& _origin)
 	: CScript((int)SCRIPT_TYPE::BASICBALLSCRIPT)
-	, m_fSpeed(500.f)
+	, m_fSpeed(600.f)
 	, m_fMaxTime(1.f)
 	, m_fTimer(0.f)
-	, m_fAngle(0.f)
+	, m_fRadian(0.f)
 	, m_eMoveType(BALLMOVE_TYPE::LINEAR)
-
+	, m_bStart(true)
+	, m_bHit(false)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -76,7 +79,7 @@ void CBasicBallScript::Init(Vec3 _startpos)
 		// 시작위치 조정 
 
 		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
-		vPos.y += 50.f;
+		vPos.y += 70.f;
 		GetOwner()->Transform()->SetRelativePos(vPos);
 	
 	}
@@ -133,8 +136,19 @@ void CBasicBallScript::update()
 
 void CBasicBallScript::lateupdate()
 {
+	// HIt Monster Success - Delete Obj 
+	if (m_bHit == true)
+	{
+		// Event 
+		CGameObject* pDelObj = GetOwner();
+		int pDelObj_LayerIdx = GetOwner()->GetLayerIndex();
 
-	// Delete Obj
+		CSceneMgr::GetInst()->DeRegisterObjInLayer(pDelObj, pDelObj_LayerIdx);
+		GetOwner()->Destroy();
+		return;
+	}
+
+	// TImeOut - Delete Obj
 	if (m_fTimer >= m_fMaxTime)
 	{
 		// Event 
@@ -178,6 +192,8 @@ void CBasicBallScript::LinearMove()
 
 void CBasicBallScript::DiagonalMove()
 {
+
+
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 	Vec3 vRot = GetOwner()->Transform()->GetRelativeRotation();
 
@@ -193,22 +209,37 @@ void CBasicBallScript::DiagonalMove()
 	float fDot = Vector1.Dot(Vector2);
 	float fLength = Vector1.Length() * Vector2.Length();
 
-	float radian = acos(fDot / fLength);
-	float degree = radian * 180.f / 3.141592f;
+	m_fRadian = acos(fDot / fLength);
+	float degree = m_fRadian * 180.f / 3.141592f;
 
+
+	if (m_bStart)
+	{
+		Vector1 = Vec3(700.f, 500.f, 0.f);
+		if (m_eDir == BALL_DIRECTION::LEFT)
+			Vector1.x *= -1;
+
+		Vector1.Normalize();
+		float fDot = Vector1.Dot(Vector2);
+		float fLength = Vector1.Length() * Vector2.Length();
+
+		m_fRadian = acos(fDot / fLength);
+		m_bStart = false;
+	}
 
 	// Move 
-
 	if (Vector1.y < 0.f)
-		vRot.z = -radian;
+		vRot.z = -m_fRadian;
 	else
-		vRot.z = radian;
+		vRot.z = m_fRadian;
 
 	if (m_eDir == BALL_DIRECTION::LEFT)
 		vRot.z *= -1;
 
 	GetOwner()->Transform()->SetRelativePos(vPos);
 	GetOwner()->Transform()->SetRelativeRotation(vRot);
+
+
 
 }
 

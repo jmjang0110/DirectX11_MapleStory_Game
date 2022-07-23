@@ -20,6 +20,7 @@
 #include "CDoubleJumpScript.h"
 #include "CSkillScript.h"
 #include "CSkillnearScript.h"
+#include "CInventoryScript.h"
 
 CPlayerScript::CPlayerScript()
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
@@ -32,6 +33,13 @@ CPlayerScript::CPlayerScript()
 	, m_pPrefab(nullptr)
 	, m_pDbJumpSubPrefab(nullptr)
 	, m_pDbJumpPrefab(nullptr)
+	, m_iLevel(100)
+	, m_fHP(0.f)
+	, m_fMP(0.f)
+	, m_fEXP(0.f)
+	, m_fMinAttack(10000.f)
+	, m_fMaxAttack(20000.f)
+
 {
 
 	SetName(CScriptMgr::GetScriptName(this));
@@ -54,7 +62,8 @@ CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
 	, m_pPrefab(nullptr)
 	, m_pDbJumpSubPrefab(nullptr)
 	, m_pDbJumpPrefab(nullptr)
-
+	, m_fMinAttack(10000.f)
+	, m_fMaxAttack(20000.f)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -97,6 +106,8 @@ void CPlayerScript::start()
 
 void CPlayerScript::update()
 {
+	m_fEXP += 100.f;
+
 	m_vPrevPos = GetOwner()->Transform()->GetRelativePos();
 
 	Update_Skill();
@@ -105,9 +116,12 @@ void CPlayerScript::update()
 	Update_Move();
 	Update_Gravity();
 	Update_Animation();
-	
+	Update_Inventory();
+
 	m_ePrevState = m_eCurState;
 	m_ePrevDir = m_eDir;
+
+	m_ePrevAttState = m_eCurAttState;
 
 
 	
@@ -335,7 +349,11 @@ void CPlayerScript::Update_State()
 			m_eCurState = PLAYER_STATE::WALK;
 			m_eDir = PLAYER_DIRECTION::RIGHT;
 		}
+		if (KEY_TAP(KEY::DOWN))
+		{
+			m_eCurState = PLAYER_STATE::PRONE;
 
+		}
 	}
 	
 
@@ -376,6 +394,16 @@ void CPlayerScript::Update_State()
  			m_eDir = PLAYER_DIRECTION::RIGHT;
 		}
 	}
+	if (m_ePrevState == PLAYER_STATE::IDLE 
+		|| m_ePrevState == PLAYER_STATE::ATTACK 
+		|| m_ePrevState == PLAYER_STATE::WALK
+		|| m_ePrevState == PLAYER_STATE::PRONE)
+	{
+		if (KEY_PRESSED(KEY::DOWN))
+		{
+			m_eCurState = PLAYER_STATE::PRONE;
+		}
+	}
 
 
 	// KEY_AWAY
@@ -389,8 +417,15 @@ void CPlayerScript::Update_State()
 		{
 			m_eCurState = PLAYER_STATE::IDLE;
 		}
+		
+	}
+	if (m_eCurState == PLAYER_STATE::PRONE)
+	{
+		if (KEY_AWAY(KEY::DOWN))
+		{
+			m_eCurState = PLAYER_STATE::IDLE;
 
-
+		}
 	}
 
 
@@ -422,7 +457,35 @@ void CPlayerScript::Update_State()
 		if (KEY_TAP(KEY::LCTRL) || KEY_PRESSED(KEY::LCTRL))
 		{
 			m_eCurState = PLAYER_STATE::ATTACK;
+			m_eCurAttState = PLAYER_ATTACK_STATE::NORMAL_ATT_1;
 		}
+		if (KEY_TAP(KEY::A))
+		{
+			m_eCurState = PLAYER_STATE::ATTACK;
+			m_eCurAttState = PLAYER_ATTACK_STATE::SKILL_ATT_1;
+		}
+		if (KEY_TAP(KEY::S))
+		{
+			m_eCurState = PLAYER_STATE::ATTACK;
+			m_eCurAttState = PLAYER_ATTACK_STATE::SKILL_ATT_2;
+
+		}
+
+		if (KEY_AWAY(KEY::LCTRL))
+		{
+			m_eCurState = PLAYER_STATE::ALERT;
+
+		}
+		if (KEY_AWAY(KEY::A))
+		{
+			m_eCurState = PLAYER_STATE::ALERT;
+		}
+		if (KEY_AWAY(KEY::S))
+		{
+			m_eCurState = PLAYER_STATE::ALERT;
+
+		}
+
 	}
 
 
@@ -489,6 +552,11 @@ void CPlayerScript::Update_Move()
 			}
 		}
 
+		if (KEY_TAP(KEY::DOWN))
+		{
+			pRigid->SetVelocity(Vec3(0.f, 0.f, 0.f));
+
+		}
 
 		// KEY_PRESSED 
 		if (m_eCurState != PLAYER_STATE::JUMP && m_eCurState != PLAYER_STATE::DOUBLE_JUMP)
@@ -510,84 +578,194 @@ void CPlayerScript::Update_Move()
 
 
 
-	// Test  - ATtack 
-	if (KEY_TAP(KEY::LCTRL))
-	{
-		static CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		static CLayer* pCurLayer = pCurScene->GetLayer(L"Player");
+	//// Test  - ATtack 
+	//if (KEY_TAP(KEY::LCTRL))
+	//{
+	//	static CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	//	static CLayer* pCurLayer = pCurScene->GetLayer(L"Player");
 
 
 
-		if (m_pPrefab == nullptr)
-		{
-			wstring strPrefabKey = L"prefab\\BasicBall.pref";
-			wstring strContent = CPathMgr::GetInst()->GetContentPath();
-			wstring FullPath = strContent + strPrefabKey;
+	//	if (m_pPrefab == nullptr)
+	//	{
+	//		wstring strPrefabKey = L"prefab\\BasicBall.pref";
+	//		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+	//		wstring FullPath = strContent + strPrefabKey;
 
-			m_pPrefab = new CPrefab;
-			m_pPrefab->Load(FullPath);
-			assert(m_pPrefab);
-		}
-
-
-		// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
-		CGameObject* NewObj = m_pPrefab->Instantiate();
+	//		m_pPrefab = new CPrefab;
+	//		m_pPrefab->Load(FullPath);
+	//		assert(m_pPrefab);
+	//	}
 
 
-		int Offset_y = rand() % 100;
-		if (Offset_y % 2 == 1)
-			Offset_y *= -1;
+	//	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
+	//	CGameObject* NewObj = m_pPrefab->Instantiate();
 
-		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
-		vPos.y += Offset_y;
-		NewObj->Transform()->SetRelativePos(vPos);
 
-		CBasicBallScript* pScript = (CBasicBallScript*)CScriptMgr::GetScript(L"CBasicBallScript");
+	//	int Offset_y = rand() % 100;
+	//	if (Offset_y % 2 == 1)
+	//		Offset_y *= -1;
 
-		if (m_eDir == PLAYER_DIRECTION::LEFT)
-		{
-			pScript->SetDir(BALL_DIRECTION::LEFT);
-			NewObj->Animator2D()->Play(L"Move_Left", true);
+	//	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+	//	vPos.y += Offset_y;
+	//	NewObj->Transform()->SetRelativePos(vPos);
 
-		}
-		else if (m_eDir == PLAYER_DIRECTION::RIGHT)
-		{
+	//	CBasicBallScript* pScript = (CBasicBallScript*)CScriptMgr::GetScript(L"CBasicBallScript");
 
-			pScript->SetDir(BALL_DIRECTION::RIGHT);
-			NewObj->Animator2D()->Play(L"Move_Right", true);
-		}
+	//	if (m_eDir == PLAYER_DIRECTION::LEFT)
+	//	{
+	//		pScript->SetDir(BALL_DIRECTION::LEFT);
+	//		NewObj->Animator2D()->Play(L"Move_Left", true);
 
-		NewObj->AddComponent((CComponent*)pScript);
-		pCurScene->AddObject(NewObj, pCurLayer->GetName());
+	//	}
+	//	else if (m_eDir == PLAYER_DIRECTION::RIGHT)
+	//	{
 
-	}
+	//		pScript->SetDir(BALL_DIRECTION::RIGHT);
+	//		NewObj->Animator2D()->Play(L"Move_Right", true);
+	//	}
+
+	//	NewObj->AddComponent((CComponent*)pScript);
+	//	pCurScene->AddObject(NewObj, pCurLayer->GetName());
+
+	//}
 
 }
 
 void CPlayerScript::Update_Animation()
 {
-	//if (m_ePrevState == m_eCurState)
-	//	return;
+	CGameObject* pOwner = GetOwner();
+	CAnimator2D* pAnimator2D = pOwner->Animator2D();
+	CAnimation2D* pAnim = pAnimator2D->GetCurAnim();
 
-	CGameObject* owner = GetOwner();
-	vector<CGameObject*> vecChild = GetOwner()->GetChild();
-	for (int i = 0; i < vecChild.size(); ++i)
+	switch (m_eCurState)
 	{
-		if (vecChild[i]->Animator2D() == nullptr)
-			continue;
-		CAnimator2D* pAnimator2D = vecChild[i]->Animator2D();
-
-		Update_Animation(vecChild[i], L"Head");
-		Update_Animation(vecChild[i], L"Body");
-		Update_Animation(vecChild[i], L"Arm");
-
+	case PLAYER_STATE::IDLE:
+	{
+		if (PLAYER_DIRECTION::LEFT == m_eDir)
+		{
+			pAnimator2D->Play(L"STAND1_LEFT", true);
+		}
+		else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+		{
+			pAnimator2D->Play(L"STAND1_RIGHT", true);
+		}
+	}
+	break;
+	case PLAYER_STATE::WALK:
+	{
+		if (PLAYER_DIRECTION::LEFT == m_eDir)
+		{
+			pAnimator2D->Play(L"WALK1_LEFT", true);
+		}
+		else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+		{
+			pAnimator2D->Play(L"WALK1_RIGHT", true);
+		}
+	}
+	break;
+	case PLAYER_STATE::JUMP:
+	{
+		if (PLAYER_DIRECTION::LEFT == m_eDir)
+		{
+			pAnimator2D->Play(L"JUMP_LEFT", true);
+		}
+		else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+		{
+			pAnimator2D->Play(L"JUMP_RIGHT", true);
+		}
 	}
 
+	break;
+	case PLAYER_STATE::PRONE:
+	{
+		if (PLAYER_DIRECTION::LEFT == m_eDir)
+		{
+			pAnimator2D->Play(L"PRONE_LEFT", true);
+		}
+		else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+		{
+			pAnimator2D->Play(L"PRONE_RIGHT", true);
+		}
+	}
+	break;
+
+	case PLAYER_STATE::ATTACK:
+	{
+		if (m_eCurAttState == PLAYER_ATTACK_STATE::NORMAL_ATT_1)
+		{
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
+			{
+				pAnimator2D->Play(L"SWINGT1_LEFT", FALSE);
+				if(pAnimator2D->GetCurAnim()->IsFinish() == true)
+					pAnimator2D->Play(L"SWINGT1_LEFT", true);
+
+			}
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+			{
+				pAnimator2D->Play(L"SWINGT1_RIGHT", true);
+			}
+		}
+
+		if (m_eCurAttState == PLAYER_ATTACK_STATE::SKILL_ATT_1)
+		{
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
+			{
+				pAnimator2D->Play(L"SHOOT1_LEFT", true);
+			}
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+			{
+				pAnimator2D->Play(L"SHOOT1_RIGHT", true);
+			}
+		}
 
 
-	
+		if (m_eCurAttState == PLAYER_ATTACK_STATE::SKILL_ATT_2)
+		{
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
+			{
+				pAnimator2D->Play(L"SHOOTF_LEFT", true);
+			}
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+			{
+				pAnimator2D->Play(L"SHOOTF_RIGHT", true);
+			}
+		}
+	}
+	break;
+	case PLAYER_STATE::ALERT:
+	{
+		if (PLAYER_DIRECTION::LEFT == m_eDir)
+		{
 
+			pAnimator2D->Play(L"ALERT_LEFT", true);
+		}
+		else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+		{
+			pAnimator2D->Play(L"ALERT_RIGHT", true);
+		}
+	}
+	break;
+	case PLAYER_STATE::DEAD:
+
+		break;
+	}
+
+	//vector<CGameObject*> vecChild = GetOwner()->GetChild();
+	//for (int i = 0; i < vecChild.size(); ++i)
+	//{
+	//	if (vecChild[i]->Animator2D() == nullptr)
+	//		continue;
+	//	CAnimator2D* pAnimator2D = vecChild[i]->Animator2D();
+
+	//	Update_Animation(vecChild[i], L"Head");
+	//	Update_Animation(vecChild[i], L"Body");
+	//	Update_Animation(vecChild[i], L"Arm");
+
+	//}
 }
+
+
 
 void CPlayerScript::RegisterDoubleJumpEff()
 {
@@ -691,7 +869,7 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 	if (_pObj->GetName() != _name)
 		return;
 
-	m_eMoveDir = m_eDir;
+	m_eDir = m_eDir;
 	CAnimator2D* pAnimator2D = _pObj->Animator2D();
 
 
@@ -702,11 +880,11 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 		case PLAYER_STATE::IDLE:
 		{
 
-			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
 			{
 				pAnimator2D->Play(L"STAND1_LEFT", true);
 			}
-			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
 			{
 				pAnimator2D->Play(L"STAND1_RIGHT", true);
 
@@ -716,11 +894,11 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 		break;
 		case PLAYER_STATE::WALK:
 		{
-			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
 			{
 				pAnimator2D->Play(L"WALK1_LEFT", true);
 			}
-			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
 			{
 				pAnimator2D->Play(L"WALK1_RIGHT", true);
 
@@ -729,14 +907,14 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 		break;
 		case PLAYER_STATE::JUMP:
 		{
-			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
 			{
 				
 					pAnimator2D->Play(L"JUMP_LEFT", true);
 			
 
 			}
-			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
 			{
 				
 					pAnimator2D->Play(L"JUMP_RIGHT", true);
@@ -748,31 +926,55 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 
 		case PLAYER_STATE::ATTACK:
 		{
-			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			if (m_eCurAttState == PLAYER_ATTACK_STATE::NORMAL_ATT_1)
 			{
-
-				pAnimator2D->Play(L"SWINGO1_LEFT", false);
-
-
+				if (PLAYER_DIRECTION::LEFT == m_eDir)
+				{
+					pAnimator2D->Play(L"SWINGO1_LEFT", false);
+				}
+				else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+				{
+					pAnimator2D->Play(L"SWINGO1_RIGHT", true);
+				}
 			}
-			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+
+			if (m_eCurAttState == PLAYER_ATTACK_STATE::SKILL_ATT_1)
 			{
-				// 아직 안만듬 
-				//pAnimator2D->Play(L"SWINGO1_RIGHT", true);
-
+				if (PLAYER_DIRECTION::LEFT == m_eDir)
+				{
+					pAnimator2D->Play(L"SHOOT1_LEFT", false);
+				}
+				else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+				{
+					pAnimator2D->Play(L"SHOOT1_RIGHT", true);
+				}
 			}
+
+
+			if (m_eCurAttState == PLAYER_ATTACK_STATE::SKILL_ATT_2)
+			{
+				if (PLAYER_DIRECTION::LEFT == m_eDir)
+				{
+					pAnimator2D->Play(L"SHOOTF_LEFT", false);
+				}
+				else if (PLAYER_DIRECTION::RIGHT == m_eDir)
+				{
+					pAnimator2D->Play(L"SHOOTF_RIGHT", true);
+				}
+			}
+			
 		}
 			break;
 		case PLAYER_STATE::ALERT:
 		{
-			if (PLAYER_DIRECTION::LEFT == m_eMoveDir)
+			if (PLAYER_DIRECTION::LEFT == m_eDir)
 			{
 
 				pAnimator2D->Play(L"ALERT_LEFT", true);
 
 
 			}
-			else if (PLAYER_DIRECTION::RIGHT == m_eMoveDir)
+			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
 			{
 				pAnimator2D->Play(L"ALERT_RIGHT", true);
 
@@ -827,6 +1029,33 @@ void CPlayerScript::LoadFromScene(FILE* _pFile)
 	fread(&m_bOnGround, sizeof(bool), 1, _pFile);
 
 }
+
+void CPlayerScript::Update_Inventory()
+{
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
+
+	CGameObject* pObj = pLayer->FindObj(L"Inventory");
+	CInventoryScript* pScript = (CInventoryScript*)pObj->GetScriptByName(L"CInventoryScript");
+
+	if (pScript == nullptr)
+		return;
+
+	if (KEY_TAP(KEY::I))
+	{
+		bool active = pScript->GetActivate();
+		if (active)
+			pScript->Deactivate();
+		else
+			pScript->Activate();
+
+	}
+
+
+}
+
+
 
 //
 //void CPlayerScript::update()

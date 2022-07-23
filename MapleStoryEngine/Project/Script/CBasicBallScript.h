@@ -41,8 +41,9 @@ class CBasicBallScript :
 {
 
 private:
+    bool                m_bStart;
     float               m_fSpeed;
-    float               m_fAngle; // degree 
+    float               m_fRadian; // degree 
 
     BALL_DIRECTION      m_eDir;
     BALLMOVE_TYPE       m_eMoveType;
@@ -55,6 +56,14 @@ private:
 
 
 private:
+    bool                m_bHit;
+
+    float               m_fMAxAttack;
+    float               m_fMinAttack;
+
+
+
+private:
     void LinearMove();
     void DiagonalMove();
     void ParabolaMove();
@@ -62,6 +71,11 @@ private:
 
 public:
     void SetBallMoveType(BALLMOVE_TYPE _type) { m_eMoveType = _type; }
+    void SetMaxAttack(float _f) { m_fMAxAttack = _f; }
+    void SetMinAttack(float _f) { m_fMinAttack = _f; }
+    float GetMaxAttack() { return m_fMAxAttack; }
+    float GetMinAttack() { return m_fMinAttack; }
+
     void Init(Vec3 _startpos);
 
 public:
@@ -75,6 +89,7 @@ public:
     void SetDir(BALL_DIRECTION _dir) { m_eDir = _dir; }
     void SetMaxTime(float _maxTime) { m_fMaxTime = _maxTime; }
     void SetSpeed(float _fSpeed) { m_fSpeed = _fSpeed; }
+    void SetHit(bool _b) { m_bHit = _b; }
 
 
 public:

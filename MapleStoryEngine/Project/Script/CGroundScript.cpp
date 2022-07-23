@@ -4,6 +4,9 @@
 #include "CPlayerScript.h"
 #include "CRigidBodyScript.h"
 #include "CGravityScript.h"
+#include "CMonsterScript.h"
+
+
 
 #include <Engine/CCollider2D.h>
 
@@ -55,10 +58,11 @@ void CGroundScript::lateupdate()
 
 void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
-	// Player <-> Ground  Collide Check
+	// OBject <-> Ground  Collide Check
 	CPlayerScript*		playerScript = (CPlayerScript *)_OtherObject->GetScriptByName(L"CPlayerScript");
 	CGravityScript*		gravityScript = (CGravityScript*)_OtherObject->GetScriptByName(L"CGravityScript");
 	CRigidBodyScript*	rigidBodyScript = (CRigidBodyScript*)_OtherObject->GetScriptByName(L"CRigidBodyScript");
+	CMonsterScript*		monsterScript = (CMonsterScript*)_OtherObject->GetScriptByName(L"CMonsterScript");
 
 
 	Vec3 vObjPos = _OtherObject->Collider2D()->GetWorldPos();
@@ -124,6 +128,11 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 	}
 	else
 	{
+		if (playerScript == nullptr)
+		{
+			int i = 0;
+
+		}
 		float vGround_SountLine_y = vGroundPos.y - (vGroundScale.y / 2);
 		float vGround_NorthLine_y = vGroundPos.y + (vGroundScale.y / 2);
 		float vObj_SouthLine_y = vObjPos.y - (vObjScale.y / 2);
@@ -160,39 +169,58 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 
 		// 올린다. 
-		Vec3 playerPrevPos = Vec3(0.f, 0.f, 0.f);
-		Vec3 playerCurPos = Vec3(0.f, 0.f, 0.f);
+		Vec3 ObjPrevPos = Vec3(0.f, 0.f, 0.f);
+		Vec3 ObjCurPos = Vec3(0.f, 0.f, 0.f);
 		if (nullptr != playerScript)
 		{
-			playerPrevPos = playerScript->GetPrevPos();
-			playerCurPos = _OtherObject->Transform()->GetRelativePos();
+			ObjPrevPos = playerScript->GetPrevPos();
+			ObjCurPos = _OtherObject->Transform()->GetRelativePos();
 
 		}
 
+		if (nullptr != monsterScript)
+		{
+			ObjPrevPos = monsterScript->GetPrevPos();
+			ObjCurPos = _OtherObject->Transform()->GetRelativePos();
+
+		}
+
+
 		// 위 -> 아래로 향할 때 
-		if (playerPrevPos.y - playerCurPos.y >= 0.f)
+		if (ObjPrevPos.y - ObjCurPos.y >= 0.f)
 		{
 			vObjPos = _OtherObject->Transform()->GetRelativePos();
 			Vec3 vColPos = _OtherObject->Collider2D()->GetWorldPos();
 			Vec2 vColScale = _OtherObject->Collider2D()->GetOffsetScale();
+
+			ObjLine.p2.x += 20.f;
+			ObjLine.p1.x -= 20.f;
+
+			if (LineInterSection(ObjLine, GroundLine) == false)
+				return;
 
 			// 직선의 방정식 - Ground 
 			float m = (GroundLine.p2.y - GroundLine.p1.y) / (GroundLine.p2.x - GroundLine.p1.x);
 			float y = 0.f, OnLineY = 0.f;
 
 			OnLineY = m * (vColPos.x - GroundLine.p1.x) + GroundLine.p1.y;
-			m_fDiff = vObjPos.y - OnLineY;
-
-			vObjPos.y = OnLineY + m_fDiff - 1.f;;
+			float fDiff = vObjPos.y - OnLineY;
+			vObjPos.y = OnLineY + fDiff - 1.f;;
 
 
 			_OtherObject->Transform()->SetRelativePos(vObjPos);
 
 			if (nullptr != playerScript)
 			{
-				playerScript->SetOnGround(true);
+				playerScript->SetOnGround(true);  
+				playerScript->SetDiffBetweenGround(fDiff);
 			}
 
+			if (nullptr != monsterScript)
+			{
+				monsterScript->SetDiffBetweenGround(fDiff);
+
+			}
 			if (nullptr != gravityScript)
 			{
 				gravityScript->SetOnGround(true);
@@ -204,9 +232,11 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 void CGroundScript::OnCollision(CGameObject* _OtherObject)
 {
-	// Player <-> Ground  Collide Check
+	// OBject <-> Ground  Collide Check
 	CPlayerScript* playerScript = (CPlayerScript*)_OtherObject->GetScriptByName(L"CPlayerScript");
 	CGravityScript* gravityScript = (CGravityScript*)_OtherObject->GetScriptByName(L"CGravityScript");
+	CMonsterScript* monsterScript = (CMonsterScript*)_OtherObject->GetScriptByName(L"CMonsterScript");
+
 
 
 	Vec3 vObjPos = _OtherObject->Collider2D()->GetWorldPos();
@@ -234,17 +264,17 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 		if (vGround_SountLine_y < vObj_SouthLine_y && vObj_SouthLine_y <= vGround_NorthLine_y)
 		{
 			// 올린다. 
-			Vec3 playerPrevPos = Vec3(0.f, 0.f, 0.f);
-			Vec3 playerCurPos = Vec3(0.f, 0.f, 0.f);
+			Vec3 ObjPrevPos = Vec3(0.f, 0.f, 0.f);
+			Vec3 ObjCurPos = Vec3(0.f, 0.f, 0.f);
 			if (nullptr != playerScript)
 			{
-				playerPrevPos = playerScript->GetPrevPos();
-				playerCurPos = _OtherObject->Transform()->GetRelativePos();
+				ObjPrevPos = playerScript->GetPrevPos();
+				ObjCurPos = _OtherObject->Transform()->GetRelativePos();
 
 			}
 
 			// 위 -> 아래로 향할 때 
-			if (playerPrevPos.y - playerCurPos.y >= 0.f)
+			if (ObjPrevPos.y - ObjCurPos.y >= 0.f)
 			{
 				vObjPos = _OtherObject->Transform()->GetRelativePos();
 				vObjPos.y += fValue;
@@ -267,7 +297,11 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 	}
 	else
 	{
+		if (playerScript == nullptr)
+		{
+			int i = 0;
 
+		}
 		float vObj_SouthLine_y = vObjPos.y - (vObjScale.y / 2);
 		float fRadian = (fAngle * 3.141592f) / 180.f;
 		float Ground_x = (vGroundScale.x / 2.f);
@@ -325,7 +359,15 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 				float y = 0.f, OnLineY = 0.f;
 
 				OnLineY = m * (vColPos.x - GroundLine.p1.x) + GroundLine.p1.y;
-				vObjPos.y = OnLineY + m_fDiff - 1.f;
+				float fDiff = 0.f;
+
+				if (nullptr != playerScript)
+					fDiff = playerScript->GetDiffBetweenGround();
+				else if (nullptr != monsterScript)
+					fDiff = monsterScript->GetDiffBetweenGround();
+
+				
+				vObjPos.y = OnLineY + fDiff - 1.f;
 
 				_OtherObject->Transform()->SetRelativePos(vObjPos);
 
@@ -333,7 +375,7 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 				{
 					playerScript->SetOnGround(true);
 				}
-
+			
 				if (nullptr != gravityScript)
 				{
 					gravityScript->SetOnGround(true);
@@ -341,7 +383,7 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 
 			}
 		}
-		else
+		/*else
 		{
 			if (nullptr != playerScript)
 			{
@@ -352,7 +394,7 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 			{
 				gravityScript->SetOnGround(false);
 			}
-		}
+		}*/
 	}
 
 	

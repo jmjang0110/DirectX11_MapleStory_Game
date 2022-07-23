@@ -97,7 +97,7 @@ void CImGuiMgr::progress()
     }
 
     bool bOpen = true;
-    ImGui::ShowDemoWindow(&bOpen);
+   // ImGui::ShowDemoWindow(&bOpen);
 
 
     // Delegate »£√‚

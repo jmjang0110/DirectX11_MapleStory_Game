@@ -9,7 +9,7 @@
 CCameraMoveScript::CCameraMoveScript()
 	: CScript((int)SCRIPT_TYPE::CAMERAMOVESCRIPT)
 	, m_Filter(nullptr)
-	, m_fCamSpeed(500.f)
+	, m_fCamSpeed(800.f)
 	
 {
 	SetName(CScriptMgr::GetScriptName(this));

@@ -21,6 +21,8 @@ public:
     void SetLayerIdx(int _LayerIdx);
 
     void Reset() { Safe_Del_Vec(m_vecRoot); Clear(); SetName(L""); }
+    CGameObject* FindObj(wstring _objname);
+
 // ==========
 public:
     int GetLayerIdx() { return m_iLayerIdx; }

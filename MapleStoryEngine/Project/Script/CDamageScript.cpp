@@ -15,9 +15,10 @@ CDamageScript::CDamageScript()
 	, m_fTimer(0.f)
 	, m_fDeltatime(0.f)
 
+
 {
 	SetName(CScriptMgr::GetScriptName(this));
-	Init(DAMAGE_TYPE::CRITICAL_1, 10421540, 5);
+	//Init(DAMAGE_TYPE::CRITICAL_1, 10421540, 2);
 }
 
 
@@ -50,7 +51,8 @@ void CDamageScript::Init(DAMAGE_TYPE _eType, int _Damage, float _fMaxTime)
 		num /= 10;
 	}
 
-	
+	start();
+
 }
 
 void CDamageScript::start()
