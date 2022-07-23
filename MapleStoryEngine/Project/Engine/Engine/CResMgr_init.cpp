@@ -1,14 +1,30 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "CResMgr.h"
 
 void CResMgr::init()
 {
+
+	InitSound();
+
 	CreateEngineMesh();
 	CreateEngineTexture();
 	CreateEngineShader();
 	CreateEngineMaterial();
 
 	CreateEngineComputeShader();
+}
+
+void CResMgr::InitSound()
+{
+	FMOD::System_Create(&CSound::g_pFMOD);
+
+	if (nullptr == CSound::g_pFMOD)
+	{
+		assert(nullptr);
+	}
+
+	// 32ï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	CSound::g_pFMOD->init(32, FMOD_DEFAULT, nullptr);
 }
 
 void CResMgr::CreateEngineMesh()
@@ -270,7 +286,7 @@ void CResMgr::CreateEngineShader()
 	AddRes<CGraphicsShader>(L"TileMapShader", pShader, true);
 
 
-	// TileMap2 Shader - Damage Skin - LT, Offset ÁöÁ¤ °¡´É TileMap
+	// TileMap2 Shader - Damage Skin - LT, Offset ì§€ì • ê°€ëŠ¥ TileMap
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap2");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap2");
@@ -354,24 +370,24 @@ void CResMgr::CreateEngineMaterial()
 
 	CMaterial* pMtrl = nullptr;
 
-	// Std2DMtrl »ı¼º
+	// Std2DMtrl ìƒì„±
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes<CMaterial>(L"material\\Std2DMtrl.mtrl", pMtrl);
 	
-	// Std2DNoDepthMtrl »ı¼º
+	// Std2DNoDepthMtrl ìƒì„±
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DNoDepthShader"));
 	AddRes<CMaterial>(L"material\\Std2DNoDepthMtrl.mtrl", pMtrl);
 
 
-	// Std2D_Light Mtrl »ı¼º
+	// Std2D_Light Mtrl ìƒì„±
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DLightShader"));
 	AddRes<CMaterial>(L"material\\Std2DLightMtrl.mtrl", pMtrl);
 	
 
-	// Std2D_Empty Mtrl »ı¼º
+	// Std2D_Empty Mtrl ìƒì„±
 	pMtrl = new CMaterial;
 	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Std2DRenderEmptyShader"));
 	AddRes<CMaterial>(L"material\\Std2DEmptyMtrl.mtrl", pMtrl);
@@ -451,12 +467,12 @@ void CResMgr::CreateEngineComputeShader()
 
 void CResMgr::MakeInputLayoutInfo()
 {
-	// Á¤Á¡ ÀÔ·Â ±¸Á¶ (InputLayout »ı¼º)	
+	// ì •ì  ì…ë ¥ êµ¬ì¡° (InputLayout ìƒì„±)	
 	UINT iOffset = 0;
 	D3D11_INPUT_ELEMENT_DESC tInputDesc = {};
 
-	tInputDesc.SemanticName = "POSITION";	// Semantic ÀÌ¸§
-	tInputDesc.SemanticIndex = 0;			// Áßº¹ ÀÌ¸§ÀÎ °æ¿ì ÀÎµ¦½º·Î ±¸ºĞ
+	tInputDesc.SemanticName = "POSITION";	// Semantic ì´ë¦„
+	tInputDesc.SemanticIndex = 0;			// ì¤‘ë³µ ì´ë¦„ì¸ ê²½ìš° ì¸ë±ìŠ¤ë¡œ êµ¬ë¶„
 	tInputDesc.InputSlot = 0;
 	tInputDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	tInputDesc.InstanceDataStepRate = 0;
