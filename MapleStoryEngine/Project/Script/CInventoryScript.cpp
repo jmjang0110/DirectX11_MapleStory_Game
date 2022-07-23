@@ -201,12 +201,10 @@ void CInventoryScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
 
 
-
 }
 
 void CInventoryScript::OnCollision(CGameObject* _OtherObject)
 {
-
 	if (m_bMove == false)
 		return;
 
@@ -256,7 +254,6 @@ void CInventoryScript::OnCollision(CGameObject* _OtherObject)
 
 void CInventoryScript::OnCollisionExit(CGameObject* _OtherObject)
 {
-
 
 
 }
