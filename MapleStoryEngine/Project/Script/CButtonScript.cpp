@@ -72,10 +72,13 @@ void CButtonScript::lateupdate()
 void CButtonScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
 
+
 }
 
 void CButtonScript::OnCollision(CGameObject* _OtherObject)
 {
+
+
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
 
@@ -105,6 +108,7 @@ void CButtonScript::OnCollision(CGameObject* _OtherObject)
 
 void CButtonScript::OnCollisionExit(CGameObject* _OtherObject)
 {
+
 
 }
 
