@@ -33,7 +33,7 @@ private:
 
 public:
     void Init(NUMBER_TYPE _type = NUMBER_TYPE::ITEM, Vec2 _startLT = Vec2(0.f, 0.f), Vec2 _slice = Vec2(0.f, 0.f));
-    void UpdateNumbber(UINT _num);
+    void UpdateNumber(UINT _num);
 
 
 public:

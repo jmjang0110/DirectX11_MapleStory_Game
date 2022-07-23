@@ -42,6 +42,15 @@ CButtonScript::~CButtonScript()
 
 
 
+void CButtonScript::Show(bool _b)
+{
+	if (_b)
+		GetOwner()->Activate();
+	else
+		GetOwner()->Deactivate();
+
+}
+
 void CButtonScript::start()
 {
 	m_bEnable = false;
@@ -51,16 +60,11 @@ void CButtonScript::start()
 void CButtonScript::update()
 {
 	CAnimator2D* pAnimator2D = GetOwner()->Animator2D();
-	wstring name = GetOwner()->GetName();
-
-
-
-	
-
 	if (m_bEnable)
 		pAnimator2D->Play(L"ENABLED", true);
 	else
 		pAnimator2D->Play(L"DISABLED", true);
+
 
 
 }
@@ -72,39 +76,49 @@ void CButtonScript::lateupdate()
 void CButtonScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
 
+
 }
 
 void CButtonScript::OnCollision(CGameObject* _OtherObject)
 {
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
-
-	CGameObject* pObj = pLayer->FindObj(L"Inventory");
-	CInventoryScript* pScript = (CInventoryScript*)pObj->GetScriptByName(L"CInventoryScript");
-
 
 	if (KEY_TAP(KEY::LBTN))
 	{
-		if (m_bEnable == false)
-			m_bEnable = true;
+		m_bEnable = !m_bEnable;
 
-		if (GetOwner()->GetName() == L"Equip")
-			pScript->SetItemType(ITEM_TYPE::EQUIP);
-		else if (GetOwner()->GetName() == L"Consume")
-			pScript->SetItemType(ITEM_TYPE::CONSUME);
-		else if (GetOwner()->GetName() == L"Etc")
-			pScript->SetItemType(ITEM_TYPE::ETC);
+		if (m_bEnable == true
+			&& m_pInst != nullptr && m_BCEvent != nullptr)
+		{
+			(m_pInst->*m_BCEvent)((DWORD_PTR)nullptr);
 
-
-		UpdateButton(m_bEnable);
-
-		
+		}
 	}
+
+
+
+	/*if (GetOwner()->GetName() == L"Equip")
+		pScript->SetItemType(ITEM_TYPE::EQUIP);
+	else if (GetOwner()->GetName() == L"Consume")
+		pScript->SetItemType(ITEM_TYPE::CONSUME);
+	else if (GetOwner()->GetName() == L"Etc")
+		pScript->SetItemType(ITEM_TYPE::ETC);*/
+		//UpdateButton(m_bEnable);
+
+
+
+
+		//CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		//CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
+
+		//CGameObject* pObj = pLayer->FindObj(L"Inventory");
+		//CInventoryScript* pScript = (CInventoryScript*)pObj->GetScriptByName(L"CInventoryScript");
+
 
 }
 
 void CButtonScript::OnCollisionExit(CGameObject* _OtherObject)
 {
+
 
 }
 
@@ -120,29 +134,29 @@ void CButtonScript::UpdateButton(bool _bEnable)
 	CInventoryScript* pScript = (CInventoryScript*)pObj->GetScriptByName(L"CInventoryScript");
 
 
-	if (m_bEnable)
-	{
-		if (GetOwner()->GetName() == L"Equip")
-		{
-			//pScript->UpdateButton(ITEM_TYPE::EQUIP);
-			pScript->RegisterEquip();
+	//if (m_bEnable)
+	//{
+	//	if (GetOwner()->GetName() == L"Equip")
+	//	{
+	//		//pScript->UpdateButton(ITEM_TYPE::EQUIP);
+	//		pScript->RegisterEquip();
 
-		}
-		else if (GetOwner()->GetName() == L"Consume")
-		{
-			//pScript->UpdateButton(ITEM_TYPE::CONSUME);
-			pScript->RegisterConsume();
+	//	}
+	//	else if (GetOwner()->GetName() == L"Consume")
+	//	{
+	//		//pScript->UpdateButton(ITEM_TYPE::CONSUME);
+	//		pScript->RegisterConsume();
 
-		}
-		else if (GetOwner()->GetName() == L"Etc")
-		{
-			//pScript->UpdateButton(ITEM_TYPE::ETC);
-			pScript->RegisterEtc();
-		}
-	}
-	else
-	{
+	//	}
+	//	else if (GetOwner()->GetName() == L"Etc")
+	//	{
+	//		//pScript->UpdateButton(ITEM_TYPE::ETC);
+	//		pScript->RegisterEtc();
+	//	}
+	//}
+	//else
+	//{
 
-	}
+	//}
 
 }

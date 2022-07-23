@@ -124,7 +124,7 @@ void CPlayerScript::update()
 	m_ePrevAttState = m_eCurAttState;
 
 
-	
+
 }
 
 
@@ -316,7 +316,7 @@ void CPlayerScript::Update_State()
 			m_eCurState = PLAYER_STATE::IDLE;
 		}
 
-		if (0.f == fSpeed && m_bOnGround 
+		if (0.f == fSpeed && m_bOnGround
 			&& m_ePrevState != PLAYER_STATE::ATTACK
 			&& m_ePrevState != PLAYER_STATE::ALERT)
 		{
@@ -355,10 +355,10 @@ void CPlayerScript::Update_State()
 
 		}
 	}
-	
+
 
 	if (KEY_TAP(KEY::SPACE))
-	{  
+	{
 		if (m_eCurState != PLAYER_STATE::JUMP && m_eCurState != PLAYER_STATE::DOUBLE_JUMP)
 		{
 			m_eCurState = PLAYER_STATE::JUMP;
@@ -366,7 +366,7 @@ void CPlayerScript::Update_State()
 		else if (m_eCurState == PLAYER_STATE::JUMP)
 		{
 			m_eCurState = PLAYER_STATE::DOUBLE_JUMP;
-			
+
 			// Double Jump - Add Child Obj ( Eff )
 			RegisterDoubleJumpEff();
 
@@ -380,10 +380,10 @@ void CPlayerScript::Update_State()
 	{
 		if (KEY_PRESSED(KEY::LEFT))
 		{
-			if(m_bOnGround)
+			if (m_bOnGround)
 				m_eCurState = PLAYER_STATE::WALK;
 
- 			m_eDir = PLAYER_DIRECTION::LEFT;
+			m_eDir = PLAYER_DIRECTION::LEFT;
 		}
 
 		if (KEY_PRESSED(KEY::RIGHT))
@@ -391,11 +391,11 @@ void CPlayerScript::Update_State()
 			if (m_bOnGround)
 				m_eCurState = PLAYER_STATE::WALK;
 
- 			m_eDir = PLAYER_DIRECTION::RIGHT;
+			m_eDir = PLAYER_DIRECTION::RIGHT;
 		}
 	}
-	if (m_ePrevState == PLAYER_STATE::IDLE 
-		|| m_ePrevState == PLAYER_STATE::ATTACK 
+	if (m_ePrevState == PLAYER_STATE::IDLE
+		|| m_ePrevState == PLAYER_STATE::ATTACK
 		|| m_ePrevState == PLAYER_STATE::WALK
 		|| m_ePrevState == PLAYER_STATE::PRONE)
 	{
@@ -417,7 +417,7 @@ void CPlayerScript::Update_State()
 		{
 			m_eCurState = PLAYER_STATE::IDLE;
 		}
-		
+
 	}
 	if (m_eCurState == PLAYER_STATE::PRONE)
 	{
@@ -521,16 +521,16 @@ void CPlayerScript::Update_Move()
 
 
 		if (KEY_TAP(KEY::SPACE))
-		{			
+		{
 			if (nullptr != pRigid)
 			{
-				
+
 				if (m_eCurState == PLAYER_STATE::JUMP)
 				{
 
 					pRigid->AddVelocity(Vec3(0.f, 400.f, 0.f));
 				}
-				else if (m_eCurState == PLAYER_STATE::DOUBLE_JUMP && 
+				else if (m_eCurState == PLAYER_STATE::DOUBLE_JUMP &&
 					m_ePrevState != PLAYER_STATE::DOUBLE_JUMP)
 				{
 					if (m_eDir == PLAYER_DIRECTION::RIGHT)
@@ -547,7 +547,7 @@ void CPlayerScript::Update_Move()
 						MaxVelocity.x = -400.f;
 						pRigid->SetMaxVelocity(MaxVelocity);
 					}
-		
+
 				}
 			}
 		}
@@ -568,11 +568,11 @@ void CPlayerScript::Update_Move()
 
 			if (KEY_PRESSED(KEY::RIGHT))
 			{
-				 pRigid->AddForce(Vec3(250.f, 0.f, 0.f));
+				pRigid->AddForce(Vec3(250.f, 0.f, 0.f));
 			}
 		}
-		
-		
+
+
 	}
 
 
@@ -697,7 +697,7 @@ void CPlayerScript::Update_Animation()
 			if (PLAYER_DIRECTION::LEFT == m_eDir)
 			{
 				pAnimator2D->Play(L"SWINGT1_LEFT", FALSE);
-				if(pAnimator2D->GetCurAnim()->IsFinish() == true)
+				if (pAnimator2D->GetCurAnim()->IsFinish() == true)
 					pAnimator2D->Play(L"SWINGT1_LEFT", true);
 
 			}
@@ -814,7 +814,7 @@ void CPlayerScript::RegisterDoubleJumpEff()
 	// ** m_pDbJumpSubPrefab ** 
 	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
 	NewObj = m_pDbJumpSubPrefab->Instantiate();
-	
+
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 
 	pScript = (CDoubleJumpScript*)CScriptMgr::GetScript(L"CDoubleJumpScript");
@@ -909,15 +909,15 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 		{
 			if (PLAYER_DIRECTION::LEFT == m_eDir)
 			{
-				
-					pAnimator2D->Play(L"JUMP_LEFT", true);
-			
+
+				pAnimator2D->Play(L"JUMP_LEFT", true);
+
 
 			}
 			else if (PLAYER_DIRECTION::RIGHT == m_eDir)
 			{
-				
-					pAnimator2D->Play(L"JUMP_RIGHT", true);
+
+				pAnimator2D->Play(L"JUMP_RIGHT", true);
 
 			}
 		}
@@ -962,9 +962,9 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 					pAnimator2D->Play(L"SHOOTF_RIGHT", true);
 				}
 			}
-			
+
 		}
-			break;
+		break;
 		case PLAYER_STATE::ALERT:
 		{
 			if (PLAYER_DIRECTION::LEFT == m_eDir)
@@ -981,7 +981,7 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 			}
 		}
 
-			break;
+		break;
 		case PLAYER_STATE::DEAD:
 
 			break;
@@ -998,7 +998,7 @@ void CPlayerScript::Update_Animation(CGameObject* _pObj, wstring _name)
 
 	}
 
-	
+
 }
 
 void CPlayerScript::Update_Gravity()
@@ -1037,19 +1037,15 @@ void CPlayerScript::Update_Inventory()
 	CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
 
 	CGameObject* pObj = pLayer->FindObj(L"Inventory");
-	CInventoryScript* pScript = (CInventoryScript*)pObj->GetScriptByName(L"CInventoryScript");
+	CInventoryScript* pInvenScript = (CInventoryScript*)pObj->GetScriptByName(L"CInventoryScript");
 
-	if (pScript == nullptr)
+	if (pInvenScript == nullptr)
 		return;
 
 	if (KEY_TAP(KEY::I))
 	{
-		bool active = pScript->GetActivate();
-		if (active)
-			pScript->Deactivate();
-		else
-			pScript->Activate();
-
+		bool active = pInvenScript->GetActivate();
+		pInvenScript->Show(!active);
 	}
 
 

@@ -56,11 +56,11 @@ private:
     Vec3            m_Cursor_Diff;
     Vec3            m_Cursor_CurPos;
     Vec3            m_Cursor_PrevDiff;
-    
+
     bool            m_bCollide_Cursor;
 
 public:
-    void setItemType(ITEM_TYPE _etype, CONSUME_TYPE _eCtype = CONSUME_TYPE::NONE){ m_eType = _etype; m_Consume_Type = _eCtype;}
+    void setItemType(ITEM_TYPE _etype, CONSUME_TYPE _eCtype = CONSUME_TYPE::NONE) { m_eType = _etype; m_Consume_Type = _eCtype; }
     void SetHpRaise(float _f) { m_fHpRaise = _f; }
     void SetMpRaise(float _f) { m_fMpRaise = _f; }
 
@@ -70,7 +70,7 @@ public:
 public:
     void AddCnt();
     void SubCnt();
-
+    void SetCnt(int _i) { m_iCnt = _i; }
 
 
 public:
@@ -79,8 +79,9 @@ public:
     virtual void lateupdate();
 
     virtual void OnCollisionEnter(CGameObject* _OtherObject) override;
-    virtual void OnCollision(CGameObject* _OtherObject) override; 
+    virtual void OnCollision(CGameObject* _OtherObject) override;
     virtual void OnCollisionExit(CGameObject* _OtherObject) override;
+
 
 
     CLONE(CItemScript);

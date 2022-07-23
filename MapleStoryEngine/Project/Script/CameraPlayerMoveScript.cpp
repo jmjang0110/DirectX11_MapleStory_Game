@@ -98,7 +98,7 @@ void CameraPlayerMoveScript::update()
 
 
 	// Check Map Size 
-	CLayer* DefaultLayer = pCurScene->GetLayer(L"Default");
+	CLayer* DefaultLayer = pCurScene->GetLayer(L"Default2");
 	CGameObject* MapSizeObj = DefaultLayer->FindObj(L"MapSize");
 	if (MapSizeObj != nullptr)
 	{

@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine/CScript.h>
 
+typedef void (CScript::* CLIKCED)(DWORD_PTR _param);
 
 class CButtonScript :
     public CScript
@@ -9,9 +10,24 @@ class CButtonScript :
 private:
     bool    m_bEnable;
 
+    // Click
+    CScript* m_pInst;
+    CLIKCED         m_BCEvent;
+
+
 public:
     void UpdateButton(bool _bEnable);
     void SetEnable(bool _B) { m_bEnable = _B; }
+
+    void SetBtnClickedFunc(CScript* _pScript, CLIKCED _bcFunc)
+    {
+        m_pInst = _pScript;
+        m_BCEvent = _bcFunc;
+
+    }
+
+    void Show(bool _b);
+
 public:
     virtual void start();
     virtual void update();

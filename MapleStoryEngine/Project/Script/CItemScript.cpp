@@ -70,24 +70,24 @@ CItemScript::~CItemScript()
 void CItemScript::AddCnt()
 {
 	m_iCnt++;
-	CNumberScript* pNumScript = (CNumberScript*)GetOwner()->GetScriptByName(L"CNumberScript");
+	CNumberScript* pNumScript = (CNumberScript*)GetOwner()->FindChildObj(L"Number")->GetScriptByName(L"CNumberScript");
 
 	if (pNumScript != nullptr)
 	{
-		pNumScript->UpdateNumbber(m_iCnt);
+		pNumScript->UpdateNumber(m_iCnt);
 
 	}
-	
+
 }
 
 void CItemScript::SubCnt()
 {
 	m_iCnt--;
-	CNumberScript* pNumScript = (CNumberScript*)GetOwner()->GetScriptByName(L"CNumberScript");
+	CNumberScript* pNumScript = (CNumberScript*)GetOwner()->FindChildObj(L"Number")->GetScriptByName(L"CNumberScript");
 
 	if (pNumScript != nullptr)
 	{
-		pNumScript->UpdateNumbber(m_iCnt);
+		pNumScript->UpdateNumber(m_iCnt);
 
 	}
 }
@@ -117,14 +117,8 @@ void CItemScript::update()
 		playerScript->AddHp(m_fHpRaise);
 		playerScript->AddMp(m_fMpRaise);
 		//playerScript->AddExp(m_fExpRaise)
-		
-		if (m_iInventoryIdx_row != -1)
-		{
-	
-			pscript->DeleteItem(m_eType, m_iInventoryIdx_row, m_iInventoryIdx_col);
-			pscript->SetMove(true);
 
-		}
+
 
 		if (m_iCnt <= 0)
 		{
@@ -132,8 +126,12 @@ void CItemScript::update()
 			CGameObject* pDelObj = GetOwner();
 			int pDelObj_LayerIdx = GetOwner()->GetLayerIndex();
 
+			CSceneMgr::GetInst()->DisconnectParent(pDelObj);
 			CSceneMgr::GetInst()->DeRegisterObjInLayer(pDelObj, pDelObj_LayerIdx);
 			GetOwner()->Destroy();
+
+			pscript->DeleteItem(m_eType, m_iInventoryIdx_row, m_iInventoryIdx_col);
+			pscript->SetMove(true);
 
 		}
 		else
@@ -220,11 +218,11 @@ void CItemScript::OnCollision(CGameObject* _OtherObject)
 	if (KEY_PRESSED(KEY::LBTN) && (OnMoveItemIdx == Vec2(m_iInventoryIdx_col, m_iInventoryIdx_row)))
 	{
 		m_bCollide_Cursor = true;
-		pInventoryScript->SetMove(false);
+		//pInventoryScript->SetMove(false);
 
 	}
 
-	if (KEY_AWAY(KEY::LBTN) )
+	if (KEY_AWAY(KEY::LBTN))
 	{
 		OnMoveItemIdx = Vec2(-1.f, -1.f);
 		m_bCollide_Cursor = false;

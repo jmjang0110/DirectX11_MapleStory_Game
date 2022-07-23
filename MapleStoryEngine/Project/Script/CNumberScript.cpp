@@ -13,6 +13,8 @@ CNumberScript::CNumberScript()
 	: CScript((int)SCRIPT_TYPE::NUMBERSCRIPT)
 	, m_fTimer(0.f)
 	, m_iNum(0)
+	, m_vStartLT(0.f, 0.f)
+	, m_vSlice(0.f, 0.f)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -22,16 +24,21 @@ CNumberScript::CNumberScript()
 
 }
 
-CNumberScript::CNumberScript(const CNumberScript& _origin) 
+CNumberScript::CNumberScript(const CNumberScript& _origin)
 	: CScript((int)SCRIPT_TYPE::NUMBERSCRIPT)
 	, m_fTimer(0.f)
 	, m_iNum(0)
+	, m_vStartLT(0.f, 0.f)
+	, m_vSlice(0.f, 0.f)
+
 {
 	SetName(CScriptMgr::GetScriptName(this));
 }
 
 CNumberScript::~CNumberScript()
 {
+
+
 }
 
 
@@ -50,23 +57,29 @@ void CNumberScript::Init(NUMBER_TYPE _type, Vec2 _startLT, Vec2 _slice)
 		m_vSlice = Vec2(8.f, 11.f);
 
 	}
-		break;
+	break;
 	case NUMBER_TYPE::MESO:
 	{
 		m_pTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\UI\\HpMpLevel\\LvNum.png", L"texture\\UI\\HpMpLevel\\LvNum.png");
 		m_vStartLT = Vec2(0.f, 0.f);
 		m_vSlice = Vec2(7.f, 10.f);
-	
+
 	}
 
 
-		break;
+	break;
 	case NUMBER_TYPE::SHIP_TIMER:
 		break;
 	}
 
-
-	start();
+	GetOwner()->TileMap()->SetAtlasTex(m_pTex);
+	GetOwner()->TileMap()->SetTileSize(m_vSlice);
+	GetOwner()->Transform()->SetIgnoreParentScale(true);
+	if (NUMBER_TYPE::ITEM == m_eType)
+	{
+		GetOwner()->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
+	}
+	//start();
 
 }
 
@@ -74,45 +87,49 @@ void CNumberScript::Init(NUMBER_TYPE _type, Vec2 _startLT, Vec2 _slice)
 void CNumberScript::start()
 {
 
-	if (GetOwner()->TileMap() == nullptr && m_pTex != nullptr)
-	{
-		CGameObject* ChildObj = new CGameObject;
-		ChildObj->SetName(L"Number");
-		ChildObj->AddComponent(new CTransform);
-		ChildObj->AddComponent(new CTileMap);
-		ChildObj->TileMap()->SetAtlasTex(m_pTex);
-		ChildObj->TileMap()->SetTileSize(m_vSlice);
-		ChildObj->TileMap()->SetTileMapCount(1, 1);
+	//if (GetOwner()->TileMap() == nullptr && m_pTex != nullptr)
+	//{
+	//	CGameObject* ChildObj = new CGameObject;
+	//	ChildObj->SetName(L"Number");
+	//	ChildObj->AddComponent(new CTransform);
+	//	ChildObj->AddComponent(new CTileMap);
+	//	ChildObj->TileMap()->SetAtlasTex(m_pTex);
+	//	ChildObj->TileMap()->SetTileSize(m_vSlice);
+	//	ChildObj->TileMap()->SetTileMapCount(1, 1);
 
-		ChildObj->Transform()->SetRelativeScale(m_vSlice.x * 1, m_vSlice.y * 1, 1.f);
-		if (NUMBER_TYPE::ITEM == m_eType)
-		{
-			ChildObj->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
-		}
-		ChildObj->Transform()->SetIgnoreParentScale(true);
-		ChildObj->TileMap()->SetTileData(0, 1);
+	//	ChildObj->Transform()->SetRelativeScale(m_vSlice.x * 1, m_vSlice.y * 1, 1.f);
+	//	if (NUMBER_TYPE::ITEM == m_eType)
+	//	{
+	//		ChildObj->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
+	//	}
+	//	ChildObj->Transform()->SetIgnoreParentScale(true);
+	//	ChildObj->TileMap()->SetTileData(0, 1);
 
-		GetOwner()->AddChild(ChildObj);
+	//	ChildObj->UpdateLayerIdx(GetOwner()->GetLayerIndex());
+	//	GetOwner()->AddChild(ChildObj);
 
-		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	//	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
-		CGameObject* test = GetOwner();
-		int i = 0;
+	//	CGameObject* test = GetOwner();
+	//	int i = 0;
 
-		//pCurScene->AddObject(ChildObj, GetOwner()->GetLayerIndex());
+	//	//pCurScene->AddObject(ChildObj, GetOwner()->GetLayerIndex());
 
-		//CSceneMgr::GetInst()->AddChild(GetOwner(), ChildObj);
+	//	//CSceneMgr::GetInst()->AddChild(GetOwner(), ChildObj);
 
-	}
+	//}
 
 
 
 }
 
-void CNumberScript::UpdateNumbber(UINT _num)
+void CNumberScript::UpdateNumber(UINT _num)
 {
+	m_iNum = _num;
+
+	vector<UINT> vTemp;
 	m_vecNum.clear();
-	CGameObject* test = GetOwner();
+	vTemp.swap(m_vecNum);
 
 	int num = _num;
 	while (num > 0)
@@ -121,13 +138,7 @@ void CNumberScript::UpdateNumbber(UINT _num)
 		num /= 10;
 	}
 
-	CGameObject* NumObj = GetOwner()->FindChildObj(L"Number");
-	if (NumObj == nullptr)
-	{
-		int i = 0; 
-		return;
-
-	}
+	CGameObject* NumObj = GetOwner();// ->FindChildObj(L"Number");
 	NumObj->TileMap()->SetTileMapCount(m_vecNum.size(), 1);
 	NumObj->Transform()->SetRelativeScale(m_vSlice.x * m_vecNum.size(), m_vSlice.y * 1, 1.f);
 
@@ -154,7 +165,7 @@ void CNumberScript::update()
 
 		m_iNum += 1;
 		UpdateNumbber(m_iNum);
-		
+
 		m_fTimer = 0.f;
 
 	}*/
