@@ -98,6 +98,8 @@ void CItemScript::start()
 
 void CItemScript::update()
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
 	// Double Clicked Situation
 	if (m_iClickedCnt >= 2)
 	{
@@ -105,7 +107,7 @@ void CItemScript::update()
 
 		CGameObject* test = GetOwner();
 
-		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
 		CLayer* pLayer = pCurScene->GetLayer(L"Player");
 		CGameObject* pPlayer = pLayer->FindObj(L"player");
 		CPlayerScript* playerScript = (CPlayerScript*)pPlayer->GetScriptByName(L"CPlayerScript");
@@ -153,22 +155,27 @@ void CItemScript::update()
 	Vec3 vInvenPos = GetOwner()->GetAncestor()->Transform()->GetRelativePos();
 
 
-	// Inventory Relative pos - Item  
-	vPos.x = -315.f + m_iInventoryIdx_col * 42.f;
-	vPos.y = 137.f + m_iInventoryIdx_row * 42.f;
-
-	if (m_bCollide_Cursor == true)
+	if (GetOwner()->GetLayerIndex() == pCurScene->GetLayer(L"Inventory")->GetLayerIdx())
 	{
-		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		CLayer* pLayer = pCurScene->GetLayer(L"Default");
-		CGameObject* pCursorObj = nullptr;
-		pCursorObj = pLayer->FindObj(L"Cursor");
-		m_Cursor_CurPos = pCursorObj->Transform()->GetRelativePos();
+		// Inventory Relative pos - Item  
+		vPos.x = -315.f + m_iInventoryIdx_col * 42.f;
+		vPos.y = 137.f + m_iInventoryIdx_row * 42.f;
 
-		vPos.x = m_Cursor_CurPos.x - vInvenPos.x;
-		vPos.y = m_Cursor_CurPos.y - vInvenPos.y;
+		if (m_bCollide_Cursor == true)
+		{
+			pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			CLayer* pLayer = pCurScene->GetLayer(L"Default");
+			CGameObject* pCursorObj = nullptr;
+			pCursorObj = pLayer->FindObj(L"Cursor");
+			m_Cursor_CurPos = pCursorObj->Transform()->GetRelativePos();
 
+			vPos.x = m_Cursor_CurPos.x - vInvenPos.x;
+			vPos.y = m_Cursor_CurPos.y - vInvenPos.y;
+
+		}
 	}
+
+	
 
 
 	GetOwner()->Transform()->SetRelativePos(vPos);
@@ -195,51 +202,73 @@ void CItemScript::OnCollisionEnter(CGameObject* _OtherObject)
 void CItemScript::OnCollision(CGameObject* _OtherObject)
 {
 	static Vec2 OnMoveItemIdx = Vec2(-1.f, -1.f);
-	// Inventory Layer 
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
-	CGameObject* pInventory = pLayer->FindObj(L"Inventory");
-	CInventoryScript* pInventoryScript = (CInventoryScript*)pInventory->GetScriptByName(L"CInventoryScript");
 
-
-
-
-
-
-	if (KEY_TAP(KEY::LBTN) && OnMoveItemIdx == Vec2(-1.f, -1.f))
+	// Cursor <-> Item 
+	if (_OtherObject->GetName() == L"Cursor")
 	{
-		OnMoveItemIdx = Vec2(m_iInventoryIdx_col, m_iInventoryIdx_row);
-		m_bCollide_Cursor = true;
-		pInventoryScript->SetMove(false);
+		// Inventory Layer 
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
+		CGameObject* pInventory = pLayer->FindObj(L"Inventory");
+		CInventoryScript* pInventoryScript = (CInventoryScript*)pInventory->GetScriptByName(L"CInventoryScript");
 
-		m_iClickedCnt++;
-	}
 
-	if (KEY_PRESSED(KEY::LBTN) && (OnMoveItemIdx == Vec2(m_iInventoryIdx_col, m_iInventoryIdx_row)))
-	{
-		m_bCollide_Cursor = true;
-		//pInventoryScript->SetMove(false);
-
-	}
-
-	if (KEY_AWAY(KEY::LBTN))
-	{
-		OnMoveItemIdx = Vec2(-1.f, -1.f);
-		m_bCollide_Cursor = false;
-		pInventoryScript->SetMove(true);
-
-		// item - item test
-		if (GetOwner()->GetName() == _OtherObject->GetName())
+		if (KEY_TAP(KEY::LBTN) && OnMoveItemIdx == Vec2(-1.f, -1.f))
 		{
-			CItemScript* pItemSCript = (CItemScript*)GetOwner()->GetScriptByName(L"CItemScript");
-			pItemSCript->AddCnt();
-			// Event - Delete 
-			CGameObject* pDelObj = _OtherObject;
-			int pDelObj_LayerIdx = _OtherObject->GetLayerIndex();
+			OnMoveItemIdx = Vec2(m_iInventoryIdx_col, m_iInventoryIdx_row);
+			m_bCollide_Cursor = true;
+			pInventoryScript->SetMove(false);
 
-			CSceneMgr::GetInst()->DeRegisterObjInLayer(pDelObj, pDelObj_LayerIdx);
-			_OtherObject->Destroy();
+			m_iClickedCnt++;
 		}
+
+		if (KEY_PRESSED(KEY::LBTN) && (OnMoveItemIdx == Vec2(m_iInventoryIdx_col, m_iInventoryIdx_row)))
+		{
+			m_bCollide_Cursor = true;
+			//pInventoryScript->SetMove(false);
+
+		}
+
+		if (KEY_AWAY(KEY::LBTN))
+		{
+			OnMoveItemIdx = Vec2(-1.f, -1.f);
+			m_bCollide_Cursor = false;
+			pInventoryScript->SetMove(true);
+
+			// item - item test
+			if (GetOwner()->GetName() == _OtherObject->GetName())
+			{
+				CItemScript* pItemSCript = (CItemScript*)GetOwner()->GetScriptByName(L"CItemScript");
+				pItemSCript->AddCnt();
+				// Event - Delete 
+				CGameObject* pDelObj = _OtherObject;
+				int pDelObj_LayerIdx = _OtherObject->GetLayerIndex();
+
+				CSceneMgr::GetInst()->DeRegisterObjInLayer(pDelObj, pDelObj_LayerIdx);
+				_OtherObject->Destroy();
+			}
+
+		}
+	}
+	
+
+	// Player <-> Item
+	if (_OtherObject->GetName() == L"player")
+	{
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
+		CGameObject* pInventory = pLayer->FindObj(L"Inventory");
+		CInventoryScript* pInventoryScript = (CInventoryScript*)pInventory->GetScriptByName(L"CInventoryScript");
+
+
+		// Item ащ╠Б 
+		if (KEY_TAP(KEY::Z))
+		{
+			pInventoryScript->PushItem(GetOwner()->GetName(), m_eType, GetOwner());
+			CSceneMgr::GetInst()->DeRegisterObjInLayer(GetOwner(), GetOwner()->GetLayerIndex());
+			//pCurScene->AddObject(GetOwner(), pLayer->GetLayerIdx());
+		}
+
 
 	}
 

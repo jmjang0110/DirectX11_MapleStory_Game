@@ -444,42 +444,65 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 		itemInven->obj = _item;
 
 		bool bFindSpot = false;
-		for (int i = 0; i < INVENTORY_ROW; ++i)
+		// 들어온 Item 이 Inventory 에 저장되어 있는지 Check 
+		map<wstring, ItemInven*>::iterator iter2 = m_Equip.begin();
+		for (; iter2 != m_Equip.end(); ++iter2)
 		{
-			for (int k = 0; k < INVENTORY_COL; ++k)
+			if (iter2->second->obj->GetName() == _name)
 			{
-				if (m_EquipSpot[i][k] == false)
+				CItemScript* pItemScrtip = (CItemScript*)iter2->second->obj->GetScriptByName(L"CItemScript");
+				if (pItemScrtip != nullptr)
 				{
-					itemInven->row = i;
-					itemInven->col = k;
-					CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
-					pscript->m_iInventoryIdx_row = i;
-					pscript->m_iInventoryIdx_col = k;
-
-					// Num 
-					CGameObject* pNum = m_pNumPrefab->Instantiate();
-					pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
-					CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
-					pNum->AddComponent((CComponent*)pNumScript);
-					pNumScript->Init(NUMBER_TYPE::ITEM);
-					pNumScript->UpdateNumber(10);
-					pNum->Deactivate();
-					_item->AddChild(pNum);
-
-					itemInven->Num = pNum;
-
-
-
-					bFindSpot = true;
-					break;
+					pItemScrtip->AddCnt();
 				}
-			}
-			if (bFindSpot == true)
+				iter2->second->num += 1;
+				bFindSpot = true;
 				break;
+			}
+		
+		}
+		if (bFindSpot == false)
+		{
+			for (int i = 0; i < INVENTORY_ROW; ++i)
+			{
+				for (int k = 0; k < INVENTORY_COL; ++k)
+				{
+					if (m_EquipSpot[i][k] == false)
+					{
+						itemInven->row = i;
+						itemInven->col = k;
+						CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
+						pscript->m_iInventoryIdx_row = i;
+						pscript->m_iInventoryIdx_col = k;
+
+						// Num 
+						CGameObject* pNum = m_pNumPrefab->Instantiate();
+						pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
+						CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
+						pNum->AddComponent((CComponent*)pNumScript);
+						pNumScript->Init(NUMBER_TYPE::ITEM);
+						pNumScript->UpdateNumber(10);
+						pNum->Deactivate();
+						_item->AddChild(pNum);
+
+						itemInven->Num = pNum;
+
+
+
+						bFindSpot = true;
+						break;
+					}
+				}
+				if (bFindSpot == true)
+					break;
+		}
+		
+
+			m_Equip.insert(make_pair(_name, itemInven));
+		
 		}
 
 
-		m_Equip.insert(make_pair(_name, itemInven));
 
 	}
 	break;
@@ -487,42 +510,65 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 	{
 		ItemInven* itemInven = new ItemInven;
 		itemInven->obj = _item;
+		
 
 		bool bFindSpot = false;
-		for (int i = 0; i < INVENTORY_ROW; ++i)
+		// 들어온 Item 이 Inventory 에 저장되어 있는지 Check 
+		map<wstring, ItemInven*>::iterator iter2 = m_Consume.begin();
+		for (; iter2 != m_Consume.end(); ++iter2)
 		{
-			for (int k = 0; k < INVENTORY_COL; ++k)
+			if (iter2->second->obj->GetName() == _name)
 			{
-				if (m_ConsumeSpot[i][k] == false)
+				CItemScript* pItemScrtip = (CItemScript*)iter2->second->obj->GetScriptByName(L"CItemScript");
+				if (pItemScrtip != nullptr)
 				{
-					itemInven->row = i;
-					itemInven->col = k;
-					CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
-					pscript->SetCnt(10);
-					pscript->m_iInventoryIdx_row = i;
-					pscript->m_iInventoryIdx_col = k;
-
-					// Num 
-					CGameObject* pNum = m_pNumPrefab->Instantiate();
-					pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
-					CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
-					pNum->AddComponent((CComponent*)pNumScript);
-					pNumScript->Init(NUMBER_TYPE::ITEM);
-					pNumScript->UpdateNumber(10);
-					pNum->Deactivate();
-					_item->AddChild(pNum);
-
-					itemInven->Num = pNum;
-					bFindSpot = true;
-					break;
+					pItemScrtip->AddCnt();
 				}
-			}
-			if (bFindSpot == true)
+				iter2->second->num += 1;
+				bFindSpot = true;
 				break;
+			}
+
+		}
+
+		if (bFindSpot == false)
+		{
+			for (int i = 0; i < INVENTORY_ROW; ++i)
+			{
+				for (int k = 0; k < INVENTORY_COL; ++k)
+				{
+					if (m_ConsumeSpot[i][k] == false)
+					{
+						itemInven->row = i;
+						itemInven->col = k;
+						CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
+						pscript->SetCnt(10);
+						pscript->m_iInventoryIdx_row = i;
+						pscript->m_iInventoryIdx_col = k;
+
+						// Num 
+						CGameObject* pNum = m_pNumPrefab->Instantiate();
+						pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
+						CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
+						pNum->AddComponent((CComponent*)pNumScript);
+						pNumScript->Init(NUMBER_TYPE::ITEM);
+						pNumScript->UpdateNumber(10);
+						pNum->Deactivate();
+						_item->AddChild(pNum);
+
+						itemInven->Num = pNum;
+						bFindSpot = true;
+						break;
+					}
+				}
+				if (bFindSpot == true)
+					break;
+			}
+
+			m_Consume.insert(make_pair(_name, itemInven));
 		}
 
 
-		m_Consume.insert(make_pair(_name, itemInven));
 	}
 	break;
 	case ITEM_TYPE::ETC:
@@ -531,6 +577,23 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 		itemInven->obj = _item;
 
 		bool bFindSpot = false;
+		// 들어온 Item 이 Inventory 에 저장되어 있는지 Check 
+		map<wstring, ItemInven*>::iterator iter2 = m_Etc.begin();
+		for (; iter2 != m_Etc.end(); ++iter2)
+		{
+			if (iter2->second->obj->GetName() == _name)
+			{
+				CItemScript* pItemScrtip = (CItemScript*)iter2->second->obj->GetScriptByName(L"CItemScript");
+				if (pItemScrtip != nullptr)
+				{
+					pItemScrtip->AddCnt();
+				}
+				iter2->second->num += 1;
+				bFindSpot = true;
+				break;
+			}
+
+		}
 		for (int i = 0; i < INVENTORY_ROW; ++i)
 		{
 			for (int k = 0; k < INVENTORY_COL; ++k)

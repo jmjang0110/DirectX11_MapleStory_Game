@@ -65,6 +65,7 @@ private:
     class CButtonScript* m_pEtcBtnScript;
 
 private:
+    // Check Empty
     bool m_EquipSpot[INVENTORY_ROW][INVENTORY_COL] = { false, };          // false : empty / true : Exist
     bool m_ConsumeSpot[INVENTORY_ROW][INVENTORY_COL] = { false, };
     bool m_EtcSpot[INVENTORY_ROW][INVENTORY_COL] = { false, };
