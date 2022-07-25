@@ -423,6 +423,7 @@ float4 PS_Std2D_NO_DEPTH(VTX_OUT _in) : SV_Target
 }
 
 
+// todo ==========
 // ================
 // Empty2D Shader
 // - for Render Nothing
@@ -442,6 +443,31 @@ float4 PS_Empty2D(VTX_OUT _in) : SV_Target
     
     discard;
         
+    return vOutColor;
+}
+
+
+
+// ==================
+// Just Draw Rectangle Shader
+// ==================
+VTX_OUT VS_Rectangle2D(VTX_IN _in)
+{
+    VTX_OUT output = (VTX_OUT) 0.f;
+    
+    output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
+    output.vUV = _in.vUV;
+    
+    return output;
+}
+
+
+float4 PS_Rectangle2D(VTX_OUT _in) : SV_Target
+{
+    float4 vOutColor = (float4) 0.f;
+      
+    vOutColor = float4(0.f, 0.f, 1.f, 1.f);
+
     return vOutColor;
 }
 

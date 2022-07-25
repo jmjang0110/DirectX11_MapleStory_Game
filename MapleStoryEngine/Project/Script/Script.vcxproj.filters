@@ -124,6 +124,9 @@
     <Filter Include="Script\03. Object\Wall">
       <UniqueIdentifier>{25879a9b-8740-4cd8-986b-2ffc15b4ed70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\03. Object\Ground\CreateMobGround">
+      <UniqueIdentifier>{d953ed75-bba3-46ca-862a-89d07620fd0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -245,6 +248,9 @@
     <ClInclude Include="CWallScript.h">
       <Filter>Script\03. Object\Wall</Filter>
     </ClInclude>
+    <ClInclude Include="CMobGroundScript.h">
+      <Filter>Script\03. Object\Ground\CreateMobGround</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -365,6 +371,9 @@
     </ClCompile>
     <ClCompile Include="CWallScript.cpp">
       <Filter>Script\03. Object\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="CMobGroundScript.cpp">
+      <Filter>Script\03. Object\Ground\CreateMobGround</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

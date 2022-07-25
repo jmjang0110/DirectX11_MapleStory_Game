@@ -40,7 +40,7 @@ CGameObject::CGameObject(const CGameObject& _origin)
 	, m_bDynamicShadow(false)
 	, m_bFrustumCulling(false)
 {
-	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
+ 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		if (nullptr != _origin.m_arrCom[i])
 		{
@@ -209,7 +209,7 @@ void CGameObject::deactive()
 	for (UINT i = 1; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		if (nullptr != m_arrCom[i])
-			m_arrCom[i]->deactive();
+		m_arrCom[i]->deactive();
 	}
 
 	for (size_t i = 0; i < m_vecScript.size(); ++i)

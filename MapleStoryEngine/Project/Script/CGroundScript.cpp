@@ -193,8 +193,18 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 			Vec3 vColPos = _OtherObject->Collider2D()->GetWorldPos();
 			Vec2 vColScale = _OtherObject->Collider2D()->GetOffsetScale();
 
-			ObjLine.p2.x += 20.f;
-			ObjLine.p1.x -= 20.f;
+
+			if (fRadian <= 20.f)
+			{
+				ObjLine.p2.x += 50.f;
+				ObjLine.p1.x -= 50.f;
+			}
+			else 
+			{
+				ObjLine.p2.x += 30.f;
+				ObjLine.p1.x -= 30.f;
+			}
+
 
 			if (LineInterSection(ObjLine, GroundLine) == false)
 				return;
@@ -332,8 +342,8 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 		GroundLine.p2.x += fLen * Normal.x;
 		GroundLine.p2.y += fLen * Normal.y;
 
-			ObjLine.p2.x += 10.f;
-			ObjLine.p1.x -= 10.f;
+		ObjLine.p2.x += 40.f;
+		ObjLine.p1.x -= 40.f;
 
 		if (LineInterSection(ObjLine, GroundLine))
 		{

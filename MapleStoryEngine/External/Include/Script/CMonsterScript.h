@@ -30,29 +30,41 @@ class CMonsterScript :
     public CScript
 {
 private:
-    class CAIScript*    m_pAI;
+    class CAIScript* m_pAI;
     tMonsterInfo        m_tInfo;
-    MONSTER_DIRECTION   m_eDir;
-    MONSTER_DIRECTION   m_ePrevDir;
 
-    MONSTER_STATE       m_ePrevStateType;
+
+    // cur
     MONSTER_STATE       m_eCurStateType;
+    MONSTER_DIRECTION   m_eDir;
+    Vec3                m_vCurPos;
+
+    // Prev 
+    MONSTER_STATE       m_ePrevStateType;
+    MONSTER_DIRECTION   m_ePrevDir;
+    Vec3                m_vPrevPos;
 
   
 private:
     int             m_iHitCnt;
+    bool            m_bAttackEnd;
+    bool            m_bDie;
+
 
     float           m_fDiff_Between_Ground;
-    Vec3            m_vPrevPos;
-
-
-
+ 
 public:
     float               GetSpeed() { return m_tInfo.fSpeed; }
     MONSTER_DIRECTION   GetDir() { return m_eDir; }
     tMonsterInfo        GetMonsterInfo() { return m_tInfo; }
+    bool                GetAttackEnd() { return m_bAttackEnd; }
+    void                SetPrevPos(Vec3 _prevPos) { m_vPrevPos = _prevPos; }
 
-private:
+public:
+    void SetDiffBetweenGround(float _fDiff) { m_fDiff_Between_Ground = _fDiff; }
+    float GetDiffBetweenGround() { return m_fDiff_Between_Ground; }
+
+public:
     void    SetSpeed(float _f) { m_tInfo.fSpeed = _f; }
     void    SetAIScript(class CAIScript* _pAI) { m_pAI = _pAI; }
     void    SetMonsterInfo(const tMonsterInfo& _info) { m_tInfo = _info; }
@@ -62,11 +74,6 @@ private:
 public:
 
     Vec3 GetPrevPos() { return m_vPrevPos; }
-
-
-public:
-    void SetDiffBetweenGround(float _fDiff) { m_fDiff_Between_Ground = _fDiff; }
-    float GetDiffBetweenGround() { return m_fDiff_Between_Ground; }
 
 public:
     virtual void start();

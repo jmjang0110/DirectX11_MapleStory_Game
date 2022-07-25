@@ -58,6 +58,17 @@ void CPatrolStateScript::Enter()
 
 	}
 
+
+	CMonsterScript* pMobScript = (CMonsterScript*)GetOwner()->GetScriptByName(L"CMonsterScript");
+	if (pMobScript != nullptr)
+	{
+		if (m_iDir == -1)
+			pMobScript->SetDir(MONSTER_DIRECTION::LEFT);
+		else if (m_iDir == 1)
+			pMobScript->SetDir(MONSTER_DIRECTION::RIGHT);
+
+	}
+
 }
 
 void CPatrolStateScript::Exit()
@@ -109,6 +120,43 @@ void CPatrolStateScript::update()
 
 		// Monster <-> player ( out of Range )
 		if (fLen < tBossInfo.fRecogRange)
+		{
+			// Change State 
+			GetAI()->ChangeState(MONSTER_STATE::TRACE);
+		}
+
+	}
+
+
+	// Mob  Patrol
+	CMonsterScript* pMobScript = (CMonsterScript*)GetOwner()->GetScriptByName(L"CMonsterScript");
+	if (pMobScript != nullptr)
+	{
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		CLayer* pLayer = pCurScene->GetLayer(L"Player");
+		CGameObject* pPlayer = pLayer->FindObj(L"player");
+
+		tMonsterInfo tMobInfo = pMobScript->GetMonsterInfo();
+		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+
+		float fMove = DT * tMobInfo.fSpeed;
+		vPos.x += fMove * m_iDir;
+		m_fMove += fMove; // ´©Àû 
+
+		GetOwner()->Transform()->SetRelativePos(vPos);
+
+
+		// Calculate Diff -  Monster <-> player 
+		Vec3 vPlayerPos = pPlayer->Transform()->GetRelativePos();
+		Vec2 vDiff = Vec2(vPlayerPos.x - vPos.x, vPlayerPos.y - vPos.y);
+		float fLen = vDiff.Length();
+
+		if (pMobScript == nullptr)
+			return;
+
+
+		// Monster <-> player ( out of Range )
+		if (fLen < tMobInfo.fRecogRange)
 		{
 			// Change State 
 			GetAI()->ChangeState(MONSTER_STATE::TRACE);

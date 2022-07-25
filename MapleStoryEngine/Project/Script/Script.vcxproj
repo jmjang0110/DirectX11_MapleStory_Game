@@ -196,6 +196,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CLaunchSkillScript.h" />
     <ClInclude Include="CMainBarScript.h" />
     <ClInclude Include="CMissileScript.h" />
+    <ClInclude Include="CMobGroundScript.h" />
     <ClInclude Include="CMonsterFactoryScript.h" />
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMpScript.h" />
@@ -239,6 +240,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CLaunchSkillScript.cpp" />
     <ClCompile Include="CMainBarScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
+    <ClCompile Include="CMobGroundScript.cpp" />
     <ClCompile Include="CMonsterFactoryScript.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMpScript.cpp" />

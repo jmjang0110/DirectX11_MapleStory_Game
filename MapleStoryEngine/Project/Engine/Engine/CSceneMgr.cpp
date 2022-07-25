@@ -114,6 +114,16 @@ void CSceneMgr::DeRegisterObjInLayer(CGameObject* _pDeObj, int _LayerIdx)
 	CEventMgr::GetInst()->AddEvent(info);
 
 }
+void CSceneMgr::RegisterObhInLayer(CGameObject* _pObj, int _LayerIdx)
+{
+	tEventInfo info = {};
+	info.eType = EVENT_TYPE::REGISTER_OBJ_IN_LAYER;
+	info.lParam = (DWORD_PTR)_pObj;
+	info.wParam = (DWORD_PTR)_LayerIdx;
+
+	CEventMgr::GetInst()->AddEvent(info);
+
+}
 void CSceneMgr::SwapLayer(int _Lidx, int _Ridx)
 {
 	tEventInfo info = {};

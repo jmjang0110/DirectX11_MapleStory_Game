@@ -22,6 +22,7 @@ CItemScript
 CLaunchSkillScript
 CMainBarScript
 CMissileScript
+CMobGroundScript
 CMonsterFactoryScript
 CMonsterScript
 CMpScript

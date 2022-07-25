@@ -316,6 +316,16 @@ void CResMgr::CreateEngineShader()
 
 	AddRes<CGraphicsShader>(L"Collider2DShader", pShader, true);
 
+	// Rectangle 2D Shgader 
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"Shader\\std2d.fx", "VS_Rectangle2D");
+	pShader->CreatePixelShader(L"Shader\\std2d.fx", "PS_Rectangle2D");
+
+	pShader->SetShaderDomain(SHADER_DOMAIN::DOMAIN_TRANSLUCENT);
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+	AddRes<CGraphicsShader>(L"Rectangle2DShader", pShader, true);
+
 
 	// Particle Render Shader
 	pShader = new CGraphicsShader;
@@ -369,6 +379,10 @@ void CResMgr::CreateEngineMaterial()
 	wstring strMtrlFoler = L"material\\";
 
 	CMaterial* pMtrl = nullptr;
+	// Rectangle2D Mtrl 
+	pMtrl = new CMaterial;
+	pMtrl->SetShader(FindRes<CGraphicsShader>(L"Rectangle2DShader"));
+	AddRes<CMaterial>(L"material\\Rectangle2DMtrl.mtrl", pMtrl);
 
 	// Std2DMtrl 생성
 	pMtrl = new CMaterial;

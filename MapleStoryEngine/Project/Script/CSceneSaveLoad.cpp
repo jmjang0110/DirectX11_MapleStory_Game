@@ -162,6 +162,7 @@ CGameObject* CSceneSaveLoad::LoadGameObject(FILE* _pFile)
     {
         wstring strScriptName;
         LoadWStringFromFile(strScriptName, _pFile);
+
         CScript* pLoadScript = CScriptMgr::GetScript(strScriptName);
         pLoadObj->AddComponent(pLoadScript);
         pLoadScript->LoadFromScene(_pFile);

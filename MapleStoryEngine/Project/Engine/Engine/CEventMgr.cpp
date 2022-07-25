@@ -190,6 +190,20 @@ void CEventMgr::update()
 		}
 		break;
 
+		case EVENT_TYPE::REGISTER_OBJ_IN_LAYER:
+		{
+			// lParam : Obj Adress, WParam : Layer Index
+			CGameObject* pObject = (CGameObject*)m_vecEvent[i].lParam;
+			int iLayerIdx = (int)m_vecEvent[i].wParam;
+
+			pObject->UpdateLayerIdx(iLayerIdx);
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->GetLayer(iLayerIdx)->RegisterObjectAsRoot(pObject);
+			m_bObjEvn = true;
+		}
+		break;
+
+
 		case EVENT_TYPE::SWAP_LAYER:
 		{
 			// lParam : Left Layer Index, WParam : Right Layer Index

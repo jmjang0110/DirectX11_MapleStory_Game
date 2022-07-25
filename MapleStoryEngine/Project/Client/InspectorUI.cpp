@@ -641,7 +641,9 @@ void InspectorUI::GameObjectTool_SubFunc()
 			wstring FullPath = strContent + wstrResKey;
 
 			CPrefab* pPref = new CPrefab;;// (pProtoObj);
-			pPref->SetProto(m_pTargetObject->Clone());
+			CGameObject* pCloneObj = m_pTargetObject->Clone();
+
+			pPref->SetProto(pCloneObj);
 
 			// Prefab Ãß°¡
 			if (nullptr == CResMgr::GetInst()->FindRes<CPrefab>(wstrResKey))

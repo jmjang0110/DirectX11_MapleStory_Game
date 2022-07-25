@@ -83,6 +83,8 @@ public:
     void    SetMonsterInfo(const tBossMonInfo& _info) { m_tInfo = _info; }
     void    SetDir(BOSS_DIRECTION _dir) { m_eDir = _dir; }
     void    SetBossAttState(BOSS_ATTACK_STATE _estate) { m_eAttackState = _estate; }
+
+
 public:
     virtual void start();
     virtual void update();

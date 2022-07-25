@@ -18,6 +18,7 @@
 #include <Engine/CAnimator2D.h>
 #include <Engine/CAnimation2D.h>
 #include <Engine/CPrefab.h>
+#include <Engine/CCollider2D.h>
 
 
 #include "CSceneSaveLoad.h"
@@ -29,7 +30,7 @@
 
 CCloudScript::CCloudScript()
 	: CScript((int)SCRIPT_TYPE::CLOUDSCRIPT)
-	, m_fSpeed(50.f)
+	, m_fSpeed(100.f)
 	, m_vStartPos(Vec3(1000.f, 0.f, 0.f))
 	, m_vEndPos(Vec3(0.f, 0.f, 0.f))
 	, m_dir(-1)
@@ -56,7 +57,20 @@ CCloudScript::~CCloudScript()
 
 void CCloudScript::start()
 {
-	GetOwner()->Transform()->SetRelativePos(m_vStartPos);
+	CLayer* pLayer = CSceneMgr::GetInst()->GetCurScene()->GetLayer(L"Default2");
+	CGameObject* pObj = pLayer->FindObj(L"MapSize");
+
+	Vec3 vScale = pObj->Collider2D()->GetWorldScale();
+	Vec3 vCenter = pObj->Collider2D()->GetWorldPos();
+	Vec3 CloudScale = GetOwner()->Transform()->GetWorldScale();
+
+
+
+	m_vStartPos.x = vCenter.x + (vScale.x / 2) + CloudScale.x;
+	m_vStartPos.y = rand() % 1000;
+
+	m_vEndPos = m_vStartPos;
+	m_vEndPos.x = vCenter.x - (vScale.x / 2) - CloudScale.x;
 
 }
 

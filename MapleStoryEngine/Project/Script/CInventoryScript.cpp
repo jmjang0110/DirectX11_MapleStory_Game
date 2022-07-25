@@ -120,29 +120,25 @@ void CInventoryScript::start()
 	pPrefab2 = new CPrefab;
 	pPrefab2->Load(FullPath);
 
-
-
-
 	// test portion obj 
 	CGameObject* pObj = pPrefab2->Instantiate();
-	CItemScript* pItemScript = (CItemScript*)CScriptMgr::GetScript(L"CItemScript");
-	pObj->AddComponent((CComponent*)pItemScript);
+	//pObj->Transform()->SetIgnoreParentScale(true);
+	//CItemScript* pItemScript = (CItemScript*)CScriptMgr::GetScript(L"CItemScript");
+	//pObj->AddComponent((CComponent*)pItemScript);
 
-	pItemScript->setItemType(ITEM_TYPE::CONSUME, CONSUME_TYPE::HP);
-	pItemScript->SetHpRaise(10000.f);
-	pItemScript->SetMpRaise(10000.f);
+	//pItemScript->setItemType(ITEM_TYPE::CONSUME, CONSUME_TYPE::HP);
+	//pItemScript->SetHpRaise(10000.f);
+	//pItemScript->SetMpRaise(10000.f);
 
-	pObj->Deactivate();
-
-
-
+	//pObj->Deactivate();
 
 
-
-
-	PushItem(L"TestPortion", ITEM_TYPE::CONSUME, pObj);
+	PushItem(L"RedPortion", ITEM_TYPE::CONSUME, pObj);
 
 	SAFE_DELETE(pPrefab2);
+
+
+	Make_Prefab_Portion_Test();
 
 }
 
@@ -316,6 +312,8 @@ void CInventoryScript::OnCollisionExit(CGameObject* _OtherObject)
 
 void CInventoryScript::ShowEquip(DWORD_PTR _param)
 {
+	m_eEnabledTabType = ITEM_TYPE::EQUIP;
+
 	m_pEquipBtnScript->SetEnable(true);
 	m_pConsumeBtnScript->SetEnable(false);
 	m_pEtcBtnScript->SetEnable(false);
@@ -346,6 +344,8 @@ void CInventoryScript::ShowEquip(DWORD_PTR _param)
 
 void CInventoryScript::ShowConsume(DWORD_PTR _param)
 {
+	m_eEnabledTabType = ITEM_TYPE::CONSUME;
+
 	m_pEquipBtnScript->SetEnable(false);
 	m_pConsumeBtnScript->SetEnable(true);
 	m_pEtcBtnScript->SetEnable(false);
@@ -376,6 +376,9 @@ void CInventoryScript::ShowConsume(DWORD_PTR _param)
 
 void CInventoryScript::ShowEtc(DWORD_PTR _param)
 {
+	m_eEnabledTabType = ITEM_TYPE::ETC;
+
+
 	m_pEquipBtnScript->SetEnable(false);
 	m_pConsumeBtnScript->SetEnable(false);
 	m_pEtcBtnScript->SetEnable(true);
@@ -405,6 +408,8 @@ void CInventoryScript::ShowEtc(DWORD_PTR _param)
 
 void CInventoryScript::ShowOffAllItem()
 {
+	m_eEnabledTabType = ITEM_TYPE::NONE;
+
 	m_pEquipBtnScript->SetEnable(false);
 	m_pConsumeBtnScript->SetEnable(false);
 	m_pEtcBtnScript->SetEnable(false);
@@ -433,8 +438,22 @@ void CInventoryScript::ShowOffAllItem()
 
 }
 
+
+
 void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _item)
 {
+	if (m_eEnabledTabType == ITEM_TYPE::NONE)
+		_item->Deactivate();
+
+	if (m_eEnabledTabType == _type)
+		_item->Activate();
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+	//pCurScene->AddObject(_item, L"Inventory");					
+	CSceneMgr::GetInst()->RegisterObhInLayer(_item, pCurScene->GetLayer(L"Inventory")->GetLayerIdx());	// Event 
+	CSceneMgr::GetInst()->AddChild(GetOwner(), _item);													// Event 
+
 
 	switch (_type)
 	{
@@ -469,19 +488,26 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 				{
 					if (m_EquipSpot[i][k] == false)
 					{
+						m_EquipSpot[i][k] = true;
+
 						itemInven->row = i;
 						itemInven->col = k;
 						CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
 						pscript->m_iInventoryIdx_row = i;
 						pscript->m_iInventoryIdx_col = k;
 
+						_item->Transform()->SetRelativePos(m_vStartPos.x + k * m_vInterval.x,
+							m_vStartPos.y + i * m_vInterval.y, -1.f);
+
 						// Num 
 						CGameObject* pNum = m_pNumPrefab->Instantiate();
+						pNum->UpdateLayerIdx(_item->GetLayerIndex());
+
 						pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
 						CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
 						pNum->AddComponent((CComponent*)pNumScript);
 						pNumScript->Init(NUMBER_TYPE::ITEM);
-						pNumScript->UpdateNumber(10);
+						pNumScript->UpdateNumber(1);
 						pNum->Deactivate();
 						_item->AddChild(pNum);
 
@@ -539,20 +565,26 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 				{
 					if (m_ConsumeSpot[i][k] == false)
 					{
+						m_ConsumeSpot[i][k] = true;
+
 						itemInven->row = i;
 						itemInven->col = k;
 						CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
-						pscript->SetCnt(10);
+						pscript->SetCnt(1);
 						pscript->m_iInventoryIdx_row = i;
 						pscript->m_iInventoryIdx_col = k;
 
+						_item->Transform()->SetRelativePos(m_vStartPos.x + k * m_vInterval.x,
+							m_vStartPos.y + i * m_vInterval.y, -1.f);
 						// Num 
 						CGameObject* pNum = m_pNumPrefab->Instantiate();
+						pNum->UpdateLayerIdx(_item->GetLayerIndex());
+
 						pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
 						CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
 						pNum->AddComponent((CComponent*)pNumScript);
 						pNumScript->Init(NUMBER_TYPE::ITEM);
-						pNumScript->UpdateNumber(10);
+						pNumScript->UpdateNumber(1);
 						pNum->Deactivate();
 						_item->AddChild(pNum);
 
@@ -600,14 +632,21 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 			{
 				if (m_EtcSpot[i][k] == false)
 				{
+					m_EtcSpot[i][k] = true;
+
 					itemInven->row = i;
 					itemInven->col = k;
 					CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
 					pscript->m_iInventoryIdx_row = i;
 					pscript->m_iInventoryIdx_col = k;
 
+					_item->Transform()->SetRelativePos(m_vStartPos.x + k * m_vInterval.x,
+						m_vStartPos.y + i * m_vInterval.y, -1.f);
+
 					// Num 
 					CGameObject* pNum = m_pNumPrefab->Instantiate();
+					pNum->UpdateLayerIdx(_item->GetLayerIndex());
+
 					pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
 					CNumberScript* pNumScript = (CNumberScript*)CScriptMgr::GetScript(L"CNumberScript");
 					pNum->AddComponent((CComponent*)pNumScript);
@@ -633,12 +672,6 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 	}
 
 
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-
-	pCurScene->AddObject(_item, L"Inventory");
-	_item->UpdateLayerIdx(GetOwner()->GetLayerIndex());
-
-	CSceneMgr::GetInst()->AddChild(GetOwner(), _item);
 }
 
 void CInventoryScript::Show(bool _b)
@@ -737,6 +770,112 @@ void CInventoryScript::DeleteItem(ITEM_TYPE _Type, int row, int col)
 
 	}
 }
+
+void CInventoryScript::Make_Prefab_Portion_Test()
+{
+	// Blue Portion 
+	CPrefab*	pPrefab2 = nullptr;
+	wstring		strPrefabKey = L"prefab\\BluePortion.pref";
+	wstring		strContent = CPathMgr::GetInst()->GetContentPath();
+	wstring		FullPath = strContent + strPrefabKey;
+	pPrefab2 = new CPrefab;
+	pPrefab2->Load(FullPath);
+
+	CGameObject* pObj = pPrefab2->Instantiate();
+	
+
+	PushItem(L"BluePortion", ITEM_TYPE::CONSUME, pObj);
+	SAFE_DELETE(pPrefab2);
+
+
+	// OrangePortion
+	pPrefab2 = nullptr;
+	strPrefabKey = L"prefab\\OrangePortion.pref";
+	strContent = CPathMgr::GetInst()->GetContentPath();
+	FullPath = strContent + strPrefabKey;
+
+	pPrefab2 = new CPrefab;
+	pPrefab2->Load(FullPath);
+
+	// test portion obj 
+	pObj = pPrefab2->Instantiate();
+	
+
+	//pObj->Deactivate();
+	PushItem(L"OrangePortion", ITEM_TYPE::CONSUME, pObj);
+	SAFE_DELETE(pPrefab2);
+
+
+	// WhitePortion
+	pPrefab2 = nullptr;
+	strPrefabKey = L"prefab\\WhitePortion.pref";
+	strContent = CPathMgr::GetInst()->GetContentPath();
+	FullPath = strContent + strPrefabKey;
+
+	pPrefab2 = new CPrefab;
+	pPrefab2->Load(FullPath);
+
+	// test portion obj 
+	pObj = pPrefab2->Instantiate();
+
+
+	//pObj->Deactivate();
+	PushItem(L"WhitePortion", ITEM_TYPE::CONSUME, pObj);
+	SAFE_DELETE(pPrefab2);
+
+	// ExilirPortion
+	pPrefab2 = nullptr;
+	strPrefabKey = L"prefab\\ElixirPortion.pref";
+	strContent = CPathMgr::GetInst()->GetContentPath();
+	FullPath = strContent + strPrefabKey;
+
+	pPrefab2 = new CPrefab;
+	pPrefab2->Load(FullPath);
+
+	// test portion obj 
+	pObj = pPrefab2->Instantiate();
+	
+
+	//pObj->Deactivate();
+	PushItem(L"ElixirPortion", ITEM_TYPE::CONSUME, pObj);
+	SAFE_DELETE(pPrefab2);
+
+	// PowerExilirPortion
+	pPrefab2 = nullptr;
+	strPrefabKey = L"prefab\\PowerElixirPortion.pref";
+	strContent = CPathMgr::GetInst()->GetContentPath();
+	FullPath = strContent + strPrefabKey;
+
+	pPrefab2 = new CPrefab;
+	pPrefab2->Load(FullPath);
+
+	// test portion obj 
+	pObj = pPrefab2->Instantiate();
+	
+	//pObj->Deactivate();
+	PushItem(L"PowerElixirPortion", ITEM_TYPE::CONSUME, pObj);
+	SAFE_DELETE(pPrefab2);
+
+
+	// MpExilirPortion
+	pPrefab2 = nullptr;
+	strPrefabKey = L"prefab\\MpElixirPortion.pref";
+	strContent = CPathMgr::GetInst()->GetContentPath();
+	FullPath = strContent + strPrefabKey;
+
+	pPrefab2 = new CPrefab;
+	pPrefab2->Load(FullPath);
+
+	// test portion obj 
+	pObj = pPrefab2->Instantiate();
+	
+
+	//pObj->Deactivate();
+	PushItem(L"MpElixirPortion", ITEM_TYPE::CONSUME, pObj);
+	SAFE_DELETE(pPrefab2);
+}
+
+
 
 //void CInventoryScript::RegisterEquip()
 //{

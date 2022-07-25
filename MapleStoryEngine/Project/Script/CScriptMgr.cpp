@@ -25,6 +25,7 @@
 #include "CLaunchSkillScript.h"
 #include "CMainBarScript.h"
 #include "CMissileScript.h"
+#include "CMobGroundScript.h"
 #include "CMonsterFactoryScript.h"
 #include "CMonsterScript.h"
 #include "CMpScript.h"
@@ -65,6 +66,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CLaunchSkillScript");
 	_vec.push_back(L"CMainBarScript");
 	_vec.push_back(L"CMissileScript");
+	_vec.push_back(L"CMobGroundScript");
 	_vec.push_back(L"CMonsterFactoryScript");
 	_vec.push_back(L"CMonsterScript");
 	_vec.push_back(L"CMpScript");
@@ -130,6 +132,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CMainBarScript;
 	if (L"CMissileScript" == _strScriptName)
 		return new CMissileScript;
+	if (L"CMobGroundScript" == _strScriptName)
+		return new CMobGroundScript;
 	if (L"CMonsterFactoryScript" == _strScriptName)
 		return new CMonsterFactoryScript;
 	if (L"CMonsterScript" == _strScriptName)
@@ -234,6 +238,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::MISSILESCRIPT:
 		return new CMissileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::MOBGROUNDSCRIPT:
+		return new CMobGroundScript;
 		break;
 	case (UINT)SCRIPT_TYPE::MONSTERFACTORYSCRIPT:
 		return new CMonsterFactoryScript;
@@ -376,6 +383,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::MISSILESCRIPT:
 		return L"CMissileScript";
+		break;
+
+	case SCRIPT_TYPE::MOBGROUNDSCRIPT:
+		return L"CMobGroundScript";
 		break;
 
 	case SCRIPT_TYPE::MONSTERFACTORYSCRIPT:

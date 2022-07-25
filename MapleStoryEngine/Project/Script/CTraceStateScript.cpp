@@ -85,10 +85,10 @@ void CTraceStateScript::update()
 		Vec2 vDiff = Vec2(vPlayerPos.x - vMonsterPos.x, vPlayerPos.y - vMonsterPos.y);
 		float fLen = vDiff.Length();
 
-
 		tMonsterInfo tMonInfo = pMonScript->GetMonsterInfo();
 
 		// Move 
+		vDiff.Normalize();
 		Vec2 vMove = vDiff * DT * tMonInfo.fSpeed;
 		vMonsterPos.x += vMove.x;
 		GetOwner()->Transform()->SetRelativePos(vMonsterPos);
@@ -113,8 +113,7 @@ void CTraceStateScript::update()
 		Vec2 vDiff = Vec2(vPlayerPos.x - vBossPos.x, vPlayerPos.y - vBossPos.y);
 		float fLen = vDiff.Length();
 
-		if (pBossScript == nullptr)
-			return;
+
 		tBossMonInfo tBossInfo = pBossScript->GetMonsterInfo();
 
 		// Move 

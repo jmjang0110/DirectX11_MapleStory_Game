@@ -82,6 +82,9 @@ public:
     virtual void OnCollision(CGameObject* _OtherObject) override;
     virtual void OnCollisionExit(CGameObject* _OtherObject) override;
 
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
 
 
     CLONE(CItemScript);

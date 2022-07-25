@@ -24,6 +24,7 @@ public:
 	// ===== Todo =====
 	void DestroyObject(CGameObject* _pDestroyObject);
 	void DeRegisterObjInLayer(CGameObject* _pDeObj, int _LayerIdx);
+	void RegisterObhInLayer(CGameObject* _pObj, int _LayerIdx);
 	void SwapLayer(int _Lidx, int _Ridx);
 	//===== ===== =====
 	void AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject);	

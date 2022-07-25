@@ -10,6 +10,17 @@
 class CMonsterFactoryScript :
     public CScript
 {
+    wstring         m_wCurSceneName;
+
+    map<wstring, CPrefab*> m_MapPrefabMob;
+
+
+public:
+    void ChangeScene(wstring CurSceneName);
+    void AddPrefabMob(CPrefab* _prefabMob) { m_MapPrefabMob.insert(make_pair(_prefabMob->GetName(), _prefabMob)); }
+
+    void CreateMonster(int _cnt, wstring _MobName, class CMobGroundScript* _script);
+    int GetRandomNum(float _min, float _max);
 
 
 

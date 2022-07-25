@@ -32,6 +32,9 @@ CItemScript::CItemScript()
 	, m_Cursor_PrevDiff(Vec3(0.f, 0.f, 0.f))
 	, m_bCollide_Cursor(false)
 	, m_iCnt(0)
+	, m_eType(ITEM_TYPE::NONE)
+	, m_Consume_Type(CONSUME_TYPE::NONE)
+
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -41,19 +44,22 @@ CItemScript::CItemScript()
 
 CItemScript::CItemScript(const CItemScript& _origin)
 	: CScript((int)SCRIPT_TYPE::ITEMSCRIPT)
-	, m_iClickedCnt(0)
-	, m_fHpRaise(0.f)
-	, m_fMpRaise(0.f)
-	, m_fAttackRaise(0.f)
-	, m_fTimer(0.f)
-	, m_iInventoryIdx_row(-1)
-	, m_iInventoryIdx_col(-1)
-	, m_Cursor_StartPos(Vec3(0.f, 0.f, 0.f))
-	, m_Cursor_Diff(Vec3(0.f, 0.f, 0.f))
-	, m_Cursor_CurPos(Vec3(0.f, 0.f, 0.f))
-	, m_Cursor_PrevDiff(Vec3(0.f, 0.f, 0.f))
-	, m_bCollide_Cursor(false)
-	, m_iCnt(0)
+	, m_iClickedCnt(_origin.m_iClickedCnt)
+	, m_fHpRaise(_origin.m_fHpRaise)
+	, m_fMpRaise(_origin.m_fMpRaise)
+	, m_fAttackRaise(_origin.m_fAttackRaise)
+	, m_fTimer(_origin.m_fTimer)
+	, m_iInventoryIdx_row(_origin.m_iInventoryIdx_row)
+	, m_iInventoryIdx_col(_origin.m_iInventoryIdx_col)
+	, m_Cursor_StartPos(_origin.m_Cursor_StartPos)
+	, m_Cursor_Diff(_origin.m_Cursor_Diff)
+	, m_Cursor_CurPos(_origin.m_Cursor_CurPos)
+	, m_Cursor_PrevDiff(_origin.m_Cursor_PrevDiff)
+	, m_bCollide_Cursor(_origin.m_bCollide_Cursor)
+	, m_iCnt(_origin.m_iCnt)
+	, m_eType(_origin.m_eType)
+	, m_Consume_Type(_origin.m_Consume_Type)
+
 
 
 {
@@ -190,6 +196,8 @@ void CItemScript::lateupdate()
 
 void CItemScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+
+
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CLayer* pLayer = pCurScene->GetLayer(L"Inventory");
 	CGameObject* pInventory = pLayer->FindObj(L"Inventory");
@@ -264,8 +272,8 @@ void CItemScript::OnCollision(CGameObject* _OtherObject)
 		// Item ащ╠Б 
 		if (KEY_TAP(KEY::Z))
 		{
-			pInventoryScript->PushItem(GetOwner()->GetName(), m_eType, GetOwner());
 			CSceneMgr::GetInst()->DeRegisterObjInLayer(GetOwner(), GetOwner()->GetLayerIndex());
+			pInventoryScript->PushItem(GetOwner()->GetName(), m_eType, GetOwner());
 			//pCurScene->AddObject(GetOwner(), pLayer->GetLayerIdx());
 		}
 
@@ -284,6 +292,39 @@ void CItemScript::OnCollisionExit(CGameObject* _OtherObject)
 	CInventoryScript* pInventoryScript = (CInventoryScript*)pInventory->GetScriptByName(L"CInventoryScript");
 
 	pInventoryScript->SetMove(TRUE);
+}
+
+void CItemScript::SaveToScene(FILE* _pFile)
+{
+	CScript::SaveToScene(_pFile);
+
+
+	fwrite(&m_eType, sizeof(ITEM_TYPE), 1, _pFile);
+	fwrite(&m_Consume_Type, sizeof(CONSUME_TYPE), 1, _pFile);
+	fwrite(&m_iClickedCnt, sizeof(UINT), 1, _pFile);
+
+	fwrite(&m_fHpRaise, sizeof(float), 1, _pFile);
+	fwrite(&m_fMpRaise, sizeof(float), 1, _pFile);
+	fwrite(&m_fAttackRaise, sizeof(float), 1, _pFile);
+	fwrite(&m_iCnt, sizeof(int), 1, _pFile);
+
+
+
+}
+
+void CItemScript::LoadFromScene(FILE* _pFile)
+{
+	CScript::LoadFromScene(_pFile);
+
+
+	fread(&m_eType, sizeof(ITEM_TYPE), 1, _pFile);
+	fread(&m_Consume_Type, sizeof(CONSUME_TYPE), 1, _pFile);
+	fread(&m_iClickedCnt, sizeof(UINT), 1, _pFile);
+
+	fread(&m_fHpRaise, sizeof(float), 1, _pFile);
+	fread(&m_fMpRaise, sizeof(float), 1, _pFile);
+	fread(&m_fAttackRaise, sizeof(float), 1, _pFile);
+	fread(&m_iCnt, sizeof(int), 1, _pFile);
 }
 
 

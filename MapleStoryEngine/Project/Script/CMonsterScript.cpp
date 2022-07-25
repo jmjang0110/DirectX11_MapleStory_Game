@@ -51,31 +51,9 @@ void CMonsterScript::start()
 	if (pAI != nullptr)
 		m_pAI = pAI;
 
-	srand((unsigned int)(NULL));
-	int randDir = rand() % 2;
-
-	if (randDir == 1)
-		m_eDir = MONSTER_DIRECTION::LEFT;
-	else
-		m_eDir = MONSTER_DIRECTION::RIGHT;
-
-	CGameObject* pOwner = GetOwner();
-	if (pOwner != nullptr)
-	{
-		CAnimator2D* pAnimator = pOwner->Animator2D();
-		if (pAnimator != nullptr)
-		{
-			if(m_eDir == MONSTER_DIRECTION::LEFT)
-				pAnimator->Play(L"Stand_Left", true);
-			else if (m_eDir == MONSTER_DIRECTION::RIGHT)
-				pAnimator->Play(L"Stand_Right", true);
-		}
-	}
-
-
 	// Monster Info Test
-	m_tInfo.fRecogRange = 200.f;
-	m_tInfo.fSpeed = 1.f;
+	m_tInfo.fRecogRange = 500.f;
+	m_tInfo.fSpeed = 100.f;
 
 
 }
@@ -102,22 +80,40 @@ void CMonsterScript::lateupdate()
 
 void CMonsterScript::Update_State()
 {
-	CGameObject* pOwner = GetOwner();
-	if (pOwner == nullptr)
-		return;
+	// Check Attack End 
+	if (m_eCurStateType == MONSTER_STATE::ATT)
+	{
+		CAnimator2D* pAnimator2D = GetOwner()->Animator2D();
+		if (pAnimator2D->GetCurAnim()->IsFinish() == true)
+		{
+			m_bAttackEnd = true;
+			pAnimator2D->GetCurAnim()->Reset();
+		}
 
-	Vec3 vPos = pOwner->Transform()->GetRelativePos();
-	if (m_vPrevPos.x - vPos.x > 0)
-		SetDir(MONSTER_DIRECTION::LEFT);
+	}
 	else
+		m_bAttackEnd = false;
+
+	// Check Dir 
+	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+	float fDiff = m_vPrevPos.x - vPos.x;
+
+	if (fDiff > 0)
+		SetDir(MONSTER_DIRECTION::LEFT);
+	else if (fDiff < 0)
 		SetDir(MONSTER_DIRECTION::RIGHT);
+	else
+		m_eDir = m_ePrevDir;
+
+
+	m_ePrevDir = m_eDir;
 
 }
 
 void CMonsterScript::Update_Move()
 {
 
-	
+
 }
 
 void CMonsterScript::Update_Gravity()
@@ -127,44 +123,49 @@ void CMonsterScript::Update_Gravity()
 void CMonsterScript::Update_Animation()
 {
 
+	if (m_pAI == nullptr)
+		m_pAI = (CAIScript*)GetOwner()->GetScriptByName(L"CAIScript");
 
+	m_eCurStateType = m_pAI->GetCurStateType();
+	CAnimator2D* pAnimator2D = GetOwner()->Animator2D();
 
-	CAIScript* pAI = (CAIScript*)GetOwner()->GetScriptByName(L"CAIScript");
-	m_pAI = pAI;
-
-	MONSTER_STATE eStateType = pAI->GetCurStateType();
-	CGameObject* pOwner = GetOwner();
-
-	m_eCurStateType = eStateType;
-
-	if (pOwner == nullptr)
+	if (pAnimator2D == nullptr)
 		return;
 
-	CAnimator2D* pAnimator = pOwner->Animator2D();
-	
+	CAnimator2D* pAnimator = GetOwner()->Animator2D();
+
 	if (pAnimator == nullptr)
 		return;
 
-	switch (eStateType)
+
+	switch (m_eCurStateType)
 	{
 	case MONSTER_STATE::IDLE:
 	{
 		if (m_eDir == MONSTER_DIRECTION::LEFT)
-			pAnimator->Play(L"Stand_Left", true);
+			pAnimator2D->Play(L"STAND_LEFT", true);
 		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
-			pAnimator->Play(L"Stand_Right", true);
+			pAnimator2D->Play(L"STAND_RIGHT", true);
 	}
-		break;
+	break;
 	case MONSTER_STATE::PATROL:
-		break;
+	{
+
+		if (m_eDir == MONSTER_DIRECTION::LEFT)
+			pAnimator2D->Play(L"MOVE_LEFT", true);
+		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+			pAnimator2D->Play(L"MOVE_RIGHT", true);
+
+	}
+	break;
 	case MONSTER_STATE::TRACE:
 	{
 		if (m_eDir == MONSTER_DIRECTION::LEFT)
-			pAnimator->Play(L"Move_Left", true);
+			pAnimator2D->Play(L"MOVE_LEFT", true);
 		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
-			pAnimator->Play(L"Move_Right", true);
+			pAnimator2D->Play(L"MOVE_RIGHT", true);
 	}
-		break;
+	break;
 	case MONSTER_STATE::ATT:
 		break;
 	case MONSTER_STATE::RUN:
@@ -178,22 +179,34 @@ void CMonsterScript::Update_Animation()
 void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	
 	CBasicBallScript* pBallScript = (CBasicBallScript*)_OtherObject->GetScriptByName(L"CBasicBallScript");
+
+
 	if (pBallScript != nullptr)
 	{
 		pBallScript->SetHit(true); // Next Frame - Delete Ball(Arrow)
 		m_iHitCnt++;
-		if (m_iHitCnt >= 8)
+		if (m_iHitCnt >= 10)
 			m_iHitCnt = 0;
 
 
-		float OffsetY = 50.f;
+		float OffsetY = 60.f;
 		if (m_iHitCnt > 0)
 			OffsetY = 35.f;
 
 		// Damage 
-		int damage = rand() % 100000; // Test 
+		int MaxAttack = pBallScript->GetMaxAttack();
+		int MinAttack = pBallScript->GetMinAttack();
+
+		int randNum = rand() % (MaxAttack - MinAttack);
+		int damage = MinAttack + randNum;
+
+	
+		m_tInfo.fHP -= damage;
+		if (m_tInfo.fHP <= 0.f)
+			m_bDie = true;
+
+
 		CGameObject* pDamageObj = new CGameObject;
 		pDamageObj->SetName(L"damage");
 		pDamageObj->AddComponent(new CTransform);
@@ -208,7 +221,8 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 		pCurScene->AddObject(pDamageObj, L"Damage");
 
 	}
-	
+
+
 }
 
 void CMonsterScript::OnCollision(CGameObject* _OtherObject)
