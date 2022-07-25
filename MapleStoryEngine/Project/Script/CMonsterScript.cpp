@@ -7,6 +7,8 @@
 #include <Engine/CTransform.h>
 #include <Engine/CAnimator2D.h>
 #include <Engine/CAnimation2D.h>
+#include <Engine/CCollider2D.h>
+
 
 #include "CAIScript.h"
 #include "CTraceStateScript.h"
@@ -15,7 +17,8 @@
 #include "CBasicBallScript.h"
 #include "CDamageScript.h"
 #include "CPlayerScript.h"
-
+#include "CMonsterFactoryScript.h"
+#include "CMobGroundScript.h"
 
 
 CMonsterScript::CMonsterScript()
@@ -54,7 +57,7 @@ void CMonsterScript::start()
 	// Monster Info Test
 	m_tInfo.fRecogRange = 500.f;
 	m_tInfo.fSpeed = 100.f;
-
+	m_tInfo.fHP = 100000.f;
 
 }
 
@@ -80,6 +83,22 @@ void CMonsterScript::lateupdate()
 
 void CMonsterScript::Update_State()
 {
+	if (m_eCurStateType == MONSTER_STATE::DEAD && m_bDie == true)
+	{
+
+		CAnimator2D* pAnimator2D = GetOwner()->Animator2D();
+		if (pAnimator2D->GetCurAnim()->IsFinish() == true)
+		{
+			// delete Obj 
+			CSceneMgr::GetInst()->DeRegisterObjInLayer(GetOwner(), GetOwner()->GetLayerIndex());
+			GetOwner()->Destroy();
+
+			if (m_pMobGround != nullptr)
+				m_pMobGround->SubMonsterCnt();
+
+		}
+	}
+
 	// Check Attack End 
 	if (m_eCurStateType == MONSTER_STATE::ATT)
 	{
@@ -167,10 +186,22 @@ void CMonsterScript::Update_Animation()
 	}
 	break;
 	case MONSTER_STATE::ATT:
+	{
+		if (m_eDir == MONSTER_DIRECTION::LEFT)
+			pAnimator2D->Play(L"ATTACK_LEFT", false);
+		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+			pAnimator2D->Play(L"ATTACK_RIGHT", false);
+	}
 		break;
 	case MONSTER_STATE::RUN:
 		break;
-	case MONSTER_STATE::DEAD:
+	case MONSTER_STATE::DEAD: 
+	{
+		if (m_eDir == MONSTER_DIRECTION::LEFT)
+			pAnimator2D->Play(L"DIE_LEFT", false);
+		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+			pAnimator2D->Play(L"DIE_RIGHT", false);
+	}
 		break;
 	}
 }
@@ -178,6 +209,10 @@ void CMonsterScript::Update_Animation()
 
 void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+
+	if (m_eCurStateType == MONSTER_STATE::DEAD && m_bDie == true)
+		return;
+
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CBasicBallScript* pBallScript = (CBasicBallScript*)_OtherObject->GetScriptByName(L"CBasicBallScript");
 
@@ -204,7 +239,11 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 	
 		m_tInfo.fHP -= damage;
 		if (m_tInfo.fHP <= 0.f)
+		{
+			m_eCurStateType = MONSTER_STATE::DEAD;
 			m_bDie = true;
+
+		}
 
 
 		CGameObject* pDamageObj = new CGameObject;

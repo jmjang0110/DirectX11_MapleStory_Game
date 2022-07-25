@@ -161,6 +161,14 @@ void CEventMgr::update()
 
 		case EVENT_TYPE::SCENE_CHANGE:
 		{
+
+			CScene* pCurScene = (CScene*)m_vecEvent[i].lParam;
+			CScene* pNextScene = (CScene*)m_vecEvent[i].wParam;
+
+			pCurScene->SetSceneState(SCENE_STATE::STOP);
+			CSceneMgr::GetInst()->ChangeScene(pNextScene);
+
+
 			m_bObjEvn = true;
 		}
 		break;

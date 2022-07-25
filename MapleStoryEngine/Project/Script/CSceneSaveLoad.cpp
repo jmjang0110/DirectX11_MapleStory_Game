@@ -310,3 +310,22 @@ CLayer* CSceneSaveLoad::LoadLayer(const wstring& _strLayerFIlePath)
     return pLoadLayer;
 }
 
+void CSceneSaveLoad::LoadMainPlayer(CScene* _pScene)
+{
+    wstring strContent = CPathMgr::GetInst()->GetContentPath();
+    wstring wstrResKey = L"prefab\\player.pref";
+    wstring FullPath = strContent + wstrResKey;
+ 
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, FullPath.c_str(), L"rb");
+
+    CGameObject* pPlayer = LoadGameObject(pFile);
+
+    _pScene->AddObject(pPlayer, L"Player");
+
+    fclose(pFile);
+
+
+
+}
+

@@ -64,6 +64,8 @@ void CCloudScript::start()
 	Vec3 vCenter = pObj->Collider2D()->GetWorldPos();
 	Vec3 CloudScale = GetOwner()->Transform()->GetWorldScale();
 
+	float fSpeed = rand() % 60;
+	m_fSpeed = 100.f + fSpeed;
 
 
 	m_vStartPos.x = vCenter.x + (vScale.x / 2) + CloudScale.x;

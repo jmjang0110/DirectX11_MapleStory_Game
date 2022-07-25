@@ -33,7 +33,9 @@
 #include "CPaperBurnScript.h"
 #include "CPatrolStateScript.h"
 #include "CPlayerScript.h"
+#include "CPortalScript.h"
 #include "CRigidBodyScript.h"
+#include "CSceneStartScript.h"
 #include "CSkillnearScript.h"
 #include "CSkillScript.h"
 #include "CStateScript.h"
@@ -74,7 +76,9 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPaperBurnScript");
 	_vec.push_back(L"CPatrolStateScript");
 	_vec.push_back(L"CPlayerScript");
+	_vec.push_back(L"CPortalScript");
 	_vec.push_back(L"CRigidBodyScript");
+	_vec.push_back(L"CSceneStartScript");
 	_vec.push_back(L"CSkillnearScript");
 	_vec.push_back(L"CSkillScript");
 	_vec.push_back(L"CStateScript");
@@ -148,8 +152,12 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPatrolStateScript;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if (L"CPortalScript" == _strScriptName)
+		return new CPortalScript;
 	if (L"CRigidBodyScript" == _strScriptName)
 		return new CRigidBodyScript;
+	if (L"CSceneStartScript" == _strScriptName)
+		return new CSceneStartScript;
 	if (L"CSkillnearScript" == _strScriptName)
 		return new CSkillnearScript;
 	if (L"CSkillScript" == _strScriptName)
@@ -263,8 +271,14 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
 		break;
+	case (UINT)SCRIPT_TYPE::PORTALSCRIPT:
+		return new CPortalScript;
+		break;
 	case (UINT)SCRIPT_TYPE::RIGIDBODYSCRIPT:
 		return new CRigidBodyScript;
+		break;
+	case (UINT)SCRIPT_TYPE::SCENESTARTSCRIPT:
+		return new CSceneStartScript;
 		break;
 	case (UINT)SCRIPT_TYPE::SKILLNEARSCRIPT:
 		return new CSkillnearScript;
@@ -417,8 +431,16 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CPlayerScript";
 		break;
 
+	case SCRIPT_TYPE::PORTALSCRIPT:
+		return L"CPortalScript";
+		break;
+
 	case SCRIPT_TYPE::RIGIDBODYSCRIPT:
 		return L"CRigidBodyScript";
+		break;
+
+	case SCRIPT_TYPE::SCENESTARTSCRIPT:
+		return L"CSceneStartScript";
 		break;
 
 	case SCRIPT_TYPE::SKILLNEARSCRIPT:

@@ -29,5 +29,11 @@ public:
 
 	// == == == ==
 
+
+public:
+	// Load 된 Scene 에 Player를 Load 한 후 Player Layer 에 등록 
+	static void LoadMainPlayer(CScene* _pScene);
+
+
 };
 

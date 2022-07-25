@@ -56,14 +56,20 @@ CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_fSpeed(_origin.m_fSpeed)
 	, m_eDir(_origin.m_eDir)
-	, m_eCurState(_origin.m_eCurState)
-	, m_ePrevState(_origin.m_ePrevState)
-	, m_bOnGround(false)
+	, m_eCurState(PLAYER_STATE::IDLE)
+	, m_ePrevState(PLAYER_STATE::IDLE)
+	, m_bOnGround(_origin.m_bOnGround)
 	, m_pPrefab(nullptr)
 	, m_pDbJumpSubPrefab(nullptr)
 	, m_pDbJumpPrefab(nullptr)
-	, m_fMinAttack(10000.f)
-	, m_fMaxAttack(20000.f)
+	, m_iLevel(_origin.m_iLevel)
+	, m_fHP(_origin.m_fHP)
+	, m_fMP(_origin.m_fMP)
+	, m_fEXP(_origin.m_fEXP)
+	, m_fMinAttack(_origin.m_fMinAttack)
+	, m_fMaxAttack(_origin.m_fMaxAttack)
+
+
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -1016,7 +1022,14 @@ void CPlayerScript::SaveToScene(FILE* _pFile)
 
 	fwrite(&m_fSpeed, sizeof(float), 1, _pFile);
 	fwrite(&m_bOnGround, sizeof(bool), 1, _pFile);
-
+	
+	fwrite(&m_fDiff_Between_Ground, sizeof(float), 1, _pFile);
+	fwrite(&m_iLevel, sizeof(int), 1, _pFile);
+	fwrite(&m_fHP, sizeof(float), 1, _pFile);
+	fwrite(&m_fMP, sizeof(float), 1, _pFile);
+	fwrite(&m_fEXP, sizeof(float), 1, _pFile);
+	fwrite(&m_fMinAttack, sizeof(float), 1, _pFile);
+	fwrite(&m_fMaxAttack, sizeof(float), 1, _pFile);
 
 }
 
@@ -1027,7 +1040,14 @@ void CPlayerScript::LoadFromScene(FILE* _pFile)
 
 	fread(&m_fSpeed, sizeof(float), 1, _pFile);
 	fread(&m_bOnGround, sizeof(bool), 1, _pFile);
-
+	
+	fread(&m_fDiff_Between_Ground, sizeof(float), 1, _pFile);
+	fread(&m_iLevel, sizeof(int), 1, _pFile);
+	fread(&m_fHP, sizeof(float), 1, _pFile);
+	fread(&m_fMP, sizeof(float), 1, _pFile);
+	fread(&m_fEXP, sizeof(float), 1, _pFile);
+	fread(&m_fMinAttack, sizeof(float), 1, _pFile);
+	fread(&m_fMaxAttack, sizeof(float), 1, _pFile);
 }
 
 void CPlayerScript::Update_Inventory()

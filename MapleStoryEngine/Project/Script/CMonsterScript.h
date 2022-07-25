@@ -30,6 +30,7 @@ class CMonsterScript :
     public CScript
 {
 private:
+    class CMobGroundScript* m_pMobGround; // 자신이 속한 GroundScript 
     class CAIScript* m_pAI;
     tMonsterInfo        m_tInfo;
 
@@ -59,7 +60,7 @@ public:
     tMonsterInfo        GetMonsterInfo() { return m_tInfo; }
     bool                GetAttackEnd() { return m_bAttackEnd; }
     void                SetPrevPos(Vec3 _prevPos) { m_vPrevPos = _prevPos; }
-
+    void                SetMobGroundScript(CMobGroundScript* _MGScript) { m_pMobGround = _MGScript; }
 public:
     void SetDiffBetweenGround(float _fDiff) { m_fDiff_Between_Ground = _fDiff; }
     float GetDiffBetweenGround() { return m_fDiff_Between_Ground; }

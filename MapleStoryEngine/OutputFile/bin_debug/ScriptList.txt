@@ -30,7 +30,9 @@ CNumberScript
 CPaperBurnScript
 CPatrolStateScript
 CPlayerScript
+CPortalScript
 CRigidBodyScript
+CSceneStartScript
 CSkillnearScript
 CSkillScript
 CStateScript

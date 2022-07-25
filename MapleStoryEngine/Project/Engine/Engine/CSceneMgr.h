@@ -26,6 +26,8 @@ public:
 	void DeRegisterObjInLayer(CGameObject* _pDeObj, int _LayerIdx);
 	void RegisterObhInLayer(CGameObject* _pObj, int _LayerIdx);
 	void SwapLayer(int _Lidx, int _Ridx);
+
+	void SceneChangeEvent(CScene* _pcurscene, CScene* _pnextscene);
 	//===== ===== =====
 	void AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject);	
 	void DisconnectParent(CGameObject* _pObject);

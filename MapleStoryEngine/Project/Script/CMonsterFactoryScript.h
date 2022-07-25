@@ -10,9 +10,16 @@
 class CMonsterFactoryScript :
     public CScript
 {
-    wstring         m_wCurSceneName;
 
+private:
+
+    wstring         m_wCurSceneName;
     map<wstring, CPrefab*> m_MapPrefabMob;
+
+private:
+    float           m_fTimer;
+
+
 
 
 public:

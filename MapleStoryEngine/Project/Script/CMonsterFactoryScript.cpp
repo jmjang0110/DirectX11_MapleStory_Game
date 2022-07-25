@@ -19,10 +19,13 @@
 #include "CPlayerScript.h"
 #include "CBossMonsterScript.h"
 #include "CMobGroundScript.h"
+#include "CMonsterScript.h"
 
 
 CMonsterFactoryScript::CMonsterFactoryScript()
 	:CScript((int)SCRIPT_TYPE::MONSTERFACTORYSCRIPT)
+	, m_fTimer(0.f)
+
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -31,6 +34,8 @@ CMonsterFactoryScript::CMonsterFactoryScript()
 
 CMonsterFactoryScript::CMonsterFactoryScript(const CMonsterFactoryScript& _origin)
 	: CScript((int)SCRIPT_TYPE::MONSTERFACTORYSCRIPT)
+	, m_fTimer(0.f)
+
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -61,7 +66,7 @@ void CMonsterFactoryScript::start()
 
 		if (pPrefab2 != nullptr)
 		{
-			m_MapPrefabMob.insert(make_pair(pPrefab2->GetName(), pPrefab2));
+			m_MapPrefabMob.insert(make_pair(pPrefab2->GetProto()->GetName(), pPrefab2));
 
 
 		}
@@ -72,21 +77,29 @@ void CMonsterFactoryScript::start()
 
 void CMonsterFactoryScript::update()
 {
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	CLayer* pMobGroundLayer = pCurScene->GetLayer(L"MobGround");
-
-	vector<CGameObject*> vecMobGround = pMobGroundLayer->GetRootObjects();
-
-	for (int i = 0; i < vecMobGround.size(); ++i)
+	m_fTimer += DT;
+	// 5 초에 한번씩 Update 
+	if (m_fTimer >= 5.f)
 	{
-		CMobGroundScript* pMobGroundScript = (CMobGroundScript*)vecMobGround[i]->GetScriptByName(L"CMobGroundScript");
-		if (pMobGroundScript == nullptr)
-			continue;
-		int CreateMobCnt = pMobGroundScript->GetPossibleCreateCnt();
-		CreateMonster(CreateMobCnt, L"GiganticBiking", pMobGroundScript);
+		m_fTimer = 0.f;
+
+		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		CLayer* pMobGroundLayer = pCurScene->GetLayer(L"MobGround");
+
+		vector<CGameObject*> vecMobGround = pMobGroundLayer->GetRootObjects();
+
+		for (int i = 0; i < vecMobGround.size(); ++i)
+		{
+			CMobGroundScript* pMobGroundScript = (CMobGroundScript*)vecMobGround[i]->GetScriptByName(L"CMobGroundScript");
+			if (pMobGroundScript == nullptr)
+				continue;
+			int CreateMobCnt = pMobGroundScript->GetPossibleCreateCnt();
+			CreateMonster(CreateMobCnt, L"GiganticBiking", pMobGroundScript);
+
+		}
+
 
 	}
-
 
 }
 
@@ -125,6 +138,9 @@ void CMonsterFactoryScript::ChangeScene(wstring CurSceneName)
 
 void CMonsterFactoryScript::CreateMonster(int _cnt, wstring _MobName, CMobGroundScript* _script)
 {
+	if (_cnt == 0)
+		return;
+
 	if (m_MapPrefabMob.empty() == true)
 		return;
 
@@ -140,18 +156,28 @@ void CMonsterFactoryScript::CreateMonster(int _cnt, wstring _MobName, CMobGround
 	if (pMobPrefab != nullptr)
 	{
 
-		// Create Mob 
-		CGameObject* pMob = pMobPrefab->Instantiate();
-		Vec3 vPos = pMob->Transform()->GetRelativePos();
+		for (int i = 0; i < _cnt; ++i)
+		{
+			// Create Mob 
+			CGameObject* pMob = pMobPrefab->Instantiate();
+			Vec3 vPos = pMob->Transform()->GetRelativePos();
 
-		vPos.y = vCenter.y + vScale.y + pMob->Collider2D()->GetWorldScale().y;
-		vPos.x = GetRandomNum(vCenter.x - vScale.x / 2, vCenter.x + vScale.x / 2);
+			vPos.y = vCenter.y + vScale.y + pMob->Collider2D()->GetWorldScale().y;
+			vPos.x = GetRandomNum(vCenter.x - vScale.x / 2, vCenter.x + vScale.x / 2);
+
+			pMob->Transform()->SetRelativePos(vPos);
+			pMob->start();
+			CMonsterScript* pMScript = (CMonsterScript*)pMob->GetScriptByName(L"CMonsterScript");
+			if (pMScript != nullptr)
+				pMScript->SetMobGroundScript(_script);
+
+			pCurScene->AddObject(pMob, L"Monster");
+
+
+			// setting on groundScript ( Created Monster Cnt )
+			_script->AddMonsterCnt(_cnt);
+		}
 		
-		pMob->Transform()->SetRelativePos(vPos);
-		pCurScene->AddObject(pMob, L"Monster");
-
-		// setting on groundScript ( Created Monster Cnt )
-		_script->AddMonsterCnt(_cnt);
 	}
 
 

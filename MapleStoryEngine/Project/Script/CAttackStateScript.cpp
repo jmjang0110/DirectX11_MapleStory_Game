@@ -84,7 +84,10 @@ void CAttackStateScript::update()
 	if (pBossScript != nullptr)
 		UpdateBossMobAttack();
 
-	
+	CMonsterScript* pMobScript = (CMonsterScript*)GetOwner()->GetScriptByName(L"CMonsterScript");
+	if (pMobScript != nullptr)
+		UpdateMonsterAttack();
+
 }
 
 void CAttackStateScript::lateupdate()
@@ -246,4 +249,31 @@ void CAttackStateScript::UpdateBossMobAttack()
 
 	}
 
+	tBossMonInfo tBossInfo = pBossScript->GetMonsterInfo();
+	if (tBossInfo.fHP <= 0.f)
+	{
+		GetAI()->ChangeState(MONSTER_STATE::DEAD);
+	}
+
+
+
+}
+
+void CAttackStateScript::UpdateMonsterAttack()
+{
+
+	CMonsterScript* pMobScript = (CMonsterScript*)GetOwner()->GetScriptByName(L"CMonsterScript");
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	CLayer* pLayer = pCurScene->GetLayer(L"Player");
+	CGameObject* pPlayer = pLayer->FindObj(L"player");
+	CRigidBodyScript* pPlayerRigidBody = (CRigidBodyScript*)pPlayer->GetScriptByName(L"CRigidBodyScript");
+
+
+	tMonsterInfo tMobInfo = pMobScript->GetMonsterInfo();
+	if (tMobInfo.fHP <= 0.f)
+	{
+		GetAI()->ChangeState(MONSTER_STATE::DEAD);
+
+	}
 }

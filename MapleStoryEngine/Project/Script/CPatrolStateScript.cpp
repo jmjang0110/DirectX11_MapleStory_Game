@@ -125,6 +125,12 @@ void CPatrolStateScript::update()
 			GetAI()->ChangeState(MONSTER_STATE::TRACE);
 		}
 
+		if (tBossInfo.fHP <= 0.f)
+		{
+			GetAI()->ChangeState(MONSTER_STATE::DEAD);
+		}
+
+
 	}
 
 
@@ -161,6 +167,12 @@ void CPatrolStateScript::update()
 			// Change State 
 			GetAI()->ChangeState(MONSTER_STATE::TRACE);
 		}
+
+		if (tMobInfo.fHP <= 0.f)
+		{
+			GetAI()->ChangeState(MONSTER_STATE::DEAD);
+		}
+	
 
 	}
 

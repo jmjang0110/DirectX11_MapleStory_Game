@@ -134,6 +134,16 @@ void CSceneMgr::SwapLayer(int _Lidx, int _Ridx)
 	CEventMgr::GetInst()->AddEvent(info);
 
 }
+void CSceneMgr::SceneChangeEvent(CScene* _pcurscene, CScene* _pnextscene)
+{
+	tEventInfo info = {};
+	info.eType = EVENT_TYPE::SCENE_CHANGE;
+	info.lParam = (DWORD_PTR)_pcurscene;
+	info.wParam = (DWORD_PTR)_pnextscene;
+
+	CEventMgr::GetInst()->AddEvent(info);
+
+}
 // ====== ====== ====== ====== ======
 
 

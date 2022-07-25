@@ -26,14 +26,18 @@ CDeadStateScript::~CDeadStateScript()
 
 void CDeadStateScript::Enter()
 {
+
+
 }
 
 void CDeadStateScript::Exit()
 {
+
 }
 
 void CDeadStateScript::start()
 {
+
 }
 
 void CDeadStateScript::update()

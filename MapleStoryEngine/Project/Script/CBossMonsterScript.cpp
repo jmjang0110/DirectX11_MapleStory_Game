@@ -6,6 +6,8 @@
 #include <Engine/CTransform.h>
 #include <Engine/CAnimator2D.h>
 #include <Engine/CAnimation2D.h>
+#include <Engine/CCollider2D.h>
+
 
 #include "CAIScript.h"
 #include "CTraceStateScript.h"
@@ -50,7 +52,7 @@ void CBossMonsterScript::start()
 	// Monster Info Test
 	m_tInfo.fRecogRange = 600.f;
 	m_tInfo.fSpeed = 100.f;
-	m_tInfo.fHP = 10000000.f;
+	m_tInfo.fHP = 1000000.f;
 
 
 }
@@ -75,6 +77,19 @@ void CBossMonsterScript::lateupdate()
 
 void CBossMonsterScript::Update_State()
 {
+	if (m_eCurStateType == MONSTER_STATE::DEAD && m_bDie == true)
+	{
+
+		CAnimator2D* pAnimator2D = GetOwner()->Animator2D();
+		if (pAnimator2D->GetCurAnim()->IsFinish() == true)
+		{
+			// delete Obj 
+			CSceneMgr::GetInst()->DeRegisterObjInLayer(GetOwner(), GetOwner()->GetLayerIndex());
+			GetOwner()->Destroy();
+		}
+	}
+
+
 	// Check Attack End 
 	if (m_eCurStateType == MONSTER_STATE::ATT)
 	{
@@ -244,7 +259,13 @@ void CBossMonsterScript::Update_Animation()
 	case MONSTER_STATE::RUN:
 		break;
 	case MONSTER_STATE::DEAD:
-		break;
+	{
+		if (m_eDir == BOSS_DIRECTION::LEFT)
+			pAnimator2D->Play(L"DIE_LEFT", false);
+		else if (m_eDir == BOSS_DIRECTION::RIGHT)
+			pAnimator2D->Play(L"DIE_RIGHT", false);
+	}
+	break;
 	}
 
 
@@ -259,6 +280,8 @@ void CBossMonsterScript::Update_Animation()
 
 void CBossMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+	if (m_eCurStateType == MONSTER_STATE::DEAD && m_bDie == true)
+		return;
 
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CBasicBallScript* pBallScript = (CBasicBallScript*)_OtherObject->GetScriptByName(L"CBasicBallScript");
@@ -293,7 +316,11 @@ void CBossMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 		m_tInfo.fHP -= damage;
 		if (m_tInfo.fHP <= 0.f)
+		{
+			m_eCurStateType = MONSTER_STATE::DEAD;
 			m_bDie = true;
+		}
+			
 
 
 		CGameObject* pDamageObj = new CGameObject;

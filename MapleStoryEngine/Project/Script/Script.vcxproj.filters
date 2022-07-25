@@ -127,6 +127,12 @@
     <Filter Include="Script\03. Object\Ground\CreateMobGround">
       <UniqueIdentifier>{d953ed75-bba3-46ca-862a-89d07620fd0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\03. Object\Portal">
+      <UniqueIdentifier>{800f77cf-c1e2-439e-b019-86fe171f68ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\SceneStart">
+      <UniqueIdentifier>{cd736559-05c9-48c6-af9f-36d95e251ee1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -251,6 +257,12 @@
     <ClInclude Include="CMobGroundScript.h">
       <Filter>Script\03. Object\Ground\CreateMobGround</Filter>
     </ClInclude>
+    <ClInclude Include="CPortalScript.h">
+      <Filter>Script\03. Object\Portal</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneStartScript.h">
+      <Filter>Script\02. UI\SceneStart</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -374,6 +386,12 @@
     </ClCompile>
     <ClCompile Include="CMobGroundScript.cpp">
       <Filter>Script\03. Object\Ground\CreateMobGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CPortalScript.cpp">
+      <Filter>Script\03. Object\Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneStartScript.cpp">
+      <Filter>Script\02. UI\SceneStart</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

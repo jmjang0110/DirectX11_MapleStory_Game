@@ -113,7 +113,10 @@ void CIdleStateScript::update()
 			// Change State Idle -> Trace 
 			GetAI()->ChangeState(MONSTER_STATE::TRACE);
 		}
-
+		if (tMonInfo.fHP <= 0.f)
+		{
+			GetAI()->ChangeState(MONSTER_STATE::DEAD);
+		}
 	}
 	
 
@@ -138,6 +141,13 @@ void CIdleStateScript::update()
 			// Change State 
 			GetAI()->ChangeState(MONSTER_STATE::TRACE);
 		}
+
+		if (tBossInfo.fHP <= 0.f)
+		{
+			GetAI()->ChangeState(MONSTER_STATE::DEAD);
+		}
+
+
 	}
 }
 

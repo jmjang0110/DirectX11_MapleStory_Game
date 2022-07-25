@@ -25,6 +25,7 @@ public:
 
 private:
     void UpdateBossMobAttack();
+    void UpdateMonsterAttack();
 
 
 

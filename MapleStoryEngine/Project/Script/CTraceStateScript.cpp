@@ -100,6 +100,12 @@ void CTraceStateScript::update()
 			// Change State 
 			GetAI()->ChangeState(MONSTER_STATE::IDLE);
 		}
+
+		if (tMonInfo.fHP <= 0.f)
+		{
+			GetAI()->ChangeState(MONSTER_STATE::DEAD);
+		}
+
 	}
 	
 	CBossMonsterScript* pBossScript = (CBossMonsterScript*)GetOwner()->GetScriptByName(L"CBossMonsterScript");
@@ -135,6 +141,12 @@ void CTraceStateScript::update()
 			// Change State
 			GetAI()->ChangeState(MONSTER_STATE::ATT);
 		}
+
+		if (tBossInfo.fHP <= 0.f)
+		{
+			GetAI()->ChangeState(MONSTER_STATE::DEAD);
+		}
+
 	}
 
 	

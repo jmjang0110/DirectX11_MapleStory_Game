@@ -156,13 +156,15 @@ void CItemScript::update()
 	//m_vStartPos = Vec2(-315.f, 137.f);
 	//m_vInterval = Vec2(42.f, -42.f);
 
-	Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
-	Vec3 vInvenPos = GetOwner()->GetAncestor()->Transform()->GetRelativePos();
+
 
 
 	if (GetOwner()->GetLayerIndex() == pCurScene->GetLayer(L"Inventory")->GetLayerIdx())
 	{
+		Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+		Vec3 vInvenPos = GetOwner()->GetAncestor()->Transform()->GetRelativePos();
+
 		// Inventory Relative pos - Item  
 		vPos.x = -315.f + m_iInventoryIdx_col * 42.f;
 		vPos.y = 137.f + m_iInventoryIdx_row * 42.f;
@@ -179,12 +181,12 @@ void CItemScript::update()
 			vPos.y = m_Cursor_CurPos.y - vInvenPos.y;
 
 		}
+		GetOwner()->Transform()->SetRelativePos(vPos);
+
 	}
 
 	
 
-
-	GetOwner()->Transform()->SetRelativePos(vPos);
 
 
 }
