@@ -4,6 +4,8 @@
 #include "CSceneSaveLoad.h"
 #include <Engine/CTransform.h>
 
+#include "CSceneStartScript.h"
+
 
 
 CPortalScript::CPortalScript()
@@ -62,6 +64,7 @@ void CPortalScript::OnCollision(CGameObject* _OtherObject)
 
 	if (KEY_TAP(KEY::UP))
 	{
+		// Change Scene !!
 		// 로딩할 Scene 파일의 경로 계산
 		wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 		strFilePath += m_wNextScene_RelativePath;
@@ -71,6 +74,9 @@ void CPortalScript::OnCollision(CGameObject* _OtherObject)
 
 		CSceneMgr::GetInst()->SceneChangeEvent(pCurScene, m_pNextScene);
 		SavePlayerToPrefab();
+		
+
+		CSceneSaveLoad::pSceneMgrScript->End();
 
 	}
 

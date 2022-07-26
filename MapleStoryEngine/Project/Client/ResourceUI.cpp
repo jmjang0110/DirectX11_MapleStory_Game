@@ -12,12 +12,15 @@
 #include <Engine/CSceneMgr.h>
 #include <Engine/CScene.h>
 #include <Script/CSceneSaveLoad.h>
+#include <Script/CSceneStartScript.h>
+
 
 #include <Engine/CLayerFile.h>
 
 
 #include "SceneOutlinerTool.h"
 #include <experimental/filesystem>
+
 
 
 ResourceUI::ResourceUI()
@@ -130,6 +133,9 @@ void ResourceUI::ItemDBClicked(DWORD_PTR _dwNode)
 
 	CImGuiMgr::GetInst()->AddDelegate(tDeleteCom);
 	// =======================
+
+
+
 }
 
 

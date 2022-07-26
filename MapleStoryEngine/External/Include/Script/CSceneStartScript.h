@@ -17,6 +17,8 @@ private:
     map<wstring, CPrefab*> m_MapPrefab;
     map<wstring, CPrefab*> m_MapMonsterPrefab;
 
+private:
+    Ptr<CSound> pSound_Bgm;
 
 public:
     void InsertPrefab(wstring _name);
@@ -34,6 +36,8 @@ public:
     CPrefab* GetMonsterPrefab(wstring _name);
     CPrefab* GetMonsterPrefab(int idx);
 
+public:
+    void End();
 
 public:
     virtual void start();

@@ -51,8 +51,7 @@ void CTestScene::CreateTestScene()
 	CScene* pCurScene = new CScene;
 	CSceneMgr::GetInst()->ChangeScene(pCurScene);
 
-	Ptr<CSound> pSound = CResMgr::GetInst()->Load<CSound>(L"sound\\FairyTale.mp3", L"sound\\FairyTale.mp3");
-	pSound->Play(1, 0.5f);
+	
 
 	return;
 

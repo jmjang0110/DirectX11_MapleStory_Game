@@ -187,7 +187,6 @@ void CPlayerScript::Update_Skill()
 		pCurScene->AddObject(ptest, L"Skill");
 
 
-
 	}
 
 	if (KEY_TAP(KEY::S))
@@ -222,6 +221,7 @@ void CPlayerScript::Update_Skill()
 		pCurScene->AddObject(ptest, L"Skill");
 
 
+
 	}
 	if (KEY_TAP(KEY::LCTRL))
 	{
@@ -250,6 +250,11 @@ void CPlayerScript::Update_Skill()
 
 	}
 
+
+	if (KEY_PRESSED(KEY::A) || KEY_PRESSED(KEY::S))
+	{
+		m_fMP -= 5.f;
+	}
 
 }
 
@@ -323,7 +328,7 @@ void CPlayerScript::Update_State()
 
 			// Double Jump - Add Child Obj ( Eff )
 			RegisterDoubleJumpEff();
-
+			m_fMP -= 100.f;
 		}
 
 	}

@@ -26,6 +26,12 @@ CSceneStartScript::~CSceneStartScript()
 	Safe_Del_Map(m_MapPrefab);
 	Safe_Del_Map(m_MapMonsterPrefab);
 
+	if (pSound_Bgm != nullptr)
+		pSound_Bgm->Stop();
+
+	CSceneSaveLoad::pSceneManagerObj = nullptr;
+	CSceneSaveLoad::pSceneMgrScript = nullptr;
+
 }
 
 
@@ -123,7 +129,21 @@ void CSceneStartScript::start()
 	CSceneSaveLoad::pSceneManagerObj = GetOwner();
 	CSceneSaveLoad::pSceneMgrScript = this;
 
+	if(pCurScene->GetName() == L"Osolgil")
+		pSound_Bgm = CResMgr::GetInst()->Load<CSound>(L"sound\\AboveTheTreetops.mp3", L"sound\\AboveTheTreetops.mp3");
+	else if(pCurScene->GetName() == L"ClockTowerBottomFloor")
+		pSound_Bgm = CResMgr::GetInst()->Load<CSound>(L"sound\\FairyTale.mp3", L"sound\\FairyTale.mp3");
+
+	pSound_Bgm->Play(0, 0.5f);
 }
+
+void CSceneStartScript::End()
+{
+	pSound_Bgm->Stop();
+
+
+}
+
 
 void CSceneStartScript::update()
 {
@@ -150,6 +170,8 @@ CPrefab* CSceneStartScript::GetMonsterPrefab(int idx)
 		return iter->second;
 	}
 }
+
+
 
 void CSceneStartScript::lateupdate()
 {
