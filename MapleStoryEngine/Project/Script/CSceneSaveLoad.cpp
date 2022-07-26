@@ -15,8 +15,12 @@
 #include <Engine/CCollisionMgr.h>
 #include <Engine/CCollider2D.h>
 
-
+#include "CSceneStartScript.h"
 #include <Engine/CLayerFile.h>
+
+CGameObject* CSceneSaveLoad::pSceneManagerObj = nullptr;
+CSceneStartScript* CSceneSaveLoad::pSceneMgrScript = nullptr;
+
 
 
 void CSceneSaveLoad::SaveScene(CScene* _pScene, const wstring& _strSceneFilePath)

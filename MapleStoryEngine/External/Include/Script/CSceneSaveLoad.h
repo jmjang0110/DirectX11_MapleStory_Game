@@ -8,6 +8,11 @@ class CPrefab;
 class CSceneSaveLoad
 {
 public:
+	// Scene/Default/SceneManager ( CSceneStartSCript 에서 초기화 ) 
+	static CGameObject* pSceneManagerObj;
+	static class CSceneStartScript* pSceneMgrScript;
+
+public:
 	// Save
 	static void SaveScene(CScene* _pScene, const wstring& _strSceneFilePath);
 	static void SaveGameObject(CGameObject* _pObj, FILE* _pFile);

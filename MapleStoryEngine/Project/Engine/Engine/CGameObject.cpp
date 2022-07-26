@@ -61,9 +61,6 @@ CGameObject::CGameObject(const CGameObject& _origin)
 
 CGameObject::~CGameObject()
 {
-	if (GetName() == L"RedPortion")
-		int i = 0;
-
 
 	Safe_Del_Arr(m_arrCom);
 	Safe_Del_Vec(m_vecScript);

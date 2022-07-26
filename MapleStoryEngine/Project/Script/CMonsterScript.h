@@ -106,6 +106,7 @@ public:
     ~CMonsterScript();
 
 
+    friend class CSceneStartScript;
 
 };
 

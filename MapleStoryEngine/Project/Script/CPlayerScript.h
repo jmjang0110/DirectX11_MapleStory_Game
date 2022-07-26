@@ -87,11 +87,6 @@ private:
 
     Vec3            m_vPrevPos;
 
-private:
-    class CPrefab* m_pPrefab;
-    class CPrefab* m_pDbJumpPrefab;
-    class CPrefab* m_pDbJumpSubPrefab;
-
 
 
 public:

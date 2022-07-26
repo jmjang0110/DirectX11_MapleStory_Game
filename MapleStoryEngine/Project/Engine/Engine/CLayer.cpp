@@ -100,7 +100,7 @@ void CLayer::UpdateLayerIdx(int _LayerIdx)
 		vector<CGameObject*> vecChildObj = m_vecRoot[i]->GetChild();
 		for (int k = 0; k < vecChildObj.size(); ++k)
 		{
-			vecChildObj[k]->m_iLayerIdx = _LayerIdx;
+			vecChildObj[k]->UpdateLayerIdx(_LayerIdx);
 
 		}
 

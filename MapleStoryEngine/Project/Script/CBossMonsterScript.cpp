@@ -52,7 +52,7 @@ void CBossMonsterScript::start()
 	// Monster Info Test
 	m_tInfo.fRecogRange = 600.f;
 	m_tInfo.fSpeed = 100.f;
-	m_tInfo.fHP = 1000000.f;
+	m_tInfo.fHP = 10000000.f;
 
 
 }

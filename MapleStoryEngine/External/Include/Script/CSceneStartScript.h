@@ -1,5 +1,6 @@
 #pragma once
 #include <Engine/CScript.h>
+#include <Engine/CPrefab.h>
 
 /*
     Default Layer 에서 Scene 이 시작됐을 때 시작할 일들을 
@@ -9,7 +10,29 @@
 class CSceneStartScript :
     public CScript
 {
+private:
+    class CGameObject* m_pOwner;
+    
+    // 해당Scene 에서 필요한 Prefab 들을 미리 Load 시켜 놓는다. 
+    map<wstring, CPrefab*> m_MapPrefab;
+    map<wstring, CPrefab*> m_MapMonsterPrefab;
 
+
+public:
+    void InsertPrefab(wstring _name);
+    void InsertMonsterPrefab(wstring _name);
+
+    void InsertPrefab_RelatedPlayer();
+    void InsertPrefab_RelatedMonster(wstring _SceneName);
+
+public:
+    // 모든 Scene 이 공통적으로 가지고 있어야 할 Prefab 저장 
+    void LoadDefaultPrefab();
+
+public:
+    CPrefab* GetPrefab(wstring _name);
+    CPrefab* GetMonsterPrefab(wstring _name);
+    CPrefab* GetMonsterPrefab(int idx);
 
 
 public:
@@ -37,7 +60,11 @@ public:
     ~CSceneStartScript();
 
 
-
+    friend class CMonsterScript;
 
 };
+
+
+
+
 

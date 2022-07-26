@@ -22,6 +22,10 @@
 #include "CSkillnearScript.h"
 #include "CInventoryScript.h"
 
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+
+
 CPlayerScript::CPlayerScript()
 	: CScript((int)SCRIPT_TYPE::PLAYERSCRIPT)
 	//, m_pMissilePrefab(nullptr)
@@ -30,9 +34,6 @@ CPlayerScript::CPlayerScript()
 	, m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
 	, m_bOnGround(false)
-	, m_pPrefab(nullptr)
-	, m_pDbJumpSubPrefab(nullptr)
-	, m_pDbJumpPrefab(nullptr)
 	, m_iLevel(100)
 	, m_fHP(0.f)
 	, m_fMP(0.f)
@@ -59,9 +60,6 @@ CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
 	, m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
 	, m_bOnGround(_origin.m_bOnGround)
-	, m_pPrefab(nullptr)
-	, m_pDbJumpSubPrefab(nullptr)
-	, m_pDbJumpPrefab(nullptr)
 	, m_iLevel(_origin.m_iLevel)
 	, m_fHP(_origin.m_fHP)
 	, m_fMP(_origin.m_fMP)
@@ -83,9 +81,7 @@ CPlayerScript::CPlayerScript(const CPlayerScript& _origin)
 
 CPlayerScript::~CPlayerScript()
 {
-	SAFE_DELETE(m_pPrefab);
-	SAFE_DELETE(m_pDbJumpPrefab);
-	SAFE_DELETE(m_pDbJumpSubPrefab);
+
 
 }
 
@@ -104,9 +100,7 @@ void CPlayerScript::start()
 	AddScriptParam("Direction", SCRIPTPARAM_TYPE::INT, &m_eDir);
 	AddScriptParam("PlayerOnGround", SCRIPTPARAM_TYPE::INT, &m_bOnGround);
 
-	m_pPrefab = nullptr;
-	m_pDbJumpPrefab = nullptr;
-	m_pDbJumpSubPrefab = nullptr;
+
 
 }
 
@@ -170,37 +164,18 @@ void CPlayerScript::Update_Skill()
 		ptest->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
 
 
-		wstring strPrefabKey = L"prefab\\StormPrepare.pref";
-		wstring strContent = CPathMgr::GetInst()->GetContentPath();
-		wstring FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab1 = new CPrefab;
-		pPrefab1->Load(FullPath);
-		assert(pPrefab1);
-
-		strPrefabKey = L"prefab\\Storm.pref";
-		strContent = CPathMgr::GetInst()->GetContentPath();
-		FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab2 = new CPrefab;
-		pPrefab2->Load(FullPath);
-		assert(pPrefab2);
-
-		strPrefabKey = L"prefab\\StormEnd.pref";
-		strContent = CPathMgr::GetInst()->GetContentPath();
-		FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab3 = new CPrefab;
-		pPrefab3->Load(FullPath);
-		assert(pPrefab3);
-
 		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 		CSkillScript* pScript = (CSkillScript*)CScriptMgr::GetScript(L"CSkillScript");
 		ptest->AddComponent((CComponent*)pScript);
 
+		CPrefab* prepare = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"StormPrepare");
+		CPrefab* KeyDown = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Storm");
+		CPrefab* End = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"StormEnd");
+
+
 		pScript->SetKey(KEY::A);
-		pScript->SetSkillObjByPrefab(pPrefab1, pPrefab2, pPrefab3);
+		pScript->SetSkillObjByPrefab(prepare, KeyDown, End);
 		pScript->SetName(L"stormSkill");
 		pScript->SetUser(GetOwner());
 		pScript->SetBallName(L"prefab\\BasicBall.pref");
@@ -211,9 +186,7 @@ void CPlayerScript::Update_Skill()
 		pCurScene = CSceneMgr::GetInst()->GetCurScene();
 		pCurScene->AddObject(ptest, L"Skill");
 
-		SAFE_DELETE(pPrefab1);
-		SAFE_DELETE(pPrefab2);
-		SAFE_DELETE(pPrefab3);
+
 
 	}
 
@@ -225,37 +198,19 @@ void CPlayerScript::Update_Skill()
 		ptest->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
 
 
-		wstring strPrefabKey = L"prefab\\ArrowFlatterPrepare.pref";
-		wstring strContent = CPathMgr::GetInst()->GetContentPath();
-		wstring FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab1 = new CPrefab;
-		pPrefab1->Load(FullPath);
-		assert(pPrefab1);
-
-		strPrefabKey = L"prefab\\ArrowFlatter.pref";
-		strContent = CPathMgr::GetInst()->GetContentPath();
-		FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab2 = new CPrefab;
-		pPrefab2->Load(FullPath);
-		assert(pPrefab2);
-
-		strPrefabKey = L"prefab\\ArrowFlatterEnd.pref";
-		strContent = CPathMgr::GetInst()->GetContentPath();
-		FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab3 = new CPrefab;
-		pPrefab3->Load(FullPath);
-		assert(pPrefab3);
-
 		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 		CSkillScript* pScript = (CSkillScript*)CScriptMgr::GetScript(L"CSkillScript");
 		ptest->AddComponent((CComponent*)pScript);
 
+
+		CPrefab* prepare = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"ArrowFlatterPrepare");
+		CPrefab* KeyDown = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"ArrowFlatter");
+		CPrefab* End = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"ArrowFlatterEnd");
+
+
 		pScript->SetKey(KEY::S);
-		pScript->SetSkillObjByPrefab(pPrefab1, pPrefab2, pPrefab3);
+		pScript->SetSkillObjByPrefab(prepare, KeyDown, End);
 		pScript->SetName(L"ArrowFlatterSkill");
 		pScript->SetUser(GetOwner());
 		pScript->SetBallName(L"prefab\\ArrowFlatterBall.pref");
@@ -266,39 +221,32 @@ void CPlayerScript::Update_Skill()
 		pCurScene = CSceneMgr::GetInst()->GetCurScene();
 		pCurScene->AddObject(ptest, L"Skill");
 
-		SAFE_DELETE(pPrefab1);
-		SAFE_DELETE(pPrefab2);
-		SAFE_DELETE(pPrefab3);
 
 	}
 	if (KEY_TAP(KEY::LCTRL))
 	{
-		CGameObject* ptest = new CGameObject;
-		ptest->SetName(L"FinalBlow");
-		ptest->AddComponent(new CTransform);
-		ptest->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
 
-		wstring strPrefabKey = L"prefab\\FinalBlow.pref";
-		wstring strContent = CPathMgr::GetInst()->GetContentPath();
-		wstring FullPath = strContent + strPrefabKey;
+		CPrefab* Skillpref = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"FinalBlow");
 
-		CPrefab* pPrefab1 = new CPrefab;
-		pPrefab1->Load(FullPath);
-		assert(pPrefab1);
+
+		CGameObject* pFinalBlow = Skillpref->Instantiate();
+		pFinalBlow->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
+		pFinalBlow->SetName(L"FinalBlow");
 
 		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
 		CSkillnearScript* pScript = (CSkillnearScript*)CScriptMgr::GetScript(L"CSkillnearScript");
-		ptest->AddComponent((CComponent*)pScript);
+		pScript->start();
+		pFinalBlow->AddComponent((CComponent*)pScript);
 
 		pScript->SetKey(KEY::LCTRL);
-		pScript->SetSkillObjByPrefab(pPrefab1, L"FinalBlow");
+		//pScript->SetSkillObjByPrefab(m_prefFinalBlow, L"FinalBlow");
 		pScript->SetUser(GetOwner());
 
 		pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		pCurScene->AddObject(ptest, L"Skill");
+		pCurScene->AddObject(pFinalBlow, L"SubSkill_1");
 
-		SAFE_DELETE(pPrefab1);
+
 
 	}
 
@@ -489,6 +437,39 @@ void CPlayerScript::Update_State()
 		if (KEY_AWAY(KEY::S))
 		{
 			m_eCurState = PLAYER_STATE::ALERT;
+
+		}
+
+	}
+
+
+	if ((m_eCurState != PLAYER_STATE::JUMP && m_eCurState != PLAYER_STATE::DOUBLE_JUMP)
+		|| m_eCurState == PLAYER_STATE::ALERT && m_eCurState != PLAYER_STATE::ATTACK
+		|| m_eCurState == PLAYER_STATE::IDLE && m_eCurState != PLAYER_STATE::ATTACK
+		|| m_eCurState == PLAYER_STATE::WALK && m_eCurState != PLAYER_STATE::ATTACK)
+	{
+		if (KEY_PRESSED(KEY::RIGHT) || KEY_PRESSED(KEY::LEFT))
+		{
+			m_eCurState = PLAYER_STATE::WALK;
+		}
+
+	}
+
+
+
+	if (m_eCurState != PLAYER_STATE::JUMP && m_eCurState != PLAYER_STATE::DOUBLE_JUMP)
+	{
+		if (KEY_PRESSED(KEY::A))
+		{
+			m_eCurState = PLAYER_STATE::ATTACK;
+			m_eCurAttState = PLAYER_ATTACK_STATE::SKILL_ATT_1;
+
+		}
+
+		if (KEY_PRESSED(KEY::S))
+		{
+			m_eCurState = PLAYER_STATE::ATTACK;
+			m_eCurAttState = PLAYER_ATTACK_STATE::SKILL_ATT_2;
 
 		}
 
@@ -775,30 +756,12 @@ void CPlayerScript::Update_Animation()
 
 void CPlayerScript::RegisterDoubleJumpEff()
 {
-	if (m_pDbJumpPrefab == nullptr)
-	{
-		wstring strPrefabKey = L"prefab\\DoubleJumpEffect.pref";
-		wstring strContent = CPathMgr::GetInst()->GetContentPath();
-		wstring FullPath = strContent + strPrefabKey;
-
-		m_pDbJumpPrefab = new CPrefab;
-		m_pDbJumpPrefab->Load(FullPath);
-		assert(m_pDbJumpPrefab);
-	}
-	if (m_pDbJumpSubPrefab == nullptr)
-	{
-		wstring strPrefabKey = L"prefab\\DoubleJumpSubEffect.pref";
-		wstring strContent = CPathMgr::GetInst()->GetContentPath();
-		wstring FullPath = strContent + strPrefabKey;
-
-		m_pDbJumpSubPrefab = new CPrefab;
-		m_pDbJumpSubPrefab->Load(FullPath);
-		assert(m_pDbJumpSubPrefab);
-	}
 
 	// ** m_pDbJumpPrefab ** 
 	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
-	CGameObject* NewObj = m_pDbJumpPrefab->Instantiate();
+	CPrefab* DoubleJumpPref = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"DoubleJumpEffect");
+
+	CGameObject* NewObj = DoubleJumpPref->Instantiate();
 	CDoubleJumpScript* pScript = (CDoubleJumpScript*)CScriptMgr::GetScript(L"CDoubleJumpScript");
 
 	if (m_eDir == PLAYER_DIRECTION::LEFT)
@@ -819,7 +782,8 @@ void CPlayerScript::RegisterDoubleJumpEff()
 
 	// ** m_pDbJumpSubPrefab ** 
 	// Prefab 파일에 저장된 gameObject 를 읽어서 해당 Layer 에 포함한다. 
-	NewObj = m_pDbJumpSubPrefab->Instantiate();
+	CPrefab* DoubleJumpSubPref = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"DoubleJumpSubEffect");
+	NewObj = DoubleJumpSubPref->Instantiate();
 
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 

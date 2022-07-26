@@ -109,7 +109,7 @@ void CDamageScript::start()
 	if (nullptr == pOwner->GetRenderComponent())
 	{
 		pOwner->AddComponent(new CDamageParticle);
-		Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\hit\\damageSkin.png", L"texture\\hit\\damageSkin.png");
+		static Ptr<CTexture> pParticleTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\hit\\damageSkin.png", L"texture\\hit\\damageSkin.png");
 		Vec2 sliceUV = Vec2(vSlice.x / pParticleTex->Width(), vSlice.y / pParticleTex->Height());
 		Vec2 StartUV = Vec2(vStartLT.x / pParticleTex->Width(), vStartLT.y / pParticleTex->Height());
 

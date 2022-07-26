@@ -72,6 +72,11 @@ void CWallScript::OnCollisionEnter(CGameObject* _OtherObject)
 		BossMobScript->SetPrevPos(vPos);
 
 
+	if (monsterScript != nullptr)
+		monsterScript->SetPrevPos(vPos);
+
+
+
 
 }
 

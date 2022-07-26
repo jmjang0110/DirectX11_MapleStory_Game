@@ -21,6 +21,11 @@
 #include "CMobGroundScript.h"
 #include "CMonsterScript.h"
 
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+
+
+
 
 CMonsterFactoryScript::CMonsterFactoryScript()
 	:CScript((int)SCRIPT_TYPE::MONSTERFACTORYSCRIPT)
@@ -44,7 +49,7 @@ CMonsterFactoryScript::CMonsterFactoryScript(const CMonsterFactoryScript& _origi
 
 CMonsterFactoryScript::~CMonsterFactoryScript()
 {
-	Safe_Del_Map(m_MapPrefabMob);
+	//Safe_Del_Map(m_MapPrefabMob);
 
 }
 
@@ -53,7 +58,7 @@ CMonsterFactoryScript::~CMonsterFactoryScript()
 void CMonsterFactoryScript::start()
 {
 	// Scene 에 따라서 PrefabMob Setting 
-	if (CSceneMgr::GetInst()->GetCurScene()->GetName() == L"Osolgil")
+	/*if (CSceneMgr::GetInst()->GetCurScene()->GetName() == L"Osolgil")
 	{
 		Safe_Del_Map(m_MapPrefabMob);
 
@@ -70,7 +75,7 @@ void CMonsterFactoryScript::start()
 
 
 		}
-	}
+	}*/
 
 
 }
@@ -93,8 +98,11 @@ void CMonsterFactoryScript::update()
 			CMobGroundScript* pMobGroundScript = (CMobGroundScript*)vecMobGround[i]->GetScriptByName(L"CMobGroundScript");
 			if (pMobGroundScript == nullptr)
 				continue;
+
 			int CreateMobCnt = pMobGroundScript->GetPossibleCreateCnt();
-			CreateMonster(CreateMobCnt, L"GiganticBiking", pMobGroundScript);
+
+			if(pCurScene->GetName() == L"Osolgil")
+				CreateMonster(CreateMobCnt, L"GiganticBiking", pMobGroundScript);
 
 		}
 
@@ -141,8 +149,8 @@ void CMonsterFactoryScript::CreateMonster(int _cnt, wstring _MobName, CMobGround
 	if (_cnt == 0)
 		return;
 
-	if (m_MapPrefabMob.empty() == true)
-		return;
+	//if (m_MapPrefabMob.empty() == true)
+	//	return;
 
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
@@ -150,7 +158,8 @@ void CMonsterFactoryScript::CreateMonster(int _cnt, wstring _MobName, CMobGround
 	Vec3 vCenter = _script->GetPos();
 	Vec3 vScale = _script->GetScale();
 
-	CPrefab* pMobPrefab = m_MapPrefabMob.find(_MobName)->second;
+	CPrefab* pMobPrefab = CSceneSaveLoad::pSceneMgrScript->GetMonsterPrefab(_MobName);
+
 
 
 	if (pMobPrefab != nullptr)
@@ -172,7 +181,6 @@ void CMonsterFactoryScript::CreateMonster(int _cnt, wstring _MobName, CMobGround
 				pMScript->SetMobGroundScript(_script);
 
 			pCurScene->AddObject(pMob, L"Monster");
-
 
 			// setting on groundScript ( Created Monster Cnt )
 			_script->AddMonsterCnt(_cnt);

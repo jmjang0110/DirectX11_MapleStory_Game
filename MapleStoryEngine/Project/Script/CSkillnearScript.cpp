@@ -21,6 +21,10 @@ CSkillnearScript::CSkillnearScript()
 	: CScript((int)SCRIPT_TYPE::SKILLNEARSCRIPT)
 	, m_SkillObj(nullptr)
 	, m_pSkillUser(nullptr)
+	, m_iAttackCnt(0)
+	, m_MyHitObjAddress(nullptr)
+
+
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -32,6 +36,9 @@ CSkillnearScript::CSkillnearScript(const CSkillnearScript& _origin)
 	: CScript((int)SCRIPT_TYPE::SKILLNEARSCRIPT)
 	, m_SkillObj(nullptr)
 	, m_pSkillUser(nullptr)
+	, m_iAttackCnt(0)
+	, m_MyHitObjAddress(nullptr)
+
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -47,7 +54,7 @@ CSkillnearScript::~CSkillnearScript()
 void CSkillnearScript::SetSkillObjByPrefab(CPrefab* _Pref, wstring _SkillName)
 {
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	CLayer* pCurLayer = pCurScene->GetLayer(L"Skill");
+	CLayer* pCurLayer = pCurScene->GetLayer(L"SubSkill_1");
 
 	if (_Pref != nullptr)
 	{
@@ -64,12 +71,18 @@ void CSkillnearScript::SetSkillObjByPrefab(CPrefab* _Pref, wstring _SkillName)
 void CSkillnearScript::start()
 {
 
+	// test 
+	m_iAttackCnt = 0;
+	m_iAttackMaxCnt = 6;
+	m_fMAxAttack = 10000;
+	m_fMinAttack = 5000;
+
 }
 
 void CSkillnearScript::update()
 {
 
-	CAnimator2D* pAnimator2D = m_SkillObj->Animator2D();
+	CAnimator2D* pAnimator2D = GetOwner()->Animator2D();
 	if (pAnimator2D == nullptr)
 		return;
 
@@ -150,21 +163,32 @@ void CSkillnearScript::lateupdate()
 
 void CSkillnearScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+
+
 }
 
 void CSkillnearScript::OnCollision(CGameObject* _OtherObject)
 {
+
+
+
 }
 
 void CSkillnearScript::OnCollisionExit(CGameObject* _OtherObject)
 {
+
+
 }
 
 void CSkillnearScript::SaveToScene(FILE* _pFile)
 {
+
+
 }
 
 void CSkillnearScript::LoadFromScene(FILE* _pFile)
 {
+
+
 }
 

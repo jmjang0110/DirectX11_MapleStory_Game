@@ -19,7 +19,10 @@
 #include "CPlayerScript.h"
 #include "CMonsterFactoryScript.h"
 #include "CMobGroundScript.h"
+#include "CSkillnearScript.h"
+#include "CSceneStartScript.h"
 
+#include "CSceneSaveLoad.h"
 
 CMonsterScript::CMonsterScript()
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
@@ -245,10 +248,18 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 		}
 
+	//	CPrefab* pPrefab = CSceneStartScript::GetPrefab(L"Damage");
+		CPrefab* pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Damage");
 
-		CGameObject* pDamageObj = new CGameObject;
-		pDamageObj->SetName(L"damage");
-		pDamageObj->AddComponent(new CTransform);
+	/*	wstring strPrefabKey = L"Prefab\\Damage.pref";
+		wstring strContent = CPathMgr::GetInst()->GetContentPath();
+		wstring FullPath = strContent + strPrefabKey;
+
+		CPrefab* pPrefab = new CPrefab;
+		pPrefab->Load(FullPath);*/
+
+
+		CGameObject* pDamageObj = pPrefab->Instantiate();
 		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 		vPos.y += (m_iHitCnt * OffsetY);
 
@@ -256,18 +267,77 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 		CDamageScript* pDamageScript = (CDamageScript*)CScriptMgr::GetScript(L"CDamageScript");
 		pDamageObj->AddComponent((CComponent*)pDamageScript);
 		pDamageScript->Init(DAMAGE_TYPE::CRITICAL_1, damage, 2.f);
-
 		pCurScene->AddObject(pDamageObj, L"Damage");
-
 	}
 
+	// Near Skill
+	CSkillnearScript* pSkillNearScript = (CSkillnearScript*)_OtherObject->GetScriptByName(L"CSkillnearScript");
+	if (pSkillNearScript != nullptr)
+	{
+		pSkillNearScript->SetHitObjAddress(GetOwner());
 
+	}
 }
 
 void CMonsterScript::OnCollision(CGameObject* _OtherObject)
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+	CSkillnearScript* pSkillNearScript = (CSkillnearScript*)_OtherObject->GetScriptByName(L"CSkillnearScript");
+	if (pSkillNearScript == nullptr)
+		return;
+
+	if (pSkillNearScript->GetHitObjAddress() != GetOwner())
+		return;
+
+	if (pSkillNearScript != nullptr)
+	{
+		if (pSkillNearScript->GetAttackCnt() < pSkillNearScript->GetMaxAttackCnt())
+		{
+			int iAttackCnt = pSkillNearScript->GetAttackCnt();
+			pSkillNearScript->AddAttackCnt();
+
+			float OffsetY = 60.f;
+			if (iAttackCnt > 0)
+				OffsetY = 35.f;
+
+			// Damage 
+			int MaxAttack = pSkillNearScript->GetMaxAttack();
+			int MinAttack = pSkillNearScript->GetMinAttack();
+
+			int randNum = rand() % (MaxAttack - MinAttack);
+			int damage = MinAttack + randNum;
+
+			m_tInfo.fHP -= damage;
+			if (m_tInfo.fHP <= 0.f)
+			{
+				m_eCurStateType = MONSTER_STATE::DEAD;
+				m_bDie = true;
+
+			}
 
 
+
+			CPrefab* pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Damage");
+			CGameObject* pDamageObj = pPrefab->Instantiate();
+
+			Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+			vPos.y += (iAttackCnt * OffsetY);
+			pDamageObj->Transform()->SetRelativePos(vPos);
+
+			CDamageScript* pDamageScript = (CDamageScript*)CScriptMgr::GetScript(L"CDamageScript");
+			pDamageObj->AddComponent((CComponent*)pDamageScript);
+			pDamageScript->Init(DAMAGE_TYPE::CRITICAL_2, damage, 2.f);
+
+			pCurScene->AddObject(pDamageObj, L"Damage");
+
+
+
+
+
+		}
+	}
+	
 }
 
 void CMonsterScript::OnCollisionExit(CGameObject* _OtherObject)
