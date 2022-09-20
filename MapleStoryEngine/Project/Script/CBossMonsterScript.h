@@ -35,6 +35,8 @@ struct tBossMonInfo
 {
     float      fSpeed;           // 속도
     float      fHP;              // 체력 
+    float       fMaxHP;
+
 
     float      fRecogRange;      // 인식 범위 
     float      fAttRange;        // 공격 범위
@@ -68,9 +70,12 @@ private:
     int             m_iHitCnt;
     bool            m_bAttackEnd;
     bool            m_bDie;
+    float           m_fTimer;
 
 
 public:
+    bool                GetDie() { return m_bDie; }
+
     float               GetSpeed() { return m_tInfo.fSpeed; }
     BOSS_DIRECTION      GetDir() { return m_eDir; }
     tBossMonInfo        GetMonsterInfo() { return m_tInfo; }
@@ -83,6 +88,8 @@ public:
     void    SetMonsterInfo(const tBossMonInfo& _info) { m_tInfo = _info; }
     void    SetDir(BOSS_DIRECTION _dir) { m_eDir = _dir; }
     void    SetBossAttState(BOSS_ATTACK_STATE _estate) { m_eAttackState = _estate; }
+
+    void SubHP(float damage) { m_tInfo.fHP -= damage; if (m_tInfo.fHP <= 0.f) { m_eCurStateType = MONSTER_STATE::DEAD;  m_bDie = true; } }
 
 
 public:

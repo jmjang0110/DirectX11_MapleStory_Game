@@ -5,6 +5,7 @@
 #include "CRigidBodyScript.h"
 #include "CGravityScript.h"
 #include "CMonsterScript.h"
+#include "CItemScript.h"
 
 
 
@@ -63,6 +64,14 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 	CGravityScript*		gravityScript = (CGravityScript*)_OtherObject->GetScriptByName(L"CGravityScript");
 	CRigidBodyScript*	rigidBodyScript = (CRigidBodyScript*)_OtherObject->GetScriptByName(L"CRigidBodyScript");
 	CMonsterScript*		monsterScript = (CMonsterScript*)_OtherObject->GetScriptByName(L"CMonsterScript");
+	CItemScript* itemScript = (CItemScript*)_OtherObject->GetScriptByName(L"CItemScript");
+
+	if (playerScript != nullptr)
+	{
+		if (playerScript->GetState() == PLAYER_STATE::ROPE_MOVE_DOWN)
+			return;
+	}
+
 
 
 	Vec3 vObjPos = _OtherObject->Collider2D()->GetWorldPos();
@@ -92,6 +101,8 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 		float vGround_SountLine_y = vGroundPos.y - (vGroundScale.y / 2);
 		float vGround_NorthLine_y = vGroundPos.y + (vGroundScale.y / 2);
 
+		
+
 		if (vGround_SountLine_y < vObj_SouthLine_y && vObj_SouthLine_y <= vGround_NorthLine_y)
 		{
 			// 올린다. 
@@ -104,6 +115,7 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 			}
 
+
 			// 위 -> 아래로 향할 때 
 			if (playerPrevPos.y - playerCurPos.y >= 0.f)
 			{
@@ -114,11 +126,19 @@ void CGroundScript::OnCollisionEnter(CGameObject* _OtherObject)
 				if (nullptr != playerScript)
 				{
 					playerScript->SetOnGround(true);
+					playerScript->SetGroundNorthY(vGround_NorthLine_y);
+					playerScript->SetOnGroundAngle(false);
+
 				}
 
 				if (nullptr != gravityScript)
 				{
 					gravityScript->SetOnGround(true);
+				}
+
+				if (nullptr != itemScript)
+				{
+					itemScript->m_eSpotType = ITEM_SPOT::JUMP;
 				}
 
 			}
@@ -247,6 +267,13 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 	CGravityScript* gravityScript = (CGravityScript*)_OtherObject->GetScriptByName(L"CGravityScript");
 	CMonsterScript* monsterScript = (CMonsterScript*)_OtherObject->GetScriptByName(L"CMonsterScript");
 
+	//if (playerScript != nullptr)
+	//{
+	//	if (playerScript->GetState() == PLAYER_STATE::ROPE_MOVE_DOWN)
+	//		return;
+	//}
+
+
 
 
 	Vec3 vObjPos = _OtherObject->Collider2D()->GetWorldPos();
@@ -287,12 +314,24 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 			if (ObjPrevPos.y - ObjCurPos.y >= 0.f)
 			{
 				vObjPos = _OtherObject->Transform()->GetRelativePos();
-				vObjPos.y += fValue;
+				if (playerScript != nullptr)
+				{
+				PLAYER_STATE playerState = playerScript->GetState();
+				if(playerState != PLAYER_STATE::ROPE_MOVE_DOWN)
+					vObjPos.y += fValue;
+				}
+				else
+				{
+					vObjPos.y += fValue;
+				}
+
 				_OtherObject->Transform()->SetRelativePos(vObjPos);
 
 				if (nullptr != playerScript)
 				{
 					playerScript->SetOnGround(true);
+					playerScript->SetOnGroundAngle(false);
+
 				}
 
 				if (nullptr != gravityScript)
@@ -384,6 +423,8 @@ void CGroundScript::OnCollision(CGameObject* _OtherObject)
 				if (nullptr != playerScript)
 				{
 					playerScript->SetOnGround(true);
+					playerScript->SetOnGroundAngle(true);
+
 				}
 			
 				if (nullptr != gravityScript)

@@ -11,7 +11,7 @@ private:
     bool    m_bEnable;
 
     // Click
-    CScript* m_pInst;
+    CScript*        m_pInst;
     CLIKCED         m_BCEvent;
 
 

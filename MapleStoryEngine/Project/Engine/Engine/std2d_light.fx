@@ -145,13 +145,15 @@ float4 PS_Collider2D(VTX_OUT _in) : SV_Target
        
     if(g_int_0)
     {
-        vOutColor = float4(1.f, 0.f, 0.f, 1.f);
+       vOutColor = float4(1.f, 0.f, 0.f, 1.f);
     }
     else
     {
         vOutColor = float4(0.f, 1.f, 0.f, 1.f);
     }
         
+    
+    
     return vOutColor;
 }
 

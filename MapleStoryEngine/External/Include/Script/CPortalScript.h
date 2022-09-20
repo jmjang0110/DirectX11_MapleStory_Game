@@ -16,6 +16,9 @@ private:
 
 public:
     void SavePlayerToPrefab();
+    void SaveInventoryToPrefab();
+    void SaveQuickSlotToPrefab();
+
 
 
 public:

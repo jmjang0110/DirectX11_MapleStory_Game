@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+JJM_DX11_2DGame filter=lfs diff=lfs merge=lfs -text
+MapleStoryEngine filter=lfs diff=lfs merge=lfs -text

@@ -19,8 +19,12 @@
 #include <Engine/CLayerFile.h>
 
 CGameObject* CSceneSaveLoad::pSceneManagerObj = nullptr;
+CGameObject* CSceneSaveLoad::pMainPlayer = nullptr;
+CGameObject* CSceneSaveLoad::pMainCamera = nullptr;
+
 CSceneStartScript* CSceneSaveLoad::pSceneMgrScript = nullptr;
 
+wstring CSceneSaveLoad::LoadSceneName = L"";
 
 
 void CSceneSaveLoad::SaveScene(CScene* _pScene, const wstring& _strSceneFilePath)
@@ -99,10 +103,14 @@ void CSceneSaveLoad::SaveGameObject(CGameObject* _pObj, FILE* _pFile)
     }
 }
 
+
 CScene* CSceneSaveLoad::LoadScene(const wstring& _strSceneFilePath)
 {
     // 최종 경로에서 상대경로만 추출
     wstring strKey = CPathMgr::GetInst()->GetRelativePath(_strSceneFilePath);
+
+
+    LoadSceneName = strKey;
 
     // CResMgr 에서 상대경로를 키값으로, CSceneFile 을 찾아냄
     CResMgr::GetInst()->Load<CSceneFile>(strKey, strKey);
@@ -330,6 +338,43 @@ void CSceneSaveLoad::LoadMainPlayer(CScene* _pScene)
     fclose(pFile);
 
 
+
+}
+
+void CSceneSaveLoad::LoadInventory(CScene* _pScene)
+{
+    wstring strContent = CPathMgr::GetInst()->GetContentPath();
+    wstring wstrResKey = L"prefab\\Inventory.pref";
+    wstring FullPath = strContent + wstrResKey;
+
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, FullPath.c_str(), L"rb");
+
+    CGameObject* pObj = LoadGameObject(pFile);
+    pObj->Deactivate();
+
+    _pScene->AddObject(pObj, L"Inventory");
+
+    fclose(pFile);
+
+
+}
+
+void CSceneSaveLoad::LoadMainBar(CScene* _pScene)
+{
+
+    wstring strContent = CPathMgr::GetInst()->GetContentPath();
+    wstring wstrResKey = L"prefab\\MainBar.pref";
+    wstring FullPath = strContent + wstrResKey;
+
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, FullPath.c_str(), L"rb");
+
+    CGameObject* pObj = LoadGameObject(pFile);
+
+    _pScene->AddObject(pObj, L"UI");
+
+    fclose(pFile);
 
 }
 

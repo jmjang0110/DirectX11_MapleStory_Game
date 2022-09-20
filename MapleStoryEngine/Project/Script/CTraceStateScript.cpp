@@ -13,7 +13,8 @@
 #include "CIdleStateScript.h"
 #include "CBossMonsterScript.h"
 
-
+#include "CBasicBallScript.h"
+#include "CSkillnearScript.h"
 
 CTraceStateScript::CTraceStateScript()
 	: CStateScript((int)SCRIPT_TYPE::TRACESTATESCRIPT)
@@ -101,6 +102,13 @@ void CTraceStateScript::update()
 			GetAI()->ChangeState(MONSTER_STATE::IDLE);
 		}
 
+		if (fLen <= m_fRangeToAttack)
+		{
+			// Change State
+			GetAI()->ChangeState(MONSTER_STATE::ATT);
+		}
+
+
 		if (tMonInfo.fHP <= 0.f)
 		{
 			GetAI()->ChangeState(MONSTER_STATE::DEAD);
@@ -162,6 +170,8 @@ void CTraceStateScript::lateupdate()
 
 void CTraceStateScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+
+
 }
 
 void CTraceStateScript::OnCollision(CGameObject* _OtherObject)

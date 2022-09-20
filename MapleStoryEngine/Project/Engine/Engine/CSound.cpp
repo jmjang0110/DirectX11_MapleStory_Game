@@ -26,6 +26,9 @@ CSound::~CSound()
 
 int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap)
 {
+	if (_iRoopCount == 1)
+		int i = 0;
+
 	if (_iRoopCount <= -1)
 	{
 		assert(nullptr);
@@ -53,8 +56,9 @@ int CSound::Play(int _iRoopCount, float _fVolume, bool _bOverlap)
 	m_listChannel.push_back(pChannel);
 
 	int iIdx = -1;
-	pChannel->getIndex(&iIdx);
+ 	pChannel->getIndex(&iIdx);
 
+	
 	return iIdx;
 }
 
@@ -85,6 +89,8 @@ void CSound::SetVolume(float _f, int _iChannelIdx)
 	}
 }
 
+
+
 void CSound::RemoveChannel(FMOD::Channel* _pTargetChannel)
 {
 	list<FMOD::Channel*>::iterator iter = m_listChannel.begin();
@@ -92,7 +98,7 @@ void CSound::RemoveChannel(FMOD::Channel* _pTargetChannel)
 	{
 		if (*iter == _pTargetChannel)
 		{
-			m_listChannel.erase(iter);
+   			m_listChannel.erase(iter);
 			return;
 		}
 	}

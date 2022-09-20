@@ -239,15 +239,22 @@ float4 PS_Collider2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
        
-    if(g_int_0)
+    if (g_int_0)
     {
         vOutColor = float4(1.f, 0.f, 0.f, 1.f);
     }
     else
     {
-        vOutColor = float4(0.f, 1.f, 0.f, 1.f);
+    
+            vOutColor = float4(0.f, 1.f, 0.f, 1.f);
     }
         
+    
+    if (g_int_0 == -1)
+    {
+                // 시연할려고 일부러 출력안시키게 함 이거 지우고 위에꺼 키면 Collider 정상출력
+        vOutColor = float4(0.f, 0.f, 0.f, 0.f);
+    }
     return vOutColor;
 }
 
@@ -466,7 +473,7 @@ float4 PS_Rectangle2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = (float4) 0.f;
       
-    vOutColor = float4(0.f, 0.f, 1.f, 1.f);
+    //vOutColor = float4(0.f, 0.f, 1.f, 1.f);
 
     return vOutColor;
 }

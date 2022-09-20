@@ -30,6 +30,8 @@
 CMonsterFactoryScript::CMonsterFactoryScript()
 	:CScript((int)SCRIPT_TYPE::MONSTERFACTORYSCRIPT)
 	, m_fTimer(0.f)
+	, m_bMonsterCreateMode(true)
+
 
 
 {
@@ -40,6 +42,8 @@ CMonsterFactoryScript::CMonsterFactoryScript()
 CMonsterFactoryScript::CMonsterFactoryScript(const CMonsterFactoryScript& _origin)
 	: CScript((int)SCRIPT_TYPE::MONSTERFACTORYSCRIPT)
 	, m_fTimer(0.f)
+	, m_bMonsterCreateMode(true)
+
 
 
 {
@@ -82,6 +86,9 @@ void CMonsterFactoryScript::start()
 
 void CMonsterFactoryScript::update()
 {
+	if (m_bMonsterCreateMode == false)
+		return;
+
 	m_fTimer += DT;
 	// 5 초에 한번씩 Update 
 	if (m_fTimer >= 5.f)
@@ -101,14 +108,23 @@ void CMonsterFactoryScript::update()
 
 			int CreateMobCnt = pMobGroundScript->GetPossibleCreateCnt();
 
-			if(pCurScene->GetName() == L"Osolgil")
+			if (pCurScene->GetName() == L"Osolgil")
 				CreateMonster(CreateMobCnt, L"GiganticBiking", pMobGroundScript);
+			else if (pCurScene->GetName() == L"ClockTowerBottomFloor")
+				CreateMonster(CreateMobCnt, L"GiganticBiking", pMobGroundScript);
+			else if (pCurScene->GetName() == L"ClockTowerOriginFloor")
+				CreateMonster(CreateMobCnt, L"Tanatos", pMobGroundScript);
+
 
 		}
 
 
 	}
 
+	if (KEY_TAP(KEY::K))
+	{
+		m_bMonsterCreateMode = !m_bMonsterCreateMode;
+	}
 }
 
 void CMonsterFactoryScript::lateupdate()

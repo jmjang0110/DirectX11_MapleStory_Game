@@ -31,8 +31,8 @@ class CMonsterScript :
 {
 private:
     class CMobGroundScript* m_pMobGround; // 자신이 속한 GroundScript 
-    class CAIScript* m_pAI;
-    tMonsterInfo        m_tInfo;
+    class CAIScript*        m_pAI;
+    tMonsterInfo            m_tInfo;
 
 
     // cur
@@ -50,11 +50,17 @@ private:
     int             m_iHitCnt;
     bool            m_bAttackEnd;
     bool            m_bDie;
+    float           m_fTimer;
 
 
     float           m_fDiff_Between_Ground;
+
+private:
+    int m_iHitNumber;
+
  
 public:
+    bool                GetDie() { return m_bDie; }
     float               GetSpeed() { return m_tInfo.fSpeed; }
     MONSTER_DIRECTION   GetDir() { return m_eDir; }
     tMonsterInfo        GetMonsterInfo() { return m_tInfo; }

@@ -1,0 +1,58 @@
+﻿  .\Project\Script\CAIScript.h
+  .\Project\Script\CameraPlayerMoveScript.h
+  .\Project\Script\CAnimOnceScript.h
+  .\Project\Script\CAttackStateScript.h
+  .\Project\Script\CBackGroundScript.h
+  .\Project\Script\CBasicBallScript.h
+  .\Project\Script\CBossHPBarScript.h
+  .\Project\Script\CBossMonsterScript.h
+  .\Project\Script\CBossNPCScript.h
+  .\Project\Script\CButtonScript.h
+  .\Project\Script\CCameraMoveScript.h
+  .\Project\Script\CCloudScript.h
+  .\Project\Script\CConsumeScript.h
+  .\Project\Script\CCursorScript.h
+  .\Project\Script\CDamageScript.h
+  .\Project\Script\CDeadStateScript.h
+  .\Project\Script\CDieNoticeScript.h
+  .\Project\Script\CDoubleJumpScript.h
+  .\Project\Script\CExpScript.h
+  .\Project\Script\CGravityScript.h
+  .\Project\Script\CGroundScript.h
+  .\Project\Script\CHitScript.h
+  .\Project\Script\CHpScript.h
+  .\Project\Script\CIdleStateScript.h
+  .\Project\Script\CInventoryScript.h
+  .\Project\Script\CItemScript.h
+  .\Project\Script\CLaunchSkillScript.h
+  .\Project\Script\CMainBarScript.h
+  .\Project\Script\CMissileScript.h
+  .\Project\Script\CMobGroundScript.h
+  .\Project\Script\CMonsterFactoryScript.h
+  .\Project\Script\CMonsterScript.h
+  .\Project\Script\CMpScript.h
+  .\Project\Script\CNumberScript.h
+  .\Project\Script\CPaperBurnScript.h
+  .\Project\Script\CPatrolStateScript.h
+  .\Project\Script\CPlayerScript.h
+  .\Project\Script\CPortalScript.h
+  .\Project\Script\CQuickSlotScript.h
+  .\Project\Script\CRigidBodyScript.h
+  .\Project\Script\CRopeScript.h
+  .\Project\Script\CSceneSaveLoad.h
+  .\Project\Script\CSceneStartScript.h
+  .\Project\Script\CScriptMgr.h
+  .\Project\Script\CShowInfoScript.h
+  .\Project\Script\CSkillnearScript.h
+  .\Project\Script\CSkillScript.h
+  .\Project\Script\CStateScript.h
+  .\Project\Script\CStatScript.h
+  .\Project\Script\CTimerScript.h
+  .\Project\Script\CTraceStateScript.h
+  .\Project\Script\CWallScript.h
+  52개 파일이 복사되었습니다.
+  CSceneStartScript.cpp
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Include\Engine\CSound.h(34,23): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Include\Engine\CSound.h(35,26): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Script\CSceneStartScript.cpp(351,44): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Script.vcxproj -> C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Library\Script\Script.lib

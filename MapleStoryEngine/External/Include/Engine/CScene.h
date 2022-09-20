@@ -16,6 +16,13 @@ private:
     SCENE_STATE     m_eSceneState;
     wstring         m_strResKey;
 
+private:
+    // todo 
+    bool        m_bEditMode;
+
+public:
+    void SetEditMode(bool _b) { m_bEditMode = _b; }
+    bool GetEditMode() { return m_bEditMode; }
 
 public:
     void start();

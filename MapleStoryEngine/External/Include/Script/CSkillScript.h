@@ -24,12 +24,23 @@ enum class SKILL_STATE
 class CSkillScript :
     public CScript
 {
+private:
+    Ptr<CSound>         m_pPrepareBgm;
+    Ptr<CSound>         m_pKeyDownBgm;
+    Ptr<CSound>         m_pEndBgm;
+
+    bool m_bPrepareBgmStart;
+    bool m_bEndBgmStart;
+
 
 private:
     bool                m_bOffsetY;
     float               m_fArrowTimer;
     float               m_fMaxArrowTimer;
     wstring             m_wstrBallPrefabName;
+
+    float               m_fTimer;
+
 
 
     KEY                 m_eKey;

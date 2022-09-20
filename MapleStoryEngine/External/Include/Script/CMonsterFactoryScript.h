@@ -19,6 +19,8 @@ private:
 private:
     float           m_fTimer;
 
+private:
+    bool            m_bMonsterCreateMode;
 
 
 

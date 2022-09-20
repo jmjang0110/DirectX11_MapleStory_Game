@@ -42,6 +42,13 @@ void CMobGroundScript::start()
 	m_vScale = GetOwner()->Transform()->GetWorldScale();
 	m_vPos = GetOwner()->Transform()->GetRelativePos();
 
+	 // 가로 700 px 당 한마리 생성 
+	if (m_vScale.x >= 2100.f)
+		m_iMaxMonsterCnt = (int)m_vScale.x / 700;
+	else if (m_vScale.x <= 1000.f)
+		m_iMaxMonsterCnt = (int)m_vScale.x / 300;
+	else
+		m_iMaxMonsterCnt = (int)m_vScale.x / 500;
 
 }
 

@@ -19,6 +19,15 @@ private:
 
 private:
     Ptr<CSound> pSound_Bgm;
+    CScene* m_pCurScene;
+
+private:
+    float m_fTimer;
+
+
+private:
+    bool        m_bBossEnd;
+
 
 public:
     void InsertPrefab(wstring _name);
@@ -35,6 +44,14 @@ public:
     CPrefab* GetPrefab(wstring _name);
     CPrefab* GetMonsterPrefab(wstring _name);
     CPrefab* GetMonsterPrefab(int idx);
+
+
+public:
+    void SavePlayerToPrefab(Vec2 _vnextScenePlayerpos);
+    void SaveInventoryToPrefab();
+    void SaveQuickSlotToPrefab();
+
+    void ChangeBackGroundBgm(wstring _BgmName);
 
 public:
     void End();

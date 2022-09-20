@@ -25,6 +25,9 @@ enum class PLAYER_STATE
     ALERT,
     ATTACK,
     DEAD,
+    ROPE_MOVE_UP,
+    ROPE_MOVE_DOWN,
+    ROPE_STOP,
 
     END,
 
@@ -81,15 +84,46 @@ private:
     float           m_fMP;
     float           m_fEXP;
 
+    float           m_fMaxHP;
+    float           m_fMaxMP;
+    float           m_fMaxEXP;
+
+    bool            m_bDie;
+
+
     float           m_fMinAttack;
     float           m_fMaxAttack;
 
-
+    float           m_fTimer;
     Vec3            m_vPrevPos;
+    int             m_iHitCnt;
+
+
+private:
+    Ptr<CSound>     m_pJumpBgm;
+    Ptr<CSound>     m_pDieBgm;
+
+private:
+    float           m_STR;
+    float           m_DEX;
+    float           m_INT;
+    float           m_LUK;
+
+    float           m_fGroundNorthY;
+    bool            m_bOnAngleGround;
+
+private:
+    float           m_bD_SkillColltime;
+    bool            m_bD_SkillStart;
+
+
 
 
 
 public:
+    void SetGroundNorthY(float _f) { m_fGroundNorthY = _f; }
+    void SetOnGroundAngle(bool _b) { m_bOnAngleGround = _b; }
+    
     Vec3 GetPrevPos() { return m_vPrevPos; }
     PLAYER_DIRECTION GetDir() { return m_eDir; }
     void SetOnGround(bool _b) { m_bOnGround = _b; }
@@ -105,13 +139,48 @@ public:
     float GetExp() { return m_fEXP; }
     float GetHp() { return m_fHP; }
     float GetMp() { return m_fMP; }
+    float GetMaxHp() { return m_fMaxHP; }
+    float GetMaxMp() { return m_fMaxMP; }
+
+
+    float GetSTR() { return m_STR; }
+    float GetDEX() { return m_DEX; }
+    float GetINT() { return m_INT; }
+    float GetLUK() { return m_LUK; }
+
+
+
+    void LevelUp() { m_iLevel++; }
+
 
 public:
-    void AddHp(float _fhp) { m_fHP += _fhp; }
-    void AddMp(float _fmp) { m_fMP += _fmp; }
-    void AddExp(float _fexp) { m_fEXP += _fexp; }
+    void AddHp(float _fhp) {
+        m_fHP += _fhp; if (m_fHP >= m_fMaxHP) m_fHP = m_fMaxHP;
+
+        int i = 0; 
+
+    }
+    void AddMp(float _fmp) { m_fMP += _fmp;if (m_fMP >= m_fMaxMP) m_fHP = m_fMaxHP; }
+    void AddExp(float _fexp) { m_fEXP += _fexp;  }
+
+    void SubHP(float _fhp) { m_fHP -= _fhp; if (m_fHP <= 0.f) m_fHP = 0.f; }
+    void SubMP(float _fmp) { m_fMP -= _fmp; if (m_fMP <= 0.f) m_fHP = 0.f; }
+
+    void SetMP(float _F) { m_fMP = _F; }
+    void SetHP(float _F) { m_fHP = _F; }
+    void SetExp(float _f) { m_fEXP = _f; }
+
+    int GetLevel() { return m_iLevel; }
 
 
+
+    void SetState(PLAYER_STATE _eState) { m_ePrevState = m_eCurState; m_eCurState = _eState; }
+    void SetPrevState(PLAYER_STATE _eState) { m_ePrevState = _eState; }
+
+    PLAYER_STATE GetState() { return m_eCurState; }
+
+
+    void Revival();
 
 public:
     virtual void start();
@@ -131,6 +200,9 @@ public:
     void Update_Animation();
 
     void Update_Inventory();
+
+    void Update_Bgm();
+
 
 
 public:
@@ -160,6 +232,7 @@ public:
     friend class CHpScript;
     friend class CMpScript;
     friend class CItemScript;
+    friend class CStatScript;
 
 };
 

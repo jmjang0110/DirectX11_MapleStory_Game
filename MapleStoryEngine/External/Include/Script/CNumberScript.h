@@ -6,6 +6,7 @@ enum class NUMBER_TYPE
     ITEM,
     MESO,
     SHIP_TIMER,
+    BLACK,
 
     END,
 
@@ -18,14 +19,14 @@ class CNumberScript :
     public CScript
 {
 private:
-    float           m_fTimer;
+    float           m_fTimer; // 4
 
 private:
-    Vec2            m_vStartLT;
-    Vec2            m_vSlice;
+    Vec2            m_vStartLT; // 8
+    Vec2            m_vSlice; // 8
 
     Ptr<CTexture>   m_pTex;
-    UINT            m_iNum;
+    UINT            m_iNum; // 4
 
     NUMBER_TYPE     m_eType;
 

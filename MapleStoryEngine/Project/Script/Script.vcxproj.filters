@@ -133,6 +133,39 @@
     <Filter Include="Script\02. UI\SceneStart">
       <UniqueIdentifier>{cd736559-05c9-48c6-af9f-36d95e251ee1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script\02. UI\QuickSlot">
+      <UniqueIdentifier>{481139e9-8791-4b18-92a8-087563369633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\05. State\Hit">
+      <UniqueIdentifier>{cb416360-ddb1-44e1-8dd8-50d067c290f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\RopeLadder">
+      <UniqueIdentifier>{81642b9c-c2e3-49b2-bff3-6184becefb8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Stat">
+      <UniqueIdentifier>{35db41f6-58f0-4173-9767-13d94d056c5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\04. Effect\AnimOnce">
+      <UniqueIdentifier>{9f6e1531-117c-451a-9cf0-48ee03da7144}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\Timer">
+      <UniqueIdentifier>{c0533c4e-b14b-484d-8eb4-50b51b3b5a25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\BossBar">
+      <UniqueIdentifier>{da9e86f3-c6a3-433e-beec-b250623f4304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\BossBar\BossHPBar">
+      <UniqueIdentifier>{76094db4-db5a-4a28-a458-7a4ad6d78f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\DieNotice">
+      <UniqueIdentifier>{78e49ca8-4896-4b7b-a56d-d1e118b56676}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\03. Object\NPC">
+      <UniqueIdentifier>{d70f975f-0171-4748-8e89-a8e20f2684b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\02. UI\ShowInfo">
+      <UniqueIdentifier>{f6150198-64d0-4deb-beaa-ed3237554b93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -263,6 +296,36 @@
     <ClInclude Include="CSceneStartScript.h">
       <Filter>Script\02. UI\SceneStart</Filter>
     </ClInclude>
+    <ClInclude Include="CQuickSlotScript.h">
+      <Filter>Script\02. UI\QuickSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="CHitScript.h">
+      <Filter>Script\05. State\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="CRopeScript.h">
+      <Filter>Script\03. Object\RopeLadder</Filter>
+    </ClInclude>
+    <ClInclude Include="CStatScript.h">
+      <Filter>Script\02. UI\Stat</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimOnceScript.h">
+      <Filter>Script\04. Effect\AnimOnce</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimerScript.h">
+      <Filter>Script\02. UI\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossHPBarScript.h">
+      <Filter>Script\02. UI\BossBar\BossHPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="CDieNoticeScript.h">
+      <Filter>Script\02. UI\DieNotice</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossNPCScript.h">
+      <Filter>Script\03. Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="CShowInfoScript.h">
+      <Filter>Script\02. UI\ShowInfo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -378,9 +441,6 @@
     <ClCompile Include="CBossMonsterScript.cpp">
       <Filter>Script\03. Object\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="CLaunchSkillScript.cpp">
-      <Filter>Script\03. Object\Skill\BossMobSkill</Filter>
-    </ClCompile>
     <ClCompile Include="CWallScript.cpp">
       <Filter>Script\03. Object\Wall</Filter>
     </ClCompile>
@@ -392,6 +452,39 @@
     </ClCompile>
     <ClCompile Include="CSceneStartScript.cpp">
       <Filter>Script\02. UI\SceneStart</Filter>
+    </ClCompile>
+    <ClCompile Include="CQuickSlotScript.cpp">
+      <Filter>Script\02. UI\QuickSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="CHitScript.cpp">
+      <Filter>Script\05. State\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="CRopeScript.cpp">
+      <Filter>Script\03. Object\RopeLadder</Filter>
+    </ClCompile>
+    <ClCompile Include="CStatScript.cpp">
+      <Filter>Script\02. UI\Stat</Filter>
+    </ClCompile>
+    <ClCompile Include="CLaunchSkillScript.cpp">
+      <Filter>Script\03. Object\Skill\BossMobSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimOnceScript.cpp">
+      <Filter>Script\04. Effect\AnimOnce</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimerScript.cpp">
+      <Filter>Script\02. UI\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossHPBarScript.cpp">
+      <Filter>Script\02. UI\BossBar\BossHPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="CDieNoticeScript.cpp">
+      <Filter>Script\02. UI\DieNotice</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossNPCScript.cpp">
+      <Filter>Script\03. Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="CShowInfoScript.cpp">
+      <Filter>Script\02. UI\ShowInfo</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

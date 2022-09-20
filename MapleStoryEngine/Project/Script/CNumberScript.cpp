@@ -27,9 +27,10 @@ CNumberScript::CNumberScript()
 CNumberScript::CNumberScript(const CNumberScript& _origin)
 	: CScript((int)SCRIPT_TYPE::NUMBERSCRIPT)
 	, m_fTimer(0.f)
-	, m_iNum(0)
-	, m_vStartLT(0.f, 0.f)
-	, m_vSlice(0.f, 0.f)
+	, m_iNum(_origin.m_iNum)
+	, m_vStartLT(_origin.m_vStartLT)
+	, m_vSlice(_origin.m_vSlice)
+	, m_eType(_origin.m_eType)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -37,6 +38,7 @@ CNumberScript::CNumberScript(const CNumberScript& _origin)
 
 CNumberScript::~CNumberScript()
 {
+	int i = 0;
 
 
 }
@@ -68,7 +70,20 @@ void CNumberScript::Init(NUMBER_TYPE _type, Vec2 _startLT, Vec2 _slice)
 
 
 	break;
+	case NUMBER_TYPE::BLACK:
+	{
+		m_pTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\Inventory\\BlackNumber.png", L"texture\\Inventory\\BlackNumber.png");
+		m_vStartLT = Vec2(0.f, 0.f);
+		m_vSlice = Vec2(5.f, 7.f);
+	}
+		break;
 	case NUMBER_TYPE::SHIP_TIMER:
+	{
+		m_pTex = CResMgr::GetInst()->Load<CTexture>(L"texture\\UI\\TimerNum.png", L"texture\\UI\\TimerNum.png");
+
+		m_vStartLT = Vec2(0.f, 0.f);
+		m_vSlice = Vec2(28.f, 47.f);
+	}
 		break;
 	}
 
@@ -125,6 +140,9 @@ void CNumberScript::start()
 
 void CNumberScript::UpdateNumber(UINT _num)
 {
+	if (_num == 0)
+		int i = 0;
+
 	m_iNum = _num;
 
 	vector<UINT> vTemp;
@@ -138,11 +156,19 @@ void CNumberScript::UpdateNumber(UINT _num)
 		num /= 10;
 	}
 
+	int size = m_vecNum.size();
+	if (_num == 0)
+		size = 1;
+
 	CGameObject* NumObj = GetOwner();// ->FindChildObj(L"Number");
-	NumObj->TileMap()->SetTileMapCount(m_vecNum.size(), 1);
-	NumObj->Transform()->SetRelativeScale(m_vSlice.x * m_vecNum.size(), m_vSlice.y * 1, 1.f);
+	NumObj->TileMap()->SetTileMapCount(size, 1);
+	NumObj->Transform()->SetRelativeScale(m_vSlice.x * size, m_vSlice.y * 1, 1.f);
 
 	int idx = 0;
+
+	if(_num == 0)
+		NumObj->TileMap()->SetTileData(idx, 0);
+
 
 	for (int i = m_vecNum.size() - 1; i >= 0; --i)
 	{

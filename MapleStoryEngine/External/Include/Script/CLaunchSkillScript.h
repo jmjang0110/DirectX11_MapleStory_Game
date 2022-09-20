@@ -8,6 +8,26 @@ private:
     bool m_bOnGorund;
 
 
+    bool m_UseGround; // true : ¶¥¿¡ ´ê¾ÒÀ» ¶§ false : ±×³É ¸ÂÀ¸¸é ÅÍÁü 
+    bool m_bHit;
+
+    float m_fTimer;
+
+    bool m_bAttackSuccess;
+
+
+
+public:
+    float GetTime() { return m_fTimer; }
+
+
+public:
+    void UseGround(bool _b) { m_UseGround = _b; }
+    void SetHit(bool _B) { m_bHit = _B; }
+
+    void SetAttackSuccess(bool _b) { m_bAttackSuccess = _b; }
+    bool GetATtackSuccess() { return m_bAttackSuccess; }
+
 public:
     virtual void start();
     virtual void update();

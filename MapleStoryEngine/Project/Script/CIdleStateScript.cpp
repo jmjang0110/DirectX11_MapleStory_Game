@@ -13,6 +13,8 @@
 #include "CAIScript.h"
 #include "CTraceStateScript.h"
 #include "CBossMonsterScript.h"
+#include "CBasicBallScript.h"
+#include "CSkillnearScript.h"
 
 
 
@@ -157,6 +159,17 @@ void CIdleStateScript::lateupdate()
 
 void CIdleStateScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+	CBasicBallScript* pBasicBallScript = (CBasicBallScript*)_OtherObject->GetScriptByName(L"CBasicBallScript");
+	CSkillnearScript* pSkillNearScript = (CSkillnearScript*)_OtherObject->GetScriptByName(L"CSkillnearScript");
+
+	if (pBasicBallScript != nullptr ||
+		pSkillNearScript != nullptr)
+	{
+
+		GetAI()->ChangeState(MONSTER_STATE::HIT);
+
+	}
+
 }
 
 void CIdleStateScript::OnCollision(CGameObject* _OtherObject)

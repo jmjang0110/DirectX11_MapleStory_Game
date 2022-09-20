@@ -28,6 +28,8 @@ public:
 	void SwapLayer(int _Lidx, int _Ridx);
 
 	void SceneChangeEvent(CScene* _pcurscene, CScene* _pnextscene);
+	void StartSceneEvent(CScene* _StartScene);
+
 	//===== ===== =====
 	void AddChild(CGameObject* _pParentObject, CGameObject* _pChildObject);	
 	void DisconnectParent(CGameObject* _pObject);

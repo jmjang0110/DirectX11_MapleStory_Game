@@ -10,6 +10,9 @@ enum class MONSTER_STATE
 	ATT,
 	RUN,
 	DEAD,
+	HIT,
+
+
 	END,
 
 };

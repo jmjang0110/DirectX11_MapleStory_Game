@@ -120,7 +120,14 @@ void CCollider2D::render()
 	UpdateData();
 
 	//m_pMtrl->SetScalarParam(L"IsCollision", &m_iCollisionCount);
+	if(	CSceneMgr::GetInst()->GetCurScene()->GetEditMode() == true)
 	m_pMtrl->SetScalarParam(SCALAR_PARAM::INT_0, &m_iCollisionCount); // CResMgr_Init 할 때 IsCollision 밖에 노출 안시킬려고 지웠음 
+	else
+	{
+		int param = -1;
+		m_pMtrl->SetScalarParam(SCALAR_PARAM::INT_0, &param);
+	}
+	
 	m_pMtrl->UpdateData();
 
 	m_pMesh->render();

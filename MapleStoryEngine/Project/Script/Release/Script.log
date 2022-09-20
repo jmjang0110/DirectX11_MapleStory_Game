@@ -1,0 +1,2 @@
+﻿  pch.cpp
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Script\pch.h(14,10): fatal error C1083: 포함 파일을 열 수 없습니다. 'Engine/global.h': No such file or directory

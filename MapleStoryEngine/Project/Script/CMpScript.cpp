@@ -16,6 +16,11 @@
 #include "CSkillnearScript.h"
 #include "CInventoryScript.h"
 #include "CPlayerScript.h"
+
+
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+
 CMpScript::CMpScript()
 	: CScript((int)SCRIPT_TYPE::MPSCRIPT)
 	, m_fMaxMp(10000.f)
@@ -42,15 +47,20 @@ CMpScript::~CMpScript()
 
 void CMpScript::start()
 {
+	CPlayerScript* playerScript = (CPlayerScript*)CSceneSaveLoad::pMainPlayer->GetScriptByName(L"CPlayerScript");
+	m_fMaxMp = playerScript->GetMaxMp();
+	m_fMp = playerScript->GetMp();
+
+
+
 }
 
 void CMpScript::update()
 {
 	if (m_pPlayer == nullptr)
 	{
-		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		CLayer* pLayer = pCurScene->GetLayer(L"Player");
-		m_pPlayer = pLayer->FindObj(L"player");
+		
+		m_pPlayer = CSceneSaveLoad::pMainPlayer; // pLayer->FindObj(L"player");
 	}
 	// Child Of MainBar Object 
 	static Vec2 Resolution = CDevice::GetInst()->GetRenderResolution();
@@ -60,6 +70,7 @@ void CMpScript::update()
 
 	CPlayerScript* playerScript = (CPlayerScript*)m_pPlayer->GetScriptByName(L"CPlayerScript");
 	m_fMp = playerScript->GetMp();
+	m_fMaxMp = playerScript->GetMaxMp();
 
 
 	// Exp Scale Max Å©±â : Resolution.x - 15.f
@@ -69,6 +80,12 @@ void CMpScript::update()
 	{
 		m_fMp = m_fMaxMp;
 		Ratio = 1.f;
+	}
+
+	if (m_fMp <= 0.f)
+	{
+		m_fMp = 0.f;
+		playerScript->SetMP(0.f);
 	}
 
 	m_fDest = (171.f) * Ratio;

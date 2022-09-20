@@ -17,6 +17,12 @@
 #include "CSkillnearScript.h"
 #include "CInventoryScript.h"
 
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+#include "CNumberScript.h"
+#include "CPlayerScript.h"
+
+
 CMainBarScript::CMainBarScript()
 	: CScript((int)SCRIPT_TYPE::MAINBARSCRIPT)
 	, m_pSubObj(nullptr)
@@ -43,13 +49,30 @@ CMainBarScript::~CMainBarScript()
 
 void CMainBarScript::start()
 {
+	CGameObject* LevelNum = GetOwner()->FindChildObj(L"Level");
+	if (LevelNum != nullptr)
+	{
+		CNumberScript* pNumScript = (CNumberScript*)LevelNum->GetScriptByName(L"CNumberScript");
+		pNumScript->Init(NUMBER_TYPE::MESO);
+		CPlayerScript* pPlayerScript = (CPlayerScript*)CSceneSaveLoad::pMainPlayer->GetScriptByName(L"CPlayerScript");
+		int level = 0;
+		if(pPlayerScript != nullptr)
+		level = pPlayerScript->GetLevel();
+
+		pNumScript->UpdateNumber(level);
+
+		
+	
+	}
+
+
 }
 
 void CMainBarScript::update()
 {
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	CLayer* pLayer = pCurScene->GetLayer(L"Default");
-	CGameObject* pCamera = pLayer->FindObj(L"MainCamera");
+	//CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	//CLayer* pLayer = pCurScene->GetLayer(L"Default");
+	CGameObject* pCamera = CSceneSaveLoad::pMainCamera;
 
 	static Vec2 Resolution = CDevice::GetInst()->GetRenderResolution();
 	Vec3 CameraPos = pCamera->Transform()->GetRelativePos();
@@ -76,6 +99,7 @@ void CMainBarScript::update()
 
 
 
+
 }
 
 void CMainBarScript::lateupdate()
@@ -92,4 +116,15 @@ void CMainBarScript::OnCollision(CGameObject* _OtherObject)
 
 void CMainBarScript::OnCollisionExit(CGameObject* _OtherObject)
 {
+}
+
+void CMainBarScript::SaveToScene(FILE* _pFile)
+{
+	CScript::SaveToScene(_pFile);
+}
+
+void CMainBarScript::LoadFromScene(FILE* _pFile)
+{
+	CScript::LoadFromScene(_pFile);
+
 }

@@ -5,6 +5,9 @@
 
 #include <Engine/CTimeMgr.h>
 #include <Engine/CTransform.h>
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+
 
 
 CRigidBodyScript::CRigidBodyScript()
@@ -16,6 +19,8 @@ CRigidBodyScript::CRigidBodyScript()
 	, m_vMaxVelocity(Vec3(150.f, 400.f, 0.f))
 	, m_fMass(1.f)
 	, m_fFricCoeff(200.f)
+	, m_vAccelRatio(1.f)
+
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -31,6 +36,9 @@ CRigidBodyScript::CRigidBodyScript(const CRigidBodyScript& _origin)
 	, m_vMaxVelocity(Vec3(150.f, 400.f, 0.f))
 	, m_fMass(1.f)
 	, m_fFricCoeff(200.f)
+	, m_vAccelRatio(1.f)
+
+
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -48,6 +56,40 @@ void CRigidBodyScript::start()
 
 void CRigidBodyScript::update()
 {
+	CPlayerScript* pPlayerScript = (CPlayerScript*)GetOwner()->GetScriptByName(L"CPlayerScript");
+	if (pPlayerScript != nullptr)
+	{
+		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+		if (pPlayerScript->GetState() == PLAYER_STATE::ROPE_MOVE_UP)
+		{
+			
+			if (KEY_PRESSED(KEY::UP))
+			{
+				vPos.y += 100.f * DT;
+				Transform()->SetRelativePos(vPos);
+			}
+			
+			return;
+
+		}
+		if (pPlayerScript->GetState() == PLAYER_STATE::ROPE_MOVE_DOWN)
+		{
+			if (KEY_PRESSED(KEY::DOWN))
+			{
+				vPos.y += -100.f * DT;
+				Transform()->SetRelativePos(vPos);
+			}
+			return;
+
+		}
+
+		if (pPlayerScript->GetState() == PLAYER_STATE::ROPE_STOP)
+		{
+			return;
+		}
+		
+	}
+
 
 
 	if (0.f != m_vForce.Length())
@@ -57,7 +99,8 @@ void CRigidBodyScript::update()
 	}
 
 	m_vAccel += m_vAccelA;								// 추가 가속도 ex) 중력 
-	m_vVelocity += m_vAccel * DT;						// 가속도에 따른 속도 변화 
+
+	m_vVelocity += m_vAccel * DT;					// 가속도에 따른 속도 변화 
 
 	if (!m_vVelocity.IsZero())
 	{
@@ -97,7 +140,7 @@ void CRigidBodyScript::update()
 		vDir.Normalize();								// 이동 방향 
 
 		Vec3 vPos = Transform()->GetRelativePos();
-		vPos += m_vVelocity * DT;						// vPos += vDir * fSpeed * DT;
+		vPos += m_vVelocity * DT ;						// vPos += vDir * fSpeed * DT;
 		Transform()->SetRelativePos(vPos);
 	}
 
@@ -105,6 +148,10 @@ void CRigidBodyScript::update()
 	m_vForce = Vec3(0.f, 0.f, 0.f);						// 힘 초기화 
 	m_vAccel = Vec3(0.f, 0.f, 0.f);						// 가속도 초기화 
 	m_vAccelA = Vec3(0.f, 0.f, 0.f);					// 추가 가속도 초기화
+
+
+
+
 }
 
 void CRigidBodyScript::lateupdate()

@@ -173,6 +173,18 @@ void CEventMgr::update()
 		}
 		break;
 
+		case EVENT_TYPE::SCENE_START:
+		{
+
+			CScene* pStartScene = (CScene*)m_vecEvent[i].lParam;
+			if (pStartScene->GetSceneState() == SCENE_STATE::STOP)
+			{
+				
+				pStartScene->SetSceneState(SCENE_STATE::PLAY);
+			}
+
+		}
+		break;
 		case EVENT_TYPE::DELETE_RES:
 		{
 			// lParam : Res Adress
@@ -224,6 +236,7 @@ void CEventMgr::update()
 
 		}
 		break;
+
 
 		// =========================
 

@@ -8,6 +8,11 @@
 #include "CRigidBodyScript.h"
 #include "CGravityScript.h"
 
+#include "CBossMonsterScript.h"
+#include "CMonsterScript.h"
+
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
 
 
 CBasicBallScript::CBasicBallScript()
@@ -44,6 +49,7 @@ CBasicBallScript::CBasicBallScript(const CBasicBallScript& _origin)
 CBasicBallScript::~CBasicBallScript()
 {
 
+
 }
 
 
@@ -55,6 +61,10 @@ void CBasicBallScript::Init(Vec3 _startpos)
 		return;
 
 
+	//if(m_pKeyDownBgm == nullptr)
+	//	m_pKeyDownBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Storm\\Use.mp3", L"sound\\Storm\\Use.mp3");
+
+	//m_iChannelIdx = m_pKeyDownBgm->Play(1, 0.5f, true);
 
 
 	if (m_eMoveType == BALLMOVE_TYPE::DIAGONAL)
@@ -86,6 +96,9 @@ void CBasicBallScript::Init(Vec3 _startpos)
 
 	m_vStartPos = _startpos;
 	m_vPrevPos = _startpos;
+
+
+
 }
 
 void CBasicBallScript::start()
@@ -93,7 +106,9 @@ void CBasicBallScript::start()
 	m_fSpeed = 500.f;
 	m_eDir = BALL_DIRECTION::LEFT;
 	m_fMaxTime = 1.f;
-	
+
+
+
 }
 
 void CBasicBallScript::update()
@@ -125,6 +140,15 @@ void CBasicBallScript::update()
 
 	}
 		break;
+
+	case BALLMOVE_TYPE::STAND:
+	{
+		StandMove();
+
+	}
+
+		break;
+
 
 	}
 
@@ -163,6 +187,12 @@ void CBasicBallScript::lateupdate()
 
 }
 
+
+void CBasicBallScript::SetHitBgm(wstring _RelativePath)
+{
+	m_pHitSound = CResMgr::GetInst()->Load<CSound>(_RelativePath, _RelativePath);
+
+}
 
 void CBasicBallScript::LinearMove()
 {
@@ -251,10 +281,50 @@ void CBasicBallScript::BallisticMove()
 {
 }
 
+void CBasicBallScript::StandMove()
+{
+	// PLayer 위치에 생성 
+	GetOwner()->Transform()->SetRelativePos(m_vStartPos);
+
+	
+
+
+}
+
 
 
 void CBasicBallScript::OnCollisionEnter(CGameObject* _OtherObject)
 {
+	
+	CMonsterScript* pMonsterScript = (CMonsterScript*)_OtherObject->GetScriptByName(L"CMonsterScript");
+	CBossMonsterScript* pBossMonsterScript = (CBossMonsterScript*)_OtherObject->GetScriptByName(L"CBossMonsterScript");
+	
+	// Die  -> return 
+	if (pMonsterScript != nullptr)
+	{
+		if (pMonsterScript->GetDie() == true)
+			return;
+
+		//if (m_pHitSound == nullptr)
+		//	m_pHitSound = CResMgr::GetInst()->Load<CSound>(L"sound\\Storm\\Hit.mp3", L"sound\\Storm\\Hit.mp3");
+
+		if (m_pHitSound != nullptr)
+		{
+			m_pHitSound->Play(1, 0.5f, true);
+			CSound::UpdateFMOD();
+		}
+
+
+	}
+	if (pBossMonsterScript != nullptr)
+	{
+		if (pBossMonsterScript->GetDie())
+			return;
+	}
+
+
+
+
 }
 
 void CBasicBallScript::OnCollision(CGameObject* _OtherObject)

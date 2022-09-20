@@ -13,6 +13,15 @@ private:
 	int				m_iLevel;
 	CGameObject*	m_pPlayer;
 
+
+	float			m_fDest;
+	Ptr<CSound>     m_pLevelUpBgm;
+	
+	float m_fBgmstartTimer;
+	bool m_bLEvelUp;
+
+
+
 public:
 	void SetMaxExp(float _f) { m_fMaxExp = _f; }
 	void SetPlayer(CGameObject* _pPlayer) { m_pPlayer = _pPlayer; }

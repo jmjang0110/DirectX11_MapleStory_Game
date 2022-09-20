@@ -10,6 +10,10 @@
 
 #include <Engine/CDevice.h>
 
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+
+
 
 CameraPlayerMoveScript::CameraPlayerMoveScript()
 	: CScript((int)SCRIPT_TYPE::AMERAPLAYERMOVESCRIPT)
@@ -38,6 +42,10 @@ CameraPlayerMoveScript::~CameraPlayerMoveScript()
 
 void CameraPlayerMoveScript::start()
 {
+
+	CSceneSaveLoad::pMainCamera = GetOwner();
+
+
 }
 
 void CameraPlayerMoveScript::update()

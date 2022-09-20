@@ -1,0 +1,5 @@
+﻿C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\DamageParticle.fx(104,16-73): warning X3206: implicit truncation of vector type
+FXC : error X3501: 'main': entrypoint not found
+  
+  compilation failed; no code produced

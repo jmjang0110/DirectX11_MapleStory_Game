@@ -11,6 +11,12 @@ public:
 	// Scene/Default/SceneManager ( CSceneStartSCript 에서 초기화 ) 
 	static CGameObject* pSceneManagerObj;
 	static class CSceneStartScript* pSceneMgrScript;
+	static CGameObject* pMainPlayer;
+	static CGameObject* pMainCamera;
+
+
+	static wstring LoadSceneName;
+
 
 public:
 	// Save
@@ -38,6 +44,8 @@ public:
 public:
 	// Load 된 Scene 에 Player를 Load 한 후 Player Layer 에 등록 
 	static void LoadMainPlayer(CScene* _pScene);
+	static void LoadInventory(CScene* _pScene);
+	static void LoadMainBar(CScene* _pScene);
 
 
 };

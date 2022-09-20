@@ -303,6 +303,9 @@ CGameObject* CGameObject::GetAncestor()
 
 CGameObject* CGameObject::FindChildObj(wstring _name)
 {
+	if (_name == L"Level")
+		int i = 0;
+
 	for (int i = 0; i < m_vecChild.size(); ++i)
 	{
 		if (m_vecChild[i]->GetName() == _name)
@@ -311,7 +314,7 @@ CGameObject* CGameObject::FindChildObj(wstring _name)
 		vector<CGameObject*> child = m_vecChild[i]->GetChild();
 		for (int k = 0; k < child.size(); ++k)
 		{
-			CGameObject* obj = FindChildObj(_name);
+			CGameObject* obj = child[k]->FindChildObj(_name);
 			if (obj != nullptr)
 				return obj;
 		}

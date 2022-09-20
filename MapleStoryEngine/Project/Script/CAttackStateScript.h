@@ -12,21 +12,28 @@ private:
     BOSS_ATTACK_STATE   m_ePrevAttState;
 
     float               m_fTimer;
-    CPrefab*            m_pSkillPrefab1;
     int                 m_Skill1_Cnt;
 
 
 private:
     bool                m_bAttackEnd; // Attack End 
+    bool                m_bAddSubSkill;
+    bool                m_bHitPlayer;
+
 
 public:
     void SetAttackEnd(bool _b) { m_bAttackEnd = _b; }
+    void AddPapulatusSkill(BOSS_ATTACK_STATE _eState);
+    void ShootPlayer(BOSS_ATTACK_STATE _eState);
 
 
 private:
     void UpdateBossMobAttack();
     void UpdateMonsterAttack();
 
+private:
+    void ShootGiganticBall();
+    void ShootTanatosBall();
 
 
 public:

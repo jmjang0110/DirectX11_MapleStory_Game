@@ -24,7 +24,7 @@ void CResMgr::InitSound()
 	}
 
 	// 32�� ä�� ����
-	CSound::g_pFMOD->init(32, FMOD_DEFAULT, nullptr);
+	CSound::g_pFMOD->init(128, FMOD_DEFAULT, nullptr);
 }
 
 void CResMgr::CreateEngineMesh()

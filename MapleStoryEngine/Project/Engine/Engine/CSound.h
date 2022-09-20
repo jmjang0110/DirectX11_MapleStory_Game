@@ -16,7 +16,7 @@ class CSound :
 {
 public:
 	static FMOD::System* g_pFMOD;
-
+	static void UpdateFMOD() { g_pFMOD->update(); }
 private:
 	FMOD::Sound* m_pSound;
 	list<FMOD::Channel*>	m_listChannel;
@@ -28,7 +28,13 @@ public:
 
 	// 0 ~ 1
 	void SetVolume(float _f, int _iChannelIdx);
-
+	
+	// todo 
+	
+	int GetChannelSize() { return m_listChannel.size(); }
+	int GetChannelMaxsize() { return m_listChannel.max_size(); }
+	// ====
+		
 private:
 	void RemoveChannel(FMOD::Channel* _pTargetChannel);
 	friend FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL* channelcontrol, FMOD_CHANNELCONTROL_TYPE controltype

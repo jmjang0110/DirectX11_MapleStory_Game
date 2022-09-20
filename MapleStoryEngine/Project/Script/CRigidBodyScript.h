@@ -24,6 +24,15 @@ private:
     float           m_fFricCoeff;   // 마찰 계수 
 
 
+
+    // todo
+    float m_vAccelRatio; // Accel 비율을 줄이거나 늘려서 줄이고 싶은 애들은 줄인다. Default : 1.f 
+
+public:
+    void SetAccelRatio(float _F) { m_vAccelRatio = _F; }
+
+
+
 public:
     virtual void start();
     virtual void update();
@@ -41,6 +50,8 @@ public:
 public:
     void AddForce(Vec3 _vF) { m_vForce += _vF; }
     void AddVelocity(Vec3 _v) { m_vVelocity += _v; }
+    void AddAccelAlpha(Vec3 _vAccelA) { m_vAccelA += _vAccelA; }
+
 
 public:
     void SetForce(Vec3 _vForce) { m_vForce = _vForce; }

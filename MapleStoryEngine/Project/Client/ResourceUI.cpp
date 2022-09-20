@@ -116,11 +116,15 @@ void ResourceUI::ItemDBClicked(DWORD_PTR _dwNode)
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	pCurScene->SetSceneState(SCENE_STATE::STOP);
 
+
+
 	// 로딩할 Scene 파일의 경로 계산
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += pResource->GetRelativePath();
 
 	CScene* pNewScene = CSceneSaveLoad::LoadScene(strFilePath);
+
+
 	CSceneMgr::GetInst()->ChangeScene(pNewScene);
 
 	// ======= Todo ==========

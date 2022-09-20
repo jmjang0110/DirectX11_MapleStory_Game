@@ -47,6 +47,8 @@ void CRenderMgr::render()
 
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 
+
+
 	if (pCurScene->GetSceneState() == SCENE_STATE::PLAY)
 	{
 		render_play();

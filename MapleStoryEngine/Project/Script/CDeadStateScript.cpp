@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "CDeadStateScript.h"
 
+#include "CBasicBallScript.h"
+#include "CSkillnearScript.h"
+
+
 CDeadStateScript::CDeadStateScript()
 	: CStateScript((int)SCRIPT_TYPE::DEADSTATESCRIPT)
 

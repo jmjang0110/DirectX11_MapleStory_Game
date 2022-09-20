@@ -23,7 +23,7 @@ CSkillScript::CSkillScript()
 	, m_KeyDownObj(nullptr)
 	, m_EndObj(nullptr)
 	, m_fArrowTimer(0.f)
-	, m_fMaxArrowTimer(0.15f)
+	, m_fMaxArrowTimer(0.1f)
 	, m_eBallMoveType(BALLMOVE_TYPE::LINEAR)
 	, m_bOffsetY(false)
 
@@ -39,7 +39,7 @@ CSkillScript::CSkillScript(const CSkillScript& _origin)
 	, m_KeyDownObj(nullptr)
 	, m_EndObj(nullptr)
 	, m_fArrowTimer(0.f)
-	, m_fMaxArrowTimer(0.15f)
+	, m_fMaxArrowTimer(0.1f)
 	, m_eBallMoveType(BALLMOVE_TYPE::LINEAR)
 	, m_bOffsetY(false)
 
@@ -52,7 +52,10 @@ CSkillScript::CSkillScript(const CSkillScript& _origin)
 CSkillScript::~CSkillScript()
 {
 	SAFE_DELETE(m_ArrowPrefab);
-
+	
+	m_pEndBgm->Stop();
+	m_pPrepareBgm->Stop();
+	m_pKeyDownBgm->Stop();
 
 }
 
@@ -61,12 +64,32 @@ void CSkillScript::start()
 {
 	m_eState = SKILL_STATE::PREPARE;
 	m_fArrowTimer = 0.f;
-	m_fMaxArrowTimer = 0.15f;
+	m_fMaxArrowTimer = 0.1f;
+
+
+	if (GetName() == L"stormSkill")
+	{
+		m_pPrepareBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Storm\\Loop.mp3", L"sound\\Storm\\Loop.mp3");
+		m_pKeyDownBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Storm\\Use.mp3", L"sound\\Storm\\Use.mp3");
+		m_pEndBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Storm\\End.mp3", L"sound\\Storm\\End.mp3");
+
+	}
+	else if (GetName() == L"ArrowFlatterSkill")
+	{
+		m_pPrepareBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\ArrowFlatter\\Loop.mp3", L"sound\\ArrowFlatter\\Loop.mp3");
+		m_pKeyDownBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\ArrowFlatter\\Use.mp3", L"sound\\Storm\\Use.mp3");
+		m_pEndBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\ArrowFlatter\\End.mp3", L"sound\\Storm\\End.mp3");
+
+	}
+	
+	m_fTimer = 0.f;
+
 
 }
 
 void CSkillScript::update()
 {
+	m_fTimer += DT;
 
 	UpdatePos();
 
@@ -75,18 +98,27 @@ void CSkillScript::update()
 	case SKILL_STATE::PREPARE:
 	{
 		Prepare();
+	
+
+
 	}
 	break;
 	case SKILL_STATE::KEYDOWN:
 	{
+	
 		KeyDown();
 		AttackArrow();
+		if (m_fTimer >=3.f)
+			CSound::UpdateFMOD();
+
+
 
 	}
 	break;
 	case SKILL_STATE::SKILLEND:
 	{
 		SkillEnd();
+
 	}
 	break;
 
@@ -151,6 +183,7 @@ void CSkillScript::Prepare()
 
 		// Change State 
 		m_eState = SKILL_STATE::KEYDOWN;
+		
 		return;
 	}
 	// On
@@ -172,6 +205,7 @@ void CSkillScript::Prepare()
 
 	if (KEY_TAP(m_eKey))
 	{
+		m_pPrepareBgm->Play(1, 0.7f, true);
 		CPlayerScript* pPlayerScript = (CPlayerScript*)m_pSkillUser->GetScriptByName(L"CPlayerScript");
 
 		if (pPlayerScript->GetDir() == PLAYER_DIRECTION::LEFT)
@@ -183,6 +217,7 @@ void CSkillScript::Prepare()
 		{
 			pAnimator2D->Play(L"Move_Right", false);
 		}
+
 
 
 
@@ -271,6 +306,8 @@ void CSkillScript::KeyDown()
 		pAnimator2D->Play(L"EMPTY", false);
 		pAnimator2D->Deactivate();
 
+		m_fTimer = 0.f;
+		m_pEndBgm->Play(1, 0.8f, true);
 	}
 
 	return;
@@ -283,7 +320,7 @@ void CSkillScript::SkillEnd()
 	if (m_eState != SKILL_STATE::SKILLEND)
 		return;
 
-	if (m_EndObj == nullptr)
+	if (m_EndObj == nullptr )
 	{
 		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 		CLayer* pCurLayer = pCurScene->GetLayer(L"Skill");
@@ -334,7 +371,7 @@ void CSkillScript::SkillEnd()
 		pAnimator2D->Play(L"Move_Right", false);
 	}
 	CAnimation2D* pCurAnim = pAnimator2D->GetCurAnim();
-	if (pCurAnim->IsFinish() == true)
+	if (pCurAnim->IsFinish() == true && m_fTimer >= 1.2f)
 	{
 		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 		CLayer* pCurLayer = pCurScene->GetLayer(L"Skill");
@@ -417,6 +454,10 @@ void CSkillScript::AttackArrow()
 	else
 		m_fArrowTimer = 0.f;
 
+
+
+	m_pKeyDownBgm->Play(1, 0.25f, true);
+
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	CLayer* pLayer = pCurScene->GetLayer(L"SubSkill_1");
 
@@ -477,6 +518,20 @@ void CSkillScript::AttackArrow()
 	pScript->Init(vPos);
 	pScript->SetMaxAttack(pPlayerScript->GetMaxAttack());
 	pScript->SetMinAttack(pPlayerScript->GetMinAttack());
+
+	if (GetName() == L"stormSkill")
+	{
+		pScript->SetHitBgm(L"sound\\Storm\\Hit.mp3");
+	}
+	else if (GetName() == L"ArrowFlatterSkill")
+	{
+		pScript->SetHitBgm(L"sound\\ArrowFlatter\\Hit.mp3");
+	}
+
+
+
+	
+
 
 }
 

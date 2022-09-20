@@ -17,6 +17,8 @@
 #include "CButtonScript.h"
 #include "CItemScript.h"
 #include "CNumberScript.h"
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
 
 
 CInventoryScript::CInventoryScript()
@@ -52,29 +54,23 @@ CInventoryScript::CInventoryScript(const CInventoryScript& _origin)
 	, m_Cursor_CurPos(0.f)
 	, m_Cursor_PrevDiff(0.f)
 	, m_bMove(true)
+	
 {
 	SetName(CScriptMgr::GetScriptName(this));
-	//for (int i = 0; i < INVENTORY_ROW; ++i)
-	//{
-	//	m_Equip[i][INVENTORY_COL] = { nullptr, };
-	//	m_Consume[i][INVENTORY_COL] = { nullptr, };
-	//	m_Etc[i][INVENTORY_COL] = { nullptr, };
-	//}
-
+	
 	m_vStartPos = Vec2(-315.f, 137.f);
 	m_vInterval = Vec2(42.f, -42.f);
+
+	m_Equip = _origin.m_Equip;
+	m_Consume = _origin.m_Consume;
+	m_Etc = _origin.m_Etc;
 
 }
 
 
 CInventoryScript::~CInventoryScript()
 {
-
-	Safe_Del_Map(m_Equip);
-	Safe_Del_Map(m_Consume);
-	Safe_Del_Map(m_Etc);
-	SAFE_DELETE(m_pNumPrefab);
-
+	
 
 }
 
@@ -83,62 +79,47 @@ CInventoryScript::~CInventoryScript()
 
 void CInventoryScript::start()
 {
+	vector<CGameObject*> ChildObj = GetOwner()->GetChild();
+	for (int i = 0; i < ChildObj.size(); ++i)
+	{
+		CItemScript* pItemScript = (CItemScript*)ChildObj[i]->GetScriptByName(L"CItemScript");
+		if (pItemScript != nullptr)
+			pItemScript->DeleteThisItem();
+
+	}
+
+	if (m_pEquipBtnScript == nullptr)
+	{
 	CGameObject* equip = GetOwner()->FindChildObj(L"Equip");
 	m_pEquipBtnScript = (CButtonScript*)equip->GetScriptByName(L"CButtonScript");
 	m_pEquipBtnScript->SetBtnClickedFunc(this, (CLIKCED)&CInventoryScript::ShowEquip);
 
+	}
 
 
+	if (m_pConsumeBtnScript == nullptr)
+	{
 	CGameObject* consume = GetOwner()->FindChildObj(L"Consume");
 	m_pConsumeBtnScript = (CButtonScript*)consume->GetScriptByName(L"CButtonScript");
 	m_pConsumeBtnScript->SetBtnClickedFunc(this, (CLIKCED)&CInventoryScript::ShowConsume);
 
+	}
 
 
+	if (m_pEtcBtnScript == nullptr)
+	{
 	CGameObject* etc = GetOwner()->FindChildObj(L"Etc");
 	m_pEtcBtnScript = (CButtonScript*)etc->GetScriptByName(L"CButtonScript");
 	m_pEtcBtnScript->SetBtnClickedFunc(this, (CLIKCED)&CInventoryScript::ShowEtc);
 
-
-	// Num Obj
-	wstring strPrefabKey_Num = L"prefab\\Number.pref";
-	wstring strContent = CPathMgr::GetInst()->GetContentPath();
-	wstring FullPath_num = strContent + strPrefabKey_Num;
-
-	m_pNumPrefab = nullptr;
-	m_pNumPrefab = new CPrefab;
-	m_pNumPrefab->Load(FullPath_num);
+	}
 
 
+	// Push Item Test 
+	//Make_Prefab_Portion_Test();
 
-
-
-	CPrefab* pPrefab2 = nullptr;
-	wstring strPrefabKey = L"prefab\\RedPortion.pref";
-	strContent = CPathMgr::GetInst()->GetContentPath();
-	wstring FullPath = strContent + strPrefabKey;
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
-	// test portion obj 
-	CGameObject* pObj = pPrefab2->Instantiate();
-	//pObj->Transform()->SetIgnoreParentScale(true);
-	//CItemScript* pItemScript = (CItemScript*)CScriptMgr::GetScript(L"CItemScript");
-	//pObj->AddComponent((CComponent*)pItemScript);
-
-	//pItemScript->setItemType(ITEM_TYPE::CONSUME, CONSUME_TYPE::HP);
-	//pItemScript->SetHpRaise(10000.f);
-	//pItemScript->SetMpRaise(10000.f);
-
-	//pObj->Deactivate();
-
-
-	PushItem(L"RedPortion", ITEM_TYPE::CONSUME, pObj);
-
-	SAFE_DELETE(pPrefab2);
-
-
-	Make_Prefab_Portion_Test();
+	m_vStartPos = Vec2(-315.f, 137.f);
+	m_vInterval = Vec2(42.f, -42.f);
 
 }
 
@@ -250,10 +231,24 @@ void CInventoryScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 
 
+
 }
 
 void CInventoryScript::OnCollision(CGameObject* _OtherObject)
 {
+
+	vector<CGameObject*> ChObj = GetOwner()->GetChild();
+	for (int i = 0; i < ChObj.size(); ++i)
+	{
+		CItemScript* pItemSCript = (CItemScript*)ChObj[i]->GetScriptByName(L"CItemScript");
+		if (pItemSCript != nullptr)
+		{
+			if (pItemSCript->m_bCollide_Cursor == true)
+				return;
+		}
+	}
+
+	wstring OtherName = _OtherObject->GetName();
 
 	if (m_bMove == false)
 		return;
@@ -264,11 +259,11 @@ void CInventoryScript::OnCollision(CGameObject* _OtherObject)
 	CGameObject* pCursorObj = nullptr;
 	pCursorObj = pLayer->FindObj(L"Cursor");
 	m_Cursor_CurPos = pCursorObj->Transform()->GetRelativePos();
-	CGameObject* pCamera = pLayer->FindObj(L"MainCamera");
+	CGameObject* pCamera = CSceneSaveLoad::pMainCamera;// pLayer->FindObj(L"MainCamera");
 	Vec3 CameraPos = pCamera->Transform()->GetRelativePos();
 
 
-	if (KEY_TAP(KEY::LBTN))
+	if (KEY_TAP(KEY::LBTN) && m_bMove == true)
 	{
 		m_Cursor_StartPos.x = m_Cursor_CurPos.x;
 		m_Cursor_StartPos.y = m_Cursor_CurPos.y;
@@ -280,7 +275,7 @@ void CInventoryScript::OnCollision(CGameObject* _OtherObject)
 
 	}
 
-	if (KEY_PRESSED(KEY::LBTN))
+	if (KEY_PRESSED(KEY::LBTN) && m_bMove == true)
 	{
 
 		m_Cursor_Diff.x = m_Cursor_CurPos.x - m_Cursor_StartPos.x;
@@ -288,7 +283,7 @@ void CInventoryScript::OnCollision(CGameObject* _OtherObject)
 
 	}
 
-	if (KEY_AWAY(KEY::LBTN))
+	if (KEY_AWAY(KEY::LBTN) && m_bMove == true)
 	{
 		m_Cursor_Diff.x = m_Cursor_Diff.x + m_Cursor_PrevDiff.x;
 		m_Cursor_Diff.y = m_Cursor_Diff.y + m_Cursor_PrevDiff.y;
@@ -309,6 +304,163 @@ void CInventoryScript::OnCollisionExit(CGameObject* _OtherObject)
 
 }
 
+void CInventoryScript::SaveToScene(FILE* _pFile)
+{
+	
+	CScript::SaveToScene(_pFile);
+
+	// inventory 에 들어있는 아이템 이름 / 개수 저장 
+	int ItemCnt = m_Equip.size();
+	fwrite(&ItemCnt, sizeof(int), 1, _pFile);
+	map<wstring, ItemInven>::iterator iter = m_Equip.begin();
+	for (; iter != m_Equip.end(); ++iter)
+	{
+		// save name 
+		wstring name = iter->second.obj->GetName();
+		SaveWStringToFile(name, _pFile);
+		// save num
+		fwrite(&iter->second.num, sizeof(int), 1, _pFile);
+
+	}
+
+	// inventory 에 들어있는 아이템 이름 / 개수 저장 
+	 ItemCnt = m_Consume.size();
+	fwrite(&ItemCnt, sizeof(int), 1, _pFile);
+	iter = m_Consume.begin();
+	for (; iter != m_Consume.end(); ++iter)
+	{
+		// save name 
+		wstring name = iter->second.obj->GetName();
+		SaveWStringToFile(name, _pFile);
+		// save num
+		fwrite(&iter->second.num, sizeof(int), 1, _pFile);
+
+	}
+
+	// inventory 에 들어있는 아이템 이름 / 개수 저장 
+	 ItemCnt = m_Etc.size();
+	fwrite(&ItemCnt, sizeof(int), 1, _pFile);
+	iter = m_Etc.begin();
+	for (; iter != m_Etc.end(); ++iter)
+	{
+		// save name 
+		wstring name = iter->second.obj->GetName();
+		SaveWStringToFile(name, _pFile);
+		// save num
+		fwrite(&iter->second.num, sizeof(int), 1, _pFile);
+
+	}
+}
+
+void CInventoryScript::LoadFromScene(FILE* _pFile)
+{
+	CScript::LoadFromScene(_pFile);
+
+	//return;
+
+	//if (CSceneSaveLoad::LoadSceneName == L"scene\\ShipToToyCastle.scene")
+	//	return;
+
+
+
+	int ItemCnt = 0;
+	fread(&ItemCnt, sizeof(int), 1, _pFile);
+	for (int i = 0; i < ItemCnt; ++i)
+	{
+		wstring ItemName = L"";
+		LoadWStringFromFile(ItemName, _pFile);		// Load name 
+		int ItemCnt = 0;
+		fread(&ItemCnt, sizeof(int), 1, _pFile);	// Load Item cnt 
+
+
+		if (CSceneSaveLoad::pSceneMgrScript != nullptr)
+		{
+			CPrefab* pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(ItemName);
+
+			for (int i = 0; i < ItemCnt; ++i)
+			{
+				CGameObject* pObj = pPrefab2->Instantiate();
+				PushItem(ItemName, ITEM_TYPE::EQUIP, pObj);
+			}
+		}
+		
+
+	}
+	fread(&ItemCnt, sizeof(int), 1, _pFile);
+	for (int i = 0; i < ItemCnt; ++i)
+	{
+		wstring ItemName = L"";
+		LoadWStringFromFile(ItemName, _pFile);		// Load name 
+		int ItemCnt = 0;
+		fread(&ItemCnt, sizeof(int), 1, _pFile);	// Load Item cnt 
+
+
+		if (CSceneSaveLoad::pSceneMgrScript != nullptr)
+		{
+			CPrefab* pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(ItemName);
+
+			for (int i = 0; i < ItemCnt; ++i)
+			{
+				CGameObject* pObj = pPrefab2->Instantiate();
+				PushItem(ItemName, ITEM_TYPE::CONSUME, pObj);
+			}
+		}
+		
+
+	}
+
+	fread(&ItemCnt, sizeof(int), 1, _pFile);
+	for (int i = 0; i < ItemCnt; ++i)
+	{
+		wstring ItemName = L"";
+		LoadWStringFromFile(ItemName, _pFile);		// Load name 
+		int ItemCnt = 0;
+		fread(&ItemCnt, sizeof(int), 1, _pFile);	// Load Item cnt 
+
+
+		if (CSceneSaveLoad::pSceneMgrScript != nullptr)
+		{
+			CPrefab* pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(ItemName);
+
+			for (int i = 0; i < ItemCnt; ++i)
+			{
+				CGameObject* pObj = pPrefab2->Instantiate();
+				PushItem(ItemName, ITEM_TYPE::ETC, pObj);
+			}
+		}
+	
+
+	}
+
+}
+
+
+CGameObject* CInventoryScript::GetItemByName(wstring _name)
+{
+	map<wstring, ItemInven>::iterator iter = m_Equip.begin();
+	for (; iter != m_Equip.end(); ++iter)
+	{
+		if (iter->second.obj->GetName() == _name)
+			return iter->second.obj;
+
+	}
+	map<wstring, ItemInven>::iterator iter2 = m_Consume.begin();
+	for (; iter2 != m_Consume.end(); ++iter2)
+	{
+		if (iter2->second.obj->GetName() == _name)
+			return iter2->second.obj;
+
+	}
+	map<wstring, ItemInven>::iterator iter3 = m_Etc.begin();
+	for (; iter3 != m_Etc.end(); ++iter3)
+	{
+		if (iter3->second.obj->GetName() == _name)
+			return iter3->second.obj;
+
+	}
+
+	return nullptr;
+}
 
 void CInventoryScript::ShowEquip(DWORD_PTR _param)
 {
@@ -318,26 +470,26 @@ void CInventoryScript::ShowEquip(DWORD_PTR _param)
 	m_pConsumeBtnScript->SetEnable(false);
 	m_pEtcBtnScript->SetEnable(false);
 
-	map<wstring, ItemInven*>::iterator iter = m_Equip.begin();
+	map<wstring, ItemInven>::iterator iter = m_Equip.begin();
 	for (; iter != m_Equip.end(); ++iter)
 	{
-		iter->second->obj->Activate();
-		iter->second->Num->Activate();
+		iter->second.obj->Activate();
+		iter->second.Num->Activate();
 
 
 	}
-	map<wstring, ItemInven*>::iterator iter2 = m_Consume.begin();
+	map<wstring, ItemInven>::iterator iter2 = m_Consume.begin();
 	for (; iter2 != m_Consume.end(); ++iter2)
 	{
-		iter2->second->obj->Deactivate();
-		iter2->second->Num->Deactivate();
+		iter2->second.obj->Deactivate();
+		iter2->second.Num->Deactivate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter3 = m_Etc.begin();
+	map<wstring, ItemInven>::iterator iter3 = m_Etc.begin();
 	for (; iter3 != m_Etc.end(); ++iter3)
 	{
-		iter3->second->obj->Deactivate();
-		iter3->second->Num->Deactivate();
+		iter3->second.obj->Deactivate();
+		iter3->second.Num->Deactivate();
 
 	}
 }
@@ -350,25 +502,25 @@ void CInventoryScript::ShowConsume(DWORD_PTR _param)
 	m_pConsumeBtnScript->SetEnable(true);
 	m_pEtcBtnScript->SetEnable(false);
 
-	map<wstring, ItemInven*>::iterator iter = m_Equip.begin();
+	map<wstring, ItemInven>::iterator iter = m_Equip.begin();
 	for (; iter != m_Equip.end(); ++iter)
 	{
-		iter->second->obj->Deactivate();
-		iter->second->Num->Deactivate();
+		iter->second.obj->Deactivate();
+		iter->second.Num->Deactivate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter2 = m_Consume.begin();
+	map<wstring, ItemInven>::iterator iter2 = m_Consume.begin();
 	for (; iter2 != m_Consume.end(); ++iter2)
 	{
-		iter2->second->obj->Activate();
-		iter2->second->Num->Activate();
+		iter2->second.obj->Activate();
+		iter2->second.Num->Activate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter3 = m_Etc.begin();
+	map<wstring, ItemInven>::iterator iter3 = m_Etc.begin();
 	for (; iter3 != m_Etc.end(); ++iter3)
 	{
-		iter3->second->obj->Deactivate();
-		iter3->second->Num->Deactivate();
+		iter3->second.obj->Deactivate();
+		iter3->second.Num->Deactivate();
 
 	}
 
@@ -383,25 +535,25 @@ void CInventoryScript::ShowEtc(DWORD_PTR _param)
 	m_pConsumeBtnScript->SetEnable(false);
 	m_pEtcBtnScript->SetEnable(true);
 
-	map<wstring, ItemInven*>::iterator iter = m_Equip.begin();
+	map<wstring, ItemInven>::iterator iter = m_Equip.begin();
 	for (; iter != m_Equip.end(); ++iter)
 	{
-		iter->second->obj->Deactivate();
-		iter->second->Num->Deactivate();
+		iter->second.obj->Deactivate();
+		iter->second.Num->Deactivate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter2 = m_Consume.begin();
+	map<wstring, ItemInven>::iterator iter2 = m_Consume.begin();
 	for (; iter2 != m_Consume.end(); ++iter2)
 	{
-		iter2->second->obj->Deactivate();
-		iter2->second->Num->Deactivate();
+		iter2->second.obj->Deactivate();
+		iter2->second.Num->Deactivate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter3 = m_Etc.begin();
+	map<wstring, ItemInven>::iterator iter3 = m_Etc.begin();
 	for (; iter3 != m_Etc.end(); ++iter3)
 	{
-		iter3->second->obj->Activate();
-		iter3->second->Num->Activate();
+		iter3->second.obj->Activate();
+		iter3->second.Num->Activate();
 
 	}
 }
@@ -414,25 +566,25 @@ void CInventoryScript::ShowOffAllItem()
 	m_pConsumeBtnScript->SetEnable(false);
 	m_pEtcBtnScript->SetEnable(false);
 
-	map<wstring, ItemInven*>::iterator iter = m_Equip.begin();
+	map<wstring, ItemInven>::iterator iter = m_Equip.begin();
 	for (; iter != m_Equip.end(); ++iter)
 	{
-		iter->second->obj->Deactivate();
-		iter->second->Num->Deactivate();
+		iter->second.obj->Deactivate();
+		iter->second.Num->Deactivate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter2 = m_Consume.begin();
+	map<wstring, ItemInven>::iterator iter2 = m_Consume.begin();
 	for (; iter2 != m_Consume.end(); ++iter2)
 	{
-		iter2->second->obj->Deactivate();
-		iter2->second->Num->Deactivate();
+		iter2->second.obj->Deactivate();
+		iter2->second.Num->Deactivate();
 
 	}
-	map<wstring, ItemInven*>::iterator iter3 = m_Etc.begin();
+	map<wstring, ItemInven>::iterator iter3 = m_Etc.begin();
 	for (; iter3 != m_Etc.end(); ++iter3)
 	{
-		iter3->second->obj->Deactivate();
-		iter3->second->Num->Deactivate();
+		iter3->second.obj->Deactivate();
+		iter3->second.Num->Deactivate();
 
 	}
 
@@ -442,6 +594,8 @@ void CInventoryScript::ShowOffAllItem()
 
 void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _item)
 {
+
+
 	if (m_eEnabledTabType == ITEM_TYPE::NONE)
 		_item->Deactivate();
 
@@ -449,37 +603,45 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 		_item->Activate();
 
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	_item->UpdateLayerIdx(pCurScene->GetLayer(L"Inventory")->GetLayerIdx());
 
-	//pCurScene->AddObject(_item, L"Inventory");					
-	CSceneMgr::GetInst()->RegisterObhInLayer(_item, pCurScene->GetLayer(L"Inventory")->GetLayerIdx());	// Event 
-	CSceneMgr::GetInst()->AddChild(GetOwner(), _item);													// Event 
 
+
+	
 
 	switch (_type)
 	{
 	case ITEM_TYPE::EQUIP:
 	{
-		ItemInven* itemInven = new ItemInven;
-		itemInven->obj = _item;
+		ItemInven itemInven;// = new ItemInven;
+		itemInven.obj = _item;
 
 		bool bFindSpot = false;
 		// 들어온 Item 이 Inventory 에 저장되어 있는지 Check 
-		map<wstring, ItemInven*>::iterator iter2 = m_Equip.begin();
+		map<wstring, ItemInven>::iterator iter2 = m_Equip.begin();
 		for (; iter2 != m_Equip.end(); ++iter2)
 		{
-			if (iter2->second->obj->GetName() == _name)
+			if (iter2->second.obj->GetName() == _name)
 			{
-				CItemScript* pItemScrtip = (CItemScript*)iter2->second->obj->GetScriptByName(L"CItemScript");
+				CItemScript* pItemScrtip = (CItemScript*)iter2->second.obj->GetScriptByName(L"CItemScript");
 				if (pItemScrtip != nullptr)
 				{
 					pItemScrtip->AddCnt();
+					if (pItemScrtip->m_pClone_QS != nullptr)
+					{
+						CItemScript* pCloneItemScript = (CItemScript*)pItemScrtip->m_pClone_QS->GetScriptByName(L"CItemScript");
+						pCloneItemScript->AddCnt();
+
+					}
 				}
-				iter2->second->num += 1;
+				iter2->second.num += 1;
 				bFindSpot = true;
 				break;
 			}
 		
 		}
+
+		// Inventory 에 없는 Item 이 들어왔다면 
 		if (bFindSpot == false)
 		{
 			for (int i = 0; i < INVENTORY_ROW; ++i)
@@ -490,8 +652,8 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 					{
 						m_EquipSpot[i][k] = true;
 
-						itemInven->row = i;
-						itemInven->col = k;
+						itemInven.row = i;
+						itemInven.col = k;
 						CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
 						pscript->m_iInventoryIdx_row = i;
 						pscript->m_iInventoryIdx_col = k;
@@ -500,7 +662,7 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 							m_vStartPos.y + i * m_vInterval.y, -1.f);
 
 						// Num 
-						CGameObject* pNum = m_pNumPrefab->Instantiate();
+						CGameObject* pNum = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Number")->Instantiate();
 						pNum->UpdateLayerIdx(_item->GetLayerIndex());
 
 						pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
@@ -511,9 +673,12 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 						pNum->Deactivate();
 						_item->AddChild(pNum);
 
-						itemInven->Num = pNum;
+						itemInven.Num = pNum;
 
 
+						//pCurScene->AddObject(_item, L"Inventory");					
+						CSceneMgr::GetInst()->RegisterObhInLayer(_item, pCurScene->GetLayer(L"Inventory")->GetLayerIdx());	// Event 
+						CSceneMgr::GetInst()->AddChild(GetOwner(), _item);													// Event 
 
 						bFindSpot = true;
 						break;
@@ -534,23 +699,33 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 	break;
 	case ITEM_TYPE::CONSUME:
 	{
-		ItemInven* itemInven = new ItemInven;
-		itemInven->obj = _item;
-		
 
+		
+		ItemInven* itemInven = nullptr;
 		bool bFindSpot = false;
 		// 들어온 Item 이 Inventory 에 저장되어 있는지 Check 
-		map<wstring, ItemInven*>::iterator iter2 = m_Consume.begin();
+		map<wstring, ItemInven>::iterator iter2 = m_Consume.begin();
 		for (; iter2 != m_Consume.end(); ++iter2)
 		{
-			if (iter2->second->obj->GetName() == _name)
+			if (iter2->second.obj->GetName() == _name)
 			{
-				CItemScript* pItemScrtip = (CItemScript*)iter2->second->obj->GetScriptByName(L"CItemScript");
+				CItemScript* pItemScrtip = (CItemScript*)iter2->second.obj->GetScriptByName(L"CItemScript");
 				if (pItemScrtip != nullptr)
 				{
 					pItemScrtip->AddCnt();
+					
+	
+					CSceneMgr::GetInst()->DeRegisterObjInLayer(_item, _item->GetLayerIndex());
+					_item->Destroy();
+
+					if (pItemScrtip->m_pClone_QS != nullptr)
+					{
+						CItemScript* pCloneItemScript = (CItemScript*)pItemScrtip->m_pClone_QS->GetScriptByName(L"CItemScript");
+						pCloneItemScript->AddCnt();
+
+					}
 				}
-				iter2->second->num += 1;
+				iter2->second.num += 1;
 				bFindSpot = true;
 				break;
 			}
@@ -559,6 +734,8 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 
 		if (bFindSpot == false)
 		{
+
+
 			for (int i = 0; i < INVENTORY_ROW; ++i)
 			{
 				for (int k = 0; k < INVENTORY_COL; ++k)
@@ -566,9 +743,11 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 					if (m_ConsumeSpot[i][k] == false)
 					{
 						m_ConsumeSpot[i][k] = true;
+						ItemInven itemInven;// = new ItemInven;
+						itemInven.obj = _item;
 
-						itemInven->row = i;
-						itemInven->col = k;
+						itemInven.row = i;
+						itemInven.col = k;
 						CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
 						pscript->SetCnt(1);
 						pscript->m_iInventoryIdx_row = i;
@@ -577,7 +756,7 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 						_item->Transform()->SetRelativePos(m_vStartPos.x + k * m_vInterval.x,
 							m_vStartPos.y + i * m_vInterval.y, -1.f);
 						// Num 
-						CGameObject* pNum = m_pNumPrefab->Instantiate();
+						CGameObject* pNum = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Number")->Instantiate();
 						pNum->UpdateLayerIdx(_item->GetLayerIndex());
 
 						pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
@@ -585,11 +764,24 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 						pNum->AddComponent((CComponent*)pNumScript);
 						pNumScript->Init(NUMBER_TYPE::ITEM);
 						pNumScript->UpdateNumber(1);
-						pNum->Deactivate();
+
+						if (m_eEnabledTabType == ITEM_TYPE::CONSUME)
+							pNum->Activate();
+						else
+							pNum->Deactivate();
+
 						_item->AddChild(pNum);
 
-						itemInven->Num = pNum;
+
+						//pCurScene->AddObject(_item, L"Inventory");					
+						CSceneMgr::GetInst()->RegisterObhInLayer(_item, pCurScene->GetLayer(L"Inventory")->GetLayerIdx());	// Event 
+						CSceneMgr::GetInst()->AddChild(GetOwner(), _item);
+
+
+						itemInven.Num = pNum;
 						bFindSpot = true;
+						m_Consume.insert(make_pair(_name, itemInven));
+
 						break;
 					}
 				}
@@ -597,7 +789,6 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 					break;
 			}
 
-			m_Consume.insert(make_pair(_name, itemInven));
 		}
 
 
@@ -605,22 +796,28 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 	break;
 	case ITEM_TYPE::ETC:
 	{
-		ItemInven* itemInven = new ItemInven;
-		itemInven->obj = _item;
+		ItemInven itemInven;// = new ItemInven;
+		itemInven.obj = _item;
 
 		bool bFindSpot = false;
 		// 들어온 Item 이 Inventory 에 저장되어 있는지 Check 
-		map<wstring, ItemInven*>::iterator iter2 = m_Etc.begin();
+		map<wstring, ItemInven>::iterator iter2 = m_Etc.begin();
 		for (; iter2 != m_Etc.end(); ++iter2)
 		{
-			if (iter2->second->obj->GetName() == _name)
+			if (iter2->second.obj->GetName() == _name)
 			{
-				CItemScript* pItemScrtip = (CItemScript*)iter2->second->obj->GetScriptByName(L"CItemScript");
+				CItemScript* pItemScrtip = (CItemScript*)iter2->second.obj->GetScriptByName(L"CItemScript");
 				if (pItemScrtip != nullptr)
 				{
 					pItemScrtip->AddCnt();
+					if (pItemScrtip->m_pClone_QS != nullptr)
+					{
+						CItemScript* pCloneItemScript = (CItemScript*)pItemScrtip->m_pClone_QS->GetScriptByName(L"CItemScript");
+						pCloneItemScript->AddCnt();
+
+					}
 				}
-				iter2->second->num += 1;
+				iter2->second.num += 1;
 				bFindSpot = true;
 				break;
 			}
@@ -634,8 +831,8 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 				{
 					m_EtcSpot[i][k] = true;
 
-					itemInven->row = i;
-					itemInven->col = k;
+					itemInven.row = i;
+					itemInven.col = k;
 					CItemScript* pscript = (CItemScript*)_item->GetScriptByName(L"CItemScript");
 					pscript->m_iInventoryIdx_row = i;
 					pscript->m_iInventoryIdx_col = k;
@@ -644,7 +841,7 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 						m_vStartPos.y + i * m_vInterval.y, -1.f);
 
 					// Num 
-					CGameObject* pNum = m_pNumPrefab->Instantiate();
+					CGameObject* pNum = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Number")->Instantiate();
 					pNum->UpdateLayerIdx(_item->GetLayerIndex());
 
 					pNum->Transform()->SetRelativePos(Vec3(-9.f, -9.f, -1.f));
@@ -654,9 +851,12 @@ void CInventoryScript::PushItem(wstring _name, ITEM_TYPE _type, CGameObject* _it
 					pNumScript->UpdateNumber(1);
 					_item->AddChild(pNum);
 
-					itemInven->Num = pNum;
+					itemInven.Num = pNum;
 
 
+					//pCurScene->AddObject(_item, L"Inventory");					
+					CSceneMgr::GetInst()->RegisterObhInLayer(_item, pCurScene->GetLayer(L"Inventory")->GetLayerIdx());	// Event 
+					CSceneMgr::GetInst()->AddChild(GetOwner(), _item);
 
 					bFindSpot = true;
 					break;
@@ -722,15 +922,18 @@ void CInventoryScript::Show(bool _b)
 
 void CInventoryScript::DeleteItem(ITEM_TYPE _Type, int row, int col)
 {
+
+	m_ConsumeSpot[row][col] = false;
+
 	switch (_Type)
 	{
 	case ITEM_TYPE::EQUIP:
 	{
-		map<wstring, ItemInven*>::iterator iter = m_Equip.begin();
+		map<wstring, ItemInven>::iterator iter = m_Equip.begin();
 		for (; iter != m_Equip.end(); ++iter)
 		{
-			iter->second->obj->Deactivate();
-			iter->second->Num->Deactivate();
+			iter->second.obj->Deactivate();
+			iter->second.Num->Deactivate();
 
 		}
 
@@ -739,18 +942,18 @@ void CInventoryScript::DeleteItem(ITEM_TYPE _Type, int row, int col)
 	break;
 	case ITEM_TYPE::CONSUME:
 	{
-		map<wstring, ItemInven*>::iterator iter = m_Consume.begin();
+		map<wstring, ItemInven>::iterator iter = m_Consume.begin();
 		for (; iter != m_Consume.end(); ++iter)
 		{
-			if (iter->second->row == row && iter->second->col == col)
+			if (iter->second.row == row && iter->second.col == col)
 			{
-				iter->second->num -= 1;
+				iter->second.num -= 1;
 
-				if (iter->second->num <= 0)
-				{
+				//if (iter->second->num <= 0)
+				//{
 					m_Consume.erase(iter);
 					break;
-				}
+				//}
 
 			}
 		}
@@ -759,10 +962,10 @@ void CInventoryScript::DeleteItem(ITEM_TYPE _Type, int row, int col)
 	break;
 	case ITEM_TYPE::ETC:
 	{
-		map<wstring, ItemInven*>::iterator iter = m_Etc.begin();
+		map<wstring, ItemInven>::iterator iter = m_Etc.begin();
 		for (; iter != m_Etc.end(); ++iter)
 		{
-			iter->second->obj->Activate();
+			iter->second.obj->Activate();
 		}
 	}
 
@@ -773,106 +976,63 @@ void CInventoryScript::DeleteItem(ITEM_TYPE _Type, int row, int col)
 
 void CInventoryScript::Make_Prefab_Portion_Test()
 {
-	// Blue Portion 
-	CPrefab*	pPrefab2 = nullptr;
-	wstring		strPrefabKey = L"prefab\\BluePortion.pref";
-	wstring		strContent = CPathMgr::GetInst()->GetContentPath();
-	wstring		FullPath = strContent + strPrefabKey;
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
+	CPrefab* pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"RedPortion");
 	CGameObject* pObj = pPrefab2->Instantiate();
-	
 
+	PushItem(L"RedPortion", ITEM_TYPE::CONSUME, pObj);
+
+	// Blue Portion 
+	pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"BluePortion");
+	pObj = pPrefab2->Instantiate();
+	
 	PushItem(L"BluePortion", ITEM_TYPE::CONSUME, pObj);
-	SAFE_DELETE(pPrefab2);
+	//SAFE_DELETE(pPrefab2);
 
 
 	// OrangePortion
-	pPrefab2 = nullptr;
-	strPrefabKey = L"prefab\\OrangePortion.pref";
-	strContent = CPathMgr::GetInst()->GetContentPath();
-	FullPath = strContent + strPrefabKey;
-
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
-	// test portion obj 
+	pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"OrangePortion");
 	pObj = pPrefab2->Instantiate();
 	
 
 	//pObj->Deactivate();
 	PushItem(L"OrangePortion", ITEM_TYPE::CONSUME, pObj);
-	SAFE_DELETE(pPrefab2);
+	//SAFE_DELETE(pPrefab2);
 
 
 	// WhitePortion
-	pPrefab2 = nullptr;
-	strPrefabKey = L"prefab\\WhitePortion.pref";
-	strContent = CPathMgr::GetInst()->GetContentPath();
-	FullPath = strContent + strPrefabKey;
-
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
-	// test portion obj 
+	pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"WhitePortion");
 	pObj = pPrefab2->Instantiate();
 
 
 	//pObj->Deactivate();
 	PushItem(L"WhitePortion", ITEM_TYPE::CONSUME, pObj);
-	SAFE_DELETE(pPrefab2);
+	//SAFE_DELETE(pPrefab2);
 
 	// ExilirPortion
-	pPrefab2 = nullptr;
-	strPrefabKey = L"prefab\\ElixirPortion.pref";
-	strContent = CPathMgr::GetInst()->GetContentPath();
-	FullPath = strContent + strPrefabKey;
-
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
-	// test portion obj 
+	pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"ElixirPortion");
 	pObj = pPrefab2->Instantiate();
 	
 
 	//pObj->Deactivate();
 	PushItem(L"ElixirPortion", ITEM_TYPE::CONSUME, pObj);
-	SAFE_DELETE(pPrefab2);
+	//SAFE_DELETE(pPrefab2);
 
 	// PowerExilirPortion
-	pPrefab2 = nullptr;
-	strPrefabKey = L"prefab\\PowerElixirPortion.pref";
-	strContent = CPathMgr::GetInst()->GetContentPath();
-	FullPath = strContent + strPrefabKey;
-
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
-	// test portion obj 
+	pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"PowerElixirPortion");
 	pObj = pPrefab2->Instantiate();
 	
 	//pObj->Deactivate();
 	PushItem(L"PowerElixirPortion", ITEM_TYPE::CONSUME, pObj);
-	SAFE_DELETE(pPrefab2);
+	//SAFE_DELETE(pPrefab2);
 
 
 	// MpExilirPortion
-	pPrefab2 = nullptr;
-	strPrefabKey = L"prefab\\MpElixirPortion.pref";
-	strContent = CPathMgr::GetInst()->GetContentPath();
-	FullPath = strContent + strPrefabKey;
-
-	pPrefab2 = new CPrefab;
-	pPrefab2->Load(FullPath);
-
-	// test portion obj 
+	pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"MpElixirPortion");
 	pObj = pPrefab2->Instantiate();
-	
 
 	//pObj->Deactivate();
 	PushItem(L"MpElixirPortion", ITEM_TYPE::CONSUME, pObj);
-	SAFE_DELETE(pPrefab2);
+	//SAFE_DELETE(pPrefab2);
 }
 
 

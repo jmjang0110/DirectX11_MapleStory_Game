@@ -9,7 +9,7 @@
 CScene::CScene()
 	: m_arrLayer{}
 	, m_eSceneState(SCENE_STATE::STOP)
-
+	, m_bEditMode(true)
 {
 	for (UINT i = 0; i < MAX_LAYER; ++i)
 	{

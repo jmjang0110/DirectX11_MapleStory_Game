@@ -20,9 +20,11 @@
 
 
 
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
 CHpScript::CHpScript()
 	: CScript((int)SCRIPT_TYPE::HPSCRIPT)
-	, m_fMaxHp(50000.f)
+	, m_fMaxHp(70000.f)
 	, m_fHp(0.f)
 
 {
@@ -33,7 +35,7 @@ CHpScript::CHpScript()
 
 CHpScript::CHpScript(const CHpScript& _origin)
 	: CScript((int)SCRIPT_TYPE::HPSCRIPT)
-	, m_fMaxHp(50000.f)
+	, m_fMaxHp(70000.f)
 	, m_fHp(0.f)
 
 {
@@ -50,10 +52,17 @@ CHpScript::~CHpScript()
 
 void CHpScript::start()
 {
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	CLayer* pLayer = pCurScene->GetLayer(L"Player");
+	//CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	//CLayer* pLayer = pCurScene->GetLayer(L"Player");
 
-	m_pPlayer = pLayer->FindObj(L"player");
+	m_pPlayer = CSceneSaveLoad::pMainPlayer;// pLayer->FindObj(L"player");
+	CPlayerScript* playerScript = (CPlayerScript*)CSceneSaveLoad::pMainPlayer->GetScriptByName(L"CPlayerScript");
+
+	m_fMaxHp = playerScript->GetMaxHp();
+	m_fHp = playerScript->GetHp();
+
+
+
 
 }
 
@@ -61,9 +70,9 @@ void CHpScript::update()
 {
 	if (m_pPlayer == nullptr)
 	{
-		CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-		CLayer* pLayer = pCurScene->GetLayer(L"Player");
-		m_pPlayer = pLayer->FindObj(L"player");
+		//CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+		//CLayer* pLayer = pCurScene->GetLayer(L"Player");
+		m_pPlayer = CSceneSaveLoad::pMainPlayer;//pLayer->FindObj(L"player");
 	}
 
 	// Child Of MainBar Object 
@@ -75,7 +84,7 @@ void CHpScript::update()
 
 	CPlayerScript* playerScript = (CPlayerScript*)m_pPlayer->GetScriptByName(L"CPlayerScript");
 	m_fHp = playerScript->GetHp();
-
+	m_fMaxHp = playerScript->GetMaxHp();
 
 	// Exp Scale Max Å©±â : Resolution.x - 15.f
 	float Ratio = (m_fHp / m_fMaxHp);
@@ -85,19 +94,18 @@ void CHpScript::update()
 		m_fHp = m_fMaxHp;
 		Ratio = 1.f;
 	}
+
+	if (m_fHp <= 0.f)
+	{
+		m_fHp = 0.f;
+		playerScript->SetHP(0.f);
+	}
 	m_fDest = (171.f) * Ratio;
 
 	vScale.x += DT * 200.f;
 	if (vScale.x >= m_fDest)
 		vScale.x = m_fDest;
 
-	//static int dir = -1;
-
-	//vScale.x += dir * DT * 10.f;
-	//if (vScale.x <= 0.f)
-	//	dir = 1;
-	//else if (vScale.x >= 171.f)
-	//	dir = -1;
 
 	vPos.x = 0.f - 55.f;
 	vPos.y = 0.f - 10.f;

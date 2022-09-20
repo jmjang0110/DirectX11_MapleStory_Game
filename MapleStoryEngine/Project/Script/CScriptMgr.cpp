@@ -3,10 +3,13 @@
 
 #include "CAIScript.h"
 #include "CameraPlayerMoveScript.h"
+#include "CAnimOnceScript.h"
 #include "CAttackStateScript.h"
 #include "CBackGroundScript.h"
 #include "CBasicBallScript.h"
+#include "CBossHPBarScript.h"
 #include "CBossMonsterScript.h"
+#include "CBossNPCScript.h"
 #include "CButtonScript.h"
 #include "CCameraMoveScript.h"
 #include "CCloudScript.h"
@@ -14,10 +17,12 @@
 #include "CCursorScript.h"
 #include "CDamageScript.h"
 #include "CDeadStateScript.h"
+#include "CDieNoticeScript.h"
 #include "CDoubleJumpScript.h"
 #include "CExpScript.h"
 #include "CGravityScript.h"
 #include "CGroundScript.h"
+#include "CHitScript.h"
 #include "CHpScript.h"
 #include "CIdleStateScript.h"
 #include "CInventoryScript.h"
@@ -34,11 +39,16 @@
 #include "CPatrolStateScript.h"
 #include "CPlayerScript.h"
 #include "CPortalScript.h"
+#include "CQuickSlotScript.h"
 #include "CRigidBodyScript.h"
+#include "CRopeScript.h"
 #include "CSceneStartScript.h"
+#include "CShowInfoScript.h"
 #include "CSkillnearScript.h"
 #include "CSkillScript.h"
 #include "CStateScript.h"
+#include "CStatScript.h"
+#include "CTimerScript.h"
 #include "CTraceStateScript.h"
 #include "CWallScript.h"
 
@@ -46,10 +56,13 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CAIScript");
 	_vec.push_back(L"CameraPlayerMoveScript");
+	_vec.push_back(L"CAnimOnceScript");
 	_vec.push_back(L"CAttackStateScript");
 	_vec.push_back(L"CBackGroundScript");
 	_vec.push_back(L"CBasicBallScript");
+	_vec.push_back(L"CBossHPBarScript");
 	_vec.push_back(L"CBossMonsterScript");
+	_vec.push_back(L"CBossNPCScript");
 	_vec.push_back(L"CButtonScript");
 	_vec.push_back(L"CCameraMoveScript");
 	_vec.push_back(L"CCloudScript");
@@ -57,10 +70,12 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CCursorScript");
 	_vec.push_back(L"CDamageScript");
 	_vec.push_back(L"CDeadStateScript");
+	_vec.push_back(L"CDieNoticeScript");
 	_vec.push_back(L"CDoubleJumpScript");
 	_vec.push_back(L"CExpScript");
 	_vec.push_back(L"CGravityScript");
 	_vec.push_back(L"CGroundScript");
+	_vec.push_back(L"CHitScript");
 	_vec.push_back(L"CHpScript");
 	_vec.push_back(L"CIdleStateScript");
 	_vec.push_back(L"CInventoryScript");
@@ -77,11 +92,16 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPatrolStateScript");
 	_vec.push_back(L"CPlayerScript");
 	_vec.push_back(L"CPortalScript");
+	_vec.push_back(L"CQuickSlotScript");
 	_vec.push_back(L"CRigidBodyScript");
+	_vec.push_back(L"CRopeScript");
 	_vec.push_back(L"CSceneStartScript");
+	_vec.push_back(L"CShowInfoScript");
 	_vec.push_back(L"CSkillnearScript");
 	_vec.push_back(L"CSkillScript");
 	_vec.push_back(L"CStateScript");
+	_vec.push_back(L"CStatScript");
+	_vec.push_back(L"CTimerScript");
 	_vec.push_back(L"CTraceStateScript");
 	_vec.push_back(L"CWallScript");
 }
@@ -92,14 +112,20 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CAIScript;
 	if (L"CameraPlayerMoveScript" == _strScriptName)
 		return new CameraPlayerMoveScript;
+	if (L"CAnimOnceScript" == _strScriptName)
+		return new CAnimOnceScript;
 	if (L"CAttackStateScript" == _strScriptName)
 		return new CAttackStateScript;
 	if (L"CBackGroundScript" == _strScriptName)
 		return new CBackGroundScript;
 	if (L"CBasicBallScript" == _strScriptName)
 		return new CBasicBallScript;
+	if (L"CBossHPBarScript" == _strScriptName)
+		return new CBossHPBarScript;
 	if (L"CBossMonsterScript" == _strScriptName)
 		return new CBossMonsterScript;
+	if (L"CBossNPCScript" == _strScriptName)
+		return new CBossNPCScript;
 	if (L"CButtonScript" == _strScriptName)
 		return new CButtonScript;
 	if (L"CCameraMoveScript" == _strScriptName)
@@ -114,6 +140,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CDamageScript;
 	if (L"CDeadStateScript" == _strScriptName)
 		return new CDeadStateScript;
+	if (L"CDieNoticeScript" == _strScriptName)
+		return new CDieNoticeScript;
 	if (L"CDoubleJumpScript" == _strScriptName)
 		return new CDoubleJumpScript;
 	if (L"CExpScript" == _strScriptName)
@@ -122,6 +150,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CGravityScript;
 	if (L"CGroundScript" == _strScriptName)
 		return new CGroundScript;
+	if (L"CHitScript" == _strScriptName)
+		return new CHitScript;
 	if (L"CHpScript" == _strScriptName)
 		return new CHpScript;
 	if (L"CIdleStateScript" == _strScriptName)
@@ -154,16 +184,26 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPlayerScript;
 	if (L"CPortalScript" == _strScriptName)
 		return new CPortalScript;
+	if (L"CQuickSlotScript" == _strScriptName)
+		return new CQuickSlotScript;
 	if (L"CRigidBodyScript" == _strScriptName)
 		return new CRigidBodyScript;
+	if (L"CRopeScript" == _strScriptName)
+		return new CRopeScript;
 	if (L"CSceneStartScript" == _strScriptName)
 		return new CSceneStartScript;
+	if (L"CShowInfoScript" == _strScriptName)
+		return new CShowInfoScript;
 	if (L"CSkillnearScript" == _strScriptName)
 		return new CSkillnearScript;
 	if (L"CSkillScript" == _strScriptName)
 		return new CSkillScript;
 	if (L"CStateScript" == _strScriptName)
 		return new CStateScript;
+	if (L"CStatScript" == _strScriptName)
+		return new CStatScript;
+	if (L"CTimerScript" == _strScriptName)
+		return new CTimerScript;
 	if (L"CTraceStateScript" == _strScriptName)
 		return new CTraceStateScript;
 	if (L"CWallScript" == _strScriptName)
@@ -181,6 +221,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::AMERAPLAYERMOVESCRIPT:
 		return new CameraPlayerMoveScript;
 		break;
+	case (UINT)SCRIPT_TYPE::ANIMONCESCRIPT:
+		return new CAnimOnceScript;
+		break;
 	case (UINT)SCRIPT_TYPE::ATTACKSTATESCRIPT:
 		return new CAttackStateScript;
 		break;
@@ -190,8 +233,14 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::BASICBALLSCRIPT:
 		return new CBasicBallScript;
 		break;
+	case (UINT)SCRIPT_TYPE::BOSSHPBARSCRIPT:
+		return new CBossHPBarScript;
+		break;
 	case (UINT)SCRIPT_TYPE::BOSSMONSTERSCRIPT:
 		return new CBossMonsterScript;
+		break;
+	case (UINT)SCRIPT_TYPE::BOSSNPCSCRIPT:
+		return new CBossNPCScript;
 		break;
 	case (UINT)SCRIPT_TYPE::BUTTONSCRIPT:
 		return new CButtonScript;
@@ -214,6 +263,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::DEADSTATESCRIPT:
 		return new CDeadStateScript;
 		break;
+	case (UINT)SCRIPT_TYPE::DIENOTICESCRIPT:
+		return new CDieNoticeScript;
+		break;
 	case (UINT)SCRIPT_TYPE::DOUBLEJUMPSCRIPT:
 		return new CDoubleJumpScript;
 		break;
@@ -225,6 +277,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::GROUNDSCRIPT:
 		return new CGroundScript;
+		break;
+	case (UINT)SCRIPT_TYPE::HITSCRIPT:
+		return new CHitScript;
 		break;
 	case (UINT)SCRIPT_TYPE::HPSCRIPT:
 		return new CHpScript;
@@ -274,11 +329,20 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::PORTALSCRIPT:
 		return new CPortalScript;
 		break;
+	case (UINT)SCRIPT_TYPE::QUICKSLOTSCRIPT:
+		return new CQuickSlotScript;
+		break;
 	case (UINT)SCRIPT_TYPE::RIGIDBODYSCRIPT:
 		return new CRigidBodyScript;
 		break;
+	case (UINT)SCRIPT_TYPE::ROPESCRIPT:
+		return new CRopeScript;
+		break;
 	case (UINT)SCRIPT_TYPE::SCENESTARTSCRIPT:
 		return new CSceneStartScript;
+		break;
+	case (UINT)SCRIPT_TYPE::SHOWINFOSCRIPT:
+		return new CShowInfoScript;
 		break;
 	case (UINT)SCRIPT_TYPE::SKILLNEARSCRIPT:
 		return new CSkillnearScript;
@@ -288,6 +352,12 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::STATESCRIPT:
 		return new CStateScript;
+		break;
+	case (UINT)SCRIPT_TYPE::STATSCRIPT:
+		return new CStatScript;
+		break;
+	case (UINT)SCRIPT_TYPE::TIMERSCRIPT:
+		return new CTimerScript;
 		break;
 	case (UINT)SCRIPT_TYPE::TRACESTATESCRIPT:
 		return new CTraceStateScript;
@@ -311,6 +381,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CameraPlayerMoveScript";
 		break;
 
+	case SCRIPT_TYPE::ANIMONCESCRIPT:
+		return L"CAnimOnceScript";
+		break;
+
 	case SCRIPT_TYPE::ATTACKSTATESCRIPT:
 		return L"CAttackStateScript";
 		break;
@@ -323,8 +397,16 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CBasicBallScript";
 		break;
 
+	case SCRIPT_TYPE::BOSSHPBARSCRIPT:
+		return L"CBossHPBarScript";
+		break;
+
 	case SCRIPT_TYPE::BOSSMONSTERSCRIPT:
 		return L"CBossMonsterScript";
+		break;
+
+	case SCRIPT_TYPE::BOSSNPCSCRIPT:
+		return L"CBossNPCScript";
 		break;
 
 	case SCRIPT_TYPE::BUTTONSCRIPT:
@@ -355,6 +437,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CDeadStateScript";
 		break;
 
+	case SCRIPT_TYPE::DIENOTICESCRIPT:
+		return L"CDieNoticeScript";
+		break;
+
 	case SCRIPT_TYPE::DOUBLEJUMPSCRIPT:
 		return L"CDoubleJumpScript";
 		break;
@@ -369,6 +455,10 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::GROUNDSCRIPT:
 		return L"CGroundScript";
+		break;
+
+	case SCRIPT_TYPE::HITSCRIPT:
+		return L"CHitScript";
 		break;
 
 	case SCRIPT_TYPE::HPSCRIPT:
@@ -435,12 +525,24 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 		return L"CPortalScript";
 		break;
 
+	case SCRIPT_TYPE::QUICKSLOTSCRIPT:
+		return L"CQuickSlotScript";
+		break;
+
 	case SCRIPT_TYPE::RIGIDBODYSCRIPT:
 		return L"CRigidBodyScript";
 		break;
 
+	case SCRIPT_TYPE::ROPESCRIPT:
+		return L"CRopeScript";
+		break;
+
 	case SCRIPT_TYPE::SCENESTARTSCRIPT:
 		return L"CSceneStartScript";
+		break;
+
+	case SCRIPT_TYPE::SHOWINFOSCRIPT:
+		return L"CShowInfoScript";
 		break;
 
 	case SCRIPT_TYPE::SKILLNEARSCRIPT:
@@ -453,6 +555,14 @@ const wchar_t * CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::STATESCRIPT:
 		return L"CStateScript";
+		break;
+
+	case SCRIPT_TYPE::STATSCRIPT:
+		return L"CStatScript";
+		break;
+
+	case SCRIPT_TYPE::TIMERSCRIPT:
+		return L"CTimerScript";
 		break;
 
 	case SCRIPT_TYPE::TRACESTATESCRIPT:

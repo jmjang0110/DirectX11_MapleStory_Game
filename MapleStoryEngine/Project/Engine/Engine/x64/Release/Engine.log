@@ -1,0 +1,1081 @@
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 18 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\particle.fx(104,16-73): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 20 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  RWStructuredBuffer ParticleBuffer;
+  RWStructuredBuffer DataBuffer;
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 19 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  StructuredBuffer ParticleBuffer;
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 18 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 18 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 18 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  //
+  // FX Version: fx_5_0
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 19 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  RWTexture2D g_RWTex_0;
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 19 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  StructuredBuffer TileDataBuffer;
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\func.fx(82,13-57): warning X3206: implicit truncation of vector type
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 4 local buffer(s)
+  //
+  cbuffer TRANSFORM : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+  }
+  
+  cbuffer SCALAR_PARAM : register(b1)
+  {
+      int     g_int_0;                    // Offset:    0, size:    4
+      int     g_int_1;                    // Offset:    4, size:    4
+      int     g_int_2;                    // Offset:    8, size:    4
+      int     g_int_3;                    // Offset:   12, size:    4
+      float   g_float_0;                  // Offset:   16, size:    4
+      float   g_float_1;                  // Offset:   20, size:    4
+      float   g_float_2;                  // Offset:   24, size:    4
+      float   g_float_3;                  // Offset:   28, size:    4
+      float2  g_vec2_0;                   // Offset:   32, size:    8
+      float2  g_vec2_1;                   // Offset:   40, size:    8
+      float2  g_vec2_2;                   // Offset:   48, size:    8
+      float2  g_vec2_3;                   // Offset:   56, size:    8
+      float4  g_vec4_0;                   // Offset:   64, size:   16
+      float4  g_vec4_1;                   // Offset:   80, size:   16
+      float4  g_vec4_2;                   // Offset:   96, size:   16
+      float4  g_vec4_3;                   // Offset:  112, size:   16
+      float4x4 g_mat_0;                   // Offset:  128, size:   64
+      float4x4 g_mat_1;                   // Offset:  192, size:   64
+      float4x4 g_mat_2;                   // Offset:  256, size:   64
+      float4x4 g_mat_3;                   // Offset:  320, size:   64
+      int     g_btex_0;                   // Offset:  384, size:    4
+      int     g_btex_1;                   // Offset:  388, size:    4
+      int     g_btex_2;                   // Offset:  392, size:    4
+      int     g_btex_3;                   // Offset:  396, size:    4
+      int     g_btex_4;                   // Offset:  400, size:    4
+      int     g_btex_5;                   // Offset:  404, size:    4
+      int     g_btex_6;                   // Offset:  408, size:    4
+      int     g_btex_7;                   // Offset:  412, size:    4
+      int     g_btex_8;                   // Offset:  416, size:    4
+      int     g_btex_9;                   // Offset:  420, size:    4
+      int     iPadding1;                  // Offset:  424, size:    4
+      int     iPadding2;                  // Offset:  428, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vSlice;                   // Offset:    8, size:    8
+      float2  g_vBackgroundSize;          // Offset:   16, size:    8
+      float2  g_vOffset;                  // Offset:   24, size:    8
+      int     g_useAnim2D;                // Offset:   32, size:    4
+      float   g_Atlas_Width;              // Offset:   36, size:    4
+      float   g_Atlas_Height;             // Offset:   40, size:    4
+      float   g_Anim2D_Padding;           // Offset:   44, size:    4
+  }
+  
+  cbuffer GLOBAL : register(b3)
+  {
+      float2  vResolution;                // Offset:    0, size:    8
+      float2  vNoiseResolution;           // Offset:    8, size:    8
+      float   fDT;                        // Offset:   16, size:    4
+      float   fAccTime;                   // Offset:   20, size:    4
+      int     iLight2DCount;              // Offset:   24, size:    4
+      int     iLight3DCount;              // Offset:   28, size:    4
+  }
+  
+  //
+  // 18 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  TextureCube g_texcube_0;
+  TextureCube g_texcube_1;
+  Texture2DArray g_texarr_0;
+  Texture2DArray g_texarr_1;
+  Texture2D g_Atlas;
+  StructuredBuffer g_Light2DBuffer;
+  StructuredBuffer g_Light3DBuffer;
+  Texture2D g_noise_01;
+  Texture2D g_noise_02;
+  Texture2D g_noise_cloud;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  
+  pch.cpp
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\CSound.h(34,23): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\CSound.h(35,26): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CAnimation2D.cpp
+  CAnimator2D.cpp
+  CCamera.cpp
+  CCollider2D.cpp
+  CCollisionMgr.cpp
+  CComponent.cpp
+  CComputeShader.cpp
+  CConstBuffer.cpp
+  CCore.cpp
+  CDamageParticle.cpp
+  CDamageParticleShader.cpp
+  CDevice.cpp
+  CEntity.cpp
+  CEventMgr.cpp
+  CGameObject.cpp
+  CGraphicsShader.cpp
+  CKeyMgr.cpp
+  CLayer.cpp
+  CLayerFile.cpp
+  CLight2D.cpp
+  컴파일하고 있습니다...
+  CMaterial.cpp
+  CMesh.cpp
+  CMeshRender.cpp
+  CParticleSystem.cpp
+  CParticleUpdateShader.cpp
+  CPathMgr.cpp
+  CPrefab.cpp
+  CRenderComponent.cpp
+  CRenderMgr.cpp
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\CRenderMgr.cpp(194,102): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\CRenderMgr.cpp(207,45): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CRenderMgr_init.cpp
+  CRes.cpp
+  CResMgr.cpp
+  CResMgr_init.cpp
+  CScene.cpp
+  CSceneFile.cpp
+  CSceneMgr.cpp
+  CScript.cpp
+  CShader.cpp
+  CSound.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2575,23): warning C4244: '인수': 'const wchar_t'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Elem=char
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2586): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2586): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2566): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2566): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Iter=const wchar_t *
+          ]
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\CSound.cpp(109): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Engine\Engine\CSound.cpp(109): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+  CStructuredBuffer.cpp
+  컴파일하고 있습니다...
+  CTestShader.cpp
+  CTexture.cpp
+  CTileMap.cpp
+  CTimeMgr.cpp
+  CTransform.cpp
+  Engine.cpp
+  extern.cpp
+  func.cpp
+  Engine.vcxproj -> C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Library\Engine\Engine.lib
+  .\Project\Engine\Engine\CAnimation2D.h
+  .\Project\Engine\Engine\CAnimator2D.h
+  .\Project\Engine\Engine\CCamera.h
+  .\Project\Engine\Engine\CCollider2D.h
+  .\Project\Engine\Engine\CCollisionMgr.h
+  .\Project\Engine\Engine\CComponent.h
+  .\Project\Engine\Engine\CComputeShader.h
+  .\Project\Engine\Engine\CConstBuffer.h
+  .\Project\Engine\Engine\CCore.h
+  .\Project\Engine\Engine\CDamageParticle.h
+  .\Project\Engine\Engine\CDamageParticleShader.h
+  .\Project\Engine\Engine\CDevice.h
+  .\Project\Engine\Engine\CEntity.h
+  .\Project\Engine\Engine\CEventMgr.h
+  .\Project\Engine\Engine\CGameObject.h
+  .\Project\Engine\Engine\CGraphicsShader.h
+  .\Project\Engine\Engine\CKeyMgr.h
+  .\Project\Engine\Engine\CLayer.h
+  .\Project\Engine\Engine\CLayerFile.h
+  .\Project\Engine\Engine\CLight2D.h
+  .\Project\Engine\Engine\CMaterial.h
+  .\Project\Engine\Engine\CMesh.h
+  .\Project\Engine\Engine\CMeshRender.h
+  .\Project\Engine\Engine\CMgrScript.h
+  .\Project\Engine\Engine\CParticleSystem.h
+  .\Project\Engine\Engine\CParticleUpdateShader.h
+  .\Project\Engine\Engine\CPathMgr.h
+  .\Project\Engine\Engine\CPrefab.h
+  .\Project\Engine\Engine\CRenderComponent.h
+  .\Project\Engine\Engine\CRenderMgr.h
+  .\Project\Engine\Engine\CRes.h
+  .\Project\Engine\Engine\CResMgr.h
+  .\Project\Engine\Engine\CScene.h
+  .\Project\Engine\Engine\CSceneFile.h
+  .\Project\Engine\Engine\CSceneMgr.h
+  .\Project\Engine\Engine\CScript.h
+  .\Project\Engine\Engine\CShader.h
+  .\Project\Engine\Engine\CSound.h
+  .\Project\Engine\Engine\CStructuredBuffer.h
+  .\Project\Engine\Engine\CTestShader.h
+  .\Project\Engine\Engine\CTexture.h
+  .\Project\Engine\Engine\CTileMap.h
+  .\Project\Engine\Engine\CTimeMgr.h
+  .\Project\Engine\Engine\CTransform.h
+  .\Project\Engine\Engine\define.h
+  .\Project\Engine\Engine\extern.h
+  .\Project\Engine\Engine\func.h
+  .\Project\Engine\Engine\global.h
+  .\Project\Engine\Engine\Ptr.h
+  .\Project\Engine\Engine\SimpleMath.h
+  .\Project\Engine\Engine\singleton.h
+  .\Project\Engine\Engine\struct.h
+  52개 파일이 복사되었습니다.
+  .\Project\Engine\Engine\DamageParticle.fx
+  .\Project\Engine\Engine\DamageRender.fx
+  .\Project\Engine\Engine\func.fx
+  .\Project\Engine\Engine\paperburn.fx
+  .\Project\Engine\Engine\particle.fx
+  .\Project\Engine\Engine\particlerender.fx
+  .\Project\Engine\Engine\postprocess.fx
+  .\Project\Engine\Engine\std2d.fx
+  .\Project\Engine\Engine\std2d_light.fx
+  .\Project\Engine\Engine\struct.fx
+  .\Project\Engine\Engine\testcs.fx
+  .\Project\Engine\Engine\tilemap.fx
+  .\Project\Engine\Engine\value.fx
+  13개 파일이 복사되었습니다.

@@ -3,10 +3,11 @@
 
 enum class BALLMOVE_TYPE
 {
-    LINEAR,
-    DIAGONAL,
+    LINEAR,     // 직선 
+    DIAGONAL,   // 대각선
     PARABOLA,
     BALLISTIC,
+    STAND,      // 제자리 
 
     END,
 
@@ -39,6 +40,11 @@ enum class BALL_DIRECTION
 class CBasicBallScript :
     public CScript
 {
+private:
+    Ptr<CSound> m_pHitSound;
+    Ptr<CSound> m_pKeyDownBgm;
+
+    int m_iChannelIdx;
 
 private:
     bool                m_bStart;
@@ -61,6 +67,9 @@ private:
     float               m_fMAxAttack;
     float               m_fMinAttack;
 
+public:
+    void SetStartPos(Vec3 _startPos) { m_vStartPos = _startPos; }
+    void SetHitBgm(wstring _RelativePath);
 
 
 private:
@@ -68,6 +77,7 @@ private:
     void DiagonalMove();
     void ParabolaMove();
     void BallisticMove();
+    void StandMove();
 
 public:
     void SetBallMoveType(BALLMOVE_TYPE _type) { m_eMoveType = _type; }

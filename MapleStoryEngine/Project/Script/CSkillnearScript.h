@@ -27,11 +27,37 @@ private:
     float               m_fMinAttack;
 
     CGameObject*        m_MyHitObjAddress;
+    float               m_fTimer;       // damage 출력 타이밍 
+
+    int                 m_iHitMonsterCnt; 
+    int                 m_iHitMaxMonsterCnt;
+    bool                m_bHitPossible;
+
+    map<int, CGameObject*> m_mapHitMob;
+
+
+private:
+    Ptr<CSound>         m_pUseBgm;
+    Ptr<CSound>         m_pHitBgm;
+
+
+public:
+    void PlayHItBgm(int _iroopCnt, float volume, bool overlap) { m_pHitBgm->Play(_iroopCnt, volume, overlap); }
 
 public:
     void AddAttackCnt() { if (m_iAttackMaxCnt >= m_iAttackCnt) m_iAttackCnt += 1; }
     int     GetAttackCnt() { return m_iAttackCnt; }
     int     GetMaxAttackCnt() { return m_iAttackMaxCnt; }
+    void SetMaxAttackCnt(int _i) { m_iAttackMaxCnt = _i; }
+
+
+    bool IsAddMonsterHitPossible() { if (m_iHitMonsterCnt < m_iHitMaxMonsterCnt) return true; else return false; }
+    void AddHitMonster(CGameObject* _p) { m_mapHitMob.insert(make_pair(m_iHitMonsterCnt, _p)); }
+    void AddMonsterCnt() { if (m_iHitMonsterCnt < m_iHitMaxMonsterCnt) m_iHitMonsterCnt++; }
+    int GetMonsterCnt() { return m_iHitMonsterCnt; }
+    CGameObject* GetHitMonseterObjAddress(int _hitNum);
+    void SetHitMaxMonsterCnt(int _Cnt) { m_iHitMaxMonsterCnt = _Cnt; }
+
 
     void SetMaxAttack(float _f) { m_fMAxAttack = _f; }
     void SetMinAttack(float _f) { m_fMinAttack = _f; }
@@ -41,6 +67,7 @@ public:
     void SetHitObjAddress(CGameObject* _obj) { m_MyHitObjAddress = _obj; }
     CGameObject* GetHitObjAddress() { return m_MyHitObjAddress; }
 
+    float   GetTimer() { return m_fTimer; }
 
 
 public:

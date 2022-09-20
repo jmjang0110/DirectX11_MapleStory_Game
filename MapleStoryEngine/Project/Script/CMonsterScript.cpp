@@ -23,11 +23,17 @@
 #include "CSceneStartScript.h"
 
 #include "CSceneSaveLoad.h"
+#include "CLaunchSkillScript.h"
 
+#include "CSceneStartScript.h"
+
+#include "CItemScript.h"
+#include "CRigidBodyScript.h"
 CMonsterScript::CMonsterScript()
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
 	, m_vPrevPos(Vec3(0.f, 0.f, 0.f))
 	, m_iHitCnt(0)
+	, m_fTimer(0)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -36,6 +42,7 @@ CMonsterScript::CMonsterScript()
 CMonsterScript::CMonsterScript(const CMonsterScript& _origin)
 	: CScript((int)SCRIPT_TYPE::MONSTERSCRIPT)
 	, m_vPrevPos(Vec3(0.f, 0.f, 0.f))
+	, m_fTimer(0)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -66,7 +73,13 @@ void CMonsterScript::start()
 
 void CMonsterScript::update()
 {
+	m_fTimer += DT;
 
+	if (m_fTimer >= 3.f)
+	{
+		m_fTimer = 0.f;
+		m_iHitCnt = 0;
+	}
 	Update_State();
 	Update_Move();
 	Update_Gravity();
@@ -98,6 +111,34 @@ void CMonsterScript::Update_State()
 
 			if (m_pMobGround != nullptr)
 				m_pMobGround->SubMonsterCnt();
+
+			// Drop Item 
+			// test 
+			CPrefab* pPrefab2 = nullptr;
+			wstring portionName = L"";
+			wstring MonsterName = GetOwner()->GetName();
+
+			if (MonsterName == L"Tanatos")
+				portionName = L"PowerElixirPortion";
+			else if (MonsterName == L"GiganticBiking")
+				portionName = L"ElixirPortion";
+			
+			
+			pPrefab2 = CSceneSaveLoad::pSceneMgrScript->GetPrefab(portionName);
+			CGameObject* pObj = pPrefab2->Instantiate();
+			pObj->Transform()->SetRelativePos(GetOwner()->Transform()->GetRelativePos());
+
+			pObj->AddComponent((CComponent*)CScriptMgr::GetScript(L"CGravityScript"));
+			pObj->AddComponent((CComponent*)CScriptMgr::GetScript(L"CRigidBodyScript"));
+			CItemScript* pItemScript = (CItemScript*)pObj->GetScriptByName(L"CItemScript");
+			CRigidBodyScript* pRigidbody = (CRigidBodyScript*)pObj->GetScriptByName(L"CRigidBodyScript");
+
+			pItemScript->m_eSpotType = ITEM_SPOT::LAND;
+
+
+			// Item Layer - Add Object 
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->AddObject(pObj, L"Item");
 
 		}
 	}
@@ -190,10 +231,11 @@ void CMonsterScript::Update_Animation()
 	break;
 	case MONSTER_STATE::ATT:
 	{
+		// ATTACK_LEFT -> ATTACK1_LEFT 로 잘못지음.. 그냥 쓸래 귀찮아. 
 		if (m_eDir == MONSTER_DIRECTION::LEFT)
-			pAnimator2D->Play(L"ATTACK_LEFT", false);
+			pAnimator2D->Play(L"ATTACK1_LEFT", false);
 		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
-			pAnimator2D->Play(L"ATTACK_RIGHT", false);
+			pAnimator2D->Play(L"ATTACK1_RIGHT", false);
 	}
 		break;
 	case MONSTER_STATE::RUN:
@@ -206,6 +248,16 @@ void CMonsterScript::Update_Animation()
 			pAnimator2D->Play(L"DIE_RIGHT", false);
 	}
 		break;
+
+	case MONSTER_STATE::HIT:
+	{
+		if (m_eDir == MONSTER_DIRECTION::LEFT)
+			pAnimator2D->Play(L"HIT_LEFT", true);
+		else if (m_eDir == MONSTER_DIRECTION::RIGHT)
+			pAnimator2D->Play(L"HIT_RIGHT", true);
+	}
+	break;
+
 	}
 }
 
@@ -222,6 +274,9 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 
 	if (pBallScript != nullptr)
 	{
+		m_pAI->ChangeState(MONSTER_STATE::HIT);
+
+
 		pBallScript->SetHit(true); // Next Frame - Delete Ball(Arrow)
 		m_iHitCnt++;
 		if (m_iHitCnt >= 10)
@@ -246,18 +301,37 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 			m_eCurStateType = MONSTER_STATE::DEAD;
 			m_bDie = true;
 
+			CPlayerScript* pPlayerScript = (CPlayerScript*)CSceneSaveLoad::pMainPlayer->GetScriptByName(L"CPlayerScript");
+			pPlayerScript->AddExp(1000.f);
+
+			
+			if (GetOwner()->GetName() == L"GiganticBiking")
+			{
+				Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\GiganticBiking\\Die.mp3", L"sound\\GiganticBiking\\Die.mp3");
+				pBgm->Play(1, 0.6f, true);
+			}
+			else if (GetOwner()->GetName() == L"Tanatos")
+			{
+				Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Tanatos\\Die.mp3", L"sound\\Tanatos\\Die.mp3");
+				pBgm->Play(1, 0.6f, true);
+
+			}
 		}
 
-	//	CPrefab* pPrefab = CSceneStartScript::GetPrefab(L"Damage");
+		if (GetOwner()->GetName() == L"GiganticBiking")
+		{
+			Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\GiganticBiking\\Damage.mp3", L"sound\\GiganticBiking\\Damage.mp3");
+			pBgm->Play(1, 0.6f, true);
+		}
+		else if (GetOwner()->GetName() == L"Tanatos")
+		{
+			Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Tanatos\\Damage.mp3", L"sound\\Tanatos\\Damage.mp3");
+			pBgm->Play(1, 0.6f, true);
+
+		}
+
+
 		CPrefab* pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Damage");
-
-	/*	wstring strPrefabKey = L"Prefab\\Damage.pref";
-		wstring strContent = CPathMgr::GetInst()->GetContentPath();
-		wstring FullPath = strContent + strPrefabKey;
-
-		CPrefab* pPrefab = new CPrefab;
-		pPrefab->Load(FullPath);*/
-
 
 		CGameObject* pDamageObj = pPrefab->Instantiate();
 		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
@@ -268,13 +342,42 @@ void CMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 		pDamageObj->AddComponent((CComponent*)pDamageScript);
 		pDamageScript->Init(DAMAGE_TYPE::CRITICAL_1, damage, 2.f);
 		pCurScene->AddObject(pDamageObj, L"Damage");
+
+
+		// Hit Animation (Ball) 
+		pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"StormHit");
+
+		// CLaunchSkillScript : 시간 없어서 그냥 여기다가 응용해서 만들었음.. 
+		CGameObject* pHitObj = pPrefab->Instantiate();
+		CLaunchSkillScript* pLaunchSkillScript = (CLaunchSkillScript*)CScriptMgr::GetScript(L"CLaunchSkillScript");
+		pLaunchSkillScript->SetHit(true);
+
+		pHitObj->AddComponent((CComponent*)pLaunchSkillScript);
+		vPos = GetOwner()->Transform()->GetRelativePos();
+		vPos.z -= 10.f;
+		pHitObj->Transform()->SetRelativePos(vPos);
+
+
+		pCurScene->AddObject(pHitObj, L"SubSkill_1");
+
+
+
 	}
 
 	// Near Skill
 	CSkillnearScript* pSkillNearScript = (CSkillnearScript*)_OtherObject->GetScriptByName(L"CSkillnearScript");
 	if (pSkillNearScript != nullptr)
 	{
-		pSkillNearScript->SetHitObjAddress(GetOwner());
+		//pSkillNearScript->SetHitObjAddress(GetOwner());
+
+		if (pSkillNearScript->IsAddMonsterHitPossible() == true)
+		{
+		pSkillNearScript->AddMonsterCnt();
+		pSkillNearScript->AddHitMonster(GetOwner());
+		m_iHitNumber = pSkillNearScript->GetMonsterCnt();
+
+		}
+
 
 	}
 }
@@ -287,55 +390,107 @@ void CMonsterScript::OnCollision(CGameObject* _OtherObject)
 	if (pSkillNearScript == nullptr)
 		return;
 
-	if (pSkillNearScript->GetHitObjAddress() != GetOwner())
+	if (pSkillNearScript->GetHitMonseterObjAddress(m_iHitNumber) != GetOwner())
 		return;
+
+	//if (pSkillNearScript->GetHitObjAddress() != GetOwner())
+	//	return;
 
 	if (pSkillNearScript != nullptr)
 	{
-		if (pSkillNearScript->GetAttackCnt() < pSkillNearScript->GetMaxAttackCnt())
+		if (pSkillNearScript->GetTimer() >= 0.4f)
 		{
-			int iAttackCnt = pSkillNearScript->GetAttackCnt();
-			pSkillNearScript->AddAttackCnt();
-
-			float OffsetY = 60.f;
-			if (iAttackCnt > 0)
-				OffsetY = 35.f;
-
-			// Damage 
-			int MaxAttack = pSkillNearScript->GetMaxAttack();
-			int MinAttack = pSkillNearScript->GetMinAttack();
-
-			int randNum = rand() % (MaxAttack - MinAttack);
-			int damage = MinAttack + randNum;
-
-			m_tInfo.fHP -= damage;
-			if (m_tInfo.fHP <= 0.f)
+			if (pSkillNearScript->GetAttackCnt() < pSkillNearScript->GetMaxAttackCnt())
 			{
-				m_eCurStateType = MONSTER_STATE::DEAD;
-				m_bDie = true;
+				int iAttackCnt = pSkillNearScript->GetAttackCnt();
+				pSkillNearScript->AddAttackCnt();
+
+				float OffsetY = 60.f;
+				if (iAttackCnt > 0)
+					OffsetY = 35.f;
+
+				// Damage 
+				int MaxAttack = pSkillNearScript->GetMaxAttack();
+				int MinAttack = pSkillNearScript->GetMinAttack();
+
+				int randNum = rand() % (MaxAttack - MinAttack);
+				int damage = MinAttack + randNum;
+
+				m_tInfo.fHP -= damage;
+				if (m_tInfo.fHP <= 0.f)
+				{
+					m_eCurStateType = MONSTER_STATE::DEAD;
+
+					if (m_bDie == false)
+					{
+						CPlayerScript* pPlayerScript = (CPlayerScript*)CSceneSaveLoad::pMainPlayer->GetScriptByName(L"CPlayerScript");
+						pPlayerScript->AddExp(1000.f);
+
+					}					
+					m_bDie = true;
+
+					wstring name = GetOwner()->GetName();
+
+					
+					if (GetOwner()->GetName() == L"GiganticBiking")
+					{
+						Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\GiganticBiking\\Die.mp3", L"sound\\GiganticBiking\\Die.mp3");
+						pBgm->Play(1, 0.6f, true);
+					}
+					else if (GetOwner()->GetName() == L"Tanatos")
+					{
+						Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Tanatos\\Die.mp3", L"sound\\Tanatos\\Die.mp3");
+						pBgm->Play(1, 0.6f, true);
+
+					}
+			
+				}
+				if (GetOwner()->GetName() == L"GiganticBiking")
+				{
+					Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\GiganticBiking\\Damage.mp3", L"sound\\GiganticBiking\\Damage.mp3");
+					pBgm->Play(1, 0.6f, true);
+				}
+				else if (GetOwner()->GetName() == L"Tanatos")
+				{
+					Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Tanatos\\Damage.mp3", L"sound\\Tanatos\\Damage.mp3");
+					pBgm->Play(1, 0.6f, true);
+
+				}
+
+				pSkillNearScript->PlayHItBgm(1, 0.6f, true);
+				CPrefab* pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Damage");
+				CGameObject* pDamageObj = pPrefab->Instantiate();
+
+				Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
+				vPos.y += (iAttackCnt * OffsetY);
+				pDamageObj->Transform()->SetRelativePos(vPos);
+
+				CDamageScript* pDamageScript = (CDamageScript*)CScriptMgr::GetScript(L"CDamageScript");
+				pDamageObj->AddComponent((CComponent*)pDamageScript);
+				pDamageScript->Init(DAMAGE_TYPE::CRITICAL_2, damage, 2.f);
+
+				pCurScene->AddObject(pDamageObj, L"Damage");
+
+				// Hit Animation (Ball) 
+				pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"LargeSkillHit");
+
+				// CLaunchSkillScript : 시간 없어서 그냥 여기다가 응용해서 만들었음.. 
+				CGameObject* pHitObj = pPrefab->Instantiate();
+				CLaunchSkillScript* pLaunchSkillScript = (CLaunchSkillScript*)CScriptMgr::GetScript(L"CLaunchSkillScript");
+				pLaunchSkillScript->SetHit(true);
+
+				pHitObj->AddComponent((CComponent*)pLaunchSkillScript);
+				vPos = GetOwner()->Transform()->GetRelativePos();
+				vPos.z -= 10.f;
+				pHitObj->Transform()->SetRelativePos(vPos);
+
+
+				pCurScene->AddObject(pHitObj, L"SubSkill_1");
 
 			}
-
-
-
-			CPrefab* pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"Damage");
-			CGameObject* pDamageObj = pPrefab->Instantiate();
-
-			Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
-			vPos.y += (iAttackCnt * OffsetY);
-			pDamageObj->Transform()->SetRelativePos(vPos);
-
-			CDamageScript* pDamageScript = (CDamageScript*)CScriptMgr::GetScript(L"CDamageScript");
-			pDamageObj->AddComponent((CComponent*)pDamageScript);
-			pDamageScript->Init(DAMAGE_TYPE::CRITICAL_2, damage, 2.f);
-
-			pCurScene->AddObject(pDamageObj, L"Damage");
-
-
-
-
-
 		}
+
+		
 	}
 	
 }

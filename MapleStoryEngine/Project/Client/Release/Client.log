@@ -1,7 +1,2 @@
 ﻿  pch.cpp
-  main.cpp
-  코드를 생성하고 있습니다.
-  Previous IPDB not found, fall back to full compilation.
-  All 5 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  코드를 생성했습니다.
-  Client.vcxproj -> C:\Users\AR\source\repos\39Engine\OutputFile\bin\Client.exe
+C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\Project\Client\pch.h(18,10): fatal error C1083: 포함 파일을 열 수 없습니다. 'Engine/global.h': No such file or directory

@@ -17,11 +17,15 @@
 #include "CDamageScript.h"
 #include "CPlayerScript.h"
 #include "CBossMonsterScript.h"
+#include "CLaunchSkillScript.h"
+#include "CSceneSaveLoad.h"
+#include "CSceneStartScript.h"
+
 
 
 CBossMonsterScript::CBossMonsterScript()
 	: CScript((int)SCRIPT_TYPE::BOSSMONSTERSCRIPT)
-
+	, m_fTimer(0.f)
 {
 	SetName(CScriptMgr::GetScriptName(this));
 
@@ -29,6 +33,7 @@ CBossMonsterScript::CBossMonsterScript()
 
 CBossMonsterScript::CBossMonsterScript(const CBossMonsterScript& _origin)
 	: CScript((int)SCRIPT_TYPE::BOSSMONSTERSCRIPT)
+	, m_fTimer(0.f)
 
 {
 	SetName(CScriptMgr::GetScriptName(this));
@@ -50,15 +55,24 @@ void CBossMonsterScript::start()
 
 
 	// Monster Info Test
-	m_tInfo.fRecogRange = 600.f;
+	m_tInfo.fRecogRange = 700.f;
 	m_tInfo.fSpeed = 100.f;
-	m_tInfo.fHP = 10000000.f;
+	m_tInfo.fHP = 10000000.f * 0.4f;
+	m_tInfo.fMaxHP = 10000000.f * 0.4f;
 
 
 }
 
 void CBossMonsterScript::update()
 {
+	m_fTimer += DT;
+
+	if (m_fTimer >= 3.f)
+	{
+		m_fTimer = 0.f;
+		m_iHitCnt = 0;
+	}
+
 	Update_State();
 	Update_Move();
 	Update_Gravity();
@@ -86,6 +100,10 @@ void CBossMonsterScript::Update_State()
 			// delete Obj 
 			CSceneMgr::GetInst()->DeRegisterObjInLayer(GetOwner(), GetOwner()->GetLayerIndex());
 			GetOwner()->Destroy();
+
+			CPlayerScript* pPlayerScript = (CPlayerScript*)CSceneSaveLoad::pMainPlayer->GetScriptByName(L"CPlayerScript");
+			pPlayerScript->AddExp(100000.f);
+
 		}
 	}
 
@@ -245,6 +263,8 @@ void CBossMonsterScript::Update_Animation()
 			break;
 		case BOSS_ATTACK_STATE::SKILL_ATTACK6:
 		{
+	
+
 			if (m_eDir == BOSS_DIRECTION::LEFT)
 				pAnimator2D->Play(L"SKILL6_LEFT", false);
 			else if (m_eDir == BOSS_DIRECTION::RIGHT)
@@ -314,13 +334,10 @@ void CBossMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 			}
 		}
 
-		m_tInfo.fHP -= damage;
-		if (m_tInfo.fHP <= 0.f)
-		{
-			m_eCurStateType = MONSTER_STATE::DEAD;
-			m_bDie = true;
-		}
-			
+		SubHP(damage);
+
+		Ptr<CSound> pBgm = CResMgr::GetInst()->Load<CSound>(L"sound\\Papulatus\\Damage.mp3", L"sound\\Papulatus\\Damage.mp3");
+		pBgm->Play(1, 1.f, true);
 
 
 		CGameObject* pDamageObj = new CGameObject;
@@ -335,6 +352,25 @@ void CBossMonsterScript::OnCollisionEnter(CGameObject* _OtherObject)
 		pDamageScript->Init(DAMAGE_TYPE::CRITICAL_1, damage, 2.f);
 
 		pCurScene->AddObject(pDamageObj, L"Damage");
+
+		// Hit Animation (Ball) 
+		CPrefab* pPrefab = CSceneSaveLoad::pSceneMgrScript->GetPrefab(L"StormHit");
+
+		// CLaunchSkillScript : 시간 없어서 그냥 여기다가 응용해서 만들었음.. 
+		CGameObject* pHitObj = pPrefab->Instantiate();
+		CLaunchSkillScript* pLaunchSkillScript = (CLaunchSkillScript*)CScriptMgr::GetScript(L"CLaunchSkillScript");
+		pLaunchSkillScript->SetHit(true);
+
+		pHitObj->AddComponent((CComponent*)pLaunchSkillScript);
+		vPos = GetOwner()->Transform()->GetRelativePos();
+		vPos.z -= 10.f;
+		pHitObj->Transform()->SetRelativePos(vPos);
+
+
+		pCurScene->AddObject(pHitObj, L"SubSkill_1");
+
+
+
 
 	}
 

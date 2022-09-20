@@ -9,8 +9,8 @@ class CGameObject;
 
 struct ItemInven
 {
-    CGameObject* obj;
-    CGameObject* Num;
+    CGameObject* obj = nullptr;
+    CGameObject* Num = nullptr;
 
     UINT         num = 1;
 
@@ -55,9 +55,14 @@ private:
     Vec3            m_Cursor_PrevDiff;
 
 private:
-    map<wstring, ItemInven*>  m_Equip;
-    map<wstring, ItemInven*>  m_Consume;
-    map<wstring, ItemInven*>  m_Etc;
+    map<wstring, ItemInven>  m_Equip;
+    map<wstring, ItemInven>  m_Consume;
+    map<wstring, ItemInven>  m_Etc;
+
+
+public:
+    CGameObject* GetItemByName(wstring _name);
+
 
 private:
     class CButtonScript* m_pEquipBtnScript;
@@ -78,7 +83,7 @@ public:
     void ShowEtc(DWORD_PTR _param);
 
     void ShowOffAllItem();
-
+ 
 
     // Make Prefab - Portion 
     void Make_Prefab_Portion_Test();
@@ -107,6 +112,11 @@ public:
     virtual void OnCollisionEnter(CGameObject* _OtherObject) override;
     virtual void OnCollision(CGameObject* _OtherObject) override;
     virtual void OnCollisionExit(CGameObject* _OtherObject) override;
+
+
+public:
+    virtual void SaveToScene(FILE* _pFile) override;
+    virtual void LoadFromScene(FILE* _pFile) override;
 
 
     CLONE(CInventoryScript);

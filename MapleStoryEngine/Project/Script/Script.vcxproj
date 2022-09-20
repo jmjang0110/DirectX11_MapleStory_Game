@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
@@ -174,10 +174,13 @@ call CodeGen.exe</Command>
   <ItemGroup>
     <ClInclude Include="CAIScript.h" />
     <ClInclude Include="CameraPlayerMoveScript.h" />
+    <ClInclude Include="CAnimOnceScript.h" />
     <ClInclude Include="CAttackStateScript.h" />
     <ClInclude Include="CBackGroundScript.h" />
     <ClInclude Include="CBasicBallScript.h" />
+    <ClInclude Include="CBossHPBarScript.h" />
     <ClInclude Include="CBossMonsterScript.h" />
+    <ClInclude Include="CBossNPCScript.h" />
     <ClInclude Include="CButtonScript.h" />
     <ClInclude Include="CCameraMoveScript.h" />
     <ClInclude Include="CCloudScript.h" />
@@ -185,10 +188,12 @@ call CodeGen.exe</Command>
     <ClInclude Include="CCursorScript.h" />
     <ClInclude Include="CDamageScript.h" />
     <ClInclude Include="CDeadStateScript.h" />
+    <ClInclude Include="CDieNoticeScript.h" />
     <ClInclude Include="CDoubleJumpScript.h" />
     <ClInclude Include="CExpScript.h" />
     <ClInclude Include="CGravityScript.h" />
     <ClInclude Include="CGroundScript.h" />
+    <ClInclude Include="CHitScript.h" />
     <ClInclude Include="CHpScript.h" />
     <ClInclude Include="CIdleStateScript.h" />
     <ClInclude Include="CInventoryScript.h" />
@@ -205,13 +210,18 @@ call CodeGen.exe</Command>
     <ClInclude Include="CPatrolStateScript.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CPortalScript.h" />
+    <ClInclude Include="CQuickSlotScript.h" />
     <ClInclude Include="CRigidBodyScript.h" />
+    <ClInclude Include="CRopeScript.h" />
     <ClInclude Include="CSceneSaveLoad.h" />
     <ClInclude Include="CSceneStartScript.h" />
     <ClInclude Include="CScriptMgr.h" />
+    <ClInclude Include="CShowInfoScript.h" />
     <ClInclude Include="CSkillnearScript.h" />
     <ClInclude Include="CSkillScript.h" />
     <ClInclude Include="CStateScript.h" />
+    <ClInclude Include="CStatScript.h" />
+    <ClInclude Include="CTimerScript.h" />
     <ClInclude Include="CTraceStateScript.h" />
     <ClInclude Include="CWallScript.h" />
     <ClInclude Include="framework.h" />
@@ -220,10 +230,13 @@ call CodeGen.exe</Command>
   <ItemGroup>
     <ClCompile Include="CAIScript.cpp" />
     <ClCompile Include="CameraPlayerMoveScript.cpp" />
+    <ClCompile Include="CAnimOnceScript.cpp" />
     <ClCompile Include="CAttackStateScript.cpp" />
     <ClCompile Include="CBackGroundScript.cpp" />
     <ClCompile Include="CBasicBallScript.cpp" />
+    <ClCompile Include="CBossHPBarScript.cpp" />
     <ClCompile Include="CBossMonsterScript.cpp" />
+    <ClCompile Include="CBossNPCScript.cpp" />
     <ClCompile Include="CButtonScript.cpp" />
     <ClCompile Include="CCameraMoveScript.cpp" />
     <ClCompile Include="CCloudScript.cpp" />
@@ -231,10 +244,12 @@ call CodeGen.exe</Command>
     <ClCompile Include="CCursorScript.cpp" />
     <ClCompile Include="CDamageScript.cpp" />
     <ClCompile Include="CDeadStateScript.cpp" />
+    <ClCompile Include="CDieNoticeScript.cpp" />
     <ClCompile Include="CDoubleJumpScript.cpp" />
     <ClCompile Include="CExpScript.cpp" />
     <ClCompile Include="CGravityScript.cpp" />
     <ClCompile Include="CGroundScript.cpp" />
+    <ClCompile Include="CHitScript.cpp" />
     <ClCompile Include="CHpScript.cpp" />
     <ClCompile Include="CIdleStateScript.cpp" />
     <ClCompile Include="CInventoryScript.cpp" />
@@ -251,13 +266,18 @@ call CodeGen.exe</Command>
     <ClCompile Include="CPatrolStateScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CPortalScript.cpp" />
+    <ClCompile Include="CQuickSlotScript.cpp" />
     <ClCompile Include="CRigidBodyScript.cpp" />
+    <ClCompile Include="CRopeScript.cpp" />
     <ClCompile Include="CSceneSaveLoad.cpp" />
     <ClCompile Include="CSceneStartScript.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
+    <ClCompile Include="CShowInfoScript.cpp" />
     <ClCompile Include="CSkillnearScript.cpp" />
     <ClCompile Include="CSkillScript.cpp" />
     <ClCompile Include="CStateScript.cpp" />
+    <ClCompile Include="CStatScript.cpp" />
+    <ClCompile Include="CTimerScript.cpp" />
     <ClCompile Include="CTraceStateScript.cpp" />
     <ClCompile Include="CWallScript.cpp" />
     <ClCompile Include="pch.cpp">

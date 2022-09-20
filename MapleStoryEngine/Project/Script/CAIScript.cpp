@@ -7,6 +7,8 @@
 #include "CAttackStateScript.h"
 #include "CDeadStateSCript.h"
 #include "CPatrolStateScript.h"
+#include "CHitScript.h"
+
 
 
 CAIScript::CAIScript()
@@ -95,6 +97,8 @@ void CAIScript::start()
 	AddState(new CAttackStateScript);
 	AddState(new CDeadStateScript);
 	AddState(new CPatrolStateScript);
+	AddState(new CHitScript);
+
 
 	SetCurState(MONSTER_STATE::IDLE);
 }

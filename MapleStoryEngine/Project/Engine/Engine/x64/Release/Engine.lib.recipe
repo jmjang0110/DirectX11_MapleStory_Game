@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Library\Engine\DamageParticle.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Library\Engine\DamageRender.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\MyGithub\JJM_DX11_2DGame\MapleStoryEngine\External\Library\Engine\func.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
